@@ -7,11 +7,11 @@ export default function TeamParallaxModule() {
         <div className="image3 img-overlay1">
           <div className="container">
             <div className="caption text-center">
-              <h2 className="color-white weight-300 small-caption">
-                We introduce you our <strong>Punjab Files Team!</strong> Get more information about us here!
+              <h2 className="color-white weight-300 small-caption" style={{ fontSize: '26px', lineHeight: 1.4 }}>
+                ਮਿਲੋ ਸਾਡੀ ਸਮਰਪਿਤ <strong>ਪੰਜਾਬ ਫਾਈਲਜ਼ ਟੀਮ</strong> ਨਾਲ! ਸਾਡੇ ਬਾਰੇ ਹੋਰ ਜਾਣਕਾਰੀ ਇੱਥੇ ਪ੍ਰਾਪਤ ਕਰੋ!
               </h2>
-              <a href="#about-us" className="btn btn-default">
-                About Us
+              <a href="#about-us" className="btn btn-default" style={{ marginTop: '15px', fontWeight: 600, padding: '10px 24px' }}>
+                ਸਾਡੇ ਬਾਰੇ ਜਾਣੋ
               </a>
             </div>
           </div>

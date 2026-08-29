@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 
 const numberedHeadlines = [
-  { num: '01', title: "Survivor is world's oldest man - Guinness World Records.", img: '/img/index_370x185-image07.jpg' },
-  { num: '02', title: 'East Kilbride: Manager Billy O. to lead upcoming championship fixtures.', img: '/img/index_370x185-image08.jpg' },
-  { num: '03', title: 'Heritage and contemporary arts celebrated in annual retrospective.', img: '/img/index_370x185-image09.jpg' },
-  { num: '04', title: 'Postal history and rare stamp archives valued in national exhibitions.', img: '/img/index_370x185-image10.jpg' },
-  { num: '05', title: 'Logistics innovations modernize transport across commercial corridors.', img: '/img/index_370x185-image11.jpg' },
-  { num: '06', title: "Global maritime engineering showcases world's advanced hybrid vessels.", img: '/img/index_370x185-image12.jpg' },
-  { num: '07', title: 'Public health leaders convene to discuss seasonal wellness guidelines.', img: '/img/index_370x185-image13.jpg' },
-  { num: '08', title: 'Why do you need digital streaming access for premium broadcast features?', img: '/img/index_370x185-image14.jpg' },
-  { num: '09', title: 'Your digital subscription is your key to uninterrupted live broadcast coverage.', img: '/img/index_370x185-image15.jpg' }
+  { num: '01', title: "ਗਿਨੀਜ਼ ਬੁੱਕ ਆਫ਼ ਵਰਲਡ ਰਿਕਾਰਡਜ਼ ਵਿੱਚ ਪੰਜਾਬੀ ਨੌਜਵਾਨਾਂ ਦਾ ਨਾਮ ਦਰਜ।", img: '/img/index_370x185-image07.jpg' },
+  { num: '02', title: 'ਕਬੱਡੀ ਚੈਂਪੀਅਨਸ਼ਿਪ: ਨਵੇਂ ਖਿਡਾਰੀਆਂ ਦੀ ਚੋਣ ਲਈ ਟ੍ਰਾਇਲ ਮੁਕੰਮਲ।', img: '/img/index_370x185-image08.jpg' },
+  { num: '03', title: 'ਪੰਜਾਬੀ ਵਿਰਸਾ ਅਤੇ ਪ੍ਰੰਪਰਾਗਤ ਲੋਕ ਕਲਾਵਾਂ ਦਾ ਸ਼ਾਨਦਾਰ ਪ੍ਰਦਰਸ਼ਨ।', img: '/img/index_370x185-image09.jpg' },
+  { num: '04', title: 'ਇਤਿਹਾਸਕ ਦਸਤਾਵੇਜ਼ਾਂ ਅਤੇ ਪੁਰਾਤਨ ਸਿੱਕਿਆਂ ਦੀ ਵਿਸ਼ੇਸ਼ ਪ੍ਰਦਰਸ਼ਨੀ।', img: '/img/index_370x185-image10.jpg' },
+  { num: '05', title: 'ਸੜਕੀ ਆਵਾਜਾਈ ਅਤੇ ਟਰਾਂਸਪੋਰਟ ਨਿਯਮਾਂ ਵਿੱਚ ਲੋਕ ਹਿੱਤ ਸੁਧਾਰ।', img: '/img/index_370x185-image11.jpg' },
+  { num: '06', title: 'ਖੇਤੀਬਾੜੀ ਵਿੱਚ ਆਧੁਨਿਕ ਮਸ਼ੀਨਰੀ ਅਤੇ ਡਰੋਨ ਤਕਨਾਲੋਜੀ ਦੀ ਵਰਤੋਂ।', img: '/img/index_370x185-image12.jpg' },
+  { num: '07', title: 'ਸਿਹਤ ਮਾਹਿਰਾਂ ਵੱਲੋਂ ਮੌਸਮੀ ਤਬਦੀਲੀਆਂ ਦੌਰਾਨ ਸਾਵਧਾਨੀ ਦੇ ਨੁਸਖ਼ੇ।', img: '/img/index_370x185-image13.jpg' },
+  { num: '08', title: 'ਪੰਜਾਬ ਫਾਈਲਜ਼ ਲਾਈਵ ਸਟ੍ਰੀਮਿੰਗ ਰਾਹੀਂ ਦੇਸ਼-ਵਿਦੇਸ਼ ਦੀਆਂ ਖ਼ਬਰਾਂ ਨਾਲ ਜੁੜੋ।', img: '/img/index_370x185-image14.jpg' },
+  { num: '09', title: '24 ਘੰਟੇ ਨਿਰਪੱਖ, ਸੱਚੀ ਅਤੇ ਭਰੋਸੇਯੋਗ ਪੱਤਰਕਾਰੀ ਦਾ ਪ੍ਰਮੁੱਖ ਸਰੋਤ।', img: '/img/index_370x185-image15.jpg' }
 ];
 
 export default function RethinkingNewsModule() {
-  const [isCelsius, setIsCelsius] = useState(false);
-  const fTemp = 74;
-  const cTemp = Math.round(((fTemp - 32) * 5) / 9);
+  const [isCelsius, setIsCelsius] = useState(true);
+  const cTemp = 28;
+  const fTemp = Math.round((cTemp * 9) / 5 + 32);
 
   return (
     <section className="module highlight">
@@ -26,9 +26,9 @@ export default function RethinkingNewsModule() {
             <div className="news">
               <div className="module-title">
                 <h3 className="title">
-                  <span className="bg-1">Rethinking</span>
+                  <span className="bg-1">ਨਵੀਂ ਸੋਚ</span>
                 </h3>
-                <h3 className="subtitle">the Punjab Files Experience</h3>
+                <h3 className="subtitle">ਪੰਜਾਬ ਫਾਈਲਜ਼ ਦਾ ਵਿਸ਼ੇਸ਼ ਅੰਦਾਜ਼</h3>
               </div>
 
               {/* Featured Item */}
@@ -42,7 +42,7 @@ export default function RethinkingNewsModule() {
                   <div className="title-left title-style04 underline04">
                     <h3>
                       <a href="#breaking">
-                        <strong>Breaking</strong> News Stories
+                        <strong>ਬ੍ਰੇਕਿੰਗ ਨਿਊਜ਼</strong> ਅਤੇ ਖੋਜੀ ਪੱਤਰਕਾਰੀ
                       </a>
                     </h3>
                   </div>
@@ -50,25 +50,25 @@ export default function RethinkingNewsModule() {
                   <div className="post-meta-elements">
                     <div className="post-meta-author">
                       <i className="fa fa-user"></i>
-                      <a href="#author">By Senior Editorial Desk</a>
+                      <a href="#author">ਸੀਨੀਅਰ ਸੰਪਾਦਕੀ ਡੈਸਕ ਵੱਲੋਂ</a>
                     </div>
                     <div className="post-meta-date">
-                      <i className="fa fa-calendar"></i>October 2026
+                      <i className="fa fa-calendar"></i>ਅਕਤੂਬਰ 2026
                     </div>
                   </div>
                   <p>
                     <a href="#breaking" className="external-link">
-                      At Punjab Files we view journalism as an essential public trust, delivering verified, accurate, and fearless coverage...
+                      ਪੰਜਾਬ ਫਾਈਲਜ਼ ’ਤੇ ਅਸੀਂ ਪੱਤਰਕਾਰੀ ਨੂੰ ਸਮਾਜ ਪ੍ਰਤੀ ਅਹਿਮ ਜ਼ਿੰਮੇਵਾਰੀ ਮੰਨਦੇ ਹੋਏ ਹਰ ਵਰਗ ਦੀ ਆਵਾਜ਼ ਨਿਰਪੱਖਤਾ ਨਾਲ ਉਠਾਉਂਦੇ ਹਾਂ...
                     </a>
                   </p>
                   <p>
                     <a href="#breaking" className="external-link">
-                      Our correspondents on the ground provide real-time perspectives on policy, economy, and society.
+                      ਸਾਡੇ ਜ਼ਮੀਨੀ ਰਿਪੋਰਟਰ ਸੂਬੇ ਦੇ ਵਿਕਾਸ, ਆਰਥਿਕਤਾ, ਖੇਤੀਬਾੜੀ ਅਤੇ ਸਿੱਖਿਆ ਦੇ ਖੇਤਰ ਵਿੱਚ ਜ਼ਮੀਨੀ ਹਕੀਕਤਾਂ ਸਾਹਮਣੇ ਲਿਆਉਂਦੇ ਹਨ।
                     </a>
                   </p>
                   <div>
                     <a href="#breaking">
-                      <span className="read-more">Continue reading</span>
+                      <span className="read-more">ਹੋਰ ਪੜ੍ਹੋ</span>
                     </a>
                   </div>
                 </div>
@@ -83,9 +83,9 @@ export default function RethinkingNewsModule() {
                     </a>
                   </div>
                   <div className="item-content">
-                    <span className="day">Latest Updates</span>
+                    <span className="day">ਤਾਜ਼ਾ ਅੱਪਡੇਟ</span>
                     <p>
-                      <a href="#energy" className="external-link">The Energy Choices</a>
+                      <a href="#energy" className="external-link">ਊਰਜਾ ਅਤੇ ਬਿਜਲੀ ਸੁਧਾਰ</a>
                     </p>
                   </div>
                 </div>
@@ -97,9 +97,9 @@ export default function RethinkingNewsModule() {
                     </a>
                   </div>
                   <div className="item-content">
-                    <span className="day">Latest Updates</span>
+                    <span className="day">ਤਾਜ਼ਾ ਅੱਪਡੇਟ</span>
                     <p>
-                      <a href="#agriculture" className="external-link">Food &amp; Agriculture</a>
+                      <a href="#agriculture" className="external-link">ਖੇਤੀਬਾੜੀ ਤੇ ਕਿਸਾਨੀ ਮੁੱਦੇ</a>
                     </p>
                   </div>
                 </div>
@@ -111,9 +111,9 @@ export default function RethinkingNewsModule() {
                     </a>
                   </div>
                   <div className="item-content">
-                    <span className="day">Latest Updates</span>
+                    <span className="day">ਤਾਜ਼ਾ ਅੱਪਡੇਟ</span>
                     <p>
-                      <a href="#healthcare" className="external-link">Healthcare Horizons</a>
+                      <a href="#healthcare" className="external-link">ਸਿਹਤ ਸਹੂਲਤਾਂ ਦਾ ਵਿਸਥਾਰ</a>
                     </p>
                   </div>
                 </div>
@@ -125,9 +125,9 @@ export default function RethinkingNewsModule() {
                     </a>
                   </div>
                   <div className="item-content">
-                    <span className="day">Latest Updates</span>
+                    <span className="day">ਤਾਜ਼ਾ ਅੱਪਡੇਟ</span>
                     <p>
-                      <a href="#infrastructure" className="external-link">Housing &amp; Construction</a>
+                      <a href="#infrastructure" className="external-link">ਬੁਨਿਆਦੀ ਢਾਂਚਾ ਤੇ ਮਕਾਨ ਉਸਾਰੀ</a>
                     </p>
                   </div>
                 </div>
@@ -136,9 +136,9 @@ export default function RethinkingNewsModule() {
               {/* Sport Section */}
               <div className="module-title" style={{ marginTop: '30px' }}>
                 <h3 className="title">
-                  <span className="bg-4">Sport News</span>
+                  <span className="bg-4">ਖੇਡ ਸਮਾਚਾਰ</span>
                 </h3>
-                <h3 className="subtitle">Watch the latest sport news</h3>
+                <h3 className="subtitle">ਦੇਖੋ ਤਾਜ਼ਾ ਖੇਡਾਂ ਦੀਆਂ ਖ਼ਬਰਾਂ</h3>
               </div>
 
               <div className="item">
@@ -151,7 +151,7 @@ export default function RethinkingNewsModule() {
                   <div className="title-left title-style04 underline04">
                     <h3>
                       <a href="#sport">
-                        <strong>Features</strong> &amp; In-depth Sports Analysis
+                        <strong>ਖੇਡ ਵਿਸ਼ਲੇਸ਼ਣ</strong> ਅਤੇ ਖਿਡਾਰੀਆਂ ਦੀਆਂ ਪ੍ਰਾਪਤੀਆਂ
                       </a>
                     </h3>
                   </div>
@@ -159,20 +159,20 @@ export default function RethinkingNewsModule() {
                   <div className="post-meta-elements">
                     <div className="post-meta-author">
                       <i className="fa fa-user"></i>
-                      <a href="#sport">By Sports Desk</a>
+                      <a href="#sport">ਸਪੋਰਟਸ ਡੈਸਕ ਵੱਲੋਂ</a>
                     </div>
                     <div className="post-meta-date">
-                      <i className="fa fa-calendar"></i>October 2026
+                      <i className="fa fa-calendar"></i>ਅਕਤੂਬਰ 2026
                     </div>
                   </div>
                   <p>
                     <a href="#sport" className="external-link">
-                      Tactical breakdowns, player interviews, and comprehensive season previews across all major sports leagues.
+                      ਕਬੱਡੀ, ਕ੍ਰਿਕਟ ਅਤੇ ਹਾਕੀ ਦੇ ਮੈਦਾਨਾਂ ਤੋਂ ਤਾਜ਼ਾ ਸਕੋਰ, ਮੈਚ ਸਮੀਖਿਆ ਅਤੇ ਪ੍ਰਮੁੱਖ ਖਿਡਾਰੀਆਂ ਦੀਆਂ ਵਿਸ਼ੇਸ਼ ਇੰਟਰਵਿਊਆਂ।
                     </a>
                   </p>
                   <div>
                     <a href="#sport">
-                      <span className="read-more">Continue reading</span>
+                      <span className="read-more">ਹੋਰ ਪੜ੍ਹੋ</span>
                     </a>
                   </div>
                 </div>
@@ -181,14 +181,14 @@ export default function RethinkingNewsModule() {
               {/* 8-block Sport Thumbnails */}
               <div className="news-block">
                 {[
-                  { title: 'Cricket League Updates', time: '1h ago', img: '/img/index_800x400-image25.jpg' },
-                  { title: 'Football Championship', time: '54min ago', img: '/img/index_800x400-image26.jpg' },
-                  { title: 'Rugby Tournament', time: '6h ago', img: '/img/index_800x400-image27.jpg' },
-                  { title: 'Cycling Grand Prix', time: '1h ago', img: '/img/index_800x400-image28.jpg' },
-                  { title: 'Soccer Highlights', time: '1h ago', img: '/img/index_800x400-image29.jpg' },
-                  { title: 'Regional Athletics', time: '54min ago', img: '/img/index_800x400-image30.jpg' },
-                  { title: 'Basketball Playoffs', time: '6h ago', img: '/img/index_800x400-image31.jpg' },
-                  { title: 'Tennis Open Matches', time: '1h ago', img: '/img/index_800x400-image10.jpg' }
+                  { title: 'ਕ੍ਰਿਕਟ ਲੀਗ ਅੱਪਡੇਟ', time: '1 ਘੰਟਾ ਪਹਿਲਾਂ', img: '/img/index_800x400-image25.jpg' },
+                  { title: 'ਫੁੱਟਬਾਲ ਚੈਂਪੀਅਨਸ਼ਿਪ', time: '54 ਮਿੰਟ ਪਹਿਲਾਂ', img: '/img/index_800x400-image26.jpg' },
+                  { title: 'ਕਬੱਡੀ ਟੂਰਨਾਮੈਂਟ ਫਾਈਨਲ', time: '6 ਘੰਟੇ ਪਹਿਲਾਂ', img: '/img/index_800x400-image27.jpg' },
+                  { title: 'ਸਾਈਕਲਿੰਗ ਮੁਕਾਬਲੇ', time: '1 ਘੰਟਾ ਪਹਿਲਾਂ', img: '/img/index_800x400-image28.jpg' },
+                  { title: 'ਹਾਕੀ ਲੀਗ ਹਾਈਲਾਈਟਸ', time: '1 ਘੰਟਾ ਪਹਿਲਾਂ', img: '/img/index_800x400-image29.jpg' },
+                  { title: 'ਸੂਬਾਈ ਅਥਲੈਟਿਕਸ ਮੀਟ', time: '54 ਮਿੰਟ ਪਹਿਲਾਂ', img: '/img/index_800x400-image30.jpg' },
+                  { title: 'ਬਾਸਕਟਬਾਲ ਪਲੇਆਫਸ', time: '6 ਘੰਟੇ ਪਹਿਲਾਂ', img: '/img/index_800x400-image31.jpg' },
+                  { title: 'ਟੈਨਿਸ ਓਪਨ ਮੈਚ', time: '1 ਘੰਟਾ ਪਹਿਲਾਂ', img: '/img/index_800x400-image10.jpg' }
                 ].map((sp, idx) => (
                   <div className="item-block" key={idx}>
                     <div className="item-image">
@@ -211,7 +211,7 @@ export default function RethinkingNewsModule() {
             {/* Headlines */}
             <div className="title-style02">
               <h3>
-                <a href="#headlines">Headlines</a>
+                <a href="#headlines">ਮੁੱਖ ਸੁਰਖੀਆਂ</a>
               </h3>
             </div>
             <div className="sidebar-post">
@@ -240,7 +240,7 @@ export default function RethinkingNewsModule() {
             <div id="weather" className="sidebar-weather" style={{ marginTop: '20px' }}>
               <div className="block-title-1">
                 <div className="weather-city-text">
-                  <h3>Chandigarh / New Delhi</h3>
+                  <h3>ਚੰਡੀਗੜ੍ਹ / ਅੰਮ੍ਰਿਤਸਰ / ਦਿੱਲੀ</h3>
                 </div>
               </div>
               <div className="weather-card">
@@ -259,11 +259,11 @@ export default function RethinkingNewsModule() {
                   </button>
                 </div>
                 <div id="description">
-                  <div id="type" className="desc-text">Sunny &amp; Clear Sky</div>
+                  <div id="type" className="desc-text">ਸਾਫ਼ ਅਸਮਾਨ ਅਤੇ ਖਿੜੀ ਧੁੱਪ</div>
                   <i className="wi wi-humidity"></i>
-                  <div id="humidity" className="desc-text">Humidity: 48%</div>
+                  <div id="humidity" className="desc-text">ਨਮੀ: 48%</div>
                   <i className="wi wi-strong-wind"></i>
-                  <div id="wind" className="desc-text">Wind: 9 km/h NW</div>
+                  <div id="wind" className="desc-text">ਹਵਾ: 9 ਕਿਲੋਮੀਟਰ/ਘੰਟਾ</div>
                 </div>
               </div>
             </div>
@@ -273,14 +273,14 @@ export default function RethinkingNewsModule() {
         {/* 24h News On-Air Banner Ticker */}
         <div className="outer" style={{ marginTop: '25px' }}>
           <div className="breaking-ribbon">
-            <h5>Punjab Files On-Air</h5>
+            <h5>ਪੰਜਾਬ ਫਾਈਲਜ਼ ਆਨ-ਏਅਰ</h5>
           </div>
           <div className="news-on-air">
             <ul>
               <li>
                 <h4>
                   <i className="fa fa-video-camera" aria-hidden="true" style={{ marginRight: '8px', color: '#e52d27' }}></i>
-                  <a href="#live-stream">Watch Punjab Files 24/7 Streaming Live Online in HD Quality</a>
+                  <a href="#live-stream">ਪੰਜਾਬ ਫਾਈਲਜ਼ 24/7 ਐਚ.ਡੀ. ਕੁਆਲਿਟੀ ਵਿੱਚ ਲਾਈਵ ਆਨਲਾਈਨ ਦੇਖੋ</a>
                 </h4>
               </li>
             </ul>

@@ -22,10 +22,10 @@ export default function FeaturedAirShowModule() {
               </div>
               <div className="content">
                 <h2>
-                  <a href="#airshow">International Aviation &amp; Aerospace Expo</a>
+                  <a href="#airshow">ਕੌਮਾਂਤਰੀ ਏਅਰ ਸ਼ੋਅ ਅਤੇ ਡਿਫੈਂਸ ਐਕਸਪੋ</a>
                 </h2>
                 <h4>
-                  Spectacular aerobatic maneuvers and next-generation defence technology exhibited at the annual air show.
+                  ਅਸਮਾਨ ਵਿੱਚ ਲੜਾਕੂ ਜਹਾਜ਼ਾਂ ਦੇ ਸ਼ਾਨਦਾਰ ਕਰਤੱਬ ਅਤੇ ਅਤਿ-ਆਧੁਨਿਕ ਤਕਨਾਲੋਜੀ ਦੀ ਵਿਸ਼ੇਸ਼ ਪ੍ਰਦਰਸ਼ਨੀ।
                 </h4>
               </div>
             </div>
@@ -46,7 +46,7 @@ export default function FeaturedAirShowModule() {
                   }}
                 >
                   <span>
-                    <a className="label-1" href="#world">World News</a>
+                    <a className="label-1" href="#world">ਦੇਸ਼-ਵਿਦੇਸ਼</a>
                   </span>
                   <a href="#video">
                     <span className="play-icon"></span>
@@ -55,7 +55,7 @@ export default function FeaturedAirShowModule() {
               </div>
               <div className="content">
                 <h4>
-                  <a href="#world">Global delegates deliberate on technological cooperation...</a>
+                  <a href="#world">ਸੰਸਾਰ ਭਰ ਦੇ ਡੈਲੀਗੇਟਾਂ ਵੱਲੋਂ ਤਕਨੀਕੀ ਸਹਿਯੋਗ ’ਤੇ ਵਿਸ਼ੇਸ਼ ਵਿਚਾਰ-ਵਟਾਂਦਰਾ...</a>
                 </h4>
               </div>
             </div>
@@ -69,9 +69,9 @@ export default function FeaturedAirShowModule() {
                   </a>
                 </div>
                 <div className="item-content">
-                  <div className="entry-meta bg-1">News</div>
+                  <div className="entry-meta bg-1">ਖ਼ਬਰਾਂ</div>
                   <p className="ellipsis">
-                    <a href="#news">Cyber safety taskforce launches proactive community outreach...</a>
+                    <a href="#news">ਸਾਈਬਰ ਸੁਰੱਖਿਆ ਅਤੇ ਆਨਲਾਈਨ ਧੋਖਾਧੜੀ ਰੋਕਣ ਲਈ ਨਵੀਂ ਮੁਹਿੰਮ...</a>
                   </p>
                 </div>
               </div>
@@ -84,9 +84,9 @@ export default function FeaturedAirShowModule() {
                   </a>
                 </div>
                 <div className="item-content">
-                  <div className="entry-meta bg-2">Business</div>
+                  <div className="entry-meta bg-2">ਵਪਾਰ</div>
                   <p className="ellipsis">
-                    <a href="#business">Manufacturing clusters report increased export orders...</a>
+                    <a href="#business">ਪੰਜਾਬ ਦੇ ਨਿਰਯਾਤ ਅਤੇ ਸਨਅਤੀ ਖੇਤਰ ਵਿੱਚ ਰਿਕਾਰਡ ਵਾਧਾ ਦਰਜ...</a>
                   </p>
                 </div>
               </div>
@@ -99,9 +99,9 @@ export default function FeaturedAirShowModule() {
                   </a>
                 </div>
                 <div className="item-content">
-                  <div className="entry-meta bg-4">Politics</div>
+                  <div className="entry-meta bg-4">ਰਾਜਨੀਤੀ</div>
                   <p className="ellipsis">
-                    <a href="#politics">Policy discussions foster consensus on infrastructure expansion...</a>
+                    <a href="#politics">ਸੂਬੇ ਦੇ ਵਿਕਾਸ ਕਾਰਜਾਂ ਲਈ ਨਵੀਂ ਨੀਤੀ ਤਹਿਤ ਬਜਟ ਅਲਾਟਮੈਂਟ...</a>
                   </p>
                 </div>
               </div>

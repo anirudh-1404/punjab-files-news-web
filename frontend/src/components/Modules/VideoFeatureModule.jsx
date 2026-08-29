@@ -22,7 +22,7 @@ export default function VideoFeatureModule() {
           {/* Related Videos Col-3 */}
           <div className="col-xs-12 col-sm-3 col-md-3">
             <div className="title-left title-style03 underline03">
-              <h4>Related Videos</h4>
+              <h4>ਸਬੰਧਤ ਵੀਡੀਓਜ਼</h4>
             </div>
             <div className="module-media" style={{ marginBottom: '15px', position: 'relative' }}>
               <div className="image">

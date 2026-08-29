@@ -2,33 +2,33 @@ import React from 'react';
 
 const newsfeedItems = [
   {
-    title: 'From propaganda to pop artist',
-    desc: 'A gift for drawing led to a prestigious career as celebrated artist...',
+    title: 'ਪੰਜਾਬੀ ਕਲਾ ਅਤੇ ਸੱਭਿਆਚਾਰ',
+    desc: 'ਪੰਜਾਬੀ ਨਾਟਕਾਂ ਅਤੇ ਲੋਕ ਕਲਾ ਦਾ ਕੌਮਾਂਤਰੀ ਪੱਧਰ ’ਤੇ ਵਿਸ਼ੇਸ਼ ਪ੍ਰਦਰਸ਼ਨ...',
     img: '/img/index_370x185-image01.jpg'
   },
   {
-    title: 'Clean Energy & Regional Growth',
-    desc: 'New green energy projects promise sustainable power generation...',
+    title: 'ਸੂਰਜੀ ਊਰਜਾ ਅਤੇ ਖੇਤੀਬਾੜੀ',
+    desc: 'ਨਵੇਂ ਸੋਲਰ ਪ੍ਰੋਜੈਕਟਾਂ ਨਾਲ ਕਿਸਾਨਾਂ ਦੀ ਬਿਜਲੀ ਲਾਗਤ ਵਿੱਚ ਵੱਡੀ ਕਮੀ...',
     img: '/img/index_370x185-image02.jpg'
   },
   {
-    title: 'Youth & Higher Education',
-    desc: 'Empowering students through advanced skill training programs...',
+    title: 'ਨੌਜਵਾਨ ਅਤੇ ਉੱਚ ਸਿੱਖਿਆ',
+    desc: 'ਵਿਦਿਆਰਥੀਆਂ ਲਈ ਮੁਫ਼ਤ ਹੁਨਰ ਵਿਕਾਸ ਅਤੇ ਕੰਪਿਊਟਰ ਸਿਖਲਾਈ ਕੇਂਦਰ...',
     img: '/img/index_370x185-image03.jpg'
   },
   {
-    title: 'Infrastructure Developments',
-    desc: 'Highway expansion accelerates commerce across state borders...',
+    title: 'ਬੁਨਿਆਦੀ ਢਾਂਚਾ ਅਤੇ ਸੜਕਾਂ',
+    desc: 'ਨਵੇਂ ਐਕਸਪ੍ਰੈਸਵੇਅ ਅਤੇ ਹਾਈਵੇਅ ਪ੍ਰਾਜੈਕਟਾਂ ਨਾਲ ਵਪਾਰ ਵਿੱਚ ਤੇਜ਼ੀ...',
     img: '/img/index_370x185-image04.jpg'
   },
   {
-    title: 'Public Health Care Outreaches',
-    desc: 'Healthcare camps offer free diagnostics and specialist care...',
+    title: 'ਪੇਂਡੂ ਸਿਹਤ ਸੇਵਾਵਾਂ',
+    desc: 'ਮੋਬਾਈਲ ਵੈਨਾਂ ਰਾਹੀਂ ਪਿੰਡ-ਪਿੰਡ ਮੁਫ਼ਤ ਦਵਾਈਆਂ ਅਤੇ ਲੈਬ ਟੈਸਟ...',
     img: '/img/index_370x185-image05.jpg'
   },
   {
-    title: 'How To Succeed In Modern Markets',
-    desc: 'Strategies for establishing entrepreneurial ventures in emerging sectors...',
+    title: 'ਨਵੇਂ ਕਾਰੋਬਾਰ ਅਤੇ ਸਟਾਰਟਅੱਪ',
+    desc: 'ਪੰਜਾਬੀ ਨੌਜਵਾਨਾਂ ਵੱਲੋਂ ਖੇਤੀ ਅਤੇ ਤਕਨੀਕੀ ਖੇਤਰ ਵਿੱਚ ਨਵੇਂ ਉੱਦਮ...',
     img: '/img/index_370x185-image06.jpg'
   }
 ];
@@ -43,9 +43,9 @@ export default function NationalNewsModule() {
             <div className="news">
               <div className="module-title">
                 <h3 className="title">
-                  <span className="bg-11">National News</span>
+                  <span className="bg-11">ਰਾਸ਼ਟਰੀ ਤੇ ਸੂਬਾਈ ਖ਼ਬਰਾਂ</span>
                 </h3>
-                <h3 className="subtitle">Latest News in details</h3>
+                <h3 className="subtitle">ਵਿਸਥਾਰਪੂਰਵਕ ਤਾਜ਼ਾ ਸਮਾਚਾਰ</h3>
               </div>
 
               {/* Item 1 */}
@@ -55,30 +55,30 @@ export default function NationalNewsModule() {
                     <img className="img-responsive img-full" src="/img/index_800x400-image05.jpg" alt="National Politics" />
                   </a>
                   <span>
-                    <a className="label-2" href="#politics">Politics</a>
+                    <a className="label-2" href="#politics">ਰਾਜਨੀਤੀ</a>
                   </span>
                 </div>
                 <div className="item-content">
                   <div className="title-left title-style04 underline04">
                     <h3>
                       <a href="#politics">
-                        <strong>Legislative</strong> Assembly Reforms
+                        <strong>ਵਿਧਾਨ ਸਭਾ</strong> ਦੇ ਅਹਿਮ ਫ਼ੈਸਲੇ
                       </a>
                     </h3>
                   </div>
                   <p>
                     <a href="#politics">
-                      Key legislation regarding agricultural welfare and rural development receives broad parliamentary backing.
+                      ਕਿਸਾਨਾਂ ਲਈ ਨਹਿਰੀ ਪਾਣੀ ਦੇ ਵਿਸਥਾਰ ਅਤੇ ਨਿਰਵਿਘਨ ਬਿਜਲੀ ਸਪਲਾਈ ਲਈ ਵੱਡਾ ਬਜਟ ਮਨਜ਼ੂਰ।
                     </a>
                   </p>
                   <p>
                     <a href="#politics" className="external-link">
-                      Ministerial leaders affirm commitments toward transparent resource distribution and fast-track implementation.
+                      ਸਰਕਾਰੀ ਨੁਮਾਇੰਦਿਆਂ ਨੇ ਵਿਕਾਸ ਕਾਰਜਾਂ ਨੂੰ ਸਮੇਂ ਸਿਰ ਮੁਕੰਮਲ ਕਰਨ ਦੀ ਦਿੱਤੀ ਹਦਾਇਤ।
                     </a>
                   </p>
                   <div>
                     <a href="#politics">
-                      <span className="read-more">Politics</span>
+                      <span className="read-more">ਰਾਜਨੀਤੀ</span>
                     </a>
                   </div>
                 </div>
@@ -91,30 +91,30 @@ export default function NationalNewsModule() {
                     <img className="img-responsive img-full" src="/img/index_800x400-image06.jpg" alt="Community Progress" />
                   </a>
                   <span>
-                    <a className="label-1" href="#news">News</a>
+                    <a className="label-1" href="#news">ਖ਼ਬਰਾਂ</a>
                   </span>
                 </div>
                 <div className="item-content">
                   <div className="title-left title-style04 underline04">
                     <h3>
                       <a href="#news">
-                        <strong>Community</strong> Development Initiatives
+                        <strong>ਪੇਂਡੂ</strong> ਵਿਕਾਸ ਅਤੇ ਸੁਧਾਰ ਯੋਜਨਾਵਾਂ
                       </a>
                     </h3>
                   </div>
                   <p>
                     <a href="#news" className="external-link">
-                      Civic authorities unveil state-of-the-art citizen centers to streamline municipal services.
+                      ਪਿੰਡਾਂ ਵਿੱਚ ਸਾਫ਼ ਪੀਣ ਵਾਲਾ ਪਾਣੀ ਅਤੇ ਸੋਲਰ ਸਟਰੀਟ ਲਾਈਟਾਂ ਲਗਾਉਣ ਦਾ ਕੰਮ ਤੇਜ਼ੀ ਨਾਲ ਸ਼ੁਰੂ।
                     </a>
                   </p>
                   <p>
                     <a href="#news" className="external-link">
-                      Residents welcome digital grievance redressing portals designed for quick response.
+                      ਪੰਚਾਇਤਾਂ ਨੂੰ ਸਿੱਧੇ ਵਿਕਾਸ ਫੰਡ ਜਾਰੀ, ਲੋਕਾਂ ਦੀਆਂ ਸ਼ਿਕਾਇਤਾਂ ਦੇ ਹੱਲ ਲਈ ਸਿੰਗਲ ਵਿੰਡੋ ਸਿਸਟਮ।
                     </a>
                   </p>
                   <div>
                     <a href="#news">
-                      <span className="read-more">Punjab Files News</span>
+                      <span className="read-more">ਪੰਜਾਬ ਫਾਈਲਜ਼</span>
                     </a>
                   </div>
                 </div>
@@ -127,30 +127,30 @@ export default function NationalNewsModule() {
                     <img className="img-responsive img-full" src="/img/index_800x400-image07.jpg" alt="Economic Outlook" />
                   </a>
                   <span>
-                    <a className="label-5" href="#business">Economy</a>
+                    <a className="label-5" href="#business">ਆਰਥਿਕਤਾ</a>
                   </span>
                 </div>
                 <div className="item-content">
                   <div className="title-left title-style04 underline04">
                     <h3>
                       <a href="#business">
-                        <strong>Economic</strong> Outlook &amp; Market Growth
+                        <strong>ਕਾਰੋਬਾਰ</strong> ਅਤੇ ਨਵੇਂ ਉਦਯੋਗਿਕ ਮੌਕੇ
                       </a>
                     </h3>
                   </div>
                   <p>
                     <a href="#business" className="external-link">
-                      How regional enterprise clusters are driving job creation and boosting industrial manufacturing.
+                      ਪੰਜਾਬ ਵਿੱਚ ਫੂਡ ਪ੍ਰੋਸੈਸਿੰਗ ਅਤੇ ਟੈਕਸਟਾਈਲ ਉਦਯੋਗਾਂ ਨੂੰ ਮਿਲੇਗਾ ਵਿਸ਼ੇਸ਼ ਉਤਸ਼ਾਹ।
                     </a>
                   </p>
                   <p>
                     <a href="#business" className="external-link">
-                      Financial experts project strong GDP performance driven by domestic consumption and exports.
+                      ਆਰਥਿਕ ਮਾਹਿਰਾਂ ਅਨੁਸਾਰ ਨਵੇਂ ਨਿਵੇਸ਼ ਨਾਲ ਸਥਾਨਕ ਨੌਜਵਾਨਾਂ ਲਈ ਰੁਜ਼ਗਾਰ ਵਿੱਚ ਵੱਡਾ ਵਾਧਾ ਹੋਵੇਗਾ।
                     </a>
                   </p>
                   <div>
                     <a href="#business">
-                      <span className="read-more">Watch Live</span>
+                      <span className="read-more">ਲਾਈਵ ਦੇਖੋ</span>
                     </a>
                   </div>
                 </div>
@@ -162,29 +162,29 @@ export default function NationalNewsModule() {
                   <a className="img-link" href="#business">
                     <img className="img-responsive img-full" src="/img/index_800x400-image08.jpg" alt="Technology in Business" />
                   </a>
-                  <a className="label-6" href="#business">Business</a>
+                  <a className="label-6" href="#business">ਵਪਾਰ</a>
                 </div>
                 <div className="item-content">
                   <div className="title-left title-style04 underline04">
                     <h3>
                       <a href="#business">
-                        <strong>Technology</strong> &amp; Digital Commerce
+                        <strong>ਡਿਜੀਟਲ</strong> ਤਕਨਾਲੋਜੀ ਅਤੇ ਆਨਲਾਈਨ ਵਪਾਰ
                       </a>
                     </h3>
                   </div>
                   <p>
                     <a href="#business" className="external-link">
-                      Modern fintech innovations are empowering local merchants with contactless payment infrastructure.
+                      ਛੋਟੇ ਦੁਕਾਨਦਾਰਾਂ ਅਤੇ ਕਿਸਾਨਾਂ ਲਈ ਆਨਲਾਈਨ ਮੰਡੀ ਪਲੇਟਫਾਰਮ ਰਾਹੀਂ ਸਿੱਧੀ ਵਿਕਰੀ ਦੀ ਸਹੂਲਤ।
                     </a>
                   </p>
                   <p>
                     <a href="#business" className="external-link">
-                      Cloud computing and smart logistics optimize supply chain reliability across districts.
+                      ਡਿਜੀਟਲ ਪੇਮੈਂਟ ਅਤੇ ਈ-ਕਾਮਰਸ ਨਾਲ ਪੇਂਡੂ ਕਾਰੋਬਾਰੀਆਂ ਨੂੰ ਵਿਸ਼ਵ ਪੱਧਰੀ ਬਾਜ਼ਾਰ ਮੁਹੱਈਆ।
                     </a>
                   </p>
                   <div>
                     <a href="#business">
-                      <span className="read-more">Business</span>
+                      <span className="read-more">ਵਪਾਰ</span>
                     </a>
                   </div>
                 </div>
@@ -203,7 +203,7 @@ export default function NationalNewsModule() {
             <div className="block-title-1">
               <h3>
                 <a href="#feed">
-                  <strong>Punjab Files</strong> Feed
+                  <strong>ਪੰਜਾਬ ਫਾਈਲਜ਼</strong> ਫੀਡ
                 </a>
               </h3>
             </div>

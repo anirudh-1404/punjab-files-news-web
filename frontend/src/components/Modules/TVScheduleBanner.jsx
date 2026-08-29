@@ -6,15 +6,15 @@ export default function TVScheduleBanner() {
       <div className="container">
         <div className="show-info">
           <h4 className="schedule-logo bg-1">
-            <a href="#tv-schedule">TV Schedule</a>
+            <a href="#tv-schedule">ਲਾਈਵ ਟੀਵੀ ਸ਼ਡਿਊਲ</a>
           </h4>
           <div className="show-title">
-            <h2>Punjab Insight</h2>
-            <h3>Hosted by Senior Editors</h3>
+            <h2>ਪੰਜਾਬ ਇਨਸਾਈਟ</h2>
+            <h3>ਸੀਨੀਅਰ ਸੰਪਾਦਕਾਂ ਨਾਲ ਖ਼ਾਸ ਵਿਚਾਰ-ਵਟਾਂਦਰਾ</h3>
           </div>
           <h4>
             <a className="show-info-button bg-1" href="#watch">
-              Watch the prime time policy debate and exclusive interviews, Tonight at 9 PM
+              ਪ੍ਰਾਈਮ ਟਾਈਮ ਸਿਆਸੀ ਬਹਿਸ ਅਤੇ ਜ਼ਮੀਨੀ ਇੰਟਰਵਿਊ ਦੇਖੋ — ਅੱਜ ਰਾਤ 9:00 ਵਜੇ
             </a>
           </h4>
           <div className="figure">

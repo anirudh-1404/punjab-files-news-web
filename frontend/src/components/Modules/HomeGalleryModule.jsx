@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 
 const galleryItems = [
-  { img: '/img/index_slider-large-image01.jpg', title: 'Gallery 1' },
-  { img: '/img/index_slider-large-image02.jpg', title: 'Gallery 2' },
-  { img: '/img/index_slider-large-image03.jpg', title: 'Gallery 3' },
-  { img: '/img/index_slider-large-image04.jpg', title: 'Gallery 4' },
-  { img: '/img/index_slider-large-image05.jpg', title: 'Gallery 5' },
-  { img: '/img/index_slider-large-image06.jpg', title: 'Gallery 6' }
+  { img: '/img/index_slider-large-image01.jpg', title: 'ਤਸਵੀਰ 1' },
+  { img: '/img/index_slider-large-image02.jpg', title: 'ਤਸਵੀਰ 2' },
+  { img: '/img/index_slider-large-image03.jpg', title: 'ਤਸਵੀਰ 3' },
+  { img: '/img/index_slider-large-image04.jpg', title: 'ਤਸਵੀਰ 4' },
+  { img: '/img/index_slider-large-image05.jpg', title: 'ਤਸਵੀਰ 5' },
+  { img: '/img/index_slider-large-image06.jpg', title: 'ਤਸਵੀਰ 6' }
 ];
 
 export default function HomeGalleryModule() {
@@ -29,16 +29,16 @@ export default function HomeGalleryModule() {
   return (
     <section className="module">
       <h2 className="title-style05 style-02">
-        more headlines in our <span><a href="#sections">item sections</a></span>
+        ਸਾਡੇ ਵੱਖ-ਵੱਖ ਸੈਕਸ਼ਨਾਂ ਦੀਆਂ <span><a href="#sections">ਹੋਰ ਮੁੱਖ ਸੁਰਖੀਆਂ</a></span>
       </h2>
       <div className="center-title">
         <span className="title-line-left"></span>
-        <h4 className="title-style05 style-01">latest # news</h4>
+        <h4 className="title-style05 style-01">ਤਾਜ਼ਾ # ਸਮਾਚਾਰ</h4>
         <span className="title-line-right"></span>
       </div>
 
       <div className="container">
-        <h3 className="carousel-title-gray">Home Gallery</h3>
+        <h3 className="carousel-title-gray">ਫ਼ੋਟੋ ਅਤੇ ਵੀਡੀਓ ਗੈਲਰੀ</h3>
         <div id="big-gallery-slider-3" className="owl-carousel owl-theme" style={{ display: 'block', opacity: 1, position: 'relative' }}>
           <div className="owl-wrapper-outer">
             <div className="owl-wrapper" style={{ display: 'flex', gap: '15px' }}>

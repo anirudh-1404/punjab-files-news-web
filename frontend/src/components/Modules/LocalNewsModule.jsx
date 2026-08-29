@@ -1,114 +1,109 @@
 import React from 'react';
 
 const categoryLinks = [
-  { name: 'Home', link: '/' },
-  { name: 'Watch Live 24/7', link: '#watch-live' },
-  { name: '24 TV & Radio', link: '#tv-radio' },
-  { name: 'Web Shows', link: '#web-shows' },
-  { name: 'Punjab Files Store', link: '#store' },
-  { name: 'TV Schedule', link: '#tv-schedule' },
-  { name: 'News', link: '#news' },
-  { name: 'Politics | Business', link: '#politics' },
-  { name: 'Tech-Science', link: '#tech' },
-  { name: 'Lifestyle', link: '#lifestyle' },
-  { name: 'Sport', link: '#sport' },
-  { name: 'Cricket', link: '#cricket' },
-  { name: 'Soccer', link: '#soccer' },
-  { name: 'Basketball', link: '#basketball' },
-  { name: 'Formula 1', link: '#f1' },
-  { name: 'Tennis', link: '#tennis' },
-  { name: 'Health', link: '#health' },
-  { name: "Men's Health", link: '#health' },
-  { name: "Women's Health", link: '#health' },
-  { name: "Children's Health", link: '#health' },
-  { name: 'World', link: '#world' },
-  { name: 'Asia | Australia', link: '#world' },
-  { name: 'Europe | Middle East', link: '#world' },
-  { name: 'North America', link: '#world' },
-  { name: 'Travel & Destinations', link: '#travel' },
-  { name: 'Environment & Climate', link: '#environment' },
-  { name: 'Art & Entertainment', link: '#art' }
+  { name: 'ਮੁੱਖ ਪੰਨਾ', link: '/' },
+  { name: 'ਲਾਈਵ 24/7 ਦੇਖੋ', link: '#watch-live' },
+  { name: '24 ਟੀਵੀ ਅਤੇ ਰੇਡੀਓ', link: '#tv-radio' },
+  { name: 'ਵੈੱਬ ਸ਼ੋਅ', link: '#web-shows' },
+  { name: 'ਪੰਜਾਬ ਫਾਈਲਜ਼ ਸਟੋਰ', link: '#store' },
+  { name: 'ਲਾਈਵ ਟੀਵੀ ਸ਼ਡਿਊਲ', link: '#tv-schedule' },
+  { name: 'ਤਾਜ਼ਾ ਖ਼ਬਰਾਂ', link: '#news' },
+  { name: 'ਰਾਜਨੀਤੀ ਤੇ ਵਪਾਰ', link: '#politics' },
+  { name: 'ਵਿਗਿਆਨ ਤੇ ਤਕਨਾਲੋਜੀ', link: '#tech' },
+  { name: 'ਜੀਵਨ ਸ਼ੈਲੀ', link: '#lifestyle' },
+  { name: 'ਖੇਡਾਂ', link: '#sport' },
+  { name: 'ਕਬੱਡੀ', link: '#kabaddi' },
+  { name: 'ਕ੍ਰਿਕਟ', link: '#cricket' },
+  { name: 'ਫੁੱਟਬਾਲ', link: '#football' },
+  { name: 'ਸਿਹਤ ਸੰਭਾਲ', link: '#health' },
+  { name: 'ਤੰਦਰੁਸਤੀ ਤੇ ਖ਼ੁਰਾਕ', link: '#health' },
+  { name: 'ਦੇਸ਼-ਵਿਦੇਸ਼', link: '#world' },
+  { name: 'ਕੈਨੇਡਾ ਤੇ ਅਮਰੀਕਾ', link: '#world' },
+  { name: 'ਯੂਕੇ ਤੇ ਯੂਰਪ', link: '#world' },
+  { name: 'ਸੈਰ-ਸਪਾਟਾ', link: '#travel' },
+  { name: 'ਵਾਤਾਵਰਨ ਤੇ ਮੌਸਮ', link: '#environment' },
+  { name: 'ਮਨੋਰੰਜਨ ਤੇ ਸਿਨੇਮਾ', link: '#art' }
 ];
 
 const localNewsItems = [
   {
-    title: 'Emergency Response Drill in Central Hub',
-    tag: 'Breaking News',
+    title: 'ਪੰਜਾਬ ਵਿੱਚ ਸੁਰੱਖਿਆ ਪ੍ਰਬੰਧਾਂ ਦਾ ਵਿਸ਼ੇਸ਼ ਜਾਇਜ਼ਾ',
+    tag: 'ਬ੍ਰੇਕਿੰਗ ਨਿਊਜ਼',
     tagClass: 'label-1',
     img: '/img/index_800x400-image09.jpg',
-    desc: 'Emergency personnel and civil defence teams participate in comprehensive safety drills...',
-    btnText: 'Watch Live',
+    desc: 'ਪ੍ਰਸ਼ਾਸਨ ਅਤੇ ਸੁਰੱਖਿਆ ਬਲਾਂ ਵੱਲੋਂ ਸ਼ਾਂਤੀ ਤੇ ਅਮਨ-ਕਾਨੂੰਨ ਦੀ ਸਥਿਤੀ ਨੂੰ ਮਜ਼ਬੂਤ ਰੱਖਣ ਲਈ ਵਿਸ਼ੇਸ਼ ਚੈਕਿੰਗ ਅਭਿਆਨ...',
+    btnText: 'ਲਾਈਵ ਦੇਖੋ',
     btnLink: '#watch-live'
   },
   {
-    title: "Championship Tournament Season Kickoff",
-    tag: 'Sport',
+    title: "ਰਾਜ ਪੱਧਰੀ ਕਬੱਡੀ ਤੇ ਖੇਡ ਮੇਲੇ ਦਾ ਸ਼ਾਨਦਾਰ ਆਗਾਜ਼",
+    tag: 'ਖੇਡਾਂ',
     tagClass: 'label-4',
     img: '/img/index_800x400-image10.jpg',
-    desc: 'Athletes and coaches gear up for the upcoming inter-state championship games with high optimism.',
-    btnText: 'Sport',
+    desc: 'ਪੰਜਾਬ ਭਰ ਤੋਂ ਨੌਜਵਾਨ ਖਿਡਾਰੀਆਂ ਨੇ ਲਿਆ ਹਿੱਸਾ, ਜੇਤੂ ਟੀਮਾਂ ਨੂੰ ਲੱਖਾਂ ਰੁਪਏ ਦੇ ਨਕਦ ਇਨਾਮ ਦਿੱਤੇ ਜਾਣਗੇ।',
+    btnText: 'ਖੇਡਾਂ',
     btnLink: '#sport'
   },
   {
-    title: 'Cultural Heritage & Modern Lifestyle',
-    tag: 'Lifestyle',
+    title: 'ਪੰਜਾਬੀ ਵਿਰਸਾ ਅਤੇ ਸਾਹਿਤ ਸੰਭਾਲ ਮੇਲਾ ਸ਼ੁਰੂ',
+    tag: 'ਜੀਵਨ ਸ਼ੈਲੀ',
     tagClass: 'label-9',
     img: '/img/index_800x400-image11.jpg',
-    desc: 'Annual literature and heritage festival begins with inspiring addresses from leading scholars.',
-    btnText: 'Lifestyle',
+    desc: 'ਮਸ਼ਹੂਰ ਵਿਦਵਾਨਾਂ ਅਤੇ ਲੇਖਕਾਂ ਨੇ ਨਵੀਂ ਪੀੜ੍ਹੀ ਨੂੰ ਮਾਂ-ਬੋਲੀ ਪੰਜਾਬੀ ਅਤੇ ਸੱਭਿਆਚਾਰ ਨਾਲ ਜੁੜਨ ਦਾ ਦਿੱਤਾ ਸੁਨੇਹਾ।',
+    btnText: 'ਜੀਵਨ ਸ਼ੈਲੀ',
     btnLink: '#lifestyle'
   },
   {
-    title: 'Scenic Travel Corridors & Tourism',
-    tag: 'Travel',
+    title: 'ਧਾਰਮਿਕ ਅਤੇ ਇਤਿਹਾਸਕ ਸਥਾਨਾਂ ਲਈ ਵਿਸ਼ੇਸ਼ ਯਾਤਰਾ ਬੱਸਾਂ',
+    tag: 'ਸੈਰ-ਸਪਾਟਾ',
     tagClass: 'label-3',
     img: '/img/index_800x400-image12.jpg',
-    desc: 'New eco-tourism routes highlight historical landmarks and lush agricultural valleys.',
-    btnText: 'Travel',
+    desc: 'ਸੰਗਤਾਂ ਦੀ ਸਹੂਲਤ ਲਈ ਨਵੇਂ ਏਅਰ-ਕੰਡੀਸ਼ਨਡ ਬੱਸ ਰੂਟ ਸ਼ੁਰੂ, ਬੁਕਿੰਗ ਆਨਲਾਈਨ ਪੋਰਟਲ ’ਤੇ ਉਪਲਬਧ।',
+    btnText: 'ਸੈਰ-ਸਪਾਟਾ',
     btnLink: '#travel'
   },
   {
-    title: 'Digital Shows & Ground Reports',
-    tag: 'Web Shows',
+    title: 'ਜ਼ਮੀਨੀ ਹਕੀਕਤਾਂ ’ਤੇ ਆਧਾਰਿਤ ਵਿਸ਼ੇਸ਼ ਖੋਜੀ ਰਿਪੋਰਟਿੰਗ',
+    tag: 'ਵੈੱਬ ਸ਼ੋਅ',
     tagClass: 'label-6',
     img: '/img/index_800x400-image13.jpg',
-    desc: 'Our investigative journalism series explores grassroots stories making a positive difference.',
-    btnText: 'Web Shows',
+    desc: 'ਪੰਜਾਬ ਫਾਈਲਜ਼ ਦੀ ਟੀਮ ਵੱਲੋਂ ਪਿੰਡਾਂ ਅਤੇ ਸ਼ਹਿਰਾਂ ਦੇ ਲੋਕਾਂ ਦੇ ਅਸਲ ਮਸਲਿਆਂ ਨੂੰ ਬੇਬਾਕੀ ਨਾਲ ਉਭਾਰਿਆ ਗਿਆ।',
+    btnText: 'ਵੈੱਬ ਸ਼ੋਅ',
     btnLink: '#web-shows'
   }
 ];
 
 const recentPosts = [
   {
-    time: '1 min ago',
-    text: 'Met Department forecasts seasonal showers across northern plains.',
+    time: '1 ਮਿੰਟ ਪਹਿਲਾਂ',
+    text: 'ਮੌਸਮ ਵਿਭਾਗ ਵੱਲੋਂ ਪੰਜਾਬ ਦੇ ਮੈਦਾਨੀ ਇਲਾਕਿਆਂ ਵਿੱਚ ਹਲਕੀ ਬਾਰਿਸ਼ ਦੀ ਪੇਸ਼ੀਨਗੋਈ।',
     img: '/img/index_800x400-image40.jpg'
   },
   {
-    time: '2 min ago',
-    text: 'Advisory issued for small business entrepreneurship and digital loan schemes.'
+    time: '2 ਮਿੰਟ ਪਹਿਲਾਂ',
+    text: 'ਛੋਟੇ ਵਪਾਰੀਆਂ ਅਤੇ ਨੌਜਵਾਨ ਉੱਦਮੀਆਂ ਲਈ ਘੱਟ ਵਿਆਜ ਦਰਾਂ ’ਤੇ ਕਰਜ਼ਾ ਸਕੀਮਾਂ ਸ਼ੁਰੂ।'
   },
   {
-    time: '3 min ago',
-    text: 'State sports academy announces new training scholarships for young talent.'
+    time: '3 ਮਿੰਟ ਪਹਿਲਾਂ',
+    text: 'ਸੂਬਾ ਖੇਡ ਵਿਭਾਗ ਵੱਲੋਂ ਹੋਣਹਾਰ ਖਿਡਾਰੀਆਂ ਲਈ ਨਵੀਆਂ ਸਕਾਲਰਸ਼ਿਪਾਂ ਦਾ ਐਲਾਨ।'
   },
   {
-    time: '4 min ago',
-    text: 'Health clinics offer free seasonal health checks in suburban districts.',
+    time: '4 ਮਿੰਟ ਪਹਿਲਾਂ',
+    text: 'ਸਿਹਤ ਵਿਭਾਗ ਵੱਲੋਂ ਪੇਂਡੂ ਖੇਤਰਾਂ ਵਿੱਚ ਮੁਫ਼ਤ ਮੈਡੀਕਲ ਜਾਂਚ ਕੈਂਪ ਲਗਾਏ ਗਏ।',
     img: '/img/index_800x400-image41.jpg'
   },
   {
-    time: '5 min ago',
-    text: 'Scientists discuss solar weather cycles and renewable energy grid integration.',
+    time: '5 ਮਿੰਟ ਪਹਿਲਾਂ',
+    text: 'ਸੂਰਜੀ ਊਰਜਾ ਪ੍ਰੋਜੈਕਟਾਂ ਨੂੰ ਪਾਵਰ ਗਰਿੱਡ ਨਾਲ ਜੋੜਨ ਦਾ ਕੰਮ ਮੁਕੰਮਲ।',
     img: '/img/index_800x400-image42.jpg'
   },
   {
-    time: '6 min ago',
-    text: 'Transportation authority rolls out electric transit buses on major urban routes.'
+    time: '6 ਮਿੰਟ ਪਹਿਲਾਂ',
+    text: 'ਮੁੱਖ ਸ਼ਹਿਰਾਂ ਵਿੱਚ ਪ੍ਰਦੂਸ਼ਣ ਮੁਕਤ ਇਲੈਕਟ੍ਰਿਕ ਬੱਸਾਂ ਦੀ ਸ਼ੁਰੂਆਤ।'
   },
   {
-    time: '8 min ago',
-    text: 'Water management board implements smart canal monitoring technology.'
+    time: '8 ਮਿੰਟ ਪਹਿਲਾਂ',
+    text: 'ਸਿੰਚਾਈ ਵਿਭਾਗ ਵੱਲੋਂ ਨਹਿਰੀ ਪਾਣੀ ਦੀ ਵੰਡ ਲਈ ਸਮਾਰਟ ਮਾਨੀਟਰਿੰਗ ਸਿਸਟਮ ਲਾਗੂ।'
   }
 ];
 
@@ -121,9 +116,9 @@ export default function LocalNewsModule() {
           <div className="col-md-8">
             <div className="module-title">
               <h3 className="title">
-                <span className="bg-1">Local News</span>
+                <span className="bg-1">ਸਥਾਨਕ ਖ਼ਬਰਾਂ</span>
               </h3>
-              <h3 className="subtitle">Latest News in details</h3>
+              <h3 className="subtitle">ਪੰਜਾਬ ਦੇ ਹਰ ਕੋਨੇ ਦੀ ਖ਼ਬਰ ਵਿਸਥਾਰ ਨਾਲ</h3>
             </div>
 
             <div className="row no-gutter">
@@ -155,7 +150,7 @@ export default function LocalNewsModule() {
                         <div className="title-left title-style04 underline04">
                           <h3>
                             <a href={item.btnLink}>
-                              <strong>{item.title.split(' ')[0]}</strong> {item.title.split(' ').slice(1).join(' ')}
+                              {item.title}
                             </a>
                           </h3>
                         </div>
@@ -181,7 +176,7 @@ export default function LocalNewsModule() {
           <div className="col-md-4">
             <div className="title-style02">
               <h3>
-                <a href="#recent">Recent Posts</a>
+                <a href="#recent">ਤਾਜ਼ਾ ਅੱਪਡੇਟ</a>
               </h3>
             </div>
 
@@ -195,7 +190,7 @@ export default function LocalNewsModule() {
               </div>
               <div className="item">
                 <div className="item-content-1">
-                  <h3>Thousands of citizens gather at the community technology conclave.</h3>
+                  <h3>ਪੰਜਾਬ ਵਿੱਚ ਡਿਜੀਟਲ ਤਕਨਾਲੋਜੀ ਅਤੇ ਨੌਜਵਾਨ ਉੱਦਮੀਆਂ ਦਾ ਵਿਸ਼ੇਸ਼ ਸੰਮੇਲਨ।</h3>
                 </div>
               </div>
 

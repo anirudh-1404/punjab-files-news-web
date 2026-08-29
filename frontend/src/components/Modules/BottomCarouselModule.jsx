@@ -2,37 +2,37 @@ import React, { useState } from 'react';
 
 const carouselItems = [
   {
-    title: "What this generation's watching.",
-    category: 'Watch Live 24/7',
-    date: 'Fri, 24 Oct, 2026',
+    title: 'ਨਵੀਂ ਪੀੜ੍ਹੀ ਦੀ ਪਸੰਦ ਅਤੇ ਡਿਜੀਟਲ ਮੀਡੀਆ ਰਿਪੋਰਟਾਂ।',
+    category: 'ਲਾਈਵ 24/7',
+    date: 'ਸ਼ੁੱਕਰਵਾਰ, 24 ਅਕਤੂਬਰ 2026',
     img: '/img/index_108x108_slider-image01.jpg',
     link: '#watch-live'
   },
   {
-    title: 'Digital broadcasting expanding across regional platforms.',
-    category: '24 TV & Radio',
-    date: 'Fri, 24 Oct, 2026',
+    title: 'ਡਿਜੀਟਲ ਰੇਡੀਓ ਅਤੇ ਪੰਜਾਬੀ ਪੋਡਕਾਸਟ ਲੜੀ ਦਾ ਵਿਸਥਾਰ।',
+    category: '24 ਟੀਵੀ ਤੇ ਰੇਡੀਓ',
+    date: 'ਸ਼ੁੱਕਰਵਾਰ, 24 ਅਕਤੂਬਰ 2026',
     img: '/img/index_108x108_slider-image02.jpg',
     link: '#tv-radio'
   },
   {
-    title: 'Promoted documentaries and web investigative stories.',
-    category: 'Web Shows',
-    date: 'Fri, 24 Oct, 2026',
+    title: 'ਵਿਸ਼ੇਸ਼ ਡਾਕੂਮੈਂਟਰੀਆਂ ਅਤੇ ਜ਼ਮੀਨੀ ਖੋਜੀ ਪੱਤਰਕਾਰੀ ਸ਼ੋਅ।',
+    category: 'ਵੈੱਬ ਸ਼ੋਅ',
+    date: 'ਸ਼ੁੱਕਰਵਾਰ, 24 ਅਕਤੂਬਰ 2026',
     img: '/img/index_108x108_slider-image03.jpg',
     link: '#web-shows'
   },
   {
-    title: 'Punjab Files News Store & authentic merchandise.',
-    category: 'News Store',
-    date: 'Fri, 24 Oct, 2026',
+    title: 'ਪੰਜਾਬ ਫਾਈਲਜ਼ ਸਟੋਰ ਅਤੇ ਓਰੀਜਨਲ ਕਿਤਾਬਾਂ ਤੇ ਮਰਚੈਂਡਾਈਜ਼।',
+    category: 'ਸਟੋਰ',
+    date: 'ਸ਼ੁੱਕਰਵਾਰ, 24 ਅਕਤੂਬਰ 2026',
     img: '/img/index_108x108_slider-image04.jpg',
     link: '#store'
   },
   {
-    title: 'Enterprise investment and technological developments.',
-    category: 'Business',
-    date: 'Fri, 24 Oct, 2026',
+    title: 'ਕਾਰੋਬਾਰੀ ਨਿਵੇਸ਼ ਅਤੇ ਨਵੀਨਤਮ ਤਕਨੀਕੀ ਵਿਕਾਸ ਯੋਜਨਾਵਾਂ।',
+    category: 'ਵਪਾਰ',
+    date: 'ਸ਼ੁੱਕਰਵਾਰ, 24 ਅਕਤੂਬਰ 2026',
     img: '/img/index_108x108_slider-image05.jpg',
     link: '#business'
   }
@@ -58,7 +58,7 @@ export default function BottomCarouselModule() {
   return (
     <section className="module highlight">
       <div className="container">
-        <h3 className="carousel-title">Home Carousel</h3>
+        <h3 className="carousel-title">ਪੰਜਾਬ ਫਾਈਲਜ਼ ਵਿਸ਼ੇਸ਼ ਗੈਲਰੀ</h3>
         <div id="small-gallery-slider" className="owl-carousel owl-theme" style={{ display: 'block', opacity: 1, position: 'relative' }}>
           <div className="owl-wrapper-outer">
             <div className="owl-wrapper" style={{ display: 'flex', gap: '15px' }}>

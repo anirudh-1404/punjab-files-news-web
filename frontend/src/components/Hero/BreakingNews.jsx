@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 
 const newsItems = [
-  { category: 'News:', text: 'Extra! Extra! Rethinking the Punjab Files 24h Breaking News Experience.' },
-  { category: 'Travel:', text: 'New direct flight corridors connecting northern hubs announced today.' },
-  { category: 'Politics:', text: 'Momentous policy reforms introduced to support agricultural modernization.' },
-  { category: 'Health:', text: 'State-of-the-art regional health centers inaugurated with modern facilities.' },
-  { category: 'World:', text: 'Global climate and sustainability pact draws historic participation.' },
-  { category: 'Finance:', text: 'Economic indicators signal steady growth in tech and industrial sectors.' }
+  { category: 'ਖ਼ਬਰਾਂ:', text: 'ਪੰਜਾਬ ਫਾਈਲਜ਼ ’ਤੇ 24 ਘੰਟੇ ਲਾਈਵ ਅੱਪਡੇਟ ਅਤੇ ਤਾਜ਼ਾ ਖ਼ਬਰਾਂ ਦਾ ਸਿਲਸਿਲਾ ਜਾਰੀ।' },
+  { category: 'ਸੈਰ-ਸਪਾਟਾ:', text: 'ਪੰਜਾਬ ਤੋਂ ਕੈਨੇਡਾ, ਯੂਕੇ ਅਤੇ ਯੂਰਪ ਲਈ ਨਵੀਆਂ ਸਿੱਧੀਆਂ ਉਡਾਣਾਂ ਸ਼ੁਰੂ ਹੋਣ ਦੀ ਸੰਭਾਵਨਾ।' },
+  { category: 'ਰਾਜਨੀਤੀ:', text: 'ਸੂਬਾ ਸਰਕਾਰ ਵੱਲੋਂ ਕਿਸਾਨਾਂ, ਵਪਾਰੀਆਂ ਅਤੇ ਨੌਜਵਾਨਾਂ ਲਈ ਨਵੀਆਂ ਭਲਾਈ ਸਕੀਮਾਂ ਮਨਜ਼ੂਰ।' },
+  { category: 'ਸਿਹਤ:', text: 'ਪੰਜਾਬ ਭਰ ਦੇ ਸਿਹਤ ਕੇਂਦਰਾਂ ਵਿੱਚ ਅਤਿ-ਆਧੁਨਿਕ ਟੈਸਟਿੰਗ ਸਹੂਲਤਾਂ ਅਤੇ ਦਵਾਈਆਂ ਉਪਲਬਧ।' },
+  { category: 'ਦੇਸ਼-ਵਿਦੇਸ਼:', text: 'ਕੈਨੇਡਾ ਅਤੇ ਅਮਰੀਕਾ ਵਿੱਚ ਪੰਜਾਬੀ ਨੌਜਵਾਨਾਂ ਨੇ ਵੱਡੀਆਂ ਪ੍ਰਾਪਤੀਆਂ ਨਾਲ ਨਾਮ ਚਮਕਾਇਆ।' },
+  { category: 'ਆਰਥਿਕਤਾ:', text: 'ਸੂਬੇ ਵਿੱਚ ਨਵੇਂ ਉਦਯੋਗਿਕ ਪ੍ਰਾਜੈਕਟਾਂ ਨਾਲ ਹਜ਼ਾਰਾਂ ਨੌਜਵਾਨਾਂ ਲਈ ਰੁਜ਼ਗਾਰ ਦੇ ਮੌਕੇ ਪੈਦਾ ਹੋਣਗੇ।' }
 ];
 
 export default function BreakingNews() {
@@ -32,7 +32,7 @@ export default function BreakingNews() {
   return (
     <div className="outer">
       <div className="breaking-ribbon">
-        <h4>Breaking News</h4>
+        <h4>ਬ੍ਰੇਕਿੰਗ ਨਿਊਜ਼</h4>
       </div>
       <div className="newsticker" style={{ overflow: 'hidden' }}>
         <ul style={{ margin: 0, padding: 0, listStyle: 'none' }}>
@@ -44,10 +44,10 @@ export default function BreakingNews() {
           </li>
         </ul>
         <div className="navi">
-          <button className="up" onClick={handlePrev} type="button" aria-label="Previous Breaking News">
+          <button className="up" onClick={handlePrev} type="button" aria-label="ਪਿਛਲੀ ਖ਼ਬਰ">
             <i className="fa fa-caret-left"></i>
           </button>
-          <button className="down" onClick={handleNext} type="button" aria-label="Next Breaking News">
+          <button className="down" onClick={handleNext} type="button" aria-label="ਅਗਲੀ ਖ਼ਬਰ">
             <i className="fa fa-caret-right"></i>
           </button>
         </div>

@@ -25,7 +25,11 @@ export default function HealthAndSchoolModule() {
 
   // Calendar simple picker state
   const today = new Date();
-  const currentMonthName = today.toLocaleString('default', { month: 'long', year: 'numeric' });
+  const monthNames = [
+    'ਜਨਵਰੀ', 'ਫ਼ਰਵਰੀ', 'ਮਾਰਚ', 'ਅਪ੍ਰੈਲ', 'ਮਈ', 'ਜੂਨ',
+    'ਜੁਲਾਈ', 'ਅਗਸਤ', 'ਸਤੰਬਰ', 'ਅਕਤੂਬਰ', 'ਨਵੰਬਰ', 'ਦਸੰਬਰ'
+  ];
+  const currentMonthName = `${monthNames[today.getMonth()]} ${today.getFullYear()}`;
   const daysInMonth = 31;
   const currentDay = today.getDate();
 
@@ -43,7 +47,7 @@ export default function HealthAndSchoolModule() {
   const handleSubscribe = (e) => {
     e.preventDefault();
     if (email) {
-      setSubscribeMsg('Thank you for subscribing to Punjab Files Newsletter!');
+      setSubscribeMsg('ਪੰਜਾਬ ਫਾਈਲਜ਼ ਨਿਊਜ਼ਲੈਟਰ ਸਬਸਕ੍ਰਾਈਬ ਕਰਨ ਲਈ ਤੁਹਾਡਾ ਬਹੁਤ-ਬਹੁਤ ਧੰਨਵਾਦ!');
       setEmail('');
     }
   };
@@ -58,9 +62,9 @@ export default function HealthAndSchoolModule() {
               {/* Health News */}
               <div className="module-title">
                 <h3 className="title">
-                  <span className="bg-2">Health News</span>
+                  <span className="bg-2">ਸਿਹਤ ਖ਼ਬਰਾਂ</span>
                 </h3>
-                <h3 className="subtitle">Watch the latest health news</h3>
+                <h3 className="subtitle">ਦੇਖੋ ਤਾਜ਼ਾ ਸਿਹਤ ਤੇ ਤੰਦਰੁਸਤੀ ਰਿਪੋਰਟਾਂ</h3>
               </div>
 
               <div className="item">
@@ -73,7 +77,7 @@ export default function HealthAndSchoolModule() {
                   <div className="title-left title-style04 underline04">
                     <h3>
                       <a href="#health">
-                        <strong>Global</strong> &amp; Regional Health Priorities
+                        <strong>ਸੂਬਾਈ</strong> ਅਤੇ ਵਿਸ਼ਵ ਪੱਧਰੀ ਸਿਹਤ ਸੁਧਾਰ
                       </a>
                     </h3>
                   </div>
@@ -81,25 +85,25 @@ export default function HealthAndSchoolModule() {
                   <div className="post-meta-elements">
                     <div className="post-meta-author">
                       <i className="fa fa-user"></i>
-                      <a href="#health">By Health Desk</a>
+                      <a href="#health">ਸਿਹਤ ਸੰਪਾਦਕੀ ਡੈਸਕ ਵੱਲੋਂ</a>
                     </div>
                     <div className="post-meta-date">
-                      <i className="fa fa-calendar"></i>October 2026
+                      <i className="fa fa-calendar"></i>ਅਕਤੂਬਰ 2026
                     </div>
                   </div>
                   <p>
                     <a href="#health" className="external-link">
-                      Public wellness frameworks highlight the critical balance between modern medical treatments and preventative community care.
+                      ਸੰਤੁਲਿਤ ਖ਼ੁਰਾਕ, ਕੁਦਰਤੀ ਆਹਾਰ ਅਤੇ ਰੋਜ਼ਾਨਾ ਯੋਗਾ ਰਾਹੀਂ ਬਿਮਾਰੀਆਂ ਤੋਂ ਸੁਰੱਖਿਅਤ ਰਹਿਣ ਦੇ ਉਪਾਅ।
                     </a>
                   </p>
                   <p>
                     <a href="#health" className="external-link">
-                      Advanced robotics and tele-consultations provide specialized surgery support across remote clinics.
+                      ਪੰਜਾਬ ਭਰ ਦੇ ਹਸਪਤਾਲਾਂ ਵਿੱਚ ਅਤਿ-ਆਧੁਨਿਕ ਮਸ਼ੀਨਾਂ ਅਤੇ ਟੈਲੀ-ਮੈਡੀਸਨ ਸਹੂਲਤਾਂ ਦੀ ਸ਼ੁਰੂਆਤ।
                     </a>
                   </p>
                   <div>
                     <a href="#health">
-                      <span className="read-more">Continue reading</span>
+                      <span className="read-more">ਹੋਰ ਪੜ੍ਹੋ</span>
                     </a>
                   </div>
                 </div>
@@ -108,10 +112,10 @@ export default function HealthAndSchoolModule() {
               {/* 4 Health Blocks */}
               <div className="news-block">
                 {[
-                  { title: 'Health Policy & Nutrition', date: '20 Oct', img: '/img/index_800x400-image32.jpg' },
-                  { title: 'Community Mental Wellbeing', date: '15 Oct', img: '/img/index_800x400-image33.jpg' },
-                  { title: 'Medical Research Digest', date: '13 Oct', img: '/img/index_800x400-image34.jpg' },
-                  { title: 'Public Healthcare Outreach', date: '08 Oct', img: '/img/index_800x400-image35.jpg' }
+                  { title: 'ਸਿਹਤ ਨੀਤੀ ਅਤੇ ਪੌਸ਼ਟਿਕ ਖ਼ੁਰਾਕ', date: '20 ਅਕਤੂਬਰ', img: '/img/index_800x400-image32.jpg' },
+                  { title: 'ਮਾਨਸਿਕ ਤੰਦਰੁਸਤੀ ਅਤੇ ਯੋਗਾ', date: '15 ਅਕਤੂਬਰ', img: '/img/index_800x400-image33.jpg' },
+                  { title: 'ਮੈਡੀਕਲ ਖੋਜ ਅਤੇ ਨਵੀਆਂ ਤਕਨੀਕਾਂ', date: '13 ਅਕਤੂਬਰ', img: '/img/index_800x400-image34.jpg' },
+                  { title: 'ਪੇਂਡੂ ਸਿਹਤ ਜਾਂਚ ਕੈਂਪ', date: '08 ਅਕਤੂਬਰ', img: '/img/index_800x400-image35.jpg' }
                 ].map((item, idx) => (
                   <div className="item-block" key={idx}>
                     <div className="item-image">
@@ -132,9 +136,9 @@ export default function HealthAndSchoolModule() {
               {/* School Report */}
               <div className="module-title" style={{ marginTop: '30px' }}>
                 <h3 className="title">
-                  <span className="bg-9">School &amp; Education</span>
+                  <span className="bg-9">ਸਕੂਲ ਅਤੇ ਸਿੱਖਿਆ</span>
                 </h3>
-                <h3 className="subtitle">Watch the latest education reports</h3>
+                <h3 className="subtitle">ਦੇਖੋ ਸਿੱਖਿਆ ਜਗਤ ਦੀਆਂ ਤਾਜ਼ਾ ਰਿਪੋਰਟਾਂ</h3>
               </div>
 
               <div className="item">
@@ -147,7 +151,7 @@ export default function HealthAndSchoolModule() {
                   <div className="title-left title-style04 underline04">
                     <h3>
                       <a href="#education">
-                        <strong>Innovations</strong> in Student Learning &amp; Focus
+                        <strong>ਵਿਦਿਆਰਥੀਆਂ</strong> ਲਈ ਡਿਜੀਟਲ ਸਿੱਖਿਆ ਅਤੇ ਹੁਨਰ ਵਿਕਾਸ
                       </a>
                     </h3>
                   </div>
@@ -155,20 +159,20 @@ export default function HealthAndSchoolModule() {
                   <div className="post-meta-elements">
                     <div className="post-meta-author">
                       <i className="fa fa-user"></i>
-                      <a href="#education">By Education Desk</a>
+                      <a href="#education">ਸਿੱਖਿਆ ਡੈਸਕ ਵੱਲੋਂ</a>
                     </div>
                     <div className="post-meta-date">
-                      <i className="fa fa-calendar"></i>October 2026
+                      <i className="fa fa-calendar"></i>ਅਕਤੂਬਰ 2026
                     </div>
                   </div>
                   <p>
                     <a href="#education" className="external-link">
-                      Experiential learning models and digital classrooms empower children to explore science, language, and athletics.
+                      ਸਰਕਾਰੀ ਅਤੇ ਨਿੱਜੀ ਸਕੂਲਾਂ ਵਿੱਚ ਆਧੁਨਿਕ ਲੈਬਾਂ ਅਤੇ ਖੇਡ ਸਹੂਲਤਾਂ ਨਾਲ ਬੱਚਿਆਂ ਦਾ ਸਰਵਪੱਖੀ ਵਿਕਾਸ।
                     </a>
                   </p>
                   <div>
                     <a href="#education">
-                      <span className="read-more">Continue reading</span>
+                      <span className="read-more">ਹੋਰ ਪੜ੍ਹੋ</span>
                     </a>
                   </div>
                 </div>
@@ -177,10 +181,10 @@ export default function HealthAndSchoolModule() {
               {/* 4 School Blocks */}
               <div className="news-block">
                 {[
-                  { title: 'Smart Classrooms Rollout', date: '16 Oct', img: '/img/index_800x400-image36.jpg' },
-                  { title: 'Youth Innovation Challenge', date: '16 Oct', img: '/img/index_800x400-image37.jpg' },
-                  { title: 'Inter-School Sports Meet', date: '20 Oct', img: '/img/index_800x400-image38.jpg' },
-                  { title: 'Campus Radio & Media Day', date: '22 Oct', img: '/img/index_800x400-image39.jpg' }
+                  { title: 'ਸਮਾਰਟ ਕਲਾਸਰੂਮ ਅਤੇ ਕੰਪਿਊਟਰ ਸਿੱਖਿਆ', date: '16 ਅਕਤੂਬਰ', img: '/img/index_800x400-image36.jpg' },
+                  { title: 'ਯੁਵਾ ਇਨੋਵੇਸ਼ਨ ਤੇ ਵਿਗਿਆਨ ਮੁਕਾਬਲੇ', date: '16 ਅਕਤੂਬਰ', img: '/img/index_800x400-image37.jpg' },
+                  { title: 'ਅੰਤਰ-ਸਕੂਲ ਖੇਡ ਮੀਟ ਅਤੇ ਦੌੜਾਂ', date: '20 ਅਕਤੂਬਰ', img: '/img/index_800x400-image38.jpg' },
+                  { title: 'ਸੱਭਿਆਚਾਰਕ ਅਤੇ ਭਾਸ਼ਣ ਮੁਕਾਬਲੇ', date: '22 ਅਕਤੂਬਰ', img: '/img/index_800x400-image39.jpg' }
                 ].map((item, idx) => (
                   <div className="item-block" key={idx}>
                     <div className="item-image">
@@ -215,11 +219,11 @@ export default function HealthAndSchoolModule() {
           <div className="col-md-4">
             {/* Exchange Rates */}
             <div className="block-title-3">
-              <h3>exchange rates</h3>
+              <h3>ਮੁਦਰਾ ਵਟਾਂਦਰਾ ਦਰਾਂ</h3>
             </div>
             <div className="currency" style={{ background: '#f8f9fa', padding: '15px', borderRadius: '4px', marginBottom: '20px' }}>
               <h3 style={{ fontSize: '14px', margin: 0 }}>
-                Base: <strong>USD ($)</strong>
+                ਬੇਸ ਕਰੰਸੀ: <strong>USD ($)</strong>
               </h3>
               <hr style={{ margin: '8px 0' }} />
               <div className="rates">
@@ -242,11 +246,11 @@ export default function HealthAndSchoolModule() {
 
             {/* Currency Converter */}
             <div className="block-title-3">
-              <h3>currency converter</h3>
+              <h3>ਕਰੰਸੀ ਕਨਵਰਟਰ</h3>
             </div>
             <form className="conversionForm" onSubmit={handleConvert} style={{ background: '#f8f9fa', padding: '15px', borderRadius: '4px', marginBottom: '20px' }}>
               <div className="conversionForm-amount" style={{ marginBottom: '10px' }}>
-                <label htmlFor="amount">Amount:</label>
+                <label htmlFor="amount">ਰਕਮ ਦਰਜ ਕਰੋ:</label>
                 <input
                   type="number"
                   className="currencyValue form-control"
@@ -258,39 +262,39 @@ export default function HealthAndSchoolModule() {
               </div>
               <div className="conversionForm-currencies" style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
                 <div style={{ flex: 1 }}>
-                  <label htmlFor="from">From:</label>
+                  <label htmlFor="from">ਇਸ ਤੋਂ:</label>
                   <select
                     className="form-control"
                     id="from"
                     value={fromCurr}
                     onChange={(e) => setFromCurr(e.target.value)}
                   >
-                    <option value="USD">USD</option>
-                    <option value="EUR">EUR</option>
-                    <option value="GBP">GBP</option>
-                    <option value="INR">INR</option>
-                    <option value="CAD">CAD</option>
-                    <option value="AUD">AUD</option>
+                    <option value="USD">USD ($)</option>
+                    <option value="CAD">CAD ($)</option>
+                    <option value="GBP">GBP (£)</option>
+                    <option value="EUR">EUR (€)</option>
+                    <option value="INR">INR (₹)</option>
+                    <option value="AUD">AUD ($)</option>
                   </select>
                 </div>
                 <div style={{ flex: 1 }}>
-                  <label htmlFor="to">To:</label>
+                  <label htmlFor="to">ਇਸ ਵਿੱਚ:</label>
                   <select
                     className="form-control"
                     id="to"
                     value={toCurr}
                     onChange={(e) => setToCurr(e.target.value)}
                   >
-                    <option value="INR">INR</option>
-                    <option value="USD">USD</option>
-                    <option value="EUR">EUR</option>
-                    <option value="GBP">GBP</option>
-                    <option value="CAD">CAD</option>
-                    <option value="AUD">AUD</option>
+                    <option value="INR">INR (₹)</option>
+                    <option value="USD">USD ($)</option>
+                    <option value="CAD">CAD ($)</option>
+                    <option value="GBP">GBP (£)</option>
+                    <option value="EUR">EUR (€)</option>
+                    <option value="AUD">AUD ($)</option>
                   </select>
                 </div>
               </div>
-              <input type="submit" value="Convert" className="btn btn-default" style={{ width: '100%', marginBottom: '8px' }} />
+              <input type="submit" value="ਕਨਵਰਟ ਕਰੋ" className="btn btn-default" style={{ width: '100%', marginBottom: '8px' }} />
               {convertedText && (
                 <p className="output" style={{ fontWeight: 'bold', color: '#e52d27', margin: 0, textAlign: 'center' }}>
                   {convertedText}
@@ -300,7 +304,7 @@ export default function HealthAndSchoolModule() {
 
             {/* Calendar Widget */}
             <div className="block-title-3">
-              <h3>calendar</h3>
+              <h3>ਕੈਲੰਡਰ</h3>
             </div>
             <div
               id="calendar"
@@ -317,7 +321,7 @@ export default function HealthAndSchoolModule() {
                 {currentMonthName}
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '4px', fontSize: '12px' }}>
-                {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
+                {['ਐਤ', 'ਸੋਮ', 'ਮੰਗਲ', 'ਬੁੱਧ', 'ਵੀਰ', 'ਸ਼ੁੱਕਰ', 'ਸ਼ਨਿੱਚਰ'].map((d) => (
                   <div key={d} style={{ fontWeight: 'bold', color: '#666' }}>{d}</div>
                 ))}
                 {Array.from({ length: daysInMonth }).map((_, i) => {
@@ -345,7 +349,7 @@ export default function HealthAndSchoolModule() {
             <div id="sidebar-newsletter">
               <div className="title-style01">
                 <h3>
-                  <strong>Newsletter</strong>
+                  <strong>ਨਿਊਜ਼ਲੈਟਰ</strong>
                 </h3>
               </div>
               <div className="sidebar-newsletter-form">
@@ -354,14 +358,14 @@ export default function HealthAndSchoolModule() {
                     <input
                       className="form-control"
                       type="email"
-                      placeholder="Enter Your Email Address"
+                      placeholder="ਆਪਣਾ ਈਮੇਲ ਐਡਰੈੱਸ ਦਰਜ ਕਰੋ"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
                     />
                     <span className="input-group-btn">
                       <button type="submit" className="btn btn-success">
-                        Subscribe
+                        ਸਬਸਕ੍ਰਾਈਬ ਕਰੋ
                       </button>
                     </span>
                   </div>
@@ -378,7 +382,7 @@ export default function HealthAndSchoolModule() {
             <div className="sidebar-social-icons" style={{ marginTop: '25px' }}>
               <div className="title-style01">
                 <h3>
-                  <strong>Stay</strong> Connected
+                  <strong>ਸਾਡੇ ਨਾਲ</strong> ਜੁੜੋ
                 </h3>
               </div>
               <ul>

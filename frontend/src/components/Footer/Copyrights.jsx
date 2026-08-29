@@ -7,7 +7,7 @@ export default function Copyrights() {
     <div id="copyrights">
       <div className="container">
         <div className="copyright">
-          © {currentYear}, Copyrights Punjab Files. All Rights Reserved.
+          © {currentYear}, ਕਾਪੀਰਾਈਟ ਪੰਜਾਬ ਫਾਈਲਜ਼ (Punjab Files) | ਸਾਰੇ ਹੱਕ ਰਾਖਵੇਂ ਹਨ।
         </div>
         <div className="footer-social-icons">
           <ul>

@@ -3,20 +3,20 @@ import React, { useState, useEffect } from 'react';
 const scheduleSlides = [
   {
     time: '18:00',
-    title: 'Around the World',
-    desc: "Global financial transparency and economic consensus urged by economists.",
+    title: 'ਦੇਸ਼-ਵਿਦੇਸ਼ ਦੀਆਂ ਖ਼ਬਰਾਂ',
+    desc: 'ਕੌਮਾਂਤਰੀ ਪੱਧਰ ’ਤੇ ਵਿਸ਼ਵ ਅਰਥਵਿਵਸਥਾ ਅਤੇ ਸਿਆਸੀ ਹਾਲਾਤ ਬਾਰੇ ਵਿਸ਼ੇਸ਼ ਵਿਸ਼ਲੇਸ਼ਣ।',
     img: '/img/sidebar-schedule_slider-image01.jpg'
   },
   {
     time: '18:45',
-    title: 'Sport Headlines',
-    desc: 'All the latest sports news, match highlights, and athlete interviews.',
+    title: 'ਖੇਡਾਂ ਦੀ ਦੁਨੀਆ',
+    desc: 'ਕ੍ਰਿਕਟ, ਕਬੱਡੀ ਅਤੇ ਫੁੱਟਬਾਲ ਦੇ ਤਾਜ਼ਾ ਮੈਚਾਂ ਦੇ ਨਤੀਜੇ ਅਤੇ ਵਿਸ਼ੇਸ਼ ਇੰਟਰਵਿਊ।',
     img: '/img/sidebar-schedule_slider-image02.jpg'
   },
   {
     time: '22:00',
-    title: 'Happening Now',
-    desc: 'Senior anchors take you live to breaking reports wherever news happens.',
+    title: 'ਅੱਜ ਦੀ ਵੱਡੀ ਬਹਿਸ',
+    desc: 'ਪੰਜਾਬ ਦੇ ਭਖਦੇ ਮੁੱਦਿਆਂ ’ਤੇ ਸੀਨੀਅਰ ਐਡੀਟਰਾਂ ਨਾਲ ਸਿੱਧੀ ਅਤੇ ਬੇਬਾਕ ਚਰਚਾ।',
     img: '/img/sidebar-schedule_slider-image03.jpg'
   }
 ];
@@ -42,12 +42,12 @@ export default function WorldwideNewsModule() {
             <div className="news">
               <div className="module-title">
                 <h3 className="title">
-                  <span className="bg-11">Worldwide 24h News</span>
+                  <span className="bg-11">ਵਿਸ਼ਵ ਪੱਧਰੀ ਖ਼ਬਰਾਂ</span>
                 </h3>
-                <h3 className="subtitle">News in other languages</h3>
+                <h3 className="subtitle">ਕੌਮਾਂਤਰੀ ਮਾਮਲੇ ਅਤੇ ਵਿਸ਼ੇਸ਼ ਰਿਪੋਰਟਾਂ</h3>
               </div>
 
-              {/* Item 1 (French) */}
+              {/* Item 1 */}
               <div className="item">
                 <div className="item-image-3">
                   <a className="img-link" href="#world">
@@ -56,36 +56,36 @@ export default function WorldwideNewsModule() {
                 </div>
                 <div className="item-content">
                   <div className="title-left title-style04 underline04">
-                    <h3 lang="fr">
+                    <h3>
                       <a href="#world">
-                        <strong>Nouvelle sonde</strong> autour de Jupiter.
+                        <strong>ਪੁਲਾੜ ਖੋਜ</strong> ਵਿੱਚ ਨਵਾਂ ਮੀਲ ਪੱਥਰ
                       </a>
                     </h3>
                   </div>
-                  <p lang="fr">
+                  <p>
                     <a href="#world">
-                      <i className="fa fa-clock-o"></i> <span className="day"><strong> 5 October 2026</strong></span>
+                      <i className="fa fa-clock-o"></i> <span className="day"><strong> 5 ਅਕਤੂਬਰ 2026</strong></span>
                     </a>
                   </p>
-                  <p lang="fr">
+                  <p>
                     <a href="#world">
-                      Des signaux transmis par l'engin spatial ont confirmé que la manœuvre s’était déroulée avec succès.
+                      ਵਿਗਿਆਨੀਆਂ ਨੇ ਜੁਪੀਟਰ ਦੇ ਆਲੇ-ਦੁਆਲੇ ਨਵੇਂ ਉਪਗ੍ਰਹਿ ਦੀ ਸਫ਼ਲ ਪਲੇਸਮੈਂਟ ਦੀ ਪੁਸ਼ਟੀ ਕੀਤੀ ਹੈ।
                     </a>
                   </p>
-                  <p lang="fr">
+                  <p>
                     <a href="#world">
-                      L’intensité des ceintures de radiation et l'exploration planétaire révèlent de nouvelles données.
+                      ਨਵੇਂ ਡੇਟਾ ਰਾਹੀਂ ਬ੍ਰਹਿਮੰਡ ਅਤੇ ਗ੍ਰਹਿਆਂ ਦੇ ਰਹੱਸਾਂ ਬਾਰੇ ਅਹਿਮ ਜਾਣਕਾਰੀਆਂ ਸਾਹਮਣੇ ਆਈਆਂ ਹਨ।
                     </a>
                   </p>
                   <div>
                     <a href="#world">
-                      <span lang="fr" className="read-more">Lire la suite</span>
+                      <span className="read-more">ਹੋਰ ਪੜ੍ਹੋ</span>
                     </a>
                   </div>
                 </div>
               </div>
 
-              {/* Item 2 (Spanish) */}
+              {/* Item 2 */}
               <div className="item">
                 <div className="item-image-3">
                   <a className="img-link" href="#world">
@@ -94,31 +94,31 @@ export default function WorldwideNewsModule() {
                 </div>
                 <div className="item-content">
                   <div className="title-left title-style04 underline04">
-                    <h3 lang="es">
+                    <h3>
                       <a href="#world">
-                        <strong>Diálogo cívico</strong> y avances en políticas públicas.
+                        <strong>ਕੌਮਾਂਤਰੀ ਸੰਵਾਦ</strong> ਅਤੇ ਲੋਕਤੰਤਰੀ ਨੀਤੀਆਂ
                       </a>
                     </h3>
                   </div>
-                  <p lang="es">
+                  <p>
                     <a href="#world">
-                      <i className="fa fa-clock-o"></i> <span className="day"><strong>1 hora</strong></span>
+                      <i className="fa fa-clock-o"></i> <span className="day"><strong>1 ਘੰਟਾ ਪਹਿਲਾਂ</strong></span>
                     </a>
                   </p>
-                  <p lang="es">
+                  <p>
                     <a href="#world">
-                      Organizaciones comunitarias presentan propuestas integrales para el desarrollo socioeconómico regional.
+                      ਸਮਾਜਿਕ ਸੰਗਠਨਾਂ ਅਤੇ ਵਿਸ਼ਵ ਆਗੂਆਂ ਵੱਲੋਂ ਆਰਥਿਕ ਸਮਾਨਤਾ ਤੇ ਟਿਕਾਊ ਵਿਕਾਸ ਲਈ ਸਾਂਝੇ ਯਤਨ।
                     </a>
                   </p>
                   <div>
                     <a href="#world">
-                      <span lang="es" className="read-more">Lee mas</span>
+                      <span className="read-more">ਹੋਰ ਪੜ੍ਹੋ</span>
                     </a>
                   </div>
                 </div>
               </div>
 
-              {/* Item 3 (International) */}
+              {/* Item 3 */}
               <div className="item">
                 <div className="item-image-3">
                   <a className="img-link" href="#world">
@@ -129,23 +129,23 @@ export default function WorldwideNewsModule() {
                   <div className="title-left title-style04 underline04">
                     <h3>
                       <a href="#world">
-                        <strong>Global Satellite</strong> &amp; Orbital Mapping.
+                        <strong>ਗਲੋਬਲ ਸੈਟੇਲਾਈਟ</strong> ਅਤੇ ਮੌਸਮ ਨਿਗਰਾਨੀ ਸਿਸਟਮ
                       </a>
                     </h3>
                   </div>
                   <p>
                     <a href="#world">
-                      <i className="fa fa-clock-o"></i> <span className="day"><strong>1 hour ago</strong></span>
+                      <i className="fa fa-clock-o"></i> <span className="day"><strong>1 ਘੰਟਾ ਪਹਿਲਾਂ</strong></span>
                     </a>
                   </p>
                   <p>
                     <a href="#world">
-                      International science observatories deploy next-generation monitoring equipment for environmental analysis.
+                      ਵਾਤਾਵਰਨ ਵਿੱਚ ਆ ਰਹੇ ਬਦਲਾਵਾਂ ਅਤੇ ਤਾਪਮਾਨ 'ਤੇ ਨਜ਼ਰ ਰੱਖਣ ਲਈ ਅਤਿ-ਆਧੁਨਿਕ ਤਕਨਾਲੋਜੀ ਦੀ ਵਰਤੋਂ।
                     </a>
                   </p>
                   <div>
                     <a href="#world">
-                      <span className="read-more">Read More</span>
+                      <span className="read-more">ਹੋਰ ਪੜ੍ਹੋ</span>
                     </a>
                   </div>
                 </div>
@@ -160,7 +160,7 @@ export default function WorldwideNewsModule() {
               <div className="block-title-2">
                 <h3>
                   <a href="#tv-schedule">
-                    <strong>TV</strong> Schedule
+                    <strong>ਲਾਈਵ ਟੀਵੀ</strong> ਸ਼ਡਿਊਲ
                   </a>
                 </h3>
               </div>
@@ -183,7 +183,7 @@ export default function WorldwideNewsModule() {
             {/* Video News */}
             <div className="title-style01">
               <h3>
-                <strong>Video</strong> News
+                <strong>ਵੀਡੀਓ</strong> ਖ਼ਬਰਾਂ
               </h3>
             </div>
             <div className="sidebar-block">
@@ -196,7 +196,7 @@ export default function WorldwideNewsModule() {
                 ></iframe>
               </div>
               <div className="sidebar-content">
-                <p>Punjab Files Digital Studios presents original short documentaries and ground investigative reports.</p>
+                <p>ਪੰਜਾਬ ਫਾਈਲਜ਼ ਡਿਜੀਟਲ ਸਟੂਡੀਓ ਵੱਲੋਂ ਤਿਆਰ ਕੀਤੀਆਂ ਵਿਸ਼ੇਸ਼ ਵੀਡੀਓ ਰਿਪੋਰਟਾਂ ਅਤੇ ਖੋਜੀ ਡਾਕੂਮੈਂਟਰੀਆਂ।</p>
               </div>
             </div>
           </div>
