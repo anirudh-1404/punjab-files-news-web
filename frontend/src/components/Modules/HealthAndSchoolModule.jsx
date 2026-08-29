@@ -203,7 +203,7 @@ export default function HealthAndSchoolModule() {
               </div>
 
               {/* Pagination */}
-              <ul className="pagination" style={{ marginTop: '20px' }}>
+              <ul className="pagination" style={{ display: 'inline-flex', flexDirection: 'row', flexWrap: 'nowrap', marginTop: '20px' }}>
                 <li><a href="#page">‹</a></li>
                 <li className="active"><a href="#page">1</a></li>
                 <li><a href="#page">2</a></li>

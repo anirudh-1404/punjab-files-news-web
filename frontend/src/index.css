@@ -76,6 +76,29 @@
   }
 }
 
+/* Pagination: keep all items 1,2,3,4,5 in a single horizontal row */
+.pagination {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  margin: 20px 0 14px !important;
+  padding: 0 !important;
+  border-radius: 4px !important;
+}
+
+.pagination > li {
+  display: inline-block !important;
+  float: none !important;
+}
+
+.pagination > li > a {
+  display: inline-block !important;
+  float: none !important;
+  min-width: 36px !important;
+  text-align: center !important;
+}
+
 /* Responsive fixes */
 @media (max-width: 768px) {
   .header-logo {
