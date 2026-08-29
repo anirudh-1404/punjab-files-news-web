@@ -1,0 +1,107 @@
+/* Custom overrides and React-specific helpers */
+#root {
+  min-height: 100vh;
+}
+
+/* Ensure FontAwesome font family is explicitly prioritized */
+.fa {
+  font-family: 'FontAwesome' !important;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure dropdown carets render the clean down chevron arrow */
+.dropdown-toggle:after {
+  font-family: 'FontAwesome' !important;
+  content: "\f107" !important;
+  display: inline-block;
+  right: 1px;
+  font-size: 14px;
+  color: #FFF;
+  margin-left: 6px;
+}
+
+/* Dropdown hover behavior */
+.dropdown-menu {
+  display: none;
+}
+
+.dropdown.open > .dropdown-menu,
+.dropdown:hover > .dropdown-menu {
+  display: block;
+}
+
+/* Navbar logo styling */
+.header-logo {
+  float: left;
+}
+
+.header-logo img {
+  height: 86px;
+  max-height: 90px;
+  width: auto;
+  object-fit: contain;
+  margin: 10px 0;
+  display: block;
+}
+
+.sidenav-header-logo img {
+  max-height: 50px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Footer logo styling */
+#footer .site-logo img {
+  height: 85px !important;
+  max-height: 95px !important;
+  width: auto !important;
+  max-width: 240px !important;
+  object-fit: contain !important;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  float: none !important;
+  display: block !important;
+}
+
+/* Ensure all navbar items stay in a single line on desktop */
+@media (min-width: 992px) and (max-width: 1200px) {
+  .main-menu .nav > li > a {
+    padding: 10px 10px;
+    font-size: 12px;
+  }
+}
+
+/* Responsive fixes */
+@media (max-width: 768px) {
+  .header-logo {
+    display: none !important;
+  }
+}
+
+/* Scroll to top button */
+#toTop {
+  display: block;
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  width: 40px;
+  height: 40px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 9999;
+  transition: all 0.3s ease;
+}
+
+#toTop:hover {
+  background-color: #e52d27;
+  color: #fff;
+}
