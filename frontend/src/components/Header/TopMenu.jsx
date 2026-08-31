@@ -50,7 +50,7 @@ export default function TopMenu() {
           </li>
           <li className="address">
             <a href="#">
-              <i className="fa fa-envelope-o"></i> info@domain.com
+              <i className="fa fa-envelope-o"></i> info@punjabfiles.com
             </a>
           </li>
         </ul>
