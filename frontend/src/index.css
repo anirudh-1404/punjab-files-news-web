@@ -55,7 +55,7 @@
   object-fit: contain;
 }
 
-/* Live TV Button styling (News18 Style) */
+/* Live TV Button styling */
 .live-pulse-dot {
   width: 8px;
   height: 8px;
@@ -162,6 +162,84 @@
   font-size: 15px !important;
   line-height: 1.35 !important;
   margin-bottom: 6px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+}
+
+/* Sidebar Newsfeed Clean Square Layout */
+.sidebar-newsfeed .item,
+.sidebar-post .item {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+  padding: 10px 12px !important;
+  height: auto !important;
+  min-height: 80px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-newsfeed .item .item-image,
+.sidebar-post .item .item-image,
+.sidebar-scroll .item .item-image {
+  width: 75px !important;
+  min-width: 75px !important;
+  max-width: 75px !important;
+  height: 75px !important;
+  max-height: 75px !important;
+  position: relative !important;
+  overflow: hidden !important;
+  border-radius: 4px !important;
+  background-color: #111 !important;
+  flex-shrink: 0 !important;
+  display: block !important;
+}
+
+.sidebar-newsfeed .item .item-image .img-link,
+.sidebar-post .item .item-image .img-link {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.sidebar-newsfeed .item .item-image img,
+.sidebar-post .item .item-image img,
+.sidebar-scroll .item .item-image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  display: block !important;
+  position: static !important;
+}
+
+.sidebar-newsfeed .item .item-content,
+.sidebar-post .item .item-content {
+  padding: 0 !important;
+  flex: 1 !important;
+}
+
+.sidebar-newsfeed .item .item-content h4,
+.sidebar-post .item .item-content h4 {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  line-height: 1.35 !important;
+  margin-bottom: 4px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+}
+
+.sidebar-newsfeed .item .item-content p,
+.sidebar-post .item .item-content p {
+  font-size: 11.5px !important;
+  line-height: 1.3 !important;
+  color: #8e95a5 !important;
+  margin: 0 !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   display: -webkit-box !important;
