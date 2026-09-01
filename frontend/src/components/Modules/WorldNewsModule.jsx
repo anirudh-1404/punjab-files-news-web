@@ -4,8 +4,7 @@ import { getLivePunjabiNews } from '../../services/newsService';
 const defaultWorldItems = [
   {
     title: 'ਵਿਸ਼ਵ ਸੰਮੇਲਨ',
-    desc1: 'ਕੌਮਾਂਤਰੀ ਪੱਧਰ ’ਤੇ ਆਰਥਿਕ ਸਹਿਯੋਗ ਅਤੇ ਵਪਾਰਕ ਸਾਂਝ ਨੂੰ ਮਜ਼ਬੂਤ ਕਰਨ ਲਈ ਅਹਿਮ ਸਮਝੌਤਾ।',
-    desc2: 'ਵੱਖ-ਵੱਖ ਦੇਸ਼ਾਂ ਦੇ ਡੈਲੀਗੇਟਾਂ ਨੇ ਟਿਕਾਊ ਵਿਕਾਸ ਅਤੇ ਸਮਾਜਿਕ ਸੁਰੱਖਿਆ ਨੀਤੀਆਂ ’ਤੇ ਦਿੱਤਾ ਜ਼ੋਰ।',
+    desc: 'ਕੌਮਾਂਤਰੀ ਪੱਧਰ ’ਤੇ ਆਰਥਿਕ ਸਹਿਯੋਗ ਅਤੇ ਵਪਾਰਕ ਸਾਂਝ ਨੂੰ ਮਜ਼ਬੂਤ ਕਰਨ ਲਈ ਅਹਿਮ ਸਮਝੌਤਾ।',
     category: 'ਖ਼ਬਰਾਂ',
     labelClass: 'label-1',
     img: '/img/index_800x400-image01.jpg',
@@ -13,8 +12,7 @@ const defaultWorldItems = [
   },
   {
     title: 'ਸਿਆਸੀ ਸਰਗਰਮੀਆਂ',
-    desc1: 'ਵਿਧਾਨ ਸਭਾ ਸੈਸ਼ਨ ਦੌਰਾਨ ਜਨਤਕ ਮੁੱਦਿਆਂ ਅਤੇ ਬਜਟ ਅਲਾਟਮੈਂਟ ’ਤੇ ਵਿਸਥਾਰਪੂਰਵਕ ਚਰਚਾ।',
-    desc2: 'ਲੋਕ ਨੁਮਾਇੰਦਿਆਂ ਨੇ ਪਾਰਦਰਸ਼ੀ ਪ੍ਰਸ਼ਾਸਨ ਅਤੇ ਵਿਕਾਸ ਕਾਰਜਾਂ ਨੂੰ ਤੇਜ਼ ਕਰਨ ਦੀ ਮੰਗ ਕੀਤੀ।',
+    desc: 'ਵਿਧਾਨ ਸਭਾ ਸੈਸ਼ਨ ਦੌਰਾਨ ਜਨਤਕ ਮੁੱਦਿਆਂ ਅਤੇ ਬਜਟ ਅਲਾਟਮੈਂਟ ’ਤੇ ਵਿਸਥਾਰਪੂਰਵਕ ਚਰਚਾ।',
     category: 'ਰਾਜਨੀਤੀ',
     labelClass: 'label-3',
     img: '/img/index_800x400-image02.jpg',
@@ -22,8 +20,7 @@ const defaultWorldItems = [
   },
   {
     title: 'ਪੁਲਾੜ ਅਤੇ ਤਕਨਾਲੋਜੀ',
-    desc1: 'ਵਿਗਿਆਨੀਆਂ ਵੱਲੋਂ ਨਵੇਂ ਪੁਲਾੜ ਮਿਸ਼ਨ ਦੀ ਸਫ਼ਲ ਸ਼ੁਰੂਆਤ, ਖਗੋਲ ਵਿਗਿਆਨ ਵਿੱਚ ਨਵਾਂ ਇਤਿਹਾਸ।',
-    desc2: 'ਆਧੁਨਿਕ ਸੈਟੇਲਾਈਟ ਰਾਹੀਂ ਮੌਸਮ ਅਤੇ ਕੁਦਰਤੀ ਆਫ਼ਤਾਂ ਦੀ ਅਗਾਊਂ ਜਾਣਕਾਰੀ ਮਿਲਣਾ ਹੋਵੇਗਾ ਆਸਾਨ।',
+    desc: 'ਵਿਗਿਆਨੀਆਂ ਵੱਲੋਂ ਨਵੇਂ ਪੁਲਾੜ ਮਿਸ਼ਨ ਦੀ ਸਫ਼ਲ ਸ਼ੁਰੂਆਤ, ਖਗੋਲ ਵਿਗਿਆਨ ਵਿੱਚ ਨਵਾਂ ਇਤਿਹਾਸ।',
     category: 'ਵਿਗਿਆਨ',
     labelClass: 'label-5',
     img: '/img/index_800x400-image03.jpg',
@@ -31,8 +28,7 @@ const defaultWorldItems = [
   },
   {
     title: 'ਸਿਹਤ ਸੰਭਾਲ ਪ੍ਰੋਗਰਾਮ',
-    desc1: 'ਪੇਂਡੂ ਖੇਤਰਾਂ ਵਿੱਚ ਮੈਡੀਕਲ ਸਹੂਲਤਾਂ ਦਾ ਵਿਸਥਾਰ, ਮਾਹਿਰ ਡਾਕਟਰਾਂ ਵੱਲੋਂ ਮੁਫ਼ਤ ਜਾਂਚ ਕੈਂਪ।',
-    desc2: 'ਸਿਹਤ ਮਾਹਿਰਾਂ ਨੇ ਚੰਗੀ ਖ਼ੁਰਾਕ ਅਤੇ ਰੋਜ਼ਾਨਾ ਕਸਰਤ ਨੂੰ ਰੋਗਾਂ ਤੋਂ ਬਚਾਅ ਲਈ ਜ਼ਰੂਰੀ ਦੱਸਿਆ।',
+    desc: 'ਪੇਂਡੂ ਖੇਤਰਾਂ ਵਿੱਚ ਮੈਡੀਕਲ ਸਹੂਲਤਾਂ ਦਾ ਵਿਸਥਾਰ, ਮਾਹਿਰ ਡਾਕਟਰਾਂ ਵੱਲੋਂ ਮੁਫ਼ਤ ਜਾਂਚ ਕੈਂਪ।',
     category: 'ਸਿਹਤ',
     labelClass: 'label-2',
     img: '/img/index_800x400-image04.jpg',
@@ -52,8 +48,7 @@ export default function WorldNewsModule() {
         
         const mapped = data.world.slice(0, 4).map((item, idx) => ({
           title: item.title,
-          desc1: item.desc || item.title,
-          desc2: `ਸਰੋਤ: ${item.source || 'ਪੰਜਾਬ ਫਾਈਲਜ਼'} | ਤਾਜ਼ਾ ਲਾਈਵ ਅੱਪਡੇਟ`,
+          desc: item.desc || item.title,
           category: cats[idx] || item.category,
           labelClass: labels[idx] || 'label-1',
           img: item.img || defaultWorldItems[idx].img,
@@ -109,12 +104,7 @@ export default function WorldNewsModule() {
                     </div>
                     <p>
                       <a href={item.link} className="external-link" target="_blank" rel="noreferrer">
-                        {item.desc1}
-                      </a>
-                    </p>
-                    <p>
-                      <a href={item.link} className="external-link" target="_blank" rel="noreferrer">
-                        {item.desc2}
+                        {item.desc}
                       </a>
                     </p>
                     <div>
@@ -141,7 +131,7 @@ export default function WorldNewsModule() {
                         alt={item.title}
                         onError={(e) => {
                           e.target.onerror = null;
-                          e.target.src = '/img/index_800x400-image01.jpg';
+                          e.target.src = '/img/index_800x400-image02.jpg';
                         }}
                       />
                     </a>
@@ -159,12 +149,7 @@ export default function WorldNewsModule() {
                     </div>
                     <p>
                       <a href={item.link} className="external-link" target="_blank" rel="noreferrer">
-                        {item.desc1}
-                      </a>
-                    </p>
-                    <p>
-                      <a href={item.link} className="external-link" target="_blank" rel="noreferrer">
-                        {item.desc2}
+                        {item.desc}
                       </a>
                     </p>
                     <div>

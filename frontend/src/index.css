@@ -99,10 +99,90 @@
   text-align: center !important;
 }
 
+/* Strict news card image framing - No stretching or blurring */
+.item-image-1,
+.item-image-2,
+.item-image-3 {
+  position: relative !important;
+  width: 100% !important;
+  height: 220px !important;
+  max-height: 220px !important;
+  overflow: hidden !important;
+  border-radius: 4px !important;
+  background-color: #222 !important;
+}
+
+.item-image-1 .img-link,
+.item-image-2 .img-link,
+.item-image-3 .img-link {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.item-image-1 img,
+.item-image-2 img,
+.item-image-3 img {
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 220px !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  display: block !important;
+  transition: transform 0.3s ease;
+}
+
+.item-image-1:hover img,
+.item-image-2:hover img,
+.item-image-3:hover img {
+  transform: scale(1.04);
+}
+
+/* Sidebar thumbnails */
+.sidebar-newsfeed .item-image,
+.sidebar-scroll .item-image,
+.sidebar-post .item-image {
+  width: 90px !important;
+  height: 65px !important;
+  min-width: 90px !important;
+  max-height: 65px !important;
+  overflow: hidden !important;
+  border-radius: 3px !important;
+  background-color: #222 !important;
+}
+
+.sidebar-newsfeed .item-image img,
+.sidebar-scroll .item-image img,
+.sidebar-post .item-image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  display: block !important;
+}
+
+/* Clean text trimming for news descriptions */
+.news .item .item-content p {
+  margin-bottom: 8px !important;
+  line-height: 1.5 !important;
+  color: #666 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+}
+
 /* Responsive fixes */
 @media (max-width: 768px) {
   .header-logo {
     display: none !important;
+  }
+  .item-image-1,
+  .item-image-2,
+  .item-image-3 {
+    height: 190px !important;
+    max-height: 190px !important;
   }
 }
 

@@ -43,8 +43,7 @@ const defaultNewsfeedItems = [
 const defaultMainItems = [
   {
     title: 'ਵਿਧਾਨ ਸਭਾ ਦੇ ਅਹਿਮ ਫ਼ੈਸਲੇ',
-    desc1: 'ਕਿਸਾਨਾਂ ਲਈ ਨਹਿਰੀ ਪਾਣੀ ਦੇ ਵਿਸਥਾਰ ਅਤੇ ਨਿਰਵਿਘਨ ਬਿਜਲੀ ਸਪਲਾਈ ਲਈ ਵੱਡਾ ਬਜਟ ਮਨਜ਼ੂਰ।',
-    desc2: 'ਸਰਕਾਰੀ ਨੁਮਾਇੰਦਿਆਂ ਨੇ ਵਿਕਾਸ ਕਾਰਜਾਂ ਨੂੰ ਸਮੇਂ ਸਿਰ ਮੁਕੰਮਲ ਕਰਨ ਦੀ ਦਿੱਤੀ ਹਦਾਇਤ।',
+    desc: 'ਕਿਸਾਨਾਂ ਲਈ ਨਹਿਰੀ ਪਾਣੀ ਦੇ ਵਿਸਥਾਰ ਅਤੇ ਨਿਰਵਿਘਨ ਬਿਜਲੀ ਸਪਲਾਈ ਲਈ ਵੱਡਾ ਬਜਟ ਮਨਜ਼ੂਰ।',
     category: 'ਰਾਜਨੀਤੀ',
     labelClass: 'label-2',
     img: '/img/index_800x400-image05.jpg',
@@ -52,8 +51,7 @@ const defaultMainItems = [
   },
   {
     title: 'ਪੇਂਡੂ ਵਿਕਾਸ ਅਤੇ ਸੁਧਾਰ ਯੋਜਨਾਵਾਂ',
-    desc1: 'ਪਿੰਡਾਂ ਵਿੱਚ ਸਾਫ਼ ਪੀਣ ਵਾਲਾ ਪਾਣੀ ਅਤੇ ਸੋਲਰ ਸਟਰੀਟ ਲਾਈਟਾਂ ਲਗਾਉਣ ਦਾ ਕੰਮ ਤੇਜ਼ੀ ਨਾਲ ਸ਼ੁਰੂ।',
-    desc2: 'ਪੰਚਾਇਤਾਂ ਨੂੰ ਸਿੱਧੇ ਵਿਕਾਸ ਫੰਡ ਜਾਰੀ, ਲੋਕਾਂ ਦੀਆਂ ਸ਼ਿਕਾਇਤਾਂ ਦੇ ਹੱਲ ਲਈ ਸਿੰਗਲ ਵਿੰਡੋ ਸਿਸਟਮ।',
+    desc: 'ਪਿੰਡਾਂ ਵਿੱਚ ਸਾਫ਼ ਪੀਣ ਵਾਲਾ ਪਾਣੀ ਅਤੇ ਸੋਲਰ ਸਟਰੀਟ ਲਾਈਟਾਂ ਲਗਾਉਣ ਦਾ ਕੰਮ ਤੇਜ਼ੀ ਨਾਲ ਸ਼ੁਰੂ।',
     category: 'ਖ਼ਬਰਾਂ',
     labelClass: 'label-1',
     img: '/img/index_800x400-image06.jpg',
@@ -61,8 +59,7 @@ const defaultMainItems = [
   },
   {
     title: 'ਕਾਰੋਬਾਰ ਅਤੇ ਨਵੇਂ ਉਦਯੋਗਿਕ ਮੌਕੇ',
-    desc1: 'ਪੰਜਾਬ ਵਿੱਚ ਫੂਡ ਪ੍ਰੋਸੈਸਿੰਗ ਅਤੇ ਟੈਕਸਟਾਈਲ ਉਦਯੋਗਾਂ ਨੂੰ ਮਿਲੇਗਾ ਵਿਸ਼ੇਸ਼ ਉਤਸ਼ਾਹ।',
-    desc2: 'ਆਰਥਿਕ ਮਾਹਿਰਾਂ ਅਨੁਸਾਰ ਨਵੇਂ ਨਿਵੇਸ਼ ਨਾਲ ਸਥਾਨਕ ਨੌਜਵਾਨਾਂ ਲਈ ਰੁਜ਼ਗਾਰ ਵਿੱਚ ਵੱਡਾ ਵਾਧਾ ਹੋਵੇਗਾ।',
+    desc: 'ਪੰਜਾਬ ਵਿੱਚ ਫੂਡ ਪ੍ਰੋਸੈਸਿੰਗ ਅਤੇ ਟੈਕਸਟਾਈਲ ਉਦਯੋਗਾਂ ਨੂੰ ਮਿਲੇਗਾ ਵਿਸ਼ੇਸ਼ ਉਤਸ਼ਾਹ।',
     category: 'ਆਰਥਿਕਤਾ',
     labelClass: 'label-5',
     img: '/img/index_800x400-image07.jpg',
@@ -70,8 +67,7 @@ const defaultMainItems = [
   },
   {
     title: 'ਡਿਜੀਟਲ ਤਕਨਾਲੋਜੀ ਅਤੇ ਆਨਲਾਈਨ ਵਪਾਰ',
-    desc1: 'ਛੋਟੇ ਦੁਕਾਨਦਾਰਾਂ ਅਤੇ ਕਿਸਾਨਾਂ ਲਈ ਆਨਲਾਈਨ ਮੰਡੀ ਪਲੇਟਫਾਰਮ ਰਾਹੀਂ ਸਿੱਧੀ ਵਿਕਰੀ ਦੀ ਸਹੂਲਤ।',
-    desc2: 'ਡਿਜੀਟਲ ਪੇਮੈਂਟ ਅਤੇ ਈ-ਕਾਮਰਸ ਨਾਲ ਪੇਂਡੂ ਕਾਰੋਬਾਰੀਆਂ ਨੂੰ ਵਿਸ਼ਵ ਪੱਧਰੀ ਬਾਜ਼ਾਰ ਮੁਹੱਈਆ।',
+    desc: 'ਛੋਟੇ ਦੁਕਾਨਦਾਰਾਂ ਅਤੇ ਕਿਸਾਨਾਂ ਲਈ ਆਨਲਾਈਨ ਮੰਡੀ ਪਲੇਟਫਾਰਮ ਰਾਹੀਂ ਸਿੱਧੀ ਵਿਕਰੀ ਦੀ ਸਹੂਲਤ।',
     category: 'ਵਪਾਰ',
     labelClass: 'label-6',
     img: '/img/index_800x400-image08.jpg',
@@ -94,8 +90,7 @@ export default function NationalNewsModule() {
         
         const mappedMain = data.punjab.slice(0, 4).map((item, idx) => ({
           title: item.title,
-          desc1: item.desc || item.title,
-          desc2: `ਸਰੋਤ: ${item.source || 'ਪੰਜਾਬ ਫਾਈਲਜ਼'} | ਵਿਸਥਾਰਪੂਰਵਕ ਖ਼ਬਰ`,
+          desc: item.desc || item.title,
           category: cats[idx] || item.category,
           labelClass: labels[idx] || 'label-1',
           img: item.img || defaultMainItems[idx].img,
@@ -159,12 +154,7 @@ export default function NationalNewsModule() {
                     </div>
                     <p>
                       <a href={item.link} target="_blank" rel="noreferrer">
-                        {item.desc1}
-                      </a>
-                    </p>
-                    <p>
-                      <a href={item.link} className="external-link" target="_blank" rel="noreferrer">
-                        {item.desc2}
+                        {item.desc}
                       </a>
                     </p>
                     <div>

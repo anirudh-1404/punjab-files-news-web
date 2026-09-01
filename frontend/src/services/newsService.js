@@ -1,23 +1,21 @@
 /**
- * Punjab Files - Real-Time Live Punjabi News & High-Res Images Service
- * Fetches verified live Punjabi news with authentic real photos from ABP Sanjha & BBC Punjabi
+ * Punjab Files - Real-Time Live Punjabi News & Clean Media Service
  */
 
-const CACHE_KEY = 'punjab_files_live_news_v2';
-const CACHE_TTL = 8 * 60 * 1000; // 8 minutes cache
+const CACHE_KEY = 'punjab_files_live_news_v3';
+const CACHE_TTL = 10 * 60 * 1000; // 10 minutes cache
 
-// High quality Punjabi news feeds with real attached image media
+// High quality Punjabi news feeds
 const FEEDS = {
   top: 'https://punjabi.abplive.com/home/feed',
   punjab: 'https://punjabi.abplive.com/news/punjab/feed',
   sports: 'https://punjabi.abplive.com/sports/feed',
   world: 'https://punjabi.abplive.com/world/feed',
   entertainment: 'https://punjabi.abplive.com/entertainment/feed',
-  bbc: 'https://feeds.bbci.co.uk/punjabi/rss.xml',
-  google: 'https://news.google.com/rss?hl=pa&gl=IN&ceid=IN:pa'
+  bbc: 'https://feeds.bbci.co.uk/punjabi/rss.xml'
 };
 
-// Curated authentic Punjab fallback images
+// Curated high-definition template photos
 const FALLBACK_IMAGES = [
   '/img/index_800x400-image01.jpg',
   '/img/index_800x400-image02.jpg',
@@ -37,7 +35,7 @@ const FALLBACK_IMAGES = [
 ];
 
 /**
- * Fetch and parse a single RSS feed via rss2json API
+ * Fetch and parse a single RSS feed
  */
 async function fetchFeed(url) {
   try {
@@ -56,12 +54,13 @@ async function fetchFeed(url) {
 }
 
 /**
- * Extract image URL from item thumbnail, enclosure, or HTML content
+ * Clean and extract image URL from item
  */
 function extractImage(item, index) {
   // 1. Direct thumbnail
   if (item.thumbnail && typeof item.thumbnail === 'string' && item.thumbnail.startsWith('http')) {
     let img = item.thumbnail;
+    // Enhance BBC thumbnail to higher resolution
     if (img.includes('ichef.bbci.co.uk/ace/ws/240/')) {
       img = img.replace('/ws/240/', '/ws/700/');
     }
@@ -73,49 +72,74 @@ function extractImage(item, index) {
     return item.enclosure.link;
   }
 
-  // 3. Regex search for <img> inside description or content
-  const html = (item.description || '') + (item.content || '');
-  const imgMatch = html.match(/<img[^>]+src=["'](https?:\/\/[^"']+)["']/i);
-  if (imgMatch && imgMatch[1]) {
-    return imgMatch[1];
-  }
-
-  // 4. Fallback from curated templates
+  // 3. Fallback to clean local template image
   return FALLBACK_IMAGES[index % FALLBACK_IMAGES.length];
 }
 
 /**
- * Clean title to extract headline and source name
+ * Clean title to extract headline and source
  */
 function parseTitle(rawTitle) {
   if (!rawTitle) return { title: '', source: 'ਪੰਜਾਬ ਫਾਈਲਜ਼' };
-  const lastHyphen = rawTitle.lastIndexOf(' - ');
+  let title = rawTitle.replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&quot;/g, '"').trim();
+  const lastHyphen = title.lastIndexOf(' - ');
   if (lastHyphen !== -1) {
     return {
-      title: rawTitle.substring(0, lastHyphen).trim(),
-      source: rawTitle.substring(lastHyphen + 3).trim()
+      title: title.substring(0, lastHyphen).trim(),
+      source: title.substring(lastHyphen + 3).trim()
     };
   }
-  return { title: rawTitle.trim(), source: 'ਪੰਜਾਬ ਫਾਈਲਜ਼' };
+  return { title, source: 'ਪੰਜਾਬ ਫਾਈਲਜ਼' };
 }
 
 /**
- * Strip HTML tags from description
+ * Strip all HTML tags, iframes, and promotional boilerplate text from description
  */
-function cleanDescription(html) {
-  if (!html) return '';
+function cleanDescription(rawHtml, fallbackTitle = '') {
+  if (!rawHtml) return fallbackTitle;
+  
+  // Create virtual element to decode HTML entities and strip tags
   const div = document.createElement('div');
-  div.innerHTML = html;
-  return (div.textContent || div.innerText || '').trim();
+  div.innerHTML = rawHtml;
+  
+  // Remove scripts, iframes, styles
+  const scripts = div.querySelectorAll('script, iframe, style, noscript');
+  scripts.forEach((el) => el.remove());
+  
+  let text = (div.textContent || div.innerText || '').trim();
+
+  // Strip common promo boilerplate text
+  text = text
+    .replace(/ਨੋਟ:.*?ਲਈ ਸਾਡੇ ਐਪ ਨੂੰ ਡਾਊਨਲੋਡ ਕਰੋ.*?।?/gi, '')
+    .replace(/ਜੇ ਤੁਸੀਂ ਵੀਡੀਓ ਦੇਖਣਾ ਚਾਹੁੰਦੇ ਹੋ.*?ਸਬਸਕ੍ਰਾਈਬ ਕਰ ਲਵੋ.*?।?/gi, '')
+    .replace(/ABP ਸਾਂਝਾ ਸਾਰੇ ਸੋਸ਼ਲ ਮੀਡੀਆ.*?।?/gi, '')
+    .replace(/Published.*?IST/gi, '')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&rsquo;/g, "'")
+    .replace(/&lsquo;/g, "'")
+    .replace(/&rdquo;/g, '"')
+    .replace(/&ldquo;/g, '"')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  if (!text || text.length < 10) {
+    return fallbackTitle;
+  }
+
+  // Truncate to a clean 100-110 characters
+  if (text.length > 110) {
+    return text.substring(0, 105).trim() + '...';
+  }
+  return text;
 }
 
 /**
- * Format raw RSS items into standardized news objects with real images
+ * Format raw RSS items into standardized clean objects
  */
 function formatItems(items, defaultCategory = 'ਖ਼ਬਰਾਂ', defaultSource = 'ਪੰਜਾਬ ਫਾਈਲਜ਼') {
   return items.map((item, index) => {
     const { title, source } = parseTitle(item.title);
-    const desc = cleanDescription(item.description) || title;
+    const desc = cleanDescription(item.description, title);
     const img = extractImage(item, index);
     
     return {
@@ -132,7 +156,7 @@ function formatItems(items, defaultCategory = 'ਖ਼ਬਰਾਂ', defaultSourc
 }
 
 /**
- * Get all live Punjabi news categories with real images (with cache)
+ * Get all live Punjabi news categories
  */
 export async function getLivePunjabiNews() {
   // Check local cache
@@ -148,7 +172,7 @@ export async function getLivePunjabiNews() {
     // Ignore storage errors
   }
 
-  // Fetch all feeds in parallel
+  // Fetch feeds
   const [topItems, punjabItems, sportsItems, worldItems, bbcItems] = await Promise.all([
     fetchFeed(FEEDS.top),
     fetchFeed(FEEDS.punjab),
