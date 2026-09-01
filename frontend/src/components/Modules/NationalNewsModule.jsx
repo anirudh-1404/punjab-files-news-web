@@ -4,38 +4,32 @@ import { getLivePunjabiNews } from '../../services/newsService';
 const defaultNewsfeedItems = [
   {
     title: 'ਪੰਜਾਬੀ ਕਲਾ ਅਤੇ ਸੱਭਿਆਚਾਰ',
-    desc: 'ਪੰਜਾਬੀ ਨਾਟਕਾਂ ਅਤੇ ਲੋਕ ਕਲਾ ਦਾ ਕੌਮਾਂਤਰੀ ਪੱਧਰ ’ਤੇ ਵਿਸ਼ੇਸ਼ ਪ੍ਰਦਰਸ਼ਨ...',
+    desc: 'ਪੰਜਾਬੀ ਨਾਟਕਾਂ ਅਤੇ ਲੋਕ ਕਲਾ ਦਾ ਕੌਮਾਂਤਰੀ ਪੱਧਰ ’ਤੇ ਵਿਸ਼ੇਸ਼ ਪ੍ਰਦਰਸ਼ਨ',
     img: '/img/index_370x185-image01.jpg',
     link: '#feed'
   },
   {
     title: 'ਸੂਰਜੀ ਊਰਜਾ ਅਤੇ ਖੇਤੀਬਾੜੀ',
-    desc: 'ਨਵੇਂ ਸੋਲਰ ਪ੍ਰੋਜੈਕਟਾਂ ਨਾਲ ਕਿਸਾਨਾਂ ਦੀ ਬਿਜਲੀ ਲਾਗਤ ਵਿੱਚ ਵੱਡੀ ਕਮੀ...',
+    desc: 'ਨਵੇਂ ਸੋਲਰ ਪ੍ਰੋਜੈਕਟਾਂ ਨਾਲ ਕਿਸਾਨਾਂ ਦੀ ਬਿਜਲੀ ਲਾਗਤ ਵਿੱਚ ਵੱਡੀ ਕਮੀ',
     img: '/img/index_370x185-image02.jpg',
     link: '#feed'
   },
   {
     title: 'ਨੌਜਵਾਨ ਅਤੇ ਉੱਚ ਸਿੱਖਿਆ',
-    desc: 'ਵਿਦਿਆਰਥੀਆਂ ਲਈ ਮੁਫ਼ਤ ਹੁਨਰ ਵਿਕਾਸ ਅਤੇ ਕੰਪਿਊਟਰ ਸਿਖਲਾਈ ਕੇਂਦਰ...',
+    desc: 'ਵਿਦਿਆਰਥੀਆਂ ਲਈ ਮੁਫ਼ਤ ਹੁਨਰ ਵਿਕਾਸ ਅਤੇ ਕੰਪਿਊਟਰ ਸਿਖਲਾਈ ਕੇਂਦਰ',
     img: '/img/index_370x185-image03.jpg',
     link: '#feed'
   },
   {
     title: 'ਬੁਨਿਆਦੀ ਢਾਂਚਾ ਅਤੇ ਸੜਕਾਂ',
-    desc: 'ਨਵੇਂ ਐਕਸਪ੍ਰੈਸਵੇਅ ਅਤੇ ਹਾਈਵੇਅ ਪ੍ਰਾਜੈਕਟਾਂ ਨਾਲ ਵਪਾਰ ਵਿੱਚ ਤੇਜ਼ੀ...',
+    desc: 'ਨਵੇਂ ਐਕਸਪ੍ਰੈਸਵੇਅ ਅਤੇ ਹਾਈਵੇਅ ਪ੍ਰਾਜੈਕਟਾਂ ਨਾਲ ਵਪਾਰ ਵਿੱਚ ਤੇਜ਼ੀ',
     img: '/img/index_370x185-image04.jpg',
     link: '#feed'
   },
   {
     title: 'ਪੇਂਡੂ ਸਿਹਤ ਸੇਵਾਵਾਂ',
-    desc: 'ਮੋਬਾਈਲ ਵੈਨਾਂ ਰਾਹੀਂ ਪਿੰਡ-ਪਿੰਡ ਮੁਫ਼ਤ ਦਵਾਈਆਂ ਅਤੇ ਲੈਬ ਟੈਸਟ...',
+    desc: 'ਮੋਬਾਈਲ ਵੈਨਾਂ ਰਾਹੀਂ ਪਿੰਡ-ਪਿੰਡ ਮੁਫ਼ਤ ਦਵਾਈਆਂ ਅਤੇ ਲੈਬ ਟੈਸਟ',
     img: '/img/index_370x185-image05.jpg',
-    link: '#feed'
-  },
-  {
-    title: 'ਨਵੇਂ ਕਾਰੋਬਾਰ ਅਤੇ ਸਟਾਰਟਅੱਪ',
-    desc: 'ਪੰਜਾਬੀ ਨੌਜਵਾਨਾਂ ਵੱਲੋਂ ਖੇਤੀ ਅਤੇ ਤਕਨੀਕੀ ਖੇਤਰ ਵਿੱਚ ਨਵੇਂ ਉੱਦਮ...',
-    img: '/img/index_370x185-image06.jpg',
     link: '#feed'
   }
 ];
@@ -99,8 +93,8 @@ export default function NationalNewsModule() {
         setMainItems(mappedMain);
       }
 
-      if (data.all && data.all.length >= 6) {
-        const mappedFeed = data.all.slice(4, 10).map((item, idx) => ({
+      if (data.all && data.all.length >= 5) {
+        const mappedFeed = data.all.slice(6, 11).map((item, idx) => ({
           title: item.title,
           desc: item.desc || item.title,
           img: item.img || defaultNewsfeedItems[idx % defaultNewsfeedItems.length].img,
@@ -172,7 +166,7 @@ export default function NationalNewsModule() {
           <div className="col-md-4">
             <div className="sidebar-add-place">
               <a href="#" target="_blank" rel="noreferrer">
-                <img src="/img/banner_400x270.jpg" alt="Sidebar Ad" style={{ width: '100%', height: 'auto' }} />
+                <img src="/img/banner_400x270.jpg" alt="Sidebar Ad" style={{ width: '100%', height: 'auto', borderRadius: '4px' }} />
               </a>
             </div>
 

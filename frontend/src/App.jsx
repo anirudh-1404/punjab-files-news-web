@@ -2,6 +2,7 @@ import React from 'react';
 import Header from './components/Header/Header';
 import ParallaxHero from './components/Hero/ParallaxHero';
 import BreakingNews from './components/Hero/BreakingNews';
+import LiveTVHeroModule from './components/Modules/LiveTVHeroModule';
 import WorldNewsModule from './components/Modules/WorldNewsModule';
 import NationalNewsModule from './components/Modules/NationalNewsModule';
 import TVScheduleBanner from './components/Modules/TVScheduleBanner';
@@ -30,11 +31,14 @@ export default function App() {
         <ParallaxHero />
 
         {/* Breaking News */}
-        <section className="module">
+        <section className="module" style={{ paddingBottom: '0' }}>
           <div className="container">
             <BreakingNews />
           </div>
         </section>
+
+        {/* Dedicated Top LIVE TV Video + Featured News Section */}
+        <LiveTVHeroModule />
 
         {/* World News 2-Col Module */}
         <WorldNewsModule />
