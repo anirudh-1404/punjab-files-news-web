@@ -2,8 +2,8 @@
  * Punjab Files - Real-Time Live Punjabi News & Clean Media Service
  */
 
-const CACHE_KEY = 'punjab_files_live_news_v3';
-const CACHE_TTL = 10 * 60 * 1000; // 10 minutes cache
+const CACHE_KEY = 'punjab_files_live_news_v5';
+const CACHE_TTL = 8 * 60 * 1000; // 8 minutes cache
 
 // High quality Punjabi news feeds
 const FEEDS = {
@@ -57,22 +57,18 @@ async function fetchFeed(url) {
  * Clean and extract image URL from item
  */
 function extractImage(item, index) {
-  // 1. Direct thumbnail
   if (item.thumbnail && typeof item.thumbnail === 'string' && item.thumbnail.startsWith('http')) {
     let img = item.thumbnail;
-    // Enhance BBC thumbnail to higher resolution
     if (img.includes('ichef.bbci.co.uk/ace/ws/240/')) {
       img = img.replace('/ws/240/', '/ws/700/');
     }
     return img;
   }
 
-  // 2. Enclosure
   if (item.enclosure && item.enclosure.link && item.enclosure.link.startsWith('http')) {
     return item.enclosure.link;
   }
 
-  // 3. Fallback to clean local template image
   return FALLBACK_IMAGES[index % FALLBACK_IMAGES.length];
 }
 
@@ -81,7 +77,17 @@ function extractImage(item, index) {
  */
 function parseTitle(rawTitle) {
   if (!rawTitle) return { title: '', source: 'ਪੰਜਾਬ ਫਾਈਲਜ਼' };
-  let title = rawTitle.replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&quot;/g, '"').trim();
+  
+  // Strip any HTML tags from title as well
+  let title = rawTitle
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/<[^>]*>?/gm, '')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .trim();
+
   const lastHyphen = title.lastIndexOf(' - ');
   if (lastHyphen !== -1) {
     return {
@@ -93,42 +99,43 @@ function parseTitle(rawTitle) {
 }
 
 /**
- * Strip all HTML tags, iframes, and promotional boilerplate text from description
+ * 100% Robust HTML & tag stripper for description text
  */
 function cleanDescription(rawHtml, fallbackTitle = '') {
   if (!rawHtml) return fallbackTitle;
-  
-  // Create virtual element to decode HTML entities and strip tags
-  const div = document.createElement('div');
-  div.innerHTML = rawHtml;
-  
-  // Remove scripts, iframes, styles
-  const scripts = div.querySelectorAll('script, iframe, style, noscript');
-  scripts.forEach((el) => el.remove());
-  
-  let text = (div.textContent || div.innerText || '').trim();
 
-  // Strip common promo boilerplate text
+  // 1. Unescape HTML entities so tags become real <tag>
+  let unescaped = rawHtml
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&rsquo;/g, "'")
+    .replace(/&lsquo;/g, "'")
+    .replace(/&rdquo;/g, '"')
+    .replace(/&ldquo;/g, '"');
+
+  // 2. Strip all HTML tags completely with regex
+  let text = unescaped.replace(/<[^>]*>?/gm, ' ');
+
+  // 3. Strip promotional boilerplate text
   text = text
     .replace(/ਨੋਟ:.*?ਲਈ ਸਾਡੇ ਐਪ ਨੂੰ ਡਾਊਨਲੋਡ ਕਰੋ.*?।?/gi, '')
     .replace(/ਜੇ ਤੁਸੀਂ ਵੀਡੀਓ ਦੇਖਣਾ ਚਾਹੁੰਦੇ ਹੋ.*?ਸਬਸਕ੍ਰਾਈਬ ਕਰ ਲਵੋ.*?।?/gi, '')
     .replace(/ABP ਸਾਂਝਾ ਸਾਰੇ ਸੋਸ਼ਲ ਮੀਡੀਆ.*?।?/gi, '')
     .replace(/Published.*?IST/gi, '')
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&rsquo;/g, "'")
-    .replace(/&lsquo;/g, "'")
-    .replace(/&rdquo;/g, '"')
-    .replace(/&ldquo;/g, '"')
     .replace(/\s+/g, ' ')
     .trim();
 
-  if (!text || text.length < 10) {
+  if (!text || text.length < 15) {
     return fallbackTitle;
   }
 
-  // Truncate to a clean 100-110 characters
-  if (text.length > 110) {
-    return text.substring(0, 105).trim() + '...';
+  // 4. Truncate cleanly to ~230 characters with ellipsis
+  if (text.length > 230) {
+    return text.substring(0, 225).trim() + '...';
   }
   return text;
 }
