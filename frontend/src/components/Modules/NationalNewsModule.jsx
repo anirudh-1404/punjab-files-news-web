@@ -135,7 +135,15 @@ export default function NationalNewsModule() {
                 <div className="item" key={idx}>
                   <div className="item-image-2">
                     <a className="img-link" href={item.link} target="_blank" rel="noreferrer">
-                      <img className="img-responsive img-full" src={item.img} alt={item.title} />
+                      <img
+                        className="img-responsive img-full"
+                        src={item.img}
+                        alt={item.title}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = '/img/index_800x400-image05.jpg';
+                        }}
+                      />
                     </a>
                     <span>
                       <a className={item.labelClass} href={item.link}>{item.category}</a>
@@ -194,7 +202,15 @@ export default function NationalNewsModule() {
                       <div className="item">
                         <div className="item-image">
                           <a className="img-link" href={item.link} target="_blank" rel="noreferrer">
-                            <img className="img-responsive img-full" src={item.img} alt={item.title} />
+                            <img
+                              className="img-responsive img-full"
+                              src={item.img}
+                              alt={item.title}
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = '/img/index_370x185-image01.jpg';
+                              }}
+                            />
                           </a>
                         </div>
                         <div className="item-content">

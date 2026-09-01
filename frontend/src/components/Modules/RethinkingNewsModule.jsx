@@ -226,7 +226,15 @@ export default function RethinkingNewsModule() {
                   <div className="item-block" key={idx}>
                     <div className="item-image">
                       <a className="img-link" href={sp.link || '#sport'} target="_blank" rel="noreferrer">
-                        <img className="img-responsive img-full" src={sp.img} alt={sp.title} />
+                        <img
+                          className="img-responsive img-full"
+                          src={sp.img}
+                          alt={sp.title}
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = '/img/index_800x400-image25.jpg';
+                          }}
+                        />
                       </a>
                     </div>
                     <div className="item-content">
@@ -254,7 +262,15 @@ export default function RethinkingNewsModule() {
                     <div className="item">
                       <div className="item-image">
                         <a className="img-link" href={h.link || '#headlines'} target="_blank" rel="noreferrer">
-                          <img className="img-responsive img-full" src={h.img} alt="" />
+                          <img
+                            className="img-responsive img-full"
+                            src={h.img}
+                            alt=""
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = '/img/index_370x185-image07.jpg';
+                            }}
+                          />
                         </a>
                       </div>
                       <div className="item-content">

@@ -184,7 +184,15 @@ export default function LocalNewsModule() {
                     <div className="item" key={idx}>
                       <div className="item-image-3">
                         <a className="img-link" href={item.btnLink} target="_blank" rel="noreferrer">
-                          <img className="img-responsive img-full" src={item.img} alt={item.title} />
+                          <img
+                            className="img-responsive img-full"
+                            src={item.img}
+                            alt={item.title}
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = '/img/index_800x400-image09.jpg';
+                            }}
+                          />
                         </a>
                         <span>
                           <a className={item.tagClass} href={item.btnLink}>{item.tag}</a>
@@ -244,7 +252,15 @@ export default function LocalNewsModule() {
                     {post.img && (
                       <div className="item-image">
                         <a className="img-link" href={post.link || '#recent'} target="_blank" rel="noreferrer">
-                          <img className="img-responsive img-full" src={post.img} alt="" />
+                          <img
+                            className="img-responsive img-full"
+                            src={post.img}
+                            alt=""
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = '/img/index_800x400-image40.jpg';
+                            }}
+                          />
                         </a>
                       </div>
                     )}

@@ -85,7 +85,15 @@ export default function WorldNewsModule() {
                 <div className="item" key={idx}>
                   <div className="item-image-1">
                     <a className="img-link" href={item.link} target="_blank" rel="noreferrer">
-                      <img className="img-responsive img-full" src={item.img} alt={item.title} />
+                      <img
+                        className="img-responsive img-full"
+                        src={item.img}
+                        alt={item.title}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = '/img/index_800x400-image01.jpg';
+                        }}
+                      />
                     </a>
                     <span>
                       <a className={item.labelClass} href={item.link}>{item.category}</a>
@@ -127,7 +135,15 @@ export default function WorldNewsModule() {
                 <div className="item" key={idx}>
                   <div className="item-image-1">
                     <a className="img-link" href={item.link} target="_blank" rel="noreferrer">
-                      <img className="img-responsive img-full" src={item.img} alt={item.title} />
+                      <img
+                        className="img-responsive img-full"
+                        src={item.img}
+                        alt={item.title}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = '/img/index_800x400-image01.jpg';
+                        }}
+                      />
                     </a>
                     <span>
                       <a className={item.labelClass} href={item.link}>{item.category}</a>
