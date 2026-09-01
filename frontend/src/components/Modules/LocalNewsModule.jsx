@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { getLivePunjabiNews } from '../../services/newsService';
 
 const categoryLinks = [
   { name: 'ਮੁੱਖ ਪੰਨਾ', link: '/' },
@@ -25,7 +26,7 @@ const categoryLinks = [
   { name: 'ਮਨੋਰੰਜਨ ਤੇ ਸਿਨੇਮਾ', link: '#art' }
 ];
 
-const localNewsItems = [
+const defaultLocalNewsItems = [
   {
     title: 'ਪੰਜਾਬ ਵਿੱਚ ਸੁਰੱਖਿਆ ਪ੍ਰਬੰਧਾਂ ਦਾ ਵਿਸ਼ੇਸ਼ ਜਾਇਜ਼ਾ',
     tag: 'ਬ੍ਰੇਕਿੰਗ ਨਿਊਜ਼',
@@ -73,7 +74,7 @@ const localNewsItems = [
   }
 ];
 
-const recentPosts = [
+const defaultRecentPosts = [
   {
     time: '1 ਮਿੰਟ ਪਹਿਲਾਂ',
     text: 'ਮੌਸਮ ਵਿਭਾਗ ਵੱਲੋਂ ਪੰਜਾਬ ਦੇ ਮੈਦਾਨੀ ਇਲਾਕਿਆਂ ਵਿੱਚ ਹਲਕੀ ਬਾਰਿਸ਼ ਦੀ ਪੇਸ਼ੀਨਗੋਈ।',
@@ -108,6 +109,49 @@ const recentPosts = [
 ];
 
 export default function LocalNewsModule() {
+  const [newsItems, setNewsItems] = useState(defaultLocalNewsItems);
+  const [recentList, setRecentList] = useState(defaultRecentPosts);
+
+  useEffect(() => {
+    let isMounted = true;
+    getLivePunjabiNews().then((data) => {
+      if (!isMounted || !data) return;
+
+      if (data.punjab && data.punjab.length >= 5) {
+        const tags = [
+          { tag: 'ਬ੍ਰੇਕਿੰਗ ਨਿਊਜ਼', tagClass: 'label-1', btnText: 'ਲਾਈਵ ਦੇਖੋ' },
+          { tag: 'ਪੰਜਾਬ', tagClass: 'label-4', btnText: 'ਪੰਜਾਬ' },
+          { tag: 'ਜੀਵਨ ਸ਼ੈਲੀ', tagClass: 'label-9', btnText: 'ਜੀਵਨ ਸ਼ੈਲੀ' },
+          { tag: 'ਸੈਰ-ਸਪਾਟਾ', tagClass: 'label-3', btnText: 'ਸੈਰ-ਸਪਾਟਾ' },
+          { tag: 'ਵੈੱਬ ਸ਼ੋਅ', tagClass: 'label-6', btnText: 'ਵੈੱਬ ਸ਼ੋਅ' }
+        ];
+
+        const mapped = data.punjab.slice(0, 5).map((item, idx) => ({
+          title: item.title,
+          tag: tags[idx].tag,
+          tagClass: tags[idx].tagClass,
+          img: item.img || defaultLocalNewsItems[idx].img,
+          desc: item.desc || item.title,
+          btnText: tags[idx].btnText,
+          btnLink: item.link
+        }));
+        setNewsItems(mapped);
+      }
+
+      if (data.all && data.all.length >= 7) {
+        const times = ['1 ਮਿੰਟ ਪਹਿਲਾਂ', '2 ਮਿੰਟ ਪਹਿਲਾਂ', '3 ਮਿੰਟ ਪਹਿਲਾਂ', '5 ਮਿੰਟ ਪਹਿਲਾਂ', '7 ਮਿੰਟ ਪਹਿਲਾਂ', '10 ਮਿੰਟ ਪਹਿਲਾਂ', '15 ਮਿੰਟ ਪਹਿਲਾਂ'];
+        const mappedRecent = data.all.slice(0, 7).map((item, idx) => ({
+          time: times[idx] || 'ਤਾਜ਼ਾ ਅੱਪਡੇਟ',
+          text: item.title,
+          img: idx % 2 === 0 ? item.img : null,
+          link: item.link
+        }));
+        setRecentList(mappedRecent);
+      }
+    });
+    return () => { isMounted = false; };
+  }, []);
+
   return (
     <section className="module highlight">
       <div className="container">
@@ -136,10 +180,10 @@ export default function LocalNewsModule() {
               {/* News Items Col-9 */}
               <div className="col-xs-12 col-sm-9 col-md-9">
                 <div className="news">
-                  {localNewsItems.map((item, idx) => (
+                  {newsItems.map((item, idx) => (
                     <div className="item" key={idx}>
                       <div className="item-image-3">
-                        <a className="img-link" href={item.btnLink}>
+                        <a className="img-link" href={item.btnLink} target="_blank" rel="noreferrer">
                           <img className="img-responsive img-full" src={item.img} alt={item.title} />
                         </a>
                         <span>
@@ -149,18 +193,18 @@ export default function LocalNewsModule() {
                       <div className="item-content">
                         <div className="title-left title-style04 underline04">
                           <h3>
-                            <a href={item.btnLink}>
+                            <a href={item.btnLink} target="_blank" rel="noreferrer">
                               {item.title}
                             </a>
                           </h3>
                         </div>
                         <p>
-                          <a href={item.btnLink} className="external-link">
+                          <a href={item.btnLink} className="external-link" target="_blank" rel="noreferrer">
                             {item.desc}
                           </a>
                         </p>
                         <div>
-                          <a href={item.btnLink}>
+                          <a href={item.btnLink} target="_blank" rel="noreferrer">
                             <span className="read-more">{item.btnText}</span>
                           </a>
                         </div>
@@ -194,12 +238,12 @@ export default function LocalNewsModule() {
                 </div>
               </div>
 
-              {recentPosts.map((post, idx) => (
+              {recentList.map((post, idx) => (
                 <div className="scroll-item" key={idx}>
                   <div className="item">
                     {post.img && (
                       <div className="item-image">
-                        <a className="img-link" href="#recent">
+                        <a className="img-link" href={post.link || '#recent'} target="_blank" rel="noreferrer">
                           <img className="img-responsive img-full" src={post.img} alt="" />
                         </a>
                       </div>
@@ -207,7 +251,9 @@ export default function LocalNewsModule() {
                     <div className={post.img ? 'item-content' : 'item-content-1'}>
                       <p>
                         <i className="fa fa-clock-o"></i> <span className="day"> {post.time}</span> <br />
-                        {post.text}
+                        <a href={post.link || '#recent'} target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
+                          {post.text}
+                        </a>
                       </p>
                     </div>
                   </div>

@@ -1,21 +1,63 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { getLivePunjabiNews } from '../../services/newsService';
 
-const numberedHeadlines = [
-  { num: '01', title: "ਗਿਨੀਜ਼ ਬੁੱਕ ਆਫ਼ ਵਰਲਡ ਰਿਕਾਰਡਜ਼ ਵਿੱਚ ਪੰਜਾਬੀ ਨੌਜਵਾਨਾਂ ਦਾ ਨਾਮ ਦਰਜ।", img: '/img/index_370x185-image07.jpg' },
-  { num: '02', title: 'ਕਬੱਡੀ ਚੈਂਪੀਅਨਸ਼ਿਪ: ਨਵੇਂ ਖਿਡਾਰੀਆਂ ਦੀ ਚੋਣ ਲਈ ਟ੍ਰਾਇਲ ਮੁਕੰਮਲ।', img: '/img/index_370x185-image08.jpg' },
-  { num: '03', title: 'ਪੰਜਾਬੀ ਵਿਰਸਾ ਅਤੇ ਪ੍ਰੰਪਰਾਗਤ ਲੋਕ ਕਲਾਵਾਂ ਦਾ ਸ਼ਾਨਦਾਰ ਪ੍ਰਦਰਸ਼ਨ।', img: '/img/index_370x185-image09.jpg' },
-  { num: '04', title: 'ਇਤਿਹਾਸਕ ਦਸਤਾਵੇਜ਼ਾਂ ਅਤੇ ਪੁਰਾਤਨ ਸਿੱਕਿਆਂ ਦੀ ਵਿਸ਼ੇਸ਼ ਪ੍ਰਦਰਸ਼ਨੀ।', img: '/img/index_370x185-image10.jpg' },
-  { num: '05', title: 'ਸੜਕੀ ਆਵਾਜਾਈ ਅਤੇ ਟਰਾਂਸਪੋਰਟ ਨਿਯਮਾਂ ਵਿੱਚ ਲੋਕ ਹਿੱਤ ਸੁਧਾਰ।', img: '/img/index_370x185-image11.jpg' },
-  { num: '06', title: 'ਖੇਤੀਬਾੜੀ ਵਿੱਚ ਆਧੁਨਿਕ ਮਸ਼ੀਨਰੀ ਅਤੇ ਡਰੋਨ ਤਕਨਾਲੋਜੀ ਦੀ ਵਰਤੋਂ।', img: '/img/index_370x185-image12.jpg' },
-  { num: '07', title: 'ਸਿਹਤ ਮਾਹਿਰਾਂ ਵੱਲੋਂ ਮੌਸਮੀ ਤਬਦੀਲੀਆਂ ਦੌਰਾਨ ਸਾਵਧਾਨੀ ਦੇ ਨੁਸਖ਼ੇ।', img: '/img/index_370x185-image13.jpg' },
-  { num: '08', title: 'ਪੰਜਾਬ ਫਾਈਲਜ਼ ਲਾਈਵ ਸਟ੍ਰੀਮਿੰਗ ਰਾਹੀਂ ਦੇਸ਼-ਵਿਦੇਸ਼ ਦੀਆਂ ਖ਼ਬਰਾਂ ਨਾਲ ਜੁੜੋ।', img: '/img/index_370x185-image14.jpg' },
-  { num: '09', title: '24 ਘੰਟੇ ਨਿਰਪੱਖ, ਸੱਚੀ ਅਤੇ ਭਰੋਸੇਯੋਗ ਪੱਤਰਕਾਰੀ ਦਾ ਪ੍ਰਮੁੱਖ ਸਰੋਤ।', img: '/img/index_370x185-image15.jpg' }
+const defaultNumberedHeadlines = [
+  { num: '01', title: "ਗਿਨੀਜ਼ ਬੁੱਕ ਆਫ਼ ਵਰਲਡ ਰਿਕਾਰਡਜ਼ ਵਿੱਚ ਪੰਜਾਬੀ ਨੌਜਵਾਨਾਂ ਦਾ ਨਾਮ ਦਰਜ।", img: '/img/index_370x185-image07.jpg', link: '#headlines' },
+  { num: '02', title: 'ਕਬੱਡੀ ਚੈਂਪੀਅਨਸ਼ਿਪ: ਨਵੇਂ ਖਿਡਾਰੀਆਂ ਦੀ ਚੋਣ ਲਈ ਟ੍ਰਾਇਲ ਮੁਕੰਮਲ।', img: '/img/index_370x185-image08.jpg', link: '#headlines' },
+  { num: '03', title: 'ਪੰਜਾਬੀ ਵਿਰਸਾ ਅਤੇ ਪ੍ਰੰਪਰਾਗਤ ਲੋਕ ਕਲਾਵਾਂ ਦਾ ਸ਼ਾਨਦਾਰ ਪ੍ਰਦਰਸ਼ਨ।', img: '/img/index_370x185-image09.jpg', link: '#headlines' },
+  { num: '04', title: 'ਇਤਿਹਾਸਕ ਦਸਤਾਵੇਜ਼ਾਂ ਅਤੇ ਪੁਰਾਤਨ ਸਿੱਕਿਆਂ ਦੀ ਵਿਸ਼ੇਸ਼ ਪ੍ਰਦਰਸ਼ਨੀ।', img: '/img/index_370x185-image10.jpg', link: '#headlines' },
+  { num: '05', title: 'ਸੜਕੀ ਆਵਾਜਾਈ ਅਤੇ ਟਰਾਂਸਪੋਰਟ ਨਿਯਮਾਂ ਵਿੱਚ ਲੋਕ ਹਿੱਤ ਸੁਧਾਰ।', img: '/img/index_370x185-image11.jpg', link: '#headlines' },
+  { num: '06', title: 'ਖੇਤੀਬਾੜੀ ਵਿੱਚ ਆਧੁਨਿਕ ਮਸ਼ੀਨਰੀ ਅਤੇ ਡਰੋਨ ਤਕਨਾਲੋਜੀ ਦੀ ਵਰਤੋਂ।', img: '/img/index_370x185-image12.jpg', link: '#headlines' },
+  { num: '07', title: 'ਸਿਹਤ ਮਾਹਿਰਾਂ ਵੱਲੋਂ ਮੌਸਮੀ ਤਬਦੀਲੀਆਂ ਦੌਰਾਨ ਸਾਵਧਾਨੀ ਦੇ ਨੁਸਖ਼ੇ।', img: '/img/index_370x185-image13.jpg', link: '#headlines' },
+  { num: '08', title: 'ਪੰਜਾਬ ਫਾਈਲਜ਼ ਲਾਈਵ ਸਟ੍ਰੀਮਿੰਗ ਰਾਹੀਂ ਦੇਸ਼-ਵਿਦੇਸ਼ ਦੀਆਂ ਖ਼ਬਰਾਂ ਨਾਲ ਜੁੜੋ।', img: '/img/index_370x185-image14.jpg', link: '#headlines' },
+  { num: '09', title: '24 ਘੰਟੇ ਨਿਰਪੱਖ, ਸੱਚੀ ਅਤੇ ਭਰੋਸੇਯੋਗ ਪੱਤਰਕਾਰੀ ਦਾ ਪ੍ਰਮੁੱਖ ਸਰੋਤ।', img: '/img/index_370x185-image15.jpg', link: '#headlines' }
+];
+
+const defaultSportsItems = [
+  { title: 'ਕ੍ਰਿਕਟ ਲੀਗ ਅੱਪਡੇਟ', time: '1 ਘੰਟਾ ਪਹਿਲਾਂ', img: '/img/index_800x400-image25.jpg', link: '#sport' },
+  { title: 'ਫੁੱਟਬਾਲ ਚੈਂਪੀਅਨਸ਼ਿਪ', time: '54 ਮਿੰਟ ਪਹਿਲਾਂ', img: '/img/index_800x400-image26.jpg', link: '#sport' },
+  { title: 'ਕਬੱਡੀ ਟੂਰਨਾਮੈਂਟ ਫਾਈਨਲ', time: '6 ਘੰਟੇ ਪਹਿਲਾਂ', img: '/img/index_800x400-image27.jpg', link: '#sport' },
+  { title: 'ਸਾਈਕਲਿੰਗ ਮੁਕਾਬਲੇ', time: '1 ਘੰਟਾ ਪਹਿਲਾਂ', img: '/img/index_800x400-image28.jpg', link: '#sport' },
+  { title: 'ਹਾਕੀ ਲੀਗ ਹਾਈਲਾਈਟਸ', time: '1 ਘੰਟਾ ਪਹਿਲਾਂ', img: '/img/index_800x400-image29.jpg', link: '#sport' },
+  { title: 'ਸੂਬਾਈ ਅਥਲੈਟਿਕਸ ਮੀਟ', time: '54 ਮਿੰਟ ਪਹਿਲਾਂ', img: '/img/index_800x400-image30.jpg', link: '#sport' },
+  { title: 'ਬਾਸਕਟਬਾਲ ਪਲੇਆਫਸ', time: '6 ਘੰਟੇ ਪਹਿਲਾਂ', img: '/img/index_800x400-image31.jpg', link: '#sport' },
+  { title: 'ਟੈਨਿਸ ਓਪਨ ਮੈਚ', time: '1 ਘੰਟਾ ਪਹਿਲਾਂ', img: '/img/index_800x400-image10.jpg', link: '#sport' }
 ];
 
 export default function RethinkingNewsModule() {
+  const [headlines, setHeadlines] = useState(defaultNumberedHeadlines);
+  const [sportsList, setSportsList] = useState(defaultSportsItems);
   const [isCelsius, setIsCelsius] = useState(true);
   const cTemp = 28;
   const fTemp = Math.round((cTemp * 9) / 5 + 32);
+
+  useEffect(() => {
+    let isMounted = true;
+    getLivePunjabiNews().then((data) => {
+      if (!isMounted || !data) return;
+
+      if (data.all && data.all.length >= 9) {
+        const mappedHeadlines = data.all.slice(0, 9).map((item, idx) => ({
+          num: String(idx + 1).padStart(2, '0'),
+          title: item.title,
+          img: item.img || defaultNumberedHeadlines[idx % defaultNumberedHeadlines.length].img,
+          link: item.link
+        }));
+        setHeadlines(mappedHeadlines);
+      }
+
+      if (data.sports && data.sports.length >= 4) {
+        const mappedSports = data.sports.slice(0, 8).map((item, idx) => ({
+          title: item.title,
+          time: 'ਤਾਜ਼ਾ ਖੇਡ ਅੱਪਡੇਟ',
+          img: item.img || defaultSportsItems[idx % defaultSportsItems.length].img,
+          link: item.link
+        }));
+        setSportsList(mappedSports);
+      }
+    });
+    return () => { isMounted = false; };
+  }, []);
 
   return (
     <section className="module highlight">
@@ -180,25 +222,16 @@ export default function RethinkingNewsModule() {
 
               {/* 8-block Sport Thumbnails */}
               <div className="news-block">
-                {[
-                  { title: 'ਕ੍ਰਿਕਟ ਲੀਗ ਅੱਪਡੇਟ', time: '1 ਘੰਟਾ ਪਹਿਲਾਂ', img: '/img/index_800x400-image25.jpg' },
-                  { title: 'ਫੁੱਟਬਾਲ ਚੈਂਪੀਅਨਸ਼ਿਪ', time: '54 ਮਿੰਟ ਪਹਿਲਾਂ', img: '/img/index_800x400-image26.jpg' },
-                  { title: 'ਕਬੱਡੀ ਟੂਰਨਾਮੈਂਟ ਫਾਈਨਲ', time: '6 ਘੰਟੇ ਪਹਿਲਾਂ', img: '/img/index_800x400-image27.jpg' },
-                  { title: 'ਸਾਈਕਲਿੰਗ ਮੁਕਾਬਲੇ', time: '1 ਘੰਟਾ ਪਹਿਲਾਂ', img: '/img/index_800x400-image28.jpg' },
-                  { title: 'ਹਾਕੀ ਲੀਗ ਹਾਈਲਾਈਟਸ', time: '1 ਘੰਟਾ ਪਹਿਲਾਂ', img: '/img/index_800x400-image29.jpg' },
-                  { title: 'ਸੂਬਾਈ ਅਥਲੈਟਿਕਸ ਮੀਟ', time: '54 ਮਿੰਟ ਪਹਿਲਾਂ', img: '/img/index_800x400-image30.jpg' },
-                  { title: 'ਬਾਸਕਟਬਾਲ ਪਲੇਆਫਸ', time: '6 ਘੰਟੇ ਪਹਿਲਾਂ', img: '/img/index_800x400-image31.jpg' },
-                  { title: 'ਟੈਨਿਸ ਓਪਨ ਮੈਚ', time: '1 ਘੰਟਾ ਪਹਿਲਾਂ', img: '/img/index_800x400-image10.jpg' }
-                ].map((sp, idx) => (
+                {sportsList.map((sp, idx) => (
                   <div className="item-block" key={idx}>
                     <div className="item-image">
-                      <a className="img-link" href="#sport">
+                      <a className="img-link" href={sp.link || '#sport'} target="_blank" rel="noreferrer">
                         <img className="img-responsive img-full" src={sp.img} alt={sp.title} />
                       </a>
                     </div>
                     <div className="item-content">
                       <i className="fa fa-clock-o"></i> <span className="day">{sp.time}</span>
-                      <a href="#sport"> {sp.title}</a>
+                      <a href={sp.link || '#sport'} target="_blank" rel="noreferrer"> {sp.title}</a>
                     </div>
                   </div>
                 ))}
@@ -216,18 +249,18 @@ export default function RethinkingNewsModule() {
             </div>
             <div className="sidebar-post">
               <ul>
-                {numberedHeadlines.map((h, idx) => (
+                {headlines.map((h, idx) => (
                   <li key={idx}>
                     <div className="item">
                       <div className="item-image">
-                        <a className="img-link" href="#headlines">
+                        <a className="img-link" href={h.link || '#headlines'} target="_blank" rel="noreferrer">
                           <img className="img-responsive img-full" src={h.img} alt="" />
                         </a>
                       </div>
                       <div className="item-content">
                         <h3>{h.num}</h3>
                         <p className="ellipsis">
-                          <a href="#headlines">{h.title}</a>
+                          <a href={h.link || '#headlines'} target="_blank" rel="noreferrer">{h.title}</a>
                         </p>
                       </div>
                     </div>
