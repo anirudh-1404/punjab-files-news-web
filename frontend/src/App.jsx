@@ -2,7 +2,6 @@ import React from 'react';
 import Header from './components/Header/Header';
 import ParallaxHero from './components/Hero/ParallaxHero';
 import BreakingNews from './components/Hero/BreakingNews';
-import LiveTVHeroModule from './components/Modules/LiveTVHeroModule';
 import WorldNewsModule from './components/Modules/WorldNewsModule';
 import NationalNewsModule from './components/Modules/NationalNewsModule';
 import TVScheduleBanner from './components/Modules/TVScheduleBanner';
@@ -27,18 +26,15 @@ export default function App() {
 
       {/* Main Content Section */}
       <section id="main-section">
-        {/* Parallax Hero */}
+        {/* 60:40 Realistic Smart TV Live Section + Live Feed */}
         <ParallaxHero />
 
-        {/* Breaking News */}
-        <section className="module" style={{ paddingBottom: '0' }}>
+        {/* Breaking News Ticker */}
+        <section className="module" style={{ paddingBottom: '0', paddingTop: '15px' }}>
           <div className="container">
             <BreakingNews />
           </div>
         </section>
-
-        {/* Dedicated Top LIVE TV Video + Featured News Section */}
-        <LiveTVHeroModule />
 
         {/* World News 2-Col Module */}
         <WorldNewsModule />
