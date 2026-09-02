@@ -28,8 +28,17 @@ export default function HomeGalleryModule() {
 
   return (
     <section className="module">
-      <h2 className="title-style05 style-02">
-        ਸਾਡੇ ਵੱਖ-ਵੱਖ ਸੈਕਸ਼ਨਾਂ ਦੀਆਂ <span><a href="#sections">ਹੋਰ ਮੁੱਖ ਸੁਰਖੀਆਂ</a></span>
+      <h2
+        style={{
+          textAlign: 'center',
+          fontSize: '24px',
+          fontWeight: '700',
+          color: '#111827',
+          margin: '10px auto 14px',
+          lineHeight: '1.4'
+        }}
+      >
+        ਸਾਡੇ ਵੱਖ-ਵੱਖ ਸੈਕਸ਼ਨਾਂ ਦੀਆਂ ਹੋਰ ਮੁੱਖ ਸੁਰਖੀਆਂ
       </h2>
       <div className="center-title">
         <span className="title-line-left"></span>

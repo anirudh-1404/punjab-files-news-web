@@ -211,8 +211,8 @@ export default function LocalNewsModule() {
                             {item.desc}
                           </a>
                         </p>
-                        <div>
-                          <a href={item.btnLink} target="_blank" rel="noreferrer">
+                        <div style={{ marginTop: '8px' }}>
+                          <a href={item.btnLink} target="_blank" rel="noreferrer" style={{ display: 'inline-block', textDecoration: 'none' }}>
                             <span className="read-more">{item.btnText}</span>
                           </a>
                         </div>

@@ -157,20 +157,49 @@
   background-color: transparent !important;
 }
 
-/* Punjabi Digital Clock: Deep Navy background + Glowing Gold Text */
-.clock #time {
-  background: linear-gradient(135deg, var(--brand-navy) 0%, var(--brand-navy-dark) 100%) !important;
-  color: var(--brand-gold) !important;
-  font-weight: 700 !important;
-  border: 1px solid rgba(235, 177, 13, 0.4) !important;
-  border-radius: 4px !important;
-  padding: 4px 10px !important;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.2) !important;
+/* Punjabi Digital Clock: Symmetrical Single-Row Layout */
+.clock {
+  float: right !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 12px !important;
+  height: 42px !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .clock #date {
-  color: var(--brand-navy) !important;
+  float: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 13.5px !important;
   font-weight: 600 !important;
+  color: var(--brand-navy) !important;
+  white-space: nowrap !important;
+  line-height: 1 !important;
+}
+
+.clock #time {
+  float: none !important;
+  margin: 0 !important;
+  width: auto !important;
+  min-width: 130px !important;
+  height: auto !important;
+  padding: 5px 12px !important;
+  white-space: nowrap !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  background: linear-gradient(135deg, var(--brand-navy) 0%, var(--brand-navy-dark) 100%) !important;
+  color: var(--brand-gold) !important;
+  border: 1px solid rgba(235, 177, 13, 0.4) !important;
+  border-radius: 4px !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2) !important;
 }
 
 /* Ensure all navbar items stay in a single line on desktop */
@@ -231,9 +260,18 @@
   color: #ffffff !important;
 }
 
-/* Section Title underlines */
+/* Fix double lines under titles (Keep only 1 crisp crimson underline) */
 .title-style04.underline04 h3 {
-  border-bottom: 2px solid var(--brand-crimson) !important;
+  border-bottom: none !important;
+}
+
+.underline04::after {
+  display: none !important;
+}
+
+.underline04::before {
+  background-color: var(--brand-crimson) !important;
+  height: 2px !important;
 }
 
 .title-style02 {
@@ -245,10 +283,20 @@
 }
 
 /* Read more button */
+/* Read more button (Position: static to prevent overlapping with news text) */
 .read-more {
+  position: static !important;
+  display: inline-block !important;
+  margin-top: 6px !important;
   color: var(--brand-crimson) !important;
   font-weight: 600 !important;
+  font-size: 12px !important;
   transition: all 0.2s ease !important;
+  float: none !important;
+}
+
+.read-more::before {
+  display: none !important;
 }
 
 .read-more:hover {
@@ -300,16 +348,23 @@
   -webkit-transform: none !important;
 }
 
-/* Clean news item text clamps */
+/* Clean news item text clamps (3 lines max to prevent overlap) */
+.news .item .item-content {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+}
+
 .news .item .item-content p {
-  margin-bottom: 8px !important;
+  margin-bottom: 6px !important;
   font-size: 13px !important;
-  line-height: 1.5 !important;
+  line-height: 1.45 !important;
   color: #4b5563 !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   display: -webkit-box !important;
-  -webkit-line-clamp: 4 !important;
+  -webkit-line-clamp: 3 !important;
   -webkit-box-orient: vertical !important;
 }
 
