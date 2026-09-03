@@ -10,7 +10,7 @@ export default function TeamParallaxModule() {
               <h2 className="color-white weight-300 small-caption" style={{ fontSize: '26px', lineHeight: 1.4 }}>
                 ਮਿਲੋ ਸਾਡੀ ਸਮਰਪਿਤ <strong>ਪੰਜਾਬ ਫਾਈਲਜ਼ ਟੀਮ</strong> ਨਾਲ! ਸਾਡੇ ਬਾਰੇ ਹੋਰ ਜਾਣਕਾਰੀ ਇੱਥੇ ਪ੍ਰਾਪਤ ਕਰੋ!
               </h2>
-              <a href="#about-us" className="btn btn-default" style={{ marginTop: '15px', fontWeight: 600, padding: '10px 24px' }}>
+              <a href="#about-us" className="btn btn-default" style={{ marginTop: '15px', fontWeight: 700, padding: '10px 24px', backgroundColor: '#ebb10d', color: '#111317', border: '1px solid #c89508', borderRadius: '4px' }}>
                 ਸਾਡੇ ਬਾਰੇ ਜਾਣੋ
               </a>
             </div>

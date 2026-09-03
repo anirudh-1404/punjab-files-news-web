@@ -43,7 +43,7 @@
   display: inline-block;
   right: 1px;
   font-size: 14px;
-  color: #FFF;
+  color: inherit !important;
   margin-left: 6px;
 }
 
@@ -57,13 +57,13 @@
 }
 
 /* ====================================================
-   1. BRAND HEADER & NAVBAR STYLING (NAVY + CRIMSON + GOLD)
+   1. BRAND HEADER & NAVBAR STYLING (NAVY + GOLD + CRIMSON)
 ==================================================== */
 
-/* Top Menu Bar: Deep Navy Blue with Gold Accent Border */
+/* Top Menu Bar: Deep Navy Blue with Crimson Accent Border */
 .top-menu {
   background-color: var(--brand-navy-dark) !important;
-  border-bottom: 2px solid var(--brand-gold) !important;
+  border-bottom: 2px solid var(--brand-crimson) !important;
 }
 
 .top-menu a {
@@ -72,17 +72,18 @@
 }
 
 .top-menu a:hover {
-  color: var(--brand-gold) !important;
+  color: var(--brand-crimson-light) !important;
 }
 
 .top-menu .right-top-menu .search-icon-btn,
 .top-menu .search-icon-btn {
-  background-color: var(--brand-crimson) !important;
-  color: #ffffff !important;
+  background-color: var(--brand-gold) !important;
+  color: #111317 !important;
 }
 
 .top-menu .search-icon-btn:hover {
-  background-color: var(--brand-crimson-dark) !important;
+  background-color: var(--brand-gold-dark) !important;
+  color: #111317 !important;
 }
 
 /* Logo styling */
@@ -105,17 +106,17 @@
   object-fit: contain;
 }
 
-/* Main Navbar: Brand Crimson Red with Gold Top/Hover Accents */
+/* Main Navbar: Brand Golden Gold with Crimson Red Top/Hover Accents */
 .main-menu {
-  background: linear-gradient(180deg, var(--brand-crimson) 0%, #9e1414 100%) !important;
-  border-top: 2px solid var(--brand-gold) !important;
-  border-bottom: 1px solid var(--brand-crimson-dark) !important;
+  background: linear-gradient(180deg, var(--brand-gold) 0%, var(--brand-gold-dark) 100%) !important;
+  border-top: 2px solid var(--brand-crimson) !important;
+  border-bottom: 1px solid var(--brand-gold-dark) !important;
   box-shadow: 0 3px 8px rgba(0,0,0,0.15) !important;
 }
 
 .main-menu .nav > li > a {
-  color: #ffffff !important;
-  font-weight: 500 !important;
+  color: #111317 !important;
+  font-weight: 700 !important;
   letter-spacing: 0.3px !important;
   transition: all 0.2s ease !important;
   border-bottom: 3px solid transparent !important;
@@ -124,13 +125,13 @@
 .main-menu .nav > li.active > a,
 .main-menu .nav > li > a:hover,
 .main-menu .nav > li > a:focus {
-  background-color: var(--brand-crimson-dark) !important;
-  color: var(--brand-gold-light) !important;
-  border-bottom: 3px solid var(--brand-gold) !important;
+  background-color: var(--brand-gold-dark) !important;
+  color: #ffffff !important;
+  border-bottom: 3px solid var(--brand-crimson) !important;
 }
 
 .main-menu .dropdown-menu {
-  border-top: 3px solid var(--brand-crimson) !important;
+  border-top: 3px solid var(--brand-gold) !important;
   background-color: #ffffff !important;
 }
 
@@ -195,11 +196,12 @@
   font-size: 13px !important;
   font-weight: 700 !important;
   line-height: 1.2 !important;
-  background: linear-gradient(135deg, var(--brand-navy) 0%, var(--brand-navy-dark) 100%) !important;
-  color: var(--brand-gold) !important;
-  border: 1px solid rgba(235, 177, 13, 0.4) !important;
+  background: linear-gradient(135deg, var(--brand-crimson) 0%, var(--brand-crimson-dark) 100%) !important;
+  background-color: var(--brand-crimson) !important;
+  color: #ffffff !important;
+  border: 1px solid var(--brand-crimson-dark) !important;
   border-radius: 4px !important;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.2) !important;
+  box-shadow: 0 2px 6px rgba(183, 28, 28, 0.4) !important;
 }
 
 /* Ensure all navbar items stay in a single line on desktop */
@@ -214,13 +216,18 @@
    2. BRAND BADGES, BUTTONS & RIBBONS
 ==================================================== */
 
-/* Breaking News Ribbon: Crimson Red + Gold trim */
+/* Breaking News Ribbon: Golden Gold + Crimson Red trim */
 .breaking-ribbon {
-  background: linear-gradient(90deg, var(--brand-crimson) 0%, #9e1414 100%) !important;
-  color: #ffffff !important;
-  border-right: 3px solid var(--brand-gold) !important;
+  background: linear-gradient(90deg, var(--brand-gold) 0%, var(--brand-gold-dark) 100%) !important;
+  color: #111317 !important;
+  border-right: 3px solid var(--brand-crimson) !important;
   font-weight: 700 !important;
   letter-spacing: 0.4px !important;
+}
+
+.breaking-ribbon h4 {
+  color: #111317 !important;
+  font-weight: 700 !important;
 }
 
 /* Category Badges matched to logo */
@@ -228,6 +235,7 @@
 .label-1 {
   background-color: var(--brand-crimson) !important;
   color: #ffffff !important;
+  font-weight: 700 !important;
 }
 
 .bg-2,
@@ -251,8 +259,8 @@
 
 .bg-6,
 .label-6 {
-  background-color: var(--brand-crimson-dark) !important;
-  color: #ffffff !important;
+  background-color: var(--brand-gold-dark) !important;
+  color: #111317 !important;
 }
 
 .bg-11 {
@@ -260,7 +268,7 @@
   color: #ffffff !important;
 }
 
-/* Fix double lines under titles (Keep only 1 crisp crimson underline) */
+/* Fix double lines under titles (Keep only 1 crisp gold underline) */
 .title-style04.underline04 h3 {
   border-bottom: none !important;
 }
@@ -270,12 +278,12 @@
 }
 
 .underline04::before {
-  background-color: var(--brand-crimson) !important;
+  background-color: var(--brand-gold) !important;
   height: 2px !important;
 }
 
 .title-style02 {
-  border-left: 3px solid var(--brand-crimson) !important;
+  border-left: 3px solid var(--brand-gold) !important;
 }
 
 .block-title-1 h3 {
@@ -289,7 +297,7 @@
   display: inline-block !important;
   margin-top: 6px !important;
   color: var(--brand-crimson) !important;
-  font-weight: 600 !important;
+  font-weight: 700 !important;
   font-size: 12px !important;
   transition: all 0.2s ease !important;
   float: none !important;
@@ -300,7 +308,7 @@
 }
 
 .read-more:hover {
-  color: var(--brand-navy) !important;
+  color: var(--brand-gold-dark) !important;
 }
 
 /* Live Pulse Dot Animation */
@@ -482,9 +490,10 @@
 
 .pagination > .active > a,
 .pagination > .active > a:hover {
-  background-color: var(--brand-crimson) !important;
-  border-color: var(--brand-crimson) !important;
-  color: #ffffff !important;
+  background-color: var(--brand-gold) !important;
+  border-color: var(--brand-gold) !important;
+  color: #111317 !important;
+  font-weight: 700 !important;
 }
 
 /* ====================================================
@@ -492,7 +501,7 @@
 ==================================================== */
 #footer {
   background-color: var(--brand-navy-dark) !important;
-  border-top: 3px solid var(--brand-gold) !important;
+  border-top: 3px solid var(--brand-crimson) !important;
 }
 
 #footer .site-logo img {
@@ -508,8 +517,8 @@
 }
 
 #footer h4 {
-  color: var(--brand-gold) !important;
-  border-bottom: 2px solid var(--brand-crimson) !important;
+  color: var(--brand-crimson-light) !important;
+  border-bottom: 2px solid var(--brand-gold) !important;
 }
 
 #footer a:hover {
@@ -545,6 +554,100 @@
   background-color: var(--brand-crimson) !important;
   border-color: var(--brand-crimson) !important;
   color: #ffffff !important;
+}
+
+/* ====================================================
+   BUTTONS & ACCENTS: CRIMSON RED BUTTONS & CTAs WITH CRISP WHITE TEXT
+==================================================== */
+
+/* Parallax CTA Button (ਸਾਡੇ ਬਾਰੇ ਜਾਣੋ) & All Template Buttons */
+[data-color="red"] .btn-default,
+[data-color="red"] .btn-primary,
+[data-color="red"] .btn,
+.btn-default,
+.btn-primary,
+.btn {
+  background: linear-gradient(180deg, var(--brand-gold) 0%, var(--brand-gold-dark) 100%) !important;
+  background-color: var(--brand-gold) !important;
+  border-color: var(--brand-gold-dark) !important;
+  color: #111317 !important;
+  font-weight: 700 !important;
+  text-shadow: none !important;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.25) !important;
+}
+
+[data-color="red"] .btn-default:hover,
+[data-color="red"] .btn-primary:hover,
+[data-color="red"] .btn:hover,
+.btn-default:hover,
+.btn-primary:hover,
+.btn:hover {
+  background: var(--brand-gold-dark) !important;
+  background-color: var(--brand-gold-dark) !important;
+  border-color: var(--brand-gold-dark) !important;
+  color: #111317 !important;
+}
+
+/* Home Gallery Tag Button (ਤਾਜ਼ਾ # ਸਮਾਚਾਰ) */
+[data-color="red"] .title-style05.style-01,
+.title-style05.style-01 {
+  background: linear-gradient(180deg, var(--brand-gold) 0%, var(--brand-gold-dark) 100%) !important;
+  background-color: var(--brand-gold) !important;
+  color: #111317 !important;
+  font-weight: 700 !important;
+  border-radius: 3px !important;
+  border: none !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2) !important;
+}
+
+/* Sidebar TV Schedule & Block Titles (ਲਾਈਵ ਟੀਵੀ ਸ਼ਡਿਊਲ) */
+[data-color="red"] .block-title-1,
+[data-color="red"] .block-title-2,
+.block-title-1,
+.block-title-2 {
+  background: linear-gradient(90deg, var(--brand-gold) 0%, var(--brand-gold-dark) 100%) !important;
+  background-color: var(--brand-gold) !important;
+  color: #111317 !important;
+}
+
+[data-color="red"] .block-title-1 h3,
+[data-color="red"] .block-title-2 h3,
+[data-color="red"] .block-title-1 a,
+[data-color="red"] .block-title-2 a,
+.block-title-1 h3,
+.block-title-2 h3,
+.block-title-1 a,
+.block-title-2 a,
+.block-title-1 h3 strong,
+.block-title-2 h3 strong {
+  color: #111317 !important;
+  font-weight: 700 !important;
+}
+
+/* Video Gallery Play Icons */
+[data-color="red"] .play-icon,
+.play-icon {
+  background-color: var(--brand-crimson) !important;
+  color: #ffffff !important;
+}
+
+[data-color="red"] .play-icon:hover,
+.play-icon:hover {
+  background-color: var(--brand-crimson-dark) !important;
+  color: #ffffff !important;
+}
+
+/* TV Schedule Banner Elements */
+.schedule-logo.bg-1,
+.show-info-button.bg-1 {
+  background-color: var(--brand-crimson) !important;
+  color: #ffffff !important;
+}
+
+.schedule-logo.bg-1 a,
+.show-info-button.bg-1 {
+  color: #ffffff !important;
+  font-weight: 700 !important;
 }
 
 /* ====================================================

@@ -200,7 +200,7 @@ export default function ParallaxHero() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  borderBottom: '2px solid #b71c1c',
+                  borderBottom: '2px solid #ebb10d',
                   paddingBottom: '6px',
                   marginBottom: '2px'
                 }}
@@ -210,7 +210,7 @@ export default function ParallaxHero() {
                     style={{
                       width: '8px',
                       height: '8px',
-                      backgroundColor: '#b71c1c',
+                      backgroundColor: '#ebb10d',
                       borderRadius: '50%',
                       display: 'inline-block'
                     }}
@@ -224,12 +224,12 @@ export default function ParallaxHero() {
                   style={{
                     fontSize: '9.5px',
                     fontWeight: '700',
-                    color: '#ebb10d',
-                    backgroundColor: 'rgba(235, 177, 13, 0.15)',
-                    padding: '2px 7px',
+                    color: '#ffffff',
+                    backgroundColor: '#b71c1c',
+                    padding: '2px 8px',
                     borderRadius: '3px',
-                    border: '1px solid rgba(235, 177, 13, 0.4)',
-                    letterSpacing: '0.5px'
+                    letterSpacing: '0.5px',
+                    boxShadow: '0 2px 4px rgba(183, 28, 28, 0.4)'
                   }}
                 >
                   24x7 ON AIR

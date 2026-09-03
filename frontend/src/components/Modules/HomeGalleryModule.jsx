@@ -42,7 +42,9 @@ export default function HomeGalleryModule() {
       </h2>
       <div className="center-title">
         <span className="title-line-left"></span>
-        <h4 className="title-style05 style-01">ਤਾਜ਼ਾ # ਸਮਾਚਾਰ</h4>
+        <h4 className="title-style05 style-01" style={{ backgroundColor: '#ebb10d', color: '#111317', border: 'none', borderRadius: '3px', fontWeight: 700 }}>
+          ਤਾਜ਼ਾ # ਸਮਾਚਾਰ
+        </h4>
         <span className="title-line-right"></span>
       </div>
 
