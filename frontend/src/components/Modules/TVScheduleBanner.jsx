@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function TVScheduleBanner() {
   return (
-    <section className="module dark">
+    <section className="module dark" id="tv-schedule" style={{ paddingTop: '20px', paddingBottom: '20px' }}>
       <div className="container">
         <div className="show-info">
           <h4 className="schedule-logo bg-1">

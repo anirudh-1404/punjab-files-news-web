@@ -140,6 +140,125 @@
   color: var(--brand-crimson) !important;
 }
 
+/* Clearfix and dynamic height for header, navbar, sub-menu and hero sections */
+header,
+#header {
+  height: auto !important;
+  min-height: auto !important;
+  clear: both !important;
+  width: 100% !important;
+}
+
+#fixed-navbar,
+#fixed-navbar.navbar,
+.navbar#fixed-navbar {
+  margin-bottom: 0 !important;
+  border-bottom: 2px solid rgba(0,0,0,0.12) !important;
+}
+
+#nav-below-main,
+#main-section,
+.tv-studio-hero-section {
+  clear: both !important;
+  width: 100% !important;
+}
+
+.tv-studio-hero-section {
+  padding-top: 10px !important;
+  padding-bottom: 22px !important;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* ====================================================
+   PERFECT SINGLE-ROW HERO COLUMN HEADERS
+==================================================== */
+.hero-col-header {
+  display: flex !important;
+  align-items: center !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  max-height: 38px !important;
+  margin-bottom: 10px !important;
+  padding: 0 !important;
+  gap: 10px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.hero-col-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 32px !important;
+  padding: 0 14px !important;
+  border-radius: 3px !important;
+  color: #ffffff !important;
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.3px !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  line-height: 1 !important;
+}
+
+.hero-col-badge.badge-mukhwak,
+.hero-col-badge.badge-livetv {
+  background-color: #b71c1c !important;
+  color: #ffffff !important;
+}
+
+.live-red-dot {
+  width: 8px !important;
+  height: 8px !important;
+  background-color: #ef4444 !important;
+  border-radius: 50% !important;
+  display: inline-block !important;
+  margin-right: 6px !important;
+  animation: livePulse 1.2s infinite !important;
+}
+
+.hero-col-divider {
+  color: #94a3b8 !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  flex-shrink: 0 !important;
+}
+
+.hero-col-title {
+  margin: 0 !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  color: #000000 !important;
+  font-family: 'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  line-height: 1 !important;
+}
+
+.hero-col-sub {
+  margin-left: auto !important;
+  font-size: 11.5px !important;
+  font-weight: 700 !important;
+  color: #1e293b !important;
+  background-color: #f1f5f9 !important;
+  padding: 3px 8px !important;
+  border-radius: 3px !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+
+#header::after,
+#fixed-navbar::after,
+#nav-below-main::after,
+#main-section::after,
+.tv-studio-hero-section::after {
+  content: "" !important;
+  display: table !important;
+  clear: both !important;
+}
+
 /* Second Sub-Menu: Clean Navy & Brand Tones */
 .second-menu,
 #nav-below-main {
@@ -497,32 +616,162 @@
 }
 
 /* ====================================================
-   4. BRAND FOOTER STYLING
+   4. BRAND FOOTER STYLING & HIGH-CONTRAST VISIBILITY
 ==================================================== */
 #footer {
-  background-color: var(--brand-navy-dark) !important;
+  background-color: #070d1d !important;
   border-top: 3px solid var(--brand-crimson) !important;
+  color: #e2e8f0 !important;
+  position: relative !important;
+  z-index: 10 !important;
 }
 
-#footer .site-logo img {
-  height: 85px !important;
-  max-height: 95px !important;
-  width: auto !important;
-  max-width: 240px !important;
-  object-fit: contain !important;
-  border-radius: 4px;
-  margin-bottom: 15px;
-  float: none !important;
+#footer #parallax-section2 {
+  background-color: transparent !important;
+}
+
+/* Semi-transparent dark overlay to guarantee 100% readable text */
+#footer .img-overlay2:after {
+  background: rgba(7, 13, 29, 0.94) !important;
+}
+
+/* Footer Section Headings - Crisp White with Punchy Red Underline Accent */
+#footer h1,
+#footer h2,
+#footer h3,
+#footer h4,
+#footer h5,
+#footer h6,
+#footer .title-left,
+#footer .title-style03 {
+  color: #ffffff !important;
+  font-family: 'Mukta Mahee', 'Noto Sans Gurmukhi', 'Roboto', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 20px !important;
+  letter-spacing: 0.2px !important;
+  margin-top: 0 !important;
+  margin-bottom: 18px !important;
   display: block !important;
 }
 
-#footer h4 {
-  color: var(--brand-crimson-light) !important;
-  border-bottom: 2px solid var(--brand-gold) !important;
+/* Underline Accents for Footer Headings */
+#footer .underline03 {
+  position: relative !important;
+  padding-bottom: 12px !important;
+  display: inline-block !important;
 }
 
-#footer a:hover {
-  color: var(--brand-gold) !important;
+#footer .title-left.underline03::before {
+  content: "" !important;
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 44px !important;
+  height: 3px !important;
+  background-color: #b71c1c !important;
+  z-index: 2 !important;
+}
+
+#footer .title-left.underline03::after {
+  content: "" !important;
+  display: block !important;
+  width: 240px !important;
+  max-width: 100% !important;
+  height: 1px !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+  margin-top: 9px !important;
+}
+
+/* About Us Text - Bright, Highly Legible & Clean Typography */
+#footer p,
+#footer .about-us {
+  color: #e2e8f0 !important;
+  font-size: 14px !important;
+  line-height: 1.75 !important;
+  font-weight: 400 !important;
+  margin-bottom: 20px !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Footer Brand Logo - Big, Prominent, Crisp */
+#footer .site-logo img {
+  height: 115px !important;
+  max-height: 125px !important;
+  width: auto !important;
+  max-width: 280px !important;
+  object-fit: contain !important;
+  border-radius: 6px !important;
+  margin-top: 10px !important;
+  margin-bottom: 15px !important;
+  float: none !important;
+  display: block !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  background-color: #000000 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Footer Recent Posts List */
+#footer .footer-post ul {
+  list-style: none !important;
+  padding-left: 0 !important;
+  margin: 0 !important;
+}
+
+#footer .footer-post ul li {
+  margin-bottom: 14px !important;
+  padding-bottom: 10px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+#footer .footer-post ul li:last-child {
+  border-bottom: none !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+#footer .footer-post .item-image img {
+  border-radius: 4px !important;
+  width: 66px !important;
+  height: 46px !important;
+  object-fit: cover !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+#footer .footer-post .item-content p,
+#footer .footer-post .item-content p a {
+  color: #f1f5f9 !important;
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  line-height: 1.5 !important;
+  text-decoration: none !important;
+  display: block !important;
+  transition: color 0.2s ease !important;
+}
+
+#footer .footer-post .item-content p a:hover {
+  color: #ebb10d !important;
+  text-decoration: underline !important;
+}
+
+/* Footer Tag Cloud - Glassmorphism Light Badges */
+#footer .tagcloud a {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  color: #f8fafc !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  padding: 6px 13px !important;
+  margin: 4px 5px 6px 0 !important;
+  border-radius: 4px !important;
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  display: inline-block !important;
+  transition: all 0.2s ease !important;
+}
+
+#footer .tagcloud a:hover {
+  background-color: #b71c1c !important;
+  color: #ffffff !important;
+  border-color: #b71c1c !important;
+  transform: translateY(-1px);
 }
 
 #copyrights {
@@ -676,4 +925,636 @@
     width: 100% !important;
     margin-top: 5px !important;
   }
+
+  .newspaper-hero-flex-container {
+    flex-direction: column !important;
+  }
+  .hero-darbar-col,
+  .hero-lead-col,
+  .hero-tv-col {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
 }
+
+/* ====================================================
+   6. HEADER CONTINUOUS BREAKING NEWS TICKER
+==================================================== */
+.header-top-breaking-wrapper {
+  background-color: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 2px solid #e2e8f0;
+  color: #111317;
+  font-family: 'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif;
+  position: relative;
+  z-index: 100;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+
+.breaking-ticker-badge {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: linear-gradient(135deg, #b71c1c 0%, #8e1515 100%);
+  color: #ffffff;
+  padding: 5px 14px;
+  border-radius: 3px;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-shadow: 0 2px 5px rgba(183, 28, 28, 0.3);
+}
+
+.live-dot-pulse {
+  width: 7px;
+  height: 7px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  display: inline-block;
+  animation: livePulse 1.2s infinite;
+}
+
+.breaking-marquee-container {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  margin-left: 14px;
+  mask-image: linear-gradient(to right, transparent, black 15px, black 96%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 15px, black 96%, transparent);
+}
+
+.breaking-marquee-track {
+  display: inline-block;
+  white-space: nowrap;
+  animation: continuousMarquee 75s linear infinite;
+}
+
+.breaking-marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes continuousMarquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 28px;
+  font-size: 13px;
+}
+
+.marquee-tag {
+  background-color: rgba(235, 177, 13, 0.22);
+  color: #926600;
+  font-weight: 800;
+  padding: 1px 7px;
+  border-radius: 3px;
+  font-size: 10.5px;
+  margin-right: 7px;
+  text-transform: uppercase;
+}
+
+.marquee-text {
+  color: #111317;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.marquee-text:hover {
+  color: #b71c1c;
+  text-decoration: underline;
+}
+
+.marquee-divider {
+  color: #b71c1c;
+  font-size: 9px;
+  margin-left: 20px;
+  opacity: 0.7;
+}
+
+/* ====================================================
+   7. SRI DARBAR SAHIB & DAILY MUKH WAK COMPONENT
+==================================================== */
+.darbar-sahib-mukhwak-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-top: 3px solid #ebb10d;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  font-family: 'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif;
+}
+
+.mukhwak-card-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #fbfbfd;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.mukhwak-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ik-onkar {
+  font-size: 26px;
+  font-weight: 900;
+  color: #ebb10d;
+  line-height: 1;
+}
+
+.mukhwak-main-heading {
+  margin: 0;
+  font-size: 14.5px;
+  font-weight: 800;
+  color: #000000 !important;
+  line-height: 1.2;
+}
+
+.mukhwak-sub-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: #b71c1c;
+}
+
+.mukhwak-date-badge {
+  font-size: 11px;
+  color: #1e293b;
+  background: #edf2f7;
+  padding: 3px 8px;
+  border-radius: 3px;
+  white-space: nowrap;
+  font-weight: 700;
+}
+
+.mukhwak-image-container {
+  position: relative;
+  width: 100%;
+  height: 190px;
+  overflow: hidden;
+  background-color: #edf2f7;
+}
+
+.mukhwak-golden-temple-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.mukhwak-golden-temple-img:hover {
+  transform: scale(1.02);
+}
+
+.mukhwak-image-overlay {
+  position: absolute;
+  bottom: 8px;
+  left: 10px;
+  background: rgba(17, 19, 23, 0.85);
+  backdrop-filter: blur(4px);
+  padding: 2px 8px;
+  border-radius: 3px;
+  border-left: 2px solid #ebb10d;
+}
+
+.sacred-location-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: #ebb10d;
+}
+
+.sacred-location-tag i {
+  color: #ffffff;
+  margin-right: 3px;
+}
+
+.mukhwak-content-body {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background: #ffffff;
+}
+
+.mukhwak-raag-ang {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed #e2e8f0;
+}
+
+.raag-text {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #8c6500;
+}
+
+.ang-pill {
+  background: #b71c1c;
+  color: #ffffff;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+.mukhwak-gurbani-text {
+  background: #fffdf5;
+  border: 1px solid #fef3c7;
+  border-left: 4px solid #ebb10d;
+  padding: 10px 14px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.gurbani-line {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #000000 !important;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.gurbani-line.highlight {
+  color: #926600 !important;
+  font-weight: 800;
+}
+
+.mukhwak-viakhya-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  animation: fadeIn 0.3s ease;
+}
+
+.viakhya-title {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #b71c1c;
+  margin: 0 0 4px 0;
+}
+
+.viakhya-text {
+  font-size: 12px;
+  color: #111111 !important;
+  font-weight: 500;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.mukhwak-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 6px;
+}
+
+.btn-mukhwak-toggle {
+  background: #1c2d5a;
+  border: 1px solid #1c2d5a;
+  color: #ffffff;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-mukhwak-toggle:hover {
+  background: #b71c1c;
+  border-color: #b71c1c;
+}
+
+.btn-mukhwak-official {
+  color: #1c2d5a;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.btn-mukhwak-official:hover {
+  color: #b71c1c;
+  text-decoration: underline;
+}
+
+/* ====================================================
+   8. NEWSPAPER TYPOGRAPHY: 100% BOLD BLACK HEADLINES & CONTENT
+==================================================== */
+body {
+  font-family: 'Mukta Mahee', 'Noto Sans Gurmukhi', 'Roboto', sans-serif !important;
+  color: #000000;
+}
+
+/* Major Headings: 100% Solid Bold Black */
+h1:not(#footer *),
+h2:not(#footer *),
+h3:not(#footer *),
+h4:not(#footer *),
+h5:not(#footer *),
+h6:not(#footer *),
+#main-section h1,
+#main-section h2,
+#main-section h3,
+#main-section h4,
+#main-section h5,
+#main-section h6,
+#main-section .module-title h3,
+#main-section .module-title h4,
+#main-section .title,
+#main-section .media-heading a,
+.entry-title,
+.entry-title a,
+.post-title,
+.post-title a,
+.news-title,
+.news-title a {
+  color: #000000 !important;
+  font-weight: 800 !important;
+  font-family: 'Mukta Mahee', 'Noto Sans Gurmukhi', 'Roboto Condensed', sans-serif !important;
+  letter-spacing: -0.2px;
+}
+
+/* Heading Link States */
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a,
+.media-heading a,
+.entry-title a,
+.post-title a {
+  color: #000000 !important;
+  font-weight: 800 !important;
+}
+
+h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover,
+#main-section .media-heading a:hover,
+.entry-title a:hover,
+.post-title a:hover {
+  color: #b71c1c !important;
+}
+
+/* Body Content: Deep High-Contrast Black (#111111) */
+p:not(#footer *),
+#main-section p,
+#main-section .entry-content,
+#main-section .post-content,
+#main-section .media-body p,
+.article-body-text p,
+.news-summary,
+.desc {
+  color: #111111 !important;
+  font-weight: 500;
+  line-height: 1.65;
+}
+
+/* ====================================================
+   9. SINGLE-ROW MODULE HEADERS & TIGHT NEWSPAPER SPACING
+==================================================== */
+/* Module Section Spacing - Tight, Professional Newspaper Rhythm */
+section.module,
+.module {
+  padding-top: 14px !important;
+  padding-bottom: 20px !important;
+  border-bottom: 1px solid #edf2f7 !important;
+}
+
+/* Global Module Title Override: Always in ONE clean row, never stacked */
+.module-title,
+#main-section .module-title {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  flex-wrap: wrap !important;
+  height: auto !important;
+  min-height: 36px !important;
+  margin-top: 0 !important;
+  margin-bottom: 12px !important;
+  gap: 10px !important;
+  position: relative !important;
+  border-bottom: 2px solid #edf2f7 !important;
+  padding-bottom: 8px !important;
+}
+
+.module-title .title,
+#main-section .module-title .title {
+  margin: 0 !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  height: 32px !important;
+  line-height: 1 !important;
+}
+
+.module-title .title span,
+#main-section .module-title .title span {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 32px !important;
+  padding: 0 14px !important;
+  border-radius: 3px !important;
+  color: #ffffff !important;
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.3px !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  line-height: 1 !important;
+}
+
+.module-title .subtitle,
+#main-section .module-title .subtitle {
+  display: inline-flex !important;
+  align-items: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 15.5px !important;
+  font-weight: 800 !important;
+  color: #000000 !important;
+  font-family: 'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif !important;
+  letter-spacing: -0.2px !important;
+  line-height: 1.2 !important;
+}
+
+.module-title .subtitle::before,
+#main-section .module-title .subtitle::before {
+  content: "/" !important;
+  padding: 0 8px 0 2px !important;
+  color: #94a3b8 !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  font-style: normal !important;
+}
+
+/* Dedicated Module Header Row */
+.module-header-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
+  gap: 12px !important;
+  margin-bottom: 12px !important;
+  padding-bottom: 8px !important;
+  border-bottom: 2px solid #edf2f7 !important;
+  width: 100% !important;
+}
+
+.module-header-left {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+}
+
+.module-header-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 32px !important;
+  padding: 0 14px !important;
+  border-radius: 3px !important;
+  color: #ffffff !important;
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.3px !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  line-height: 1 !important;
+}
+
+.module-header-badge.bg-red,
+.module-header-badge.bg-navy,
+.module-header-badge.bg-gold,
+.module-header-badge.bg-teal,
+.module-header-badge {
+  background-color: #b71c1c !important;
+  color: #ffffff !important;
+}
+
+.module-header-divider {
+  color: #94a3b8 !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  flex-shrink: 0 !important;
+}
+
+.module-header-title {
+  margin: 0 !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  color: #000000 !important;
+  font-family: 'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif !important;
+  line-height: 1.2 !important;
+}
+
+.module-header-right {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-left: auto !important;
+}
+
+/* ====================================================
+   ULTRA-SMOOTH INERTIA SCROLLING & SLEEK SCROLLBAR
+==================================================== */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+}
+
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Luxury Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #b71c1c 0%, #ebb10d 100%);
+  border-radius: 999px;
+  border: 2px solid #f8fafc;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #8e1515 0%, #c89508 100%);
+}
+
+/* ====================================================
+   STICKY NAVBAR + BREAKING NEWS TOGETHER (FUSED HEADER)
+==================================================== */
+.header-masthead-wrapper {
+  background-color: #ffffff;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.header-masthead-wrapper.masthead-disabled {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px);
+}
+
+.sticky-nav-breaking-container {
+  position: sticky;
+  top: 0;
+  z-index: 9998;
+  width: 100%;
+  background-color: #ffffff;
+  transition: box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: box-shadow;
+}
+
+.sticky-nav-breaking-container.is-sticky {
+  box-shadow: 0 4px 22px rgba(0, 0, 0, 0.22);
+}
+
+.sticky-nav-breaking-container .header-top-breaking-wrapper {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+
+

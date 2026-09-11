@@ -107,18 +107,28 @@ export default function NationalNewsModule() {
   }, []);
 
   return (
-    <section className="module">
+    <section className="module" style={{ paddingTop: '14px', paddingBottom: '20px', borderBottom: '1px solid #e2e8f0' }}>
       <div className="container">
+        {/* Module Header - Single Row */}
+        <div className="module-header-row">
+          <div className="module-header-left">
+            <span className="module-header-badge bg-red">ਦੇਸ਼-ਵਿਦੇਸ਼</span>
+            <span className="module-header-divider">/</span>
+            <h3 className="module-header-title">
+              ਰਾਸ਼ਟਰੀ ਤੇ ਸੂਬਾਈ ਖ਼ਬਰਾਂ (National & Regional In-depth News)
+            </h3>
+          </div>
+          <div className="module-header-right">
+            <span style={{ fontSize: '11px', fontWeight: '700', color: '#1e3a8a', backgroundColor: '#dbeafe', padding: '3px 8px', borderRadius: '3px' }}>
+              <i className="fa fa-newspaper-o" style={{ marginRight: '4px' }}></i> ਵਿਸ਼ੇਸ਼ ਰਿਪੋਰਟ
+            </span>
+          </div>
+        </div>
+
         <div className="row no-gutter">
           {/* Main 8-column content */}
           <div className="col-md-8">
             <div className="news">
-              <div className="module-title">
-                <h3 className="title">
-                  <span className="bg-11">ਰਾਸ਼ਟਰੀ ਤੇ ਸੂਬਾਈ ਖ਼ਬਰਾਂ</span>
-                </h3>
-                <h3 className="subtitle">ਵਿਸਥਾਰਪੂਰਵਕ ਤਾਜ਼ਾ ਸਮਾਚਾਰ</h3>
-              </div>
 
               {mainItems.map((item, idx) => (
                 <div className="item" key={idx}>

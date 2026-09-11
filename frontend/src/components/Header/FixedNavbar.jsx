@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import SecondMenu from './SecondMenu';
+import { Link } from 'react-router-dom';
 
 export default function FixedNavbar() {
   const [megaSlide, setMegaSlide] = useState(0);
@@ -24,13 +24,28 @@ export default function FixedNavbar() {
         <div className="container">
           <ul className="nav navbar-nav">
             <li className="active">
-              <a href="/">ਮੁੱਖ ਪੰਨਾ</a>
+              <Link to="/">ਮੁੱਖ ਪੰਨਾ</Link>
             </li>
+
+            {/* Dedicated Punjab Section with 3 Regions */}
+            <li className="dropdown">
+              <a href="#punjab" className="dropdown-toggle" data-toggle="dropdown">
+                ਪੰਜਾਬ
+              </a>
+              <ul className="dropdown-menu">
+                <li><a href="#punjab">ਮਾਝਾ (Majha)</a></li>
+                <li><a href="#punjab">ਮਾਲਵਾ (Malwa)</a></li>
+                <li><a href="#punjab">ਦੋਆਬਾ (Doaba)</a></li>
+              </ul>
+            </li>
+
+            {/* Dedicated Religion Section */}
+            <li>
+              <a href="#religion">ਧਰਮ</a>
+            </li>
+
             <li>
               <a href="#world">ਦੇਸ਼-ਵਿਦੇਸ਼</a>
-            </li>
-            <li>
-              <a href="#news">ਖ਼ਬਰਾਂ</a>
             </li>
             <li>
               <a href="#sport">ਖੇਡਾਂ</a>
@@ -45,7 +60,7 @@ export default function FixedNavbar() {
               <a href="#art-entertainment">ਮਨੋਰੰਜਨ</a>
             </li>
             <li>
-              <a href="#tv-schedule">ਲਾਈਵ ਟੀਵੀ</a>
+              <a href="#live-tv">ਲਾਈਵ ਟੀਵੀ</a>
             </li>
 
             {/* More Dropdown */}
@@ -78,12 +93,12 @@ export default function FixedNavbar() {
 
             {/* Contact Dropdown */}
             <li className="dropdown">
-              <a href="#contact" className="dropdown-toggle" data-toggle="dropdown">
+              <Link to="/contact" className="dropdown-toggle" data-toggle="dropdown">
                 ਸੰਪਰਕ
-              </a>
+              </Link>
               <ul className="dropdown-menu">
-                <li><a href="#contact">ਸੰਪਰਕ ਕਰੋ</a></li>
-                <li><a href="#contact-1">ਦਫ਼ਤਰ ਜਾਣਕਾਰੀ</a></li>
+                <li><Link to="/contact">ਸੰਪਰਕ ਕਰੋ (Contact Us)</Link></li>
+                <li><Link to="/admin">ਨਿਊਜ਼ ਪਬਲਿਸ਼ਰ CMS (Admin)</Link></li>
               </ul>
             </li>
 
@@ -244,8 +259,6 @@ export default function FixedNavbar() {
         </div>
       </div>
 
-      {/* Second Menu under Main Menu with Live Clock */}
-      <SecondMenu />
     </div>
   );
 }

@@ -10,7 +10,7 @@ export default function MobileNav() {
   };
 
   return (
-    <nav className="navbar navbar-default" id="mobile-nav">
+    <nav className="navbar navbar-default visible-xs visible-sm hidden-md hidden-lg" id="mobile-nav">
       <div className="navbar-header">
         <button
           type="button"
@@ -22,14 +22,10 @@ export default function MobileNav() {
           <span className="icon-bar"></span>
           <span className="icon-bar"></span>
         </button>
-        <div className="sidenav-header-logo">
-          <a href="/" style={{ display: 'flex', alignItems: 'center' }}>
-            <img
-              src={whiteLogo}
-              alt="Punjab Files Logo"
-              style={{ maxHeight: '40px', width: 'auto', marginRight: '8px', objectFit: 'contain' }}
-            />
-          </a>
+        <div className="sidenav-header-logo" style={{ display: 'flex', alignItems: 'center' }}>
+          <span style={{ fontSize: '13px', fontWeight: '800', color: '#ffffff', backgroundColor: '#b71c1c', padding: '2px 8px', borderRadius: '3px' }}>
+            ਮੀਨੂ (Menu)
+          </span>
         </div>
       </div>
 
@@ -64,7 +60,7 @@ export default function MobileNav() {
               <img
                 src={whiteLogo}
                 alt="Punjab Files Logo"
-                style={{ maxHeight: '45px', width: 'auto' }}
+                style={{ maxHeight: '65px', width: 'auto' }}
               />
             </a>
           </div>
@@ -102,19 +98,24 @@ export default function MobileNav() {
             )}
           </li>
 
+          {/* Punjab Tri-Region in Mobile Nav */}
           <li>
-            <a href="#news">ਖ਼ਬਰਾਂ</a>
-            <div className="icon-sub-menu" onClick={() => toggleDropdown('news')}>
-              <span className={`sidenav-dropdown-icon ${openDropdown === 'news' ? 'up-icon' : 'show'}`}></span>
+            <a href="#punjab">ਪੰਜਾਬ</a>
+            <div className="icon-sub-menu" onClick={() => toggleDropdown('punjab')}>
+              <span className={`sidenav-dropdown-icon ${openDropdown === 'punjab' ? 'up-icon' : 'show'}`}></span>
             </div>
-            {openDropdown === 'news' && (
+            {openDropdown === 'punjab' && (
               <ul className="sidenav-dropdown" style={{ display: 'block' }}>
-                <li><a href="#politics">ਰਾਜਨੀਤੀ</a></li>
-                <li><a href="#business">ਵਪਾਰ</a></li>
-                <li><a href="#crime">ਕ੍ਰਾਈਮ</a></li>
-                <li><a href="#farmers">ਕਿਸਾਨੀ ਮੁੱਦੇ</a></li>
+                <li><a href="#majha">ਮਾਝਾ (Majha)</a></li>
+                <li><a href="#malwa">ਮਾਲਵਾ (Malwa)</a></li>
+                <li><a href="#doaba">ਦੋਆਬਾ (Doaba)</a></li>
               </ul>
             )}
+          </li>
+
+          {/* Religion Section in Mobile Nav */}
+          <li>
+            <a href="#religion">ਧਰਮ</a>
           </li>
 
           <li>
@@ -148,8 +149,8 @@ export default function MobileNav() {
           <li><a href="#travel">ਸੈਰ-ਸਪਾਟਾ</a></li>
           <li><a href="#art-entertainment">ਮਨੋਰੰਜਨ</a></li>
           <li><a href="#tv-schedule">ਲਾਈਵ ਟੀਵੀ</a></li>
-          <li><a href="#about-us">ਸਾਡੇ ਬਾਰੇ</a></li>
-          <li><a href="#contact">ਸੰਪਰਕ</a></li>
+          <li><a href="/contact">ਸੰਪਰਕ ਕਰੋ (Contact Us)</a></li>
+          <li><a href="/admin" style={{ color: '#ebb10d', fontWeight: '700' }}><i className="fa fa-user"></i> ਨਿਊਜ਼ ਪਬਲਿਸ਼ਰ CMS (Admin)</a></li>
         </ul>
       </div>
 

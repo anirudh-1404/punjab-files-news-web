@@ -1,0 +1,149 @@
+import React from 'react';
+
+const sportsArticles = [
+  {
+    id: 'sport-1',
+    title: 'ਕਬੱਡੀ ਕੱਪ 2026: ਪੰਜਾਬ ਦੇ ਜਾਫੀਆਂ ਤੇ ਧਾਵੀਆਂ ਦਾ ਦਮਦਾਰ ਪ੍ਰਦਰਸ਼ਨ, ਜੇਤੂ ਟੀਮ ਨੂੰ ਮਿਲਿਆ ਟਰੈਕਟਰ ਇਨਾਮ',
+    category: 'ਕਬੱਡੀ',
+    time: '20 ਮਿੰਟ ਪਹਿਲਾਂ',
+    img: '/img/index_800x400-image18.jpg',
+    desc: 'ਪੰਜਾਬ ਦੇ ਪ੍ਰਮੁੱਖ ਪਿੰਡਾਂ ਵਿੱਚ ਹੋਏ ਖੇਡ ਮੇਲਿਆਂ ਵਿੱਚ ਹਜ਼ਾਰਾਂ ਦਰਸ਼ਕਾਂ ਦੀ ਹਾਜ਼ਰੀ, ਨੌਜਵਾਨਾਂ ਵਿੱਚ ਖੇਡਾਂ ਪ੍ਰਤੀ ਭਾਰੀ ਉਤਸ਼ਾਹ।'
+  },
+  {
+    id: 'sport-2',
+    title: 'ਕ੍ਰਿਕਟ ਲੀਗ: ਪੰਜਾਬ ਦੇ ਤੇਜ਼ ਗੇਂਦਬਾਜ਼ ਨੇ ਤਿੰਨ ਓਵਰਾਂ ਵਿੱਚ ਝਟਕਾਈਆਂ ਚਾਰ ਵਿਕਟਾਂ, ਜਿੱਤਿਆ ਮੈਨ ਆਫ਼ ਦਾ ਮੈਚ',
+    category: 'ਕ੍ਰਿਕਟ',
+    time: '45 ਮਿੰਟ ਪਹਿਲਾਂ',
+    img: '/img/index_800x400-image25.jpg',
+    desc: 'ਸ਼ਾਨਦਾਰ ਸਵਿੰਗ ਗੇਂਦਬਾਜ਼ੀ ਨਾਲ ਵਿਰੋਧੀ ਟੀਮ ਨੂੰ ਸਸਤੇ ਵਿੱਚ ਸਮੇਟਿਆ, ਟੀਮ ਨੇ ਪਲੇਆਫ ਵਿੱਚ ਬਣਾਈ ਜਗ੍ਹਾ।'
+  },
+  {
+    id: 'sport-3',
+    title: 'ਹਾਕੀ ਇੰਡੀਆ ਕੈਂਪ: ਓਲੰਪਿਕ ਤਿਆਰੀਆਂ ਲਈ ਪੰਜਾਬ ਦੇ 6 ਸਟਾਰ ਖਿਡਾਰੀਆਂ ਦੀ ਕੌਮੀ ਟੀਮ ਵਿੱਚ ਚੋਣ',
+    category: 'ਹਾਕੀ',
+    time: '1 ਘੰਟਾ ਪਹਿਲਾਂ',
+    img: '/img/index_800x400-image26.jpg',
+    desc: 'ਜਲੰਧਰ ਅਤੇ ਅੰਮ੍ਰਿਤਸਰ ਦੀਆਂ ਹਾਕੀ ਅਕੈਡਮੀਆਂ ਦੇ ਖਿਡਾਰੀਆਂ ਨੇ ਆਪਣੀ ਪ੍ਰਤਿਭਾ ਦਾ ਲੋਹਾ ਮਨਵਾਇਆ।'
+  },
+  {
+    id: 'sport-4',
+    title: 'ਸੂਬਾਈ ਐਥਲੈਟਿਕਸ ਮੀਟ: 100 ਮੀਟਰ ਦੌੜ ਵਿੱਚ ਲੁਧਿਆਣਾ ਦੀ ਖਿਡਾਰਨ ਨੇ ਤੋੜਿਆ ਪੁਰਾਣਾ ਰਿਕਾਰਡ',
+    category: 'ਐਥਲੈਟਿਕਸ',
+    time: '2 ਘੰਟੇ ਪਹਿਲਾਂ',
+    img: '/img/index_800x400-image27.jpg',
+    desc: 'ਸੋਨ ਤਗਮਾ ਜਿੱਤਣ ਮਗਰੋਂ ਖਿਡਾਰਨ ਨੇ ਕਿਹਾ- ਅਗਲਾ ਟੀਚਾ ਏਸ਼ੀਆਈ ਖੇਡਾਂ ਵਿੱਚ ਦੇਸ਼ ਦਾ ਤਿਰੰਗਾ ਲਹਿਰਾਉਣਾ ਹੈ।'
+  }
+];
+
+export default function SportsModule() {
+  return (
+    <section className="module" id="sport" style={{ backgroundColor: '#ffffff', paddingTop: '14px', paddingBottom: '20px', borderBottom: '1px solid #e2e8f0' }}>
+      <div className="container">
+        {/* Module Header - Single Row */}
+        <div className="module-header-row">
+          <div className="module-header-left">
+            <span className="module-header-badge bg-red">ਖੇਡਾਂ</span>
+            <span className="module-header-divider">/</span>
+            <h3 className="module-header-title">
+              ਕਬੱਡੀ, ਕ੍ਰਿਕਟ, ਹਾਕੀ ਅਤੇ ਖੇਡ ਮੇਲਿਆਂ ਦੀਆਂ ਤਾਜ਼ਾ ਖ਼ਬਰਾਂ (Sports News)
+            </h3>
+          </div>
+          <div className="module-header-right">
+            <span style={{ fontSize: '11px', fontWeight: '700', color: '#1c2d5a', backgroundColor: '#edf2f7', padding: '3px 8px', borderRadius: '3px' }}>
+              <i className="fa fa-trophy" style={{ color: '#b71c1c', marginRight: '4px' }}></i> ਖੇਡ ਜਗਤ
+            </span>
+          </div>
+        </div>
+
+        {/* 4-Column Sports News Cards */}
+        <div className="row">
+          {sportsArticles.map((item) => (
+            <div className="col-md-3 col-sm-6 col-xs-12" key={item.id} style={{ marginBottom: '16px' }}>
+              <div
+                style={{
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '4px',
+                  overflow: 'hidden',
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column'
+                }}
+              >
+                {/* Image */}
+                <div style={{ position: 'relative', width: '100%', height: '160px', overflow: 'hidden', backgroundColor: '#edf2f7' }}>
+                  <a href={`#${item.id}`} style={{ display: 'block', width: '100%', height: '100%' }}>
+                    <img
+                      src={item.img}
+                      alt={item.title}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.3s ease' }}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = '/img/index_800x400-image18.jpg';
+                      }}
+                    />
+                  </a>
+                  <span
+                    style={{
+                      position: 'absolute',
+                      top: '8px',
+                      left: '8px',
+                      backgroundColor: '#b71c1c',
+                      color: '#ffffff',
+                      fontSize: '10px',
+                      fontWeight: '800',
+                      padding: '2px 7px',
+                      borderRadius: '3px'
+                    }}
+                  >
+                    {item.category}
+                  </span>
+                </div>
+
+                {/* Content */}
+                <div style={{ padding: '12px 14px 14px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                    <span style={{ fontSize: '11px', color: '#1e293b', fontWeight: '600' }}>
+                      <i className="fa fa-clock-o" style={{ marginRight: '4px' }}></i>
+                      {item.time}
+                    </span>
+                  </div>
+
+                  {/* Solid Bold Black Headline */}
+                  <h4
+                    style={{
+                      margin: '2px 0 6px 0',
+                      fontSize: '14px',
+                      fontWeight: '800',
+                      lineHeight: '1.35',
+                      color: '#000000'
+                    }}
+                  >
+                    <a href={`#${item.id}`} style={{ color: '#000000', textDecoration: 'none', fontWeight: '800' }}>
+                      {item.title}
+                    </a>
+                  </h4>
+
+                  {/* Summary */}
+                  <p
+                    style={{
+                      margin: 0,
+                      fontSize: '12px',
+                      lineHeight: '1.55',
+                      color: '#111111',
+                      fontWeight: '500',
+                      marginTop: 'auto'
+                    }}
+                  >
+                    {item.desc}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

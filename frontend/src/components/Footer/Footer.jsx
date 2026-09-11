@@ -51,18 +51,18 @@ export default function Footer() {
                 <p className="about-us">
                   ਪੰਜਾਬ ਫਾਈਲਜ਼ 24 ਘੰਟੇ ਨਿਰਪੱਖ, ਸੱਚੀਆਂ ਅਤੇ ਭਰੋਸੇਯੋਗ ਖ਼ਬਰਾਂ ਪਹੁੰਚਾਉਣ ਲਈ ਵਚਨਬੱਧ ਹੈ। ਅਸੀਂ ਤੁਹਾਨੂੰ ਜ਼ਮੀਨੀ ਹਕੀਕਤਾਂ, ਤਾਜ਼ਾ ਸਮਾਚਾਰ ਅਤੇ ਸਾਰਥਕ ਵਿਸ਼ਲੇਸ਼ਣ ਮੁਹੱਈਆ ਕਰਵਾਉਂਦੇ ਹਾਂ।
                 </p>
-                <div className="site-logo" style={{ marginTop: '15px' }}>
+                <div className="site-logo" style={{ marginTop: '18px' }}>
                   <a href="/" style={{ textDecoration: 'none', display: 'inline-block' }}>
                     <img
                       src={blackLogo}
                       alt="Punjab Files Logo"
                       style={{
-                        height: '85px',
-                        maxHeight: '95px',
-                        maxWidth: '240px',
+                        height: '115px',
+                        maxHeight: '125px',
+                        maxWidth: '280px',
                         width: 'auto',
                         objectFit: 'contain',
-                        borderRadius: '4px',
+                        borderRadius: '6px',
                         display: 'block',
                         marginBottom: '10px'
                       }}

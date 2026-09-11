@@ -58,9 +58,9 @@ export default function SecondMenu() {
 
   return (
     <div className="second-menu navbar" id="nav-below-main">
-      <div className="container">
-        <div className="collapse navbar-collapse nav-below-main in">
-          <ul className="nav navbar-nav">
+      <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'nowrap' }}>
+        <div className="collapse navbar-collapse nav-below-main in" style={{ float: 'none', display: 'flex', alignItems: 'center', padding: 0 }}>
+          <ul className="nav navbar-nav" style={{ float: 'none', display: 'flex', margin: 0 }}>
             <li>
               <a href="#watch-live">ਲਾਈਵ 24/7 ਦੇਖੋ</a>
             </li>
@@ -77,7 +77,7 @@ export default function SecondMenu() {
         </div>
 
         {/* Live Punjabi Digital Clock */}
-        <div className="clock">
+        <div className="clock" style={{ float: 'none', flexShrink: 0 }}>
           <div id="time">{timeStr}</div>
           <div id="date">{dateStr}</div>
         </div>

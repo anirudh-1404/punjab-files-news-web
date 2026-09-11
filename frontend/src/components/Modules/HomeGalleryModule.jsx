@@ -27,29 +27,24 @@ export default function HomeGalleryModule() {
   }
 
   return (
-    <section className="module">
-      <h2
-        style={{
-          textAlign: 'center',
-          fontSize: '24px',
-          fontWeight: '700',
-          color: '#111827',
-          margin: '10px auto 14px',
-          lineHeight: '1.4'
-        }}
-      >
-        ਸਾਡੇ ਵੱਖ-ਵੱਖ ਸੈਕਸ਼ਨਾਂ ਦੀਆਂ ਹੋਰ ਮੁੱਖ ਸੁਰਖੀਆਂ
-      </h2>
-      <div className="center-title">
-        <span className="title-line-left"></span>
-        <h4 className="title-style05 style-01" style={{ backgroundColor: '#ebb10d', color: '#111317', border: 'none', borderRadius: '3px', fontWeight: 700 }}>
-          ਤਾਜ਼ਾ # ਸਮਾਚਾਰ
-        </h4>
-        <span className="title-line-right"></span>
-      </div>
-
+    <section className="module" style={{ backgroundColor: '#ffffff', paddingTop: '14px', paddingBottom: '20px', borderBottom: '1px solid #e2e8f0' }}>
       <div className="container">
-        <h3 className="carousel-title-gray">ਫ਼ੋਟੋ ਅਤੇ ਵੀਡੀਓ ਗੈਲਰੀ</h3>
+        {/* Module Header - Single Row */}
+        <div className="module-header-row">
+          <div className="module-header-left">
+            <span className="module-header-badge bg-red">ਗੈਲਰੀ</span>
+            <span className="module-header-divider">/</span>
+            <h3 className="module-header-title">
+              ਤਸਵੀਰਾਂ ਅਤੇ ਵੀਡੀਓਜ਼ ਵਿੱਚ ਪੰਜਾਬ (Photo & Video Gallery)
+            </h3>
+          </div>
+          <div className="module-header-right">
+            <span style={{ fontSize: '11px', fontWeight: '700', color: '#b71c1c', backgroundColor: 'rgba(183, 28, 28, 0.08)', padding: '3px 8px', borderRadius: '3px' }}>
+              <i className="fa fa-camera" style={{ marginRight: '4px' }}></i> ਖ਼ਾਸ ਝਲਕੀਆਂ
+            </span>
+          </div>
+        </div>
+
         <div id="big-gallery-slider-3" className="owl-carousel owl-theme" style={{ display: 'block', opacity: 1, position: 'relative' }}>
           <div className="owl-wrapper-outer">
             <div className="owl-wrapper" style={{ display: 'flex', gap: '15px' }}>

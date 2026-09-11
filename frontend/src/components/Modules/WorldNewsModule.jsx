@@ -64,13 +64,20 @@ export default function WorldNewsModule() {
   const col2 = items.slice(2, 4);
 
   return (
-    <section className="module highlight">
+    <section className="module highlight" id="world" style={{ paddingTop: '14px', paddingBottom: '20px' }}>
       <div className="container">
-        <div className="module-title">
-          <h3 className="title">
-            <span className="bg-1">ਦੇਸ਼-ਵਿਦੇਸ਼</span>
-          </h3>
-          <h3 className="subtitle">ਦੇਖੋ ਤਾਜ਼ਾ ਅਤੇ ਵੱਡੀਆਂ ਖ਼ਬਰਾਂ</h3>
+        {/* Module Header - Single Row */}
+        <div className="module-header-row">
+          <div className="module-header-left">
+            <span className="module-header-badge bg-red">ਦੇਸ਼-ਵਿਦੇਸ਼</span>
+            <span className="module-header-divider">/</span>
+            <h3 className="module-header-title">ਰਾਸ਼ਟਰੀ ਅਤੇ ਕੌਮਾਂਤਰੀ ਵੱਡੀਆਂ ਖ਼ਬਰਾਂ (National & World News)</h3>
+          </div>
+          <div className="module-header-right">
+            <span style={{ fontSize: '11px', fontWeight: '700', color: '#1c2d5a', backgroundColor: '#edf2f7', padding: '3px 8px', borderRadius: '3px' }}>
+              <i className="fa fa-globe" style={{ marginRight: '4px' }}></i> ਗਲੋਬਲ ਅੱਪਡੇਟਸ
+            </span>
+          </div>
         </div>
         <div className="row no-gutter">
           {/* Column 1 */}
