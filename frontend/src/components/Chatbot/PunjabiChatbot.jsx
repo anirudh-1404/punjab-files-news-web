@@ -82,6 +82,7 @@ export default function PunjabiChatbot() {
           {/* Speech Cloud Bubble */}
           {showCloud && (
             <div
+              className="turban-speech-cloud"
               onClick={() => setIsOpen(true)}
               style={{
                 backgroundColor: '#ffffff',
@@ -173,12 +174,13 @@ export default function PunjabiChatbot() {
           {/* Turban Guy Character Button (Namaste pose) */}
           <button
             type="button"
+            className="turban-chatbot-btn"
             onClick={() => setIsOpen(true)}
             aria-label="ਓਪਨ ਪੰਜਾਬੀ ਸਹਾਇਕ ਚੈਟਬਾਕਸ"
             style={{
               position: 'relative',
-              width: '76px',
-              height: '76px',
+              width: '72px',
+              height: '72px',
               borderRadius: '50%',
               padding: 0,
               border: '3px solid #ebb10d',
@@ -232,10 +234,12 @@ export default function PunjabiChatbot() {
       {/* Chat Window */}
       {isOpen && (
         <div
+          className="punjabi-chat-dialog"
           style={{
-            width: '330px',
-            maxWidth: 'calc(100vw - 30px)',
-            height: '450px',
+            width: '340px',
+            maxWidth: 'calc(100vw - 24px)',
+            height: '460px',
+            maxHeight: 'min(460px, 78vh)',
             backgroundColor: '#ffffff',
             borderRadius: '12px',
             boxShadow: '0 14px 40px rgba(0,0,0,0.28)',

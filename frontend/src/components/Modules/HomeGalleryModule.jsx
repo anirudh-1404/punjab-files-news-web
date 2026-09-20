@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const galleryItems = [
   { img: '/img/index_slider-large-image01.jpg', title: 'ਤਸਵੀਰ 1' },
@@ -11,10 +11,18 @@ const galleryItems = [
 
 export default function HomeGalleryModule() {
   const [startIndex, setStartIndex] = useState(0);
-  const itemsPerPage = 4;
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const itemsPerPage = windowWidth < 640 ? 1 : windowWidth < 992 ? 2 : 4;
 
   const handlePrev = () => {
-    setStartIndex((prev) => (prev === 0 ? galleryItems.length - itemsPerPage : prev - 1));
+    setStartIndex((prev) => (prev === 0 ? Math.max(0, galleryItems.length - itemsPerPage) : prev - 1));
   };
 
   const handleNext = () => {
@@ -25,6 +33,8 @@ export default function HomeGalleryModule() {
   for (let i = 0; i < itemsPerPage; i++) {
     visibleItems.push(galleryItems[(startIndex + i) % galleryItems.length]);
   }
+
+  const flexBasis = itemsPerPage === 1 ? '100%' : itemsPerPage === 2 ? 'calc(50% - 8px)' : 'calc(25% - 12px)';
 
   return (
     <section className="module" style={{ backgroundColor: '#ffffff', paddingTop: '14px', paddingBottom: '20px', borderBottom: '1px solid #e2e8f0' }}>
@@ -49,8 +59,8 @@ export default function HomeGalleryModule() {
           <div className="owl-wrapper-outer">
             <div className="owl-wrapper" style={{ display: 'flex', gap: '15px' }}>
               {visibleItems.map((item, idx) => (
-                <div className="owl-item" style={{ flex: '1 0 calc(25% - 12px)', position: 'relative' }} key={idx}>
-                  <div className="big-gallery" style={{ position: 'relative' }}>
+                <div className="owl-item" style={{ flex: `1 0 ${flexBasis}`, maxWidth: flexBasis, position: 'relative' }} key={idx}>
+                  <div className="big-gallery" style={{ position: 'relative', borderRadius: '4px', overflow: 'hidden' }}>
                     <img src={item.img} alt={item.title} style={{ width: '100%', height: 'auto', display: 'block' }} />
                     <a href="#video">
                       <span className="play-icon"></span>

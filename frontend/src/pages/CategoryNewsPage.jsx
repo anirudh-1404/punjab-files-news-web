@@ -357,7 +357,11 @@ export default function CategoryNewsPage() {
                   backgroundColor: '#f1f5f9',
                   padding: '4px',
                   borderRadius: '6px',
-                  border: '1px solid #e2e8f0'
+                  border: '1px solid #e2e8f0',
+                  overflowX: 'auto',
+                  whiteSpace: 'nowrap',
+                  maxWidth: '100%',
+                  WebkitOverflowScrolling: 'touch'
                 }}
               >
                 <Link
@@ -559,7 +563,7 @@ export default function CategoryNewsPage() {
 
                 {/* Sub-grid of Other Articles */}
                 {otherArticles.length > 0 && (
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))', gap: '20px' }}>
                     {otherArticles.map((art) => (
                       <div
                         key={art._id || art.id}

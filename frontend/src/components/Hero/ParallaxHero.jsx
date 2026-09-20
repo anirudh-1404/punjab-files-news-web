@@ -25,16 +25,7 @@ export default function ParallaxHero() {
           {/* ========================================================
               LEFT COLUMN (50%): MUKH WAK SECTION (Transparent / White BG)
           ======================================================== */}
-          <div
-            className="hero-darbar-col"
-            style={{
-              flex: '1 1 calc(50% - 12px)',
-              maxWidth: 'calc(50% - 12px)',
-              minWidth: '320px',
-              display: 'flex',
-              flexDirection: 'column'
-            }}
-          >
+          <div className="hero-darbar-col">
             {/* Mukh Wak Section Heading - Pixel-Perfect Single Row */}
             <div className="hero-col-header">
               <span className="hero-col-badge badge-mukhwak">
@@ -54,17 +45,7 @@ export default function ParallaxHero() {
           {/* ========================================================
               RIGHT COLUMN (50%): LIVE TV (Dark Studio BG - Separate Section)
           ======================================================== */}
-          <div
-            className="hero-tv-col"
-            id="live-tv"
-            style={{
-              flex: '1 1 calc(50% - 12px)',
-              maxWidth: 'calc(50% - 12px)',
-              minWidth: '320px',
-              display: 'flex',
-              flexDirection: 'column'
-            }}
-          >
+          <div className="hero-tv-col" id="live-tv">
             {/* Live TV Section Heading - Pixel-Perfect Single Row */}
             <div className="hero-col-header">
               <span className="hero-col-badge badge-livetv">

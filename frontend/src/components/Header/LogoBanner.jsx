@@ -74,6 +74,7 @@ export default function LogoBanner() {
           <img
             src={whiteLogo}
             alt="Punjab Files"
+            className="brand-logo-img"
             style={{
               height: '115px',
               maxHeight: '125px',

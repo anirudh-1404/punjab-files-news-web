@@ -97,7 +97,16 @@ export default function TopMenu() {
               onClick={() => setStaffDropdownOpen((prev) => !prev)}
             >
               <i className="fa fa-shield" style={{ color: '#ebb10d', fontSize: '13px' }}></i>
-              <span>{currentUser ? `${currentUser.name.split(' ')[0]} (${currentUser.role})` : 'ਸਟਾਫ਼ ਲੌਗਇਨ (Staff Login)'}</span>
+              <span>
+                {currentUser ? (
+                  `${currentUser.name.split(' ')[0]} (${currentUser.role})`
+                ) : (
+                  <>
+                    <span>ਸਟਾਫ਼ ਲੌਗਇਨ</span>
+                    <span className="hidden-xs"> (Staff Login)</span>
+                  </>
+                )}
+              </span>
               <i className={`fa fa-angle-${staffDropdownOpen ? 'up' : 'down'}`} style={{ color: '#ebb10d', fontSize: '12px' }}></i>
             </button>
 
