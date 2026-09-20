@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import DarbarSahibMukhWak from './Hero/DarbarSahibMukhWak';
+import { articleAPI } from '../services/api';
 import { getAllArticles } from '../services/articleStore';
 
 const fallbackRegionalNews = {
@@ -71,10 +71,58 @@ export default function DarbarSahibAndPunjabModule() {
   const [regionalNews, setRegionalNews] = useState(fallbackRegionalNews);
 
   useEffect(() => {
-    const loadDynamicPunjabNews = () => {
-      const all = getAllArticles({ category: 'punjab' });
-      if (all && all.length > 0) {
-        const majha = all.filter((a) => a.punjabRegion === 'majha').map((a) => ({
+    let isMounted = true;
+
+    const loadDynamicPunjabNews = async () => {
+      try {
+        const res = await articleAPI.getPublished({ category: 'punjab' });
+        if (isMounted && res && res.data && res.data.length > 0) {
+          const all = res.data;
+          const majhaFromApi = all.filter((a) => a.punjabRegion === 'majha').map((a) => ({
+            id: a.slug || a._id,
+            title: a.title,
+            desc: a.excerpt || (a.content ? a.content.substring(0, 110) + '...' : ''),
+            region: 'ਮਾਝਾ',
+            district: 'ਮਾਝਾ ਬਿਊਰੋ',
+            time: a.publishedAt ? new Date(a.publishedAt).toLocaleTimeString('pa-IN', { hour: '2-digit', minute: '2-digit' }) : 'ਤਾਜ਼ਾ',
+            img: a.featuredImage || '/img/index_800x400-image08.jpg'
+          }));
+
+          const malwaFromApi = all.filter((a) => a.punjabRegion === 'malwa').map((a) => ({
+            id: a.slug || a._id,
+            title: a.title,
+            desc: a.excerpt || (a.content ? a.content.substring(0, 110) + '...' : ''),
+            region: 'ਮਾਲਵਾ',
+            district: 'ਮਾਲਵਾ ਬਿਊਰੋ',
+            time: a.publishedAt ? new Date(a.publishedAt).toLocaleTimeString('pa-IN', { hour: '2-digit', minute: '2-digit' }) : 'ਤਾਜ਼ਾ',
+            img: a.featuredImage || '/img/index_800x400-image09.jpg'
+          }));
+
+          const doabaFromApi = all.filter((a) => a.punjabRegion === 'doaba').map((a) => ({
+            id: a.slug || a._id,
+            title: a.title,
+            desc: a.excerpt || (a.content ? a.content.substring(0, 110) + '...' : ''),
+            region: 'ਦੋਆਬਾ',
+            district: 'ਦੋਆਬਾ ਬਿਊਰੋ',
+            time: a.publishedAt ? new Date(a.publishedAt).toLocaleTimeString('pa-IN', { hour: '2-digit', minute: '2-digit' }) : 'ਤਾਜ਼ਾ',
+            img: a.featuredImage || '/img/index_800x400-image10.jpg'
+          }));
+
+          setRegionalNews({
+            majha: majhaFromApi.length > 0 ? [...majhaFromApi, ...fallbackRegionalNews.majha].slice(0, 4) : fallbackRegionalNews.majha,
+            malwa: malwaFromApi.length > 0 ? [...malwaFromApi, ...fallbackRegionalNews.malwa].slice(0, 4) : fallbackRegionalNews.malwa,
+            doaba: doabaFromApi.length > 0 ? [...doabaFromApi, ...fallbackRegionalNews.doaba].slice(0, 4) : fallbackRegionalNews.doaba
+          });
+          return;
+        }
+      } catch (err) {
+        // Fallback to local store
+      }
+
+      // Fallback if API was unavailable
+      const allLocal = getAllArticles({ category: 'punjab' });
+      if (isMounted && allLocal && allLocal.length > 0) {
+        const majha = allLocal.filter((a) => a.punjabRegion === 'majha').map((a) => ({
           id: a.id,
           title: a.title,
           desc: a.excerpt || a.content.substring(0, 110) + '...',
@@ -84,7 +132,7 @@ export default function DarbarSahibAndPunjabModule() {
           img: a.featuredImage
         }));
 
-        const malwa = all.filter((a) => a.punjabRegion === 'malwa').map((a) => ({
+        const malwa = allLocal.filter((a) => a.punjabRegion === 'malwa').map((a) => ({
           id: a.id,
           title: a.title,
           desc: a.excerpt || a.content.substring(0, 110) + '...',
@@ -94,7 +142,7 @@ export default function DarbarSahibAndPunjabModule() {
           img: a.featuredImage
         }));
 
-        const doaba = all.filter((a) => a.punjabRegion === 'doaba').map((a) => ({
+        const doaba = allLocal.filter((a) => a.punjabRegion === 'doaba').map((a) => ({
           id: a.id,
           title: a.title,
           desc: a.excerpt || a.content.substring(0, 110) + '...',
@@ -116,9 +164,18 @@ export default function DarbarSahibAndPunjabModule() {
     window.addEventListener('storage', loadDynamicPunjabNews);
     window.addEventListener('punjab_articles_updated', loadDynamicPunjabNews);
 
+    const handleRegionSelect = (e) => {
+      if (e.detail && ['all', 'majha', 'malwa', 'doaba'].includes(e.detail)) {
+        setActiveRegion(e.detail);
+      }
+    };
+    window.addEventListener('punjab_region_select', handleRegionSelect);
+
     return () => {
+      isMounted = false;
       window.removeEventListener('storage', loadDynamicPunjabNews);
       window.removeEventListener('punjab_articles_updated', loadDynamicPunjabNews);
+      window.removeEventListener('punjab_region_select', handleRegionSelect);
     };
   }, []);
 

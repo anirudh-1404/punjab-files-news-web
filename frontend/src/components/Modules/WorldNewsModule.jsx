@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { articleAPI } from '../../services/api';
 import { getLivePunjabiNews } from '../../services/newsService';
 
 const defaultWorldItems = [
@@ -41,22 +42,46 @@ export default function WorldNewsModule() {
 
   useEffect(() => {
     let isMounted = true;
-    getLivePunjabiNews().then((data) => {
-      if (isMounted && data && data.world && data.world.length >= 4) {
-        const labels = ['label-1', 'label-3', 'label-5', 'label-2'];
-        const cats = ['ਖ਼ਬਰਾਂ', 'ਰਾਜਨੀਤੀ', 'ਵਿਗਿਆਨ', 'ਸਿਹਤ'];
-        
-        const mapped = data.world.slice(0, 4).map((item, idx) => ({
-          title: item.title,
-          desc: item.desc || item.title,
-          category: cats[idx] || item.category,
-          labelClass: labels[idx] || 'label-1',
-          img: item.img || defaultWorldItems[idx].img,
-          link: item.link
-        }));
-        setItems(mapped);
+    const labels = ['label-1', 'label-3', 'label-5', 'label-2'];
+    const cats = ['ਖ਼ਬਰਾਂ', 'ਰਾਜਨੀਤੀ', 'ਵਿਗਿਆਨ', 'ਸਿਹਤ'];
+
+    const loadWorldArticles = async () => {
+      try {
+        const res = await articleAPI.getPublished({ category: 'world' });
+        if (isMounted && res && res.data && res.data.length > 0) {
+          const fromApi = res.data.map((item, idx) => ({
+            title: item.title,
+            desc: item.excerpt || (item.content ? item.content.substring(0, 110) + '...' : item.title),
+            category: item.category === 'world' ? 'ਕੌਮਾਂਤਰੀ' : item.category,
+            labelClass: labels[idx % labels.length],
+            img: item.featuredImage || defaultWorldItems[idx % defaultWorldItems.length].img,
+            link: `/news/${item.slug || item._id}`
+          }));
+
+          const combined = [...fromApi, ...defaultWorldItems.slice(fromApi.length)].slice(0, 4);
+          setItems(combined);
+          return;
+        }
+      } catch (err) {
+        // Fallback
       }
-    });
+
+      getLivePunjabiNews().then((data) => {
+        if (isMounted && data && data.world && data.world.length >= 4) {
+          const mapped = data.world.slice(0, 4).map((item, idx) => ({
+            title: item.title,
+            desc: item.desc || item.title,
+            category: cats[idx] || item.category,
+            labelClass: labels[idx] || 'label-1',
+            img: item.img || defaultWorldItems[idx].img,
+            link: item.link
+          }));
+          setItems(mapped);
+        }
+      });
+    };
+
+    loadWorldArticles();
     return () => { isMounted = false; };
   }, []);
 
@@ -83,90 +108,96 @@ export default function WorldNewsModule() {
           {/* Column 1 */}
           <div className="col-sm-6 col-md-6">
             <div className="news">
-              {col1.map((item, idx) => (
-                <div className="item" key={idx}>
-                  <div className="item-image-1">
-                    <a className="img-link" href={item.link} target="_blank" rel="noreferrer">
-                      <img
-                        className="img-responsive img-full"
-                        src={item.img}
-                        alt={item.title}
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = '/img/index_800x400-image01.jpg';
-                        }}
-                      />
-                    </a>
-                    <span>
-                      <a className={item.labelClass} href={item.link}>{item.category}</a>
-                    </span>
-                  </div>
-                  <div className="item-content">
-                    <div className="title-left title-style04 underline04">
-                      <h3>
-                        <a href={item.link} target="_blank" rel="noreferrer">
-                          <strong>{item.title.split(' ')[0]}</strong> {item.title.split(' ').slice(1).join(' ')}
+              {col1.map((item, idx) => {
+                const isExternal = item.link && item.link.startsWith('http');
+                return (
+                  <div className="item" key={idx}>
+                    <div className="item-image-1">
+                      <a className="img-link" href={item.link} {...(isExternal ? { target: '_blank', rel: 'noreferrer' } : {})}>
+                        <img
+                          className="img-responsive img-full"
+                          src={item.img}
+                          alt={item.title}
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = '/img/index_800x400-image01.jpg';
+                          }}
+                        />
+                      </a>
+                      <span>
+                        <a className={item.labelClass} href={item.link}>{item.category}</a>
+                      </span>
+                    </div>
+                    <div className="item-content">
+                      <div className="title-left title-style04 underline04">
+                        <h3>
+                          <a href={item.link} {...(isExternal ? { target: '_blank', rel: 'noreferrer' } : {})}>
+                            <strong>{item.title.split(' ')[0]}</strong> {item.title.split(' ').slice(1).join(' ')}
+                          </a>
+                        </h3>
+                      </div>
+                      <p>
+                        <a href={item.link} className="external-link" {...(isExternal ? { target: '_blank', rel: 'noreferrer' } : {})}>
+                          {item.desc}
                         </a>
-                      </h3>
-                    </div>
-                    <p>
-                      <a href={item.link} className="external-link" target="_blank" rel="noreferrer">
-                        {item.desc}
-                      </a>
-                    </p>
-                    <div>
-                      <a href={item.link} target="_blank" rel="noreferrer">
-                        <span className="read-more">ਹੋਰ ਪੜ੍ਹੋ</span>
-                      </a>
+                      </p>
+                      <div>
+                        <a href={item.link} {...(isExternal ? { target: '_blank', rel: 'noreferrer' } : {})}>
+                          <span className="read-more">ਹੋਰ ਪੜ੍ਹੋ</span>
+                        </a>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
           {/* Column 2 */}
           <div className="col-sm-6 col-md-6">
             <div className="news">
-              {col2.map((item, idx) => (
-                <div className="item" key={idx}>
-                  <div className="item-image-1">
-                    <a className="img-link" href={item.link} target="_blank" rel="noreferrer">
-                      <img
-                        className="img-responsive img-full"
-                        src={item.img}
-                        alt={item.title}
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = '/img/index_800x400-image02.jpg';
-                        }}
-                      />
-                    </a>
-                    <span>
-                      <a className={item.labelClass} href={item.link}>{item.category}</a>
-                    </span>
-                  </div>
-                  <div className="item-content">
-                    <div className="title-left title-style04 underline04">
-                      <h3>
-                        <a href={item.link} target="_blank" rel="noreferrer">
-                          <strong>{item.title.split(' ')[0]}</strong> {item.title.split(' ').slice(1).join(' ')}
+              {col2.map((item, idx) => {
+                const isExternal = item.link && item.link.startsWith('http');
+                return (
+                  <div className="item" key={idx}>
+                    <div className="item-image-1">
+                      <a className="img-link" href={item.link} {...(isExternal ? { target: '_blank', rel: 'noreferrer' } : {})}>
+                        <img
+                          className="img-responsive img-full"
+                          src={item.img}
+                          alt={item.title}
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = '/img/index_800x400-image02.jpg';
+                          }}
+                        />
+                      </a>
+                      <span>
+                        <a className={item.labelClass} href={item.link}>{item.category}</a>
+                      </span>
+                    </div>
+                    <div className="item-content">
+                      <div className="title-left title-style04 underline04">
+                        <h3>
+                          <a href={item.link} {...(isExternal ? { target: '_blank', rel: 'noreferrer' } : {})}>
+                            <strong>{item.title.split(' ')[0]}</strong> {item.title.split(' ').slice(1).join(' ')}
+                          </a>
+                        </h3>
+                      </div>
+                      <p>
+                        <a href={item.link} className="external-link" {...(isExternal ? { target: '_blank', rel: 'noreferrer' } : {})}>
+                          {item.desc}
                         </a>
-                      </h3>
-                    </div>
-                    <p>
-                      <a href={item.link} className="external-link" target="_blank" rel="noreferrer">
-                        {item.desc}
-                      </a>
-                    </p>
-                    <div>
-                      <a href={item.link} target="_blank" rel="noreferrer">
-                        <span className="read-more">ਹੋਰ ਪੜ੍ਹੋ</span>
-                      </a>
+                      </p>
+                      <div>
+                        <a href={item.link} {...(isExternal ? { target: '_blank', rel: 'noreferrer' } : {})}>
+                          <span className="read-more">ਹੋਰ ਪੜ੍ਹੋ</span>
+                        </a>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>

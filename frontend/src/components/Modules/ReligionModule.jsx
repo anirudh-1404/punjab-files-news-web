@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { articleAPI } from '../../services/api';
 import { getAllArticles } from '../../services/articleStore';
+import { formatArticleDate } from '../../services/dateUtils';
 
 const defaultReligionItems = [
   {
@@ -32,10 +34,30 @@ export default function ReligionModule() {
   const [religionItems, setReligionItems] = useState(defaultReligionItems);
 
   useEffect(() => {
-    const loadData = () => {
+    let isMounted = true;
+
+    const loadData = async () => {
+      try {
+        const res = await articleAPI.getPublished({ category: 'religion' });
+        if (isMounted && res && res.data && res.data.length > 0) {
+          const mapped = res.data.map((item) => ({
+            id: item.slug || item._id,
+            title: item.title,
+            publicationDate: item.publishedAt ? formatArticleDate(item.publishedAt, item.language) : 'ਅੱਜ',
+            publicationTime: item.publishedAt ? new Date(item.publishedAt).toLocaleTimeString('pa-IN', { hour: '2-digit', minute: '2-digit' }) : 'ਹੁਣੇ',
+            featuredImage: item.featuredImage || '/img/index_800x400-image04.jpg',
+            excerpt: item.excerpt || (item.content ? item.content.substring(0, 110) + '...' : '')
+          }));
+          setReligionItems(mapped);
+          return;
+        }
+      } catch (err) {
+        // Fallback
+      }
+
       const all = getAllArticles();
       const filtered = all.filter((a) => a.category === 'religion');
-      if (filtered && filtered.length > 0) {
+      if (isMounted && filtered && filtered.length > 0) {
         setReligionItems(filtered);
       }
     };
@@ -44,6 +66,7 @@ export default function ReligionModule() {
     window.addEventListener('storage', loadData);
     window.addEventListener('punjab_articles_updated', loadData);
     return () => {
+      isMounted = false;
       window.removeEventListener('storage', loadData);
       window.removeEventListener('punjab_articles_updated', loadData);
     };

@@ -30,6 +30,7 @@ import HomeGalleryModule from './components/Modules/HomeGalleryModule';
 import NewsDetailPage from './pages/NewsDetailPage';
 import AdminCMS from './pages/AdminCMS';
 import ContactPage from './pages/ContactPage';
+import CategoryNewsPage from './pages/CategoryNewsPage';
 
 function ScrollToTopOnNavigate() {
   const { pathname } = useLocation();
@@ -79,6 +80,9 @@ function HomePage() {
 }
 
 export default function App() {
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith('/admin');
+
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.2,
@@ -133,21 +137,24 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/news/:id" element={<NewsDetailPage />} />
+        <Route path="/article/:id" element={<NewsDetailPage />} />
         <Route path="/admin" element={<AdminCMS />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/category/:category" element={<CategoryNewsPage />} />
+        <Route path="/category/:category/:subRegion" element={<CategoryNewsPage />} />
       </Routes>
 
-      {/* Global Footer */}
-      <Footer />
+      {/* Global Footer - Hidden on /admin */}
+      {!isAdmin && <Footer />}
 
-      {/* Copyrights */}
-      <Copyrights />
+      {/* Copyrights - Hidden on /admin */}
+      {!isAdmin && <Copyrights />}
 
-      {/* Back to Top */}
-      <ScrollToTop />
+      {/* Back to Top - Hidden on /admin */}
+      {!isAdmin && <ScrollToTop />}
 
-      {/* Discreet Punjabi AI Chatbot Widget */}
-      <PunjabiChatbot />
+      {/* Discreet Punjabi AI Chatbot Widget - Hidden on /admin */}
+      {!isAdmin && <PunjabiChatbot />}
     </div>
   );
 }

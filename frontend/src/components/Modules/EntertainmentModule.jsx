@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { articleAPI } from '../../services/api';
 
 const entertainmentArticles = [
   {
@@ -36,6 +37,27 @@ const entertainmentArticles = [
 ];
 
 export default function EntertainmentModule() {
+  const [articles, setArticles] = useState(entertainmentArticles);
+
+  useEffect(() => {
+    let isMounted = true;
+    articleAPI.getPublished({ category: 'art-entertainment' }).then((res) => {
+      if (isMounted && res && res.data && res.data.length > 0) {
+        const fromApi = res.data.map(item => ({
+          id: item.slug || item._id,
+          slug: item.slug,
+          title: item.title,
+          category: item.category === 'art-entertainment' || item.category === 'entertainment' ? 'ਮਨੋਰੰਜਨ' : item.category,
+          time: item.publishedAt ? new Date(item.publishedAt).toLocaleTimeString('pa-IN', { hour: '2-digit', minute: '2-digit' }) : 'ਤਾਜ਼ਾ',
+          img: item.featuredImage || '/img/art-entertainment_370x185-image04.jpg',
+          desc: item.excerpt || (item.content ? item.content.substring(0, 110) + '...' : '')
+        }));
+        setArticles([...fromApi, ...entertainmentArticles.slice(fromApi.length)].slice(0, 4));
+      }
+    }).catch(() => {});
+    return () => { isMounted = false; };
+  }, []);
+
   return (
     <section className="module" id="art-entertainment" style={{ backgroundColor: '#fcfdfe', paddingTop: '14px', paddingBottom: '20px', borderBottom: '1px solid #e2e8f0' }}>
       <div className="container">
@@ -57,7 +79,7 @@ export default function EntertainmentModule() {
 
         {/* 4-Column Entertainment News Cards */}
         <div className="row">
-          {entertainmentArticles.map((item) => (
+          {articles.map((item) => (
             <div className="col-md-3 col-sm-6 col-xs-12" key={item.id} style={{ marginBottom: '16px' }}>
               <div
                 style={{
@@ -73,14 +95,14 @@ export default function EntertainmentModule() {
               >
                 {/* Image */}
                 <div style={{ position: 'relative', width: '100%', height: '160px', overflow: 'hidden', backgroundColor: '#edf2f7' }}>
-                  <a href={`#${item.id}`} style={{ display: 'block', width: '100%', height: '100%' }}>
+                  <a href={`/news/${item.id}`} style={{ display: 'block', width: '100%', height: '100%' }}>
                     <img
                       src={item.img}
                       alt={item.title}
                       style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.3s ease' }}
                       onError={(e) => {
                         e.target.onerror = null;
-                        e.target.src = '/img/index_800x400-image16.jpg';
+                        e.target.src = '/img/art-entertainment_370x185-image04.jpg';
                       }}
                     />
                   </a>
@@ -120,7 +142,7 @@ export default function EntertainmentModule() {
                       color: '#000000'
                     }}
                   >
-                    <a href={`#${item.id}`} style={{ color: '#000000', textDecoration: 'none', fontWeight: '800' }}>
+                    <a href={`/news/${item.id}`} style={{ color: '#000000', textDecoration: 'none', fontWeight: '800' }}>
                       {item.title}
                     </a>
                   </h4>

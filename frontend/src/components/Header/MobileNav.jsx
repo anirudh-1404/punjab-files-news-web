@@ -68,89 +68,81 @@ export default function MobileNav() {
 
         <ul className="sidenav-menu">
           <li>
-            <a href="/" className="active">ਮੁੱਖ ਪੰਨਾ</a>
-            <div className="icon-sub-menu" onClick={() => toggleDropdown('home')}>
-              <span className={`sidenav-dropdown-icon ${openDropdown === 'home' ? 'up-icon' : 'show'}`}></span>
-            </div>
-            {openDropdown === 'home' && (
-              <ul className="sidenav-dropdown" style={{ display: 'block' }}>
-                <li><a href="#watch-live">ਲਾਈਵ 24/7</a></li>
-                <li><a href="#tv-radio">ਰੇਡੀਓ ਤੇ ਟੀਵੀ</a></li>
-                <li><a href="#web-shows">ਵੈੱਬ ਸ਼ੋਅ</a></li>
-                <li><a href="#store">ਸਟੋਰ</a></li>
-              </ul>
-            )}
-          </li>
-
-          <li>
-            <a href="#world">ਦੇਸ਼-ਵਿਦੇਸ਼</a>
-            <div className="icon-sub-menu" onClick={() => toggleDropdown('world')}>
-              <span className={`sidenav-dropdown-icon ${openDropdown === 'world' ? 'up-icon' : 'show'}`}></span>
-            </div>
-            {openDropdown === 'world' && (
-              <ul className="sidenav-dropdown" style={{ display: 'block' }}>
-                <li><a href="#punjab">ਪੰਜਾਬ</a></li>
-                <li><a href="#india">ਭਾਰਤ</a></li>
-                <li><a href="#canada">ਕੈਨੇਡਾ</a></li>
-                <li><a href="#usa">ਅਮਰੀਕਾ</a></li>
-                <li><a href="#world-all">ਸੰਸਾਰ</a></li>
-              </ul>
-            )}
+            <a href="/" onClick={() => setIsOpen(false)}>ਮੁੱਖ ਪੰਨਾ</a>
           </li>
 
           {/* Punjab Tri-Region in Mobile Nav */}
           <li>
-            <a href="#punjab">ਪੰਜਾਬ</a>
+            <a href="#punjab" onClick={() => setIsOpen(false)}>ਪੰਜਾਬ</a>
             <div className="icon-sub-menu" onClick={() => toggleDropdown('punjab')}>
               <span className={`sidenav-dropdown-icon ${openDropdown === 'punjab' ? 'up-icon' : 'show'}`}></span>
             </div>
             {openDropdown === 'punjab' && (
               <ul className="sidenav-dropdown" style={{ display: 'block' }}>
-                <li><a href="#majha">ਮਾਝਾ (Majha)</a></li>
-                <li><a href="#malwa">ਮਾਲਵਾ (Malwa)</a></li>
-                <li><a href="#doaba">ਦੋਆਬਾ (Doaba)</a></li>
+                <li><a href="/category/punjab" onClick={() => setIsOpen(false)}>ਸਾਰਾ ਪੰਜਾਬ (All Punjab)</a></li>
+                <li><a href="/category/punjab/majha" onClick={() => setIsOpen(false)}>ਮਾਝਾ (Majha)</a></li>
+                <li><a href="/category/punjab/malwa" onClick={() => setIsOpen(false)}>ਮਾਲਵਾ (Malwa)</a></li>
+                <li><a href="/category/punjab/doaba" onClick={() => setIsOpen(false)}>ਦੋਆਬਾ (Doaba)</a></li>
               </ul>
             )}
           </li>
 
           {/* Religion Section in Mobile Nav */}
           <li>
-            <a href="#religion">ਧਰਮ</a>
+            <a href="#religion" onClick={() => setIsOpen(false)}>ਧਰਮ</a>
           </li>
 
           <li>
-            <a href="#sport">ਖੇਡਾਂ</a>
-            <div className="icon-sub-menu" onClick={() => toggleDropdown('sport')}>
-              <span className={`sidenav-dropdown-icon ${openDropdown === 'sport' ? 'up-icon' : 'show'}`}></span>
-            </div>
-            {openDropdown === 'sport' && (
-              <ul className="sidenav-dropdown" style={{ display: 'block' }}>
-                <li><a href="#kabaddi">ਕਬੱਡੀ</a></li>
-                <li><a href="#cricket">ਕ੍ਰਿਕਟ</a></li>
-                <li><a href="#football">ਫੁੱਟਬਾਲ</a></li>
-              </ul>
-            )}
+            <a href="#world" onClick={() => setIsOpen(false)}>ਦੇਸ਼-ਵਿਦੇਸ਼</a>
           </li>
 
           <li>
-            <a href="#health">ਸਿਹਤ</a>
-            <div className="icon-sub-menu" onClick={() => toggleDropdown('health')}>
-              <span className={`sidenav-dropdown-icon ${openDropdown === 'health' ? 'up-icon' : 'show'}`}></span>
-            </div>
-            {openDropdown === 'health' && (
-              <ul className="sidenav-dropdown" style={{ display: 'block' }}>
-                <li><a href="#fitness">ਤੰਦਰੁਸਤੀ</a></li>
-                <li><a href="#ayurveda">ਦੇਸੀ ਨੁਸਖ਼ੇ</a></li>
-                <li><a href="#nutrition">ਖ਼ੁਰਾਕ</a></li>
+            <a href="#sport" onClick={() => setIsOpen(false)}>ਖੇਡਾਂ</a>
+          </li>
+
+          <li>
+            <a href="#health" onClick={() => setIsOpen(false)}>ਸਿਹਤ</a>
+          </li>
+
+          <li><a href="#travel" onClick={() => setIsOpen(false)}>ਸੈਰ-ਸਪਾਟਾ</a></li>
+          <li><a href="#art-entertainment" onClick={() => setIsOpen(false)}>ਮਨੋਰੰਜਨ</a></li>
+          <li><a href="#live-tv" onClick={() => setIsOpen(false)}>ਲਾਈਵ ਟੀਵੀ</a></li>
+          <li><a href="/contact" onClick={() => setIsOpen(false)}>ਸੰਪਰਕ</a></li>
+          <li>
+            <a
+              href="#staff"
+              onClick={(e) => {
+                e.preventDefault();
+                toggleDropdown('staff');
+              }}
+              style={{ color: '#ebb10d', fontWeight: '800', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+            >
+              <span><i className="fa fa-user-circle" style={{ marginRight: '6px' }}></i> ਸਟਾਫ਼ ਲੌਗਇਨ (Staff Login)</span>
+              <i className={`fa fa-angle-${openDropdown === 'staff' ? 'up' : 'down'}`} style={{ color: '#ebb10d' }}></i>
+            </a>
+            {openDropdown === 'staff' && (
+              <ul className="sidenav-dropdown" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.3)', padding: '6px 0' }}>
+                <li>
+                  <a href="/admin?role=admin" onClick={() => setIsOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 20px', color: '#ffffff' }}>
+                    <i className="fa fa-shield" style={{ color: '#b71c1c' }}></i>
+                    <span>Login as Admin (ਮੁੱਖ ਐਡਮਿਨ)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/admin?role=editor" onClick={() => setIsOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 20px', color: '#ffffff' }}>
+                    <i className="fa fa-pencil-square-o" style={{ color: '#ebb10d' }}></i>
+                    <span>Login as Editor (ਸੰਪਾਦਕ)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/admin?role=reporter" onClick={() => setIsOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 20px', color: '#ffffff' }}>
+                    <i className="fa fa-newspaper-o" style={{ color: '#38bdf8' }}></i>
+                    <span>Login as Reporter (ਪੱਤਰਕਾਰ)</span>
+                  </a>
+                </li>
               </ul>
             )}
           </li>
-
-          <li><a href="#travel">ਸੈਰ-ਸਪਾਟਾ</a></li>
-          <li><a href="#art-entertainment">ਮਨੋਰੰਜਨ</a></li>
-          <li><a href="#tv-schedule">ਲਾਈਵ ਟੀਵੀ</a></li>
-          <li><a href="/contact">ਸੰਪਰਕ ਕਰੋ (Contact Us)</a></li>
-          <li><a href="/admin" style={{ color: '#ebb10d', fontWeight: '700' }}><i className="fa fa-user"></i> ਨਿਊਜ਼ ਪਬਲਿਸ਼ਰ CMS (Admin)</a></li>
         </ul>
       </div>
 

@@ -1,23 +1,109 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { articleAPI } from '../services/api';
 import { getArticleById, incrementArticleViews, getRelatedArticles } from '../services/articleStore';
+import { formatArticleDate, formatArticleTime } from '../services/dateUtils';
 
 export default function NewsDetailPage() {
   const { id } = useParams();
   const [article, setArticle] = useState(null);
   const [related, setRelated] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const found = getArticleById(id);
-    if (found) {
-      setArticle(found);
-      incrementArticleViews(found.id);
-      const rel = getRelatedArticles(found.id, found.category, 3);
-      setRelated(rel);
+    let isMounted = true;
+
+    async function fetchArticle() {
+      setLoading(true);
+      try {
+        // 1. Try Backend API first (handles MongoDB _id or Gurmukhi/URL slug)
+        const res = await articleAPI.getBySlug(id);
+        if (isMounted && res && res.data) {
+          const apiArt = res.data;
+          let pubDate = 'ਅੱਜ';
+          let pubTime = 'ਹੁਣੇ';
+          if (apiArt.publishedAt || apiArt.createdAt) {
+            const rawDate = apiArt.publishedAt || apiArt.createdAt;
+            pubDate = formatArticleDate(rawDate, apiArt.language || 'pa');
+            pubTime = formatArticleTime(rawDate);
+          }
+
+          setArticle({
+            id: apiArt.slug || apiArt._id,
+            _id: apiArt._id,
+            title: apiArt.title,
+            category: apiArt.category,
+            punjabRegion: apiArt.punjabRegion,
+            content: apiArt.content,
+            excerpt: apiArt.excerpt,
+            author: apiArt.authorName || 'ਸੰਪਾਦਕੀ ਡੈਸਕ',
+            publicationDate: pubDate,
+            publicationTime: pubTime,
+            views: apiArt.views || 1,
+            featuredImage: apiArt.featuredImage || '/img/index_800x400-image01.jpg',
+            mediaType: apiArt.mediaType || (apiArt.videoUrl ? 'video' : 'image'),
+            videoUrl: apiArt.videoUrl || null,
+            isBreaking: apiArt.isBreaking
+          });
+
+          // Fetch related articles from backend
+          try {
+            const relRes = await articleAPI.getPublished({ category: apiArt.category, limit: 4 });
+            if (isMounted && relRes && relRes.data) {
+              const filteredRel = relRes.data
+                .filter(item => item._id !== apiArt._id && item.slug !== apiArt.slug)
+                .slice(0, 3)
+                .map(item => ({
+                  id: item.slug || item._id,
+                  title: item.title,
+                  category: item.category,
+                  featuredImage: item.featuredImage || '/img/index_800x400-image01.jpg'
+                }));
+              if (filteredRel.length > 0) {
+                setRelated(filteredRel);
+              } else {
+                setRelated(getRelatedArticles(id, apiArt.category, 3));
+              }
+            }
+          } catch {
+            setRelated(getRelatedArticles(id, apiArt.category, 3));
+          }
+
+          setLoading(false);
+          return;
+        }
+      } catch (err) {
+        // Backend lookup had no match, fallback to local store
+      }
+
+      // 2. Fallback to local store
+      const found = getArticleById(id);
+      if (isMounted && found) {
+        setArticle(found);
+        incrementArticleViews(found.id);
+        const rel = getRelatedArticles(found.id, found.category, 3);
+        setRelated(rel);
+      }
+      if (isMounted) setLoading(false);
     }
+
+    fetchArticle();
+
+    return () => {
+      isMounted = false;
+    };
   }, [id]);
+
+  if (loading) {
+    return (
+      <div className="container" style={{ padding: '90px 15px', textAlign: 'center' }}>
+        <div style={{ display: 'inline-block', width: '40px', height: '40px', border: '3px solid #f3f3f3', borderTop: '3px solid #b71c1c', borderRadius: '50%', animation: 'spin 0.8s linear infinite', marginBottom: '16px' }}></div>
+        <h4 style={{ color: '#000000', fontWeight: '800', fontFamily: "'Mukta Mahee', sans-serif" }}>ਖ਼ਬਰ ਲੋਡ ਹੋ ਰਹੀ ਹੈ...</h4>
+      </div>
+    );
+  }
 
   if (!article) {
     return (
@@ -158,27 +244,38 @@ export default function NewsDetailPage() {
                 </div>
               </div>
 
-              {/* Featured Image */}
+              {/* Featured Media (Photo or Video Player) */}
               <div
                 style={{
                   position: 'relative',
                   width: '100%',
-                  maxHeight: '440px',
                   borderRadius: '4px',
                   overflow: 'hidden',
                   marginBottom: '24px',
                   backgroundColor: '#000'
                 }}
               >
-                <img
-                  src={article.featuredImage}
-                  alt={article.title}
-                  style={{ width: '100%', maxHeight: '440px', objectFit: 'cover', display: 'block' }}
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = '/img/index_800x400-image01.jpg';
-                  }}
-                />
+                {article.videoUrl || article.mediaType === 'video' ? (
+                  <video
+                    controls
+                    playsInline
+                    src={article.videoUrl || article.featuredImage}
+                    poster={article.featuredImage && !article.featuredImage.endsWith('.mp4') ? article.featuredImage : undefined}
+                    style={{ width: '100%', maxHeight: '480px', display: 'block', backgroundColor: '#000000' }}
+                  >
+                    Your browser does not support the video tag.
+                  </video>
+                ) : (
+                  <img
+                    src={article.featuredImage}
+                    alt={article.title}
+                    style={{ width: '100%', maxHeight: '440px', objectFit: 'cover', display: 'block' }}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = '/img/index_800x400-image01.jpg';
+                    }}
+                  />
+                )}
               </div>
 
               {/* Full Article Content */}
@@ -427,34 +524,55 @@ export default function NewsDetailPage() {
 
             {/* Editor's Desk Contact */}
             <div
+              className="editors-desk-contact"
               style={{
                 backgroundColor: '#1c2d5a',
-                color: '#ffffff',
-                borderRadius: '6px',
-                padding: '20px',
-                marginBottom: '25px'
+                borderRadius: '8px',
+                padding: '22px 20px',
+                marginBottom: '25px',
+                boxShadow: '0 4px 14px rgba(28, 45, 90, 0.25)',
+                border: '1px solid rgba(255,255,255,0.1)'
               }}
             >
-              <h4 style={{ margin: '0 0 8px', fontSize: '16px', fontWeight: '800', color: '#ebb10d' }}>
+              <h4
+                className="editors-desk-title"
+                style={{
+                  margin: '0 0 10px',
+                  fontSize: '17px',
+                  fontWeight: '800',
+                  color: '#ffffff'
+                }}
+              >
                 ਖ਼ਬਰਾਂ ਭੇਜੋ ਜਾਂ ਸੰਪਰਕ ਕਰੋ
               </h4>
-              <p style={{ fontSize: '12.5px', lineHeight: '1.5', color: '#e2e8f0', margin: '0 0 14px' }}>
+              <p
+                className="editors-desk-desc"
+                style={{
+                  fontSize: '13px',
+                  lineHeight: '1.6',
+                  color: '#f1f5f9',
+                  margin: '0 0 16px'
+                }}
+              >
                 ਜੇਕਰ ਤੁਹਾਡੇ ਕੋਲ ਕੋਈ ਜ਼ਮੀਨੀ ਖ਼ਬਰ ਜਾਂ ਜਾਣਕਾਰੀ ਹੈ ਤਾਂ ਸਾਡੀ ਸੰਪਾਦਕੀ ਟੀਮ ਨਾਲ ਸਾਂਝੀ ਕਰੋ।
               </p>
               <Link
                 to="/contact"
                 style={{
-                  display: 'inline-block',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
                   backgroundColor: '#ebb10d',
-                  color: '#111317',
-                  padding: '6px 14px',
-                  borderRadius: '3px',
+                  color: '#0f172a',
+                  padding: '8px 16px',
+                  borderRadius: '4px',
                   fontWeight: '800',
-                  fontSize: '12px',
-                  textDecoration: 'none'
+                  fontSize: '12.5px',
+                  textDecoration: 'none',
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.2)'
                 }}
               >
-                ਸੰਪਰਕ ਫਾਰਮ ਭਰੋ <i className="fa fa-arrow-right"></i>
+                <span>ਸੰਪਰਕ ਫ਼ਾਰਮ ਭਰੋ</span> <i className="fa fa-arrow-right"></i>
               </Link>
             </div>
           </div>

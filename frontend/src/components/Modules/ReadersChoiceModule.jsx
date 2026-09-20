@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { articleAPI } from '../../services/api';
 import { getReadersChoiceTop10 } from '../../services/articleStore';
 
 const defaultTopArticles = [
@@ -18,9 +19,30 @@ export default function ReadersChoiceModule() {
   const [topArticles, setTopArticles] = useState(defaultTopArticles);
 
   useEffect(() => {
-    const loadTopNews = () => {
+    let isMounted = true;
+
+    const loadTopNews = async () => {
+      try {
+        const res = await articleAPI.getReadersChoice();
+        if (isMounted && res && res.data && res.data.length > 0) {
+          const fromApi = res.data.map((item, idx) => ({
+            id: item.slug || item._id,
+            rank: String(idx + 1).padStart(2, '0'),
+            title: item.title,
+            category: item.category === 'punjab' ? (item.punjabRegion || 'ਪੰਜਾਬ') : item.category,
+            views: item.views || 1000
+          }));
+
+          const combined = [...fromApi, ...defaultTopArticles.slice(fromApi.length)].slice(0, 10);
+          setTopArticles(combined);
+          return;
+        }
+      } catch (err) {
+        // Fallback
+      }
+
       const top = getReadersChoiceTop10();
-      if (top && top.length > 0) {
+      if (isMounted && top && top.length > 0) {
         setTopArticles(top);
       }
     };
@@ -29,6 +51,7 @@ export default function ReadersChoiceModule() {
     window.addEventListener('storage', loadTopNews);
     window.addEventListener('punjab_articles_updated', loadTopNews);
     return () => {
+      isMounted = false;
       window.removeEventListener('storage', loadTopNews);
       window.removeEventListener('punjab_articles_updated', loadTopNews);
     };

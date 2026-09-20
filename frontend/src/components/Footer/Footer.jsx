@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import blackLogo from '../../assets/punjab-files-black-logo.jpeg';
 
 export default function Footer() {
@@ -16,34 +17,34 @@ export default function Footer() {
     { title: 'ਪੰਜਾਬ ਫਾਈਲਜ਼ ਲਾਈਵ ਨਿਊਜ਼ ਬੁਲੇਟਿਨ ਹਰ ਪਲ ਤੁਹਾਡੇ ਨਾਲ।', img: '/img/index_370x185-image16.jpg' }
   ];
 
+  // Tags matching the Navbar categories and dropdown sections
   const tags = [
-    'ਖ਼ਬਰਾਂ',
-    'ਖੇਡਾਂ',
-    'ਪੰਜਾਬ',
-    'ਰਾਜਨੀਤੀ',
-    'ਸਿਹਤ',
-    'ਵਪਾਰ',
-    'ਸੈਰ-ਸਪਾਟਾ',
-    'ਮਨੋਰੰਜਨ',
-    'ਕਿਸਾਨੀ',
-    'ਦੇਸ਼-ਵਿਦੇਸ਼',
-    'ਲਾਈਵ ਟੀਵੀ',
-    'ਕਬੱਡੀ',
-    'ਕ੍ਰਿਕਟ',
-    'ਸੱਭਿਆਚਾਰ',
-    'ਵਿਸ਼ੇਸ਼ ਰਿਪੋਰਟ',
-    'ਮੌਸਮ',
-    'ਸਿੱਖਿਆ',
-    'ਤਕਨਾਲੋਜੀ',
-    'ਗੁਰਬਾਣੀ',
-    'ਸਿਨੇਮਾ'
+    { name: 'ਮੁੱਖ ਪੰਨਾ', href: '/' },
+    { name: 'ਪੰਜਾਬ', href: '#punjab' },
+    { name: 'ਧਰਮ', href: '#religion' },
+    { name: 'ਦੇਸ਼-ਵਿਦੇਸ਼', href: '#world' },
+    { name: 'ਖੇਡਾਂ', href: '#sport' },
+    { name: 'ਸਿਹਤ', href: '#health' },
+    { name: 'ਸੈਰ-ਸਪਾਟਾ', href: '#travel' },
+    { name: 'ਮਨੋਰੰਜਨ', href: '#art-entertainment' },
+    { name: 'ਲਾਈਵ ਟੀਵੀ', href: '#live-tv' },
+    { name: 'ਹੋਰ', href: '#more' },
+    { name: 'ਪੰਨੇ', href: '#pages' },
+    { name: 'ਸੰਪਰਕ', href: '/contact' },
+    { name: 'ਮੇਗਾ ਮੇਨੂ', href: '#mega' },
+    { name: 'ਮਾਝਾ', href: '#punjab' },
+    { name: 'ਮਾਲਵਾ', href: '#punjab' },
+    { name: 'ਦੋਆਬਾ', href: '#punjab' },
+    { name: 'ਆਟੋ / ਗੱਡੀਆਂ', href: '#autos' },
+    { name: 'ਵਪਾਰ ਤੇ ਆਫਰ', href: '#deals' },
+    { name: 'ਵਾਤਾਵਰਨ', href: '#environment' }
   ];
 
   return (
-    <footer id="footer">
-      <div id="parallax-section2">
-        <div className="bg parallax2 overlay img-overlay2">
-          <div className="container">
+    <footer id="footer" style={{ backgroundColor: '#000000', background: '#000000' }}>
+      <div id="parallax-section2" style={{ backgroundColor: '#000000', background: '#000000', backgroundImage: 'none' }}>
+        <div className="bg overlay" style={{ backgroundColor: '#000000', background: '#000000', backgroundImage: 'none' }}>
+          <div className="container" style={{ paddingTop: '50px', paddingBottom: '40px' }}>
             <div className="row no-gutter">
               {/* Column 1: About Us with Punjab Files Black Logo */}
               <div className="col-sm-6 col-md-3">
@@ -52,7 +53,7 @@ export default function Footer() {
                   ਪੰਜਾਬ ਫਾਈਲਜ਼ 24 ਘੰਟੇ ਨਿਰਪੱਖ, ਸੱਚੀਆਂ ਅਤੇ ਭਰੋਸੇਯੋਗ ਖ਼ਬਰਾਂ ਪਹੁੰਚਾਉਣ ਲਈ ਵਚਨਬੱਧ ਹੈ। ਅਸੀਂ ਤੁਹਾਨੂੰ ਜ਼ਮੀਨੀ ਹਕੀਕਤਾਂ, ਤਾਜ਼ਾ ਸਮਾਚਾਰ ਅਤੇ ਸਾਰਥਕ ਵਿਸ਼ਲੇਸ਼ਣ ਮੁਹੱਈਆ ਕਰਵਾਉਂਦੇ ਹਾਂ।
                 </p>
                 <div className="site-logo" style={{ marginTop: '18px' }}>
-                  <a href="/" style={{ textDecoration: 'none', display: 'inline-block' }}>
+                  <Link to="/" style={{ textDecoration: 'none', display: 'inline-block' }}>
                     <img
                       src={blackLogo}
                       alt="Punjab Files Logo"
@@ -67,7 +68,7 @@ export default function Footer() {
                         marginBottom: '10px'
                       }}
                     />
-                  </a>
+                  </Link>
                 </div>
               </div>
 
@@ -121,14 +122,20 @@ export default function Footer() {
                 </div>
               </div>
 
-              {/* Column 4: Tags Cloud in Punjabi */}
+              {/* Column 4: Tags Cloud matching Navbar */}
               <div className="col-sm-6 col-md-3">
                 <h3 className="title-left title-style03 underline03">ਟੈਗਸ</h3>
                 <div className="tagcloud">
                   {tags.map((tag, idx) => (
-                    <a href={`#${tag}`} key={idx}>
-                      {tag}
-                    </a>
+                    tag.href.startsWith('/') ? (
+                      <Link to={tag.href} key={idx}>
+                        {tag.name}
+                      </Link>
+                    ) : (
+                      <a href={tag.href} key={idx}>
+                        {tag.name}
+                      </a>
+                    )
                   ))}
                 </div>
               </div>

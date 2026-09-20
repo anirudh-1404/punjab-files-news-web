@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { articleAPI } from '../../services/api';
 
 const sportsArticles = [
   {
@@ -36,6 +37,27 @@ const sportsArticles = [
 ];
 
 export default function SportsModule() {
+  const [articles, setArticles] = useState(sportsArticles);
+
+  useEffect(() => {
+    let isMounted = true;
+    articleAPI.getPublished({ category: 'sport' }).then((res) => {
+      if (isMounted && res && res.data && res.data.length > 0) {
+        const fromApi = res.data.map(item => ({
+          id: item.slug || item._id,
+          slug: item.slug,
+          title: item.title,
+          category: item.category === 'sport' || item.category === 'sports' ? 'ਖੇਡਾਂ' : item.category,
+          time: item.publishedAt ? new Date(item.publishedAt).toLocaleTimeString('pa-IN', { hour: '2-digit', minute: '2-digit' }) : 'ਤਾਜ਼ਾ',
+          img: item.featuredImage || '/img/index_800x400-image18.jpg',
+          desc: item.excerpt || (item.content ? item.content.substring(0, 110) + '...' : '')
+        }));
+        setArticles([...fromApi, ...sportsArticles.slice(fromApi.length)].slice(0, 4));
+      }
+    }).catch(() => {});
+    return () => { isMounted = false; };
+  }, []);
+
   return (
     <section className="module" id="sport" style={{ backgroundColor: '#ffffff', paddingTop: '14px', paddingBottom: '20px', borderBottom: '1px solid #e2e8f0' }}>
       <div className="container">
@@ -57,7 +79,7 @@ export default function SportsModule() {
 
         {/* 4-Column Sports News Cards */}
         <div className="row">
-          {sportsArticles.map((item) => (
+          {articles.map((item) => (
             <div className="col-md-3 col-sm-6 col-xs-12" key={item.id} style={{ marginBottom: '16px' }}>
               <div
                 style={{
@@ -73,7 +95,7 @@ export default function SportsModule() {
               >
                 {/* Image */}
                 <div style={{ position: 'relative', width: '100%', height: '160px', overflow: 'hidden', backgroundColor: '#edf2f7' }}>
-                  <a href={`#${item.id}`} style={{ display: 'block', width: '100%', height: '100%' }}>
+                  <a href={`/news/${item.id}`} style={{ display: 'block', width: '100%', height: '100%' }}>
                     <img
                       src={item.img}
                       alt={item.title}
@@ -120,7 +142,7 @@ export default function SportsModule() {
                       color: '#000000'
                     }}
                   >
-                    <a href={`#${item.id}`} style={{ color: '#000000', textDecoration: 'none', fontWeight: '800' }}>
+                    <a href={`/news/${item.id}`} style={{ color: '#000000', textDecoration: 'none', fontWeight: '800' }}>
                       {item.title}
                     </a>
                   </h4>

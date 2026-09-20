@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { breakingAPI } from '../../services/api';
 import { getStoredBreaking } from '../../services/articleStore';
 import { getLivePunjabiNews } from '../../services/newsService';
 
@@ -8,37 +9,55 @@ export default function HeaderBreakingTicker() {
   useEffect(() => {
     let isMounted = true;
 
-    // Load from persistent store first
-    const stored = getStoredBreaking();
-    if (stored && stored.length > 0) {
-      setNews(stored);
-    }
-
-    // Augment with fresh live Punjabi RSS items
-    getLivePunjabiNews().then((data) => {
-      if (isMounted && data && data.breaking && data.breaking.length > 0) {
-        const liveItems = data.breaking.map((item, idx) => ({
-          id: 'live-' + idx,
-          tag: item.source || 'ਤਾਜ਼ਾ',
-          text: item.title,
-          link: item.link || '#'
-        }));
-        // Combine CMS items first, then live RSS items
-        setNews([...stored, ...liveItems]);
+    // 1. Fetch live breaking news from backend
+    const loadBackendBreaking = async () => {
+      try {
+        const res = await breakingAPI.getBreaking();
+        if (isMounted && res.items && res.items.length > 0) {
+          const mapped = res.items.map((item) => ({
+            id: item._id,
+            tag: item.tag || 'ਪੰਜਾਬ',
+            text: item.text
+          }));
+          setNews(mapped);
+          return;
+        }
+      } catch (err) {
+        console.warn('Backend breaking fetch fallback:', err.message);
       }
-    });
 
-    // Listen to local storage changes so if admin updates breaking news in another tab or form, it syncs
-    const handleStorage = () => {
-      setNews(getStoredBreaking());
+      // Fallback: stored breaking news + live RSS
+      const stored = getStoredBreaking();
+      if (isMounted && stored && stored.length > 0) {
+        setNews(stored);
+      }
+
+      getLivePunjabiNews().then((data) => {
+        if (isMounted && data && data.breaking && data.breaking.length > 0) {
+          const liveItems = data.breaking.map((item, idx) => ({
+            id: 'live-' + idx,
+            tag: item.source || 'ਤਾਜ਼ਾ',
+            text: item.title
+          }));
+          setNews([...stored, ...liveItems]);
+        }
+      });
     };
-    window.addEventListener('storage', handleStorage);
-    window.addEventListener('punjab_breaking_updated', handleStorage);
+
+    loadBackendBreaking();
+
+    // Re-fetch when breaking news is updated from dashboard
+    const handleUpdate = () => {
+      loadBackendBreaking();
+    };
+
+    window.addEventListener('storage', handleUpdate);
+    window.addEventListener('punjab_breaking_updated', handleUpdate);
 
     return () => {
       isMounted = false;
-      window.removeEventListener('storage', handleStorage);
-      window.removeEventListener('punjab_breaking_updated', handleStorage);
+      window.removeEventListener('storage', handleUpdate);
+      window.removeEventListener('punjab_breaking_updated', handleUpdate);
     };
   }, []);
 
