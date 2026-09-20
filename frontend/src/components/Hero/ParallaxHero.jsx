@@ -6,7 +6,6 @@ export default function ParallaxHero() {
     <section
       className="tv-studio-hero-section"
       style={{
-        backgroundColor: '#ffffff',
         paddingTop: '8px',
         paddingBottom: '20px',
         borderBottom: '1px solid #e2e8f0'

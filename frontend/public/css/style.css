@@ -258,7 +258,8 @@ a:focus, a:hover {
 }
 .container {
 	max-width: 1248px;
-	padding: 0;
+	padding: 0 15px;
+	box-sizing: border-box;
 	width: 100%;
 	position: relative;
 }

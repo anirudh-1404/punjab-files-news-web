@@ -64,8 +64,8 @@ export default function LogoBanner() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '10px 0 8px',
-        width: '100%'
+        padding: '8px 0',
+        flex: 1
       }}
     >
       {/* Left: Prominent Brand Logo (No Tagline) */}

@@ -115,7 +115,7 @@
 	 .dropdown-menu > li > a:hover { background-color: #FFF; text-decoration: none; color: #FFF; border-radius: 1px; }
 	 .open .dropdown-menu { display: block!important; }
 	 .top-menu .right-top-menu .contact, .top-menu .right-top-menu .about, .address, .clock { display: none; }
-	 #fixed-navbar, .header-add-place .desktop-add, .header-logo { display: none !important; }
+	 .header-add-place .desktop-add, .header-logo { display: none !important; }
 	 .sidenav { display: block; }
 	 .navbar-default .navbar-toggle { margin-top: 20px; }
 	 .navbar-default { background-color: rgba(255, 255, 255, .95); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.118); }
