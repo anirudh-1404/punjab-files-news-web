@@ -350,3 +350,37 @@ export const mukhwakAPI = {
   }
 };
 
+// -------------------------------------------------------------
+// 7. CONTACT / FEEDBACK QUERIES API
+// -------------------------------------------------------------
+export const contactAPI = {
+  // Public - submit contact message
+  submitMessage: async (formData) => {
+    return apiFetch('/contact', {
+      method: 'POST',
+      body: JSON.stringify(formData)
+    });
+  },
+
+  // Protected - get all contact messages (Admin / Editor)
+  getMessages: async (status = '') => {
+    const query = status ? `?status=${status}` : '';
+    return apiFetch(`/contact${query}`);
+  },
+
+  // Protected - update message status (read / unread)
+  updateStatus: async (id, status) => {
+    return apiFetch(`/contact/${id}/status`, {
+      method: 'PUT',
+      body: JSON.stringify({ status })
+    });
+  },
+
+  // Protected - delete message
+  deleteMessage: async (id) => {
+    return apiFetch(`/contact/${id}`, {
+      method: 'DELETE'
+    });
+  }
+};
+

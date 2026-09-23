@@ -100,13 +100,13 @@ export default function OverviewStatsView({ user, onNavigate }) {
   }
 
   return (
-    <div style={{ backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e2e8f0', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+    <div className="admin-cms-card" style={{ backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e2e8f0', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
       {/* Header */}
-      <div style={{ borderBottom: '2px solid #b71c1c', paddingBottom: '14px', marginBottom: '22px' }}>
-        <h3 style={{ margin: 0, fontSize: '20px', fontWeight: '800', color: '#0f172a' }}>
+      <div style={{ borderBottom: '2px solid #b71c1c', paddingBottom: '14px', marginBottom: '20px' }}>
+        <h3 style={{ margin: 0, fontSize: '19px', fontWeight: '800', color: '#0f172a', lineHeight: 1.25 }}>
           ਨਿਊਜ਼ਰੂਮ ਓਵਰਵਿਊ (Newsroom Overview & Performance)
         </h3>
-        <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#64748b' }}>
+        <p style={{ margin: '4px 0 0', fontSize: '12.5px', color: '#64748b' }}>
           ਪੰਜਾਬ ਫਾਈਲਜ਼ ਪੋਰਟਲ ਦਾ ਰੀਅਲ-ਟਾਈਮ ਡਾਟਾ ਅਤੇ ਕਾਰਗੁਜ਼ਾਰੀ ਸੰਖੇਪ।
         </p>
       </div>
@@ -117,8 +117,8 @@ export default function OverviewStatsView({ user, onNavigate }) {
         </div>
       ) : (
         <>
-          {/* Stats Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '16px', marginBottom: '25px' }}>
+          {/* Stats Grid - 2 cols on mobile, 4-5 cols on desktop */}
+          <div className="admin-stats-grid">
             {cards.map((c, i) => (
               <div
                 key={i}
@@ -126,27 +126,27 @@ export default function OverviewStatsView({ user, onNavigate }) {
                   backgroundColor: c.bg,
                   border: '1px solid #e2e8f0',
                   borderRadius: '6px',
-                  padding: '18px 16px',
+                  padding: '16px 14px',
                   boxShadow: '0 1px 3px rgba(0,0,0,0.04)'
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                  <span style={{ fontSize: '12px', fontWeight: '700', color: '#475569' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+                  <span style={{ fontSize: '12px', fontWeight: '700', color: '#475569', lineHeight: 1.2 }}>
                     {c.title}
                   </span>
-                  <i className={`fa ${c.icon}`} style={{ fontSize: '18px', color: c.color }}></i>
+                  <i className={`fa ${c.icon}`} style={{ fontSize: '16px', color: c.color }}></i>
                 </div>
-                <div style={{ fontSize: '28px', fontWeight: '800', color: c.color, margin: '2px 0' }}>
+                <div className="stat-value" style={{ fontSize: '26px', fontWeight: '800', color: c.color, margin: '2px 0' }}>
                   {c.value}
                 </div>
-                <div style={{ fontSize: '11px', color: '#94a3b8' }}>{c.sub}</div>
+                <div style={{ fontSize: '10.5px', color: '#94a3b8' }}>{c.sub}</div>
               </div>
             ))}
           </div>
 
           {/* Quick Action Buttons */}
-          <div style={{ backgroundColor: '#f8fafc', padding: '16px 20px', borderRadius: '6px', border: '1px solid #e2e8f0', display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
-            <span style={{ fontSize: '13px', fontWeight: '700', color: '#1e293b', marginRight: '6px' }}>
+          <div className="admin-quick-actions-bar">
+            <span className="quick-action-title" style={{ fontSize: '13px', fontWeight: '700', color: '#1e293b', marginRight: '4px' }}>
               ਤੇਜ਼ ਕਾਰਵਾਈਆਂ (Quick Actions):
             </span>
 
@@ -154,21 +154,10 @@ export default function OverviewStatsView({ user, onNavigate }) {
               <button
                 type="button"
                 onClick={() => onNavigate('all_news')}
-                style={{
-                  backgroundColor: '#b71c1c',
-                  color: '#ffffff',
-                  border: 'none',
-                  padding: '8px 16px',
-                  borderRadius: '4px',
-                  fontSize: '12.5px',
-                  fontWeight: '700',
-                  cursor: 'pointer',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px'
-                }}
+                className="quick-action-btn"
+                style={{ backgroundColor: '#b71c1c', color: '#ffffff' }}
               >
-                <i className="fa fa-newspaper-o"></i> ਸਾਰੀਆਂ ਖ਼ਬਰਾਂ (All News & Categories)
+                <i className="fa fa-newspaper-o"></i> <span>ਸਾਰੀਆਂ ਖ਼ਬਰਾਂ (All News)</span>
               </button>
             )}
 
@@ -176,21 +165,10 @@ export default function OverviewStatsView({ user, onNavigate }) {
               <button
                 type="button"
                 onClick={() => onNavigate('users')}
-                style={{
-                  backgroundColor: '#1c2d5a',
-                  color: '#ffffff',
-                  border: 'none',
-                  padding: '8px 16px',
-                  borderRadius: '4px',
-                  fontSize: '12.5px',
-                  fontWeight: '700',
-                  cursor: 'pointer',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px'
-                }}
+                className="quick-action-btn"
+                style={{ backgroundColor: '#1c2d5a', color: '#ffffff' }}
               >
-                <i className="fa fa-users"></i> ਸਟਾਫ਼ ਪ੍ਰਬੰਧਨ (Staff Management)
+                <i className="fa fa-users"></i> <span>ਸਟਾਫ਼ ਪ੍ਰਬੰਧਨ (Staff)</span>
               </button>
             )}
 
@@ -198,21 +176,10 @@ export default function OverviewStatsView({ user, onNavigate }) {
               <button
                 type="button"
                 onClick={() => onNavigate('review')}
-                style={{
-                  backgroundColor: '#d97706',
-                  color: '#ffffff',
-                  border: 'none',
-                  padding: '8px 16px',
-                  borderRadius: '4px',
-                  fontSize: '12.5px',
-                  fontWeight: '700',
-                  cursor: 'pointer',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px'
-                }}
+                className="quick-action-btn"
+                style={{ backgroundColor: '#d97706', color: '#ffffff' }}
               >
-                <i className="fa fa-clock-o"></i> {user?.role === 'admin' ? 'ਅੰਤਿਮ ਪ੍ਰਵਾਨਗੀ ਡੈਸਕ' : 'ਸੰਪਾਦਕੀ ਸਮੀਖਿਆ ਡੈਸਕ'} {stats.pendingCount > 0 ? `(${stats.pendingCount})` : ''}
+                <i className="fa fa-clock-o"></i> <span>{user?.role === 'admin' ? 'ਅੰਤਿਮ ਪ੍ਰਵਾਨਗੀ' : 'ਸੰਪਾਦਕੀ ਸਮੀਖਿਆ'} {stats.pendingCount > 0 ? `(${stats.pendingCount})` : ''}</span>
               </button>
             )}
 
@@ -220,21 +187,10 @@ export default function OverviewStatsView({ user, onNavigate }) {
               <button
                 type="button"
                 onClick={() => onNavigate('breaking')}
-                style={{
-                  backgroundColor: '#334155',
-                  color: '#ffffff',
-                  border: 'none',
-                  padding: '8px 16px',
-                  borderRadius: '4px',
-                  fontSize: '12.5px',
-                  fontWeight: '700',
-                  cursor: 'pointer',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px'
-                }}
+                className="quick-action-btn"
+                style={{ backgroundColor: '#334155', color: '#ffffff' }}
               >
-                <i className="fa fa-bolt"></i> ਬਰੇਕਿੰਗ ਨਿਊਜ਼ (Breaking News)
+                <i className="fa fa-bolt"></i> <span>ਬਰੇਕਿੰਗ ਨਿਊਜ਼ (Breaking)</span>
               </button>
             )}
 
@@ -242,21 +198,10 @@ export default function OverviewStatsView({ user, onNavigate }) {
               <button
                 type="button"
                 onClick={() => onNavigate('mukhwak')}
-                style={{
-                  backgroundColor: '#b45309',
-                  color: '#ffffff',
-                  border: 'none',
-                  padding: '8px 16px',
-                  borderRadius: '4px',
-                  fontSize: '12.5px',
-                  fontWeight: '700',
-                  cursor: 'pointer',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px'
-                }}
+                className="quick-action-btn"
+                style={{ backgroundColor: '#b45309', color: '#ffffff' }}
               >
-                <i className="fa fa-book"></i> ਮੁੱਖ ਵਾਕ (Hukamnama)
+                <i className="fa fa-book"></i> <span>ਮੁੱਖ ਵਾਕ (Hukamnama)</span>
               </button>
             )}
 
@@ -264,40 +209,34 @@ export default function OverviewStatsView({ user, onNavigate }) {
               href="/"
               target="_blank"
               rel="noreferrer"
+              className="quick-action-btn"
               style={{
                 backgroundColor: '#ffffff',
                 color: '#1e293b',
                 border: '1px solid #cbd5e1',
-                padding: '8px 16px',
-                borderRadius: '4px',
-                fontSize: '12.5px',
-                fontWeight: '700',
-                textDecoration: 'none',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px'
+                textDecoration: 'none'
               }}
             >
-              <i className="fa fa-external-link"></i> ਲਾਈਵ ਵੈੱਬਸਾਈਟ ਦੇਖੋ
+              <i className="fa fa-external-link"></i> <span>ਲਾਈਵ ਸਾਈਟ ਦੇਖੋ</span>
             </a>
           </div>
 
           {/* ========================================================= */}
           {/* READERS' CHOICE TOP 10 LEADERBOARD SECTION */}
           {/* ========================================================= */}
-          <div style={{ marginTop: '28px', backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e2e8f0', overflow: 'hidden' }}>
+          <div style={{ marginTop: '24px', backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e2e8f0', overflow: 'hidden' }}>
             {/* Section Header */}
-            <div style={{ padding: '16px 20px', borderBottom: '2px solid #b71c1c', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', backgroundColor: '#f8fafc' }}>
+            <div style={{ padding: '14px 18px', borderBottom: '2px solid #b71c1c', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', backgroundColor: '#f8fafc' }}>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ backgroundColor: '#fee2e2', color: '#b71c1c', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px' }}>
+                  <span style={{ backgroundColor: '#fee2e2', color: '#b71c1c', width: '26px', height: '26px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px' }}>
                     <i className="fa fa-fire"></i>
                   </span>
-                  <h4 style={{ margin: 0, fontSize: '16px', fontWeight: '800', color: '#0f172a' }}>
+                  <h4 style={{ margin: 0, fontSize: '15.5px', fontWeight: '800', color: '#0f172a' }}>
                     ਪਾਠਕਾਂ ਦੀ ਪਸੰਦ (Readers' Choice — Top 10 Most-Read Articles)
                   </h4>
                 </div>
-                <p style={{ margin: '3px 0 0', fontSize: '12px', color: '#64748b' }}>
+                <p style={{ margin: '3px 0 0', fontSize: '11.5px', color: '#64748b' }}>
                   ਵੈੱਬਸਾਈਟ 'ਤੇ ਸਭ ਤੋਂ ਵੱਧ ਵਿਊਜ਼ ਪ੍ਰਾਪਤ ਕਰਨ ਵਾਲੀਆਂ ਪ੍ਰਮੁੱਖ ਖ਼ਬਰਾਂ (Highest Views Leaderboard)।
                 </p>
               </div>
@@ -310,9 +249,9 @@ export default function OverviewStatsView({ user, onNavigate }) {
                     backgroundColor: 'transparent',
                     color: '#b71c1c',
                     border: '1px solid #fca5a5',
-                    padding: '6px 12px',
+                    padding: '5px 12px',
                     borderRadius: '4px',
-                    fontSize: '12px',
+                    fontSize: '11.5px',
                     fontWeight: '700',
                     cursor: 'pointer',
                     display: 'inline-flex',
@@ -326,159 +265,271 @@ export default function OverviewStatsView({ user, onNavigate }) {
               )}
             </div>
 
-            {/* Leaderboard Table */}
+            {/* Leaderboard Body */}
             {readersChoice.length === 0 ? (
               <div style={{ padding: '30px', textAlign: 'center', color: '#94a3b8', fontSize: '13px' }}>
                 ਅਜੇ ਤੱਕ ਕੋਈ ਲਾਈਵ ਖ਼ਬਰਾਂ ਦਾ ਵਿਊਜ਼ ਡਾਟਾ ਉਪਲਬਧ ਨਹੀਂ ਹੈ।
               </div>
             ) : (
-              <div style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
-                  <thead>
-                    <tr style={{ backgroundColor: '#f1f5f9', borderBottom: '1px solid #cbd5e1', color: '#475569' }}>
-                      <th style={{ padding: '10px 14px', width: '60px', fontWeight: '800', textAlign: 'center' }}>ਰੈਂਕ</th>
-                      <th style={{ padding: '10px 14px', fontWeight: '800' }}>ਖ਼ਬਰ ਦਾ ਸਿਰਲੇਖ</th>
-                      <th style={{ padding: '10px 12px', fontWeight: '800' }}>ਕੈਟੇਗਰੀ</th>
-                      <th style={{ padding: '10px 12px', fontWeight: '800' }}>ਭਾਸ਼ਾ</th>
-                      <th style={{ padding: '10px 12px', fontWeight: '800' }}>ਪੱਤਰਕਾਰ</th>
-                      <th style={{ padding: '10px 14px', fontWeight: '800', textAlign: 'center' }}>ਪਾਠਕ ਵਿਊਜ਼</th>
-                      <th style={{ padding: '10px 14px', fontWeight: '800', textAlign: 'right' }}>ਵੇਖੋ</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {readersChoice.map((art, idx) => {
-                      const rank = idx + 1;
-                      let badgeStyle = {
-                        bg: '#f8fafc',
-                        border: '1px solid #e2e8f0',
-                        color: '#64748b'
-                      };
-                      if (rank === 1) {
-                        badgeStyle = {
-                          bg: '#fef3c7',
-                          border: '1.5px solid #f59e0b',
-                          color: '#b45309',
-                          boxShadow: '0 1px 3px rgba(245, 158, 11, 0.25)'
+              <>
+                {/* A. DESKTOP VIEW: Full Table (Hidden on Mobile) */}
+                <div className="desktop-leaderboard-table-wrap" style={{ overflowX: 'auto' }}>
+                  <table style={{ width: '100%', minWidth: '640px', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
+                    <thead>
+                      <tr style={{ backgroundColor: '#f1f5f9', borderBottom: '1px solid #cbd5e1', color: '#475569' }}>
+                        <th style={{ padding: '10px 14px', width: '60px', fontWeight: '800', textAlign: 'center' }}>ਰੈਂਕ</th>
+                        <th style={{ padding: '10px 14px', fontWeight: '800' }}>ਖ਼ਬਰ ਦਾ ਸਿਰਲੇਖ</th>
+                        <th style={{ padding: '10px 12px', fontWeight: '800' }}>ਕੈਟੇਗਰੀ</th>
+                        <th style={{ padding: '10px 12px', fontWeight: '800' }}>ਭਾਸ਼ਾ</th>
+                        <th style={{ padding: '10px 12px', fontWeight: '800' }}>ਪੱਤਰਕਾਰ</th>
+                        <th style={{ padding: '10px 14px', fontWeight: '800', textAlign: 'center' }}>ਪਾਠਕ ਵਿਊਜ਼</th>
+                        <th style={{ padding: '10px 14px', fontWeight: '800', textAlign: 'right' }}>ਵੇਖੋ</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {readersChoice.map((art, idx) => {
+                        const rank = idx + 1;
+                        let badgeStyle = {
+                          bg: '#f8fafc',
+                          border: '1px solid #e2e8f0',
+                          color: '#64748b'
                         };
-                      } else if (rank === 2) {
-                        badgeStyle = {
-                          bg: '#f1f5f9',
-                          border: '1.5px solid #94a3b8',
-                          color: '#1e293b'
-                        };
-                      } else if (rank === 3) {
-                        badgeStyle = {
-                          bg: '#ffedd5',
-                          border: '1.5px solid #fb923c',
-                          color: '#c2410c'
-                        };
-                      }
+                        if (rank === 1) {
+                          badgeStyle = {
+                            bg: '#fef3c7',
+                            border: '1.5px solid #f59e0b',
+                            color: '#b45309',
+                            boxShadow: '0 1px 3px rgba(245, 158, 11, 0.25)'
+                          };
+                        } else if (rank === 2) {
+                          badgeStyle = {
+                            bg: '#f1f5f9',
+                            border: '1.5px solid #94a3b8',
+                            color: '#1e293b'
+                          };
+                        } else if (rank === 3) {
+                          badgeStyle = {
+                            bg: '#ffedd5',
+                            border: '1.5px solid #fb923c',
+                            color: '#c2410c'
+                          };
+                        }
 
-                      return (
-                        <tr key={art._id} style={{ borderBottom: '1px solid #f1f5f9', transition: 'background 0.15s' }}>
-                          {/* Rank (Symmetrical Circle Badge) */}
-                          <td style={{ padding: '10px 14px', textAlign: 'center', width: '60px', verticalAlign: 'middle' }}>
-                            <span
-                              style={{
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                width: '32px',
-                                height: '32px',
-                                minWidth: '32px',
-                                borderRadius: '50%',
-                                backgroundColor: badgeStyle.bg,
-                                border: badgeStyle.border,
-                                color: badgeStyle.color,
-                                fontSize: '12.5px',
-                                fontWeight: '800',
-                                lineHeight: 1,
-                                boxShadow: badgeStyle.boxShadow || 'none'
-                              }}
-                            >
-                              #{rank}
-                            </span>
-                          </td>
+                        return (
+                          <tr key={art._id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                            {/* Rank */}
+                            <td style={{ padding: '10px 14px', textAlign: 'center', width: '60px', verticalAlign: 'middle' }}>
+                              <span
+                                style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  width: '30px',
+                                  height: '30px',
+                                  minWidth: '30px',
+                                  borderRadius: '50%',
+                                  backgroundColor: badgeStyle.bg,
+                                  border: badgeStyle.border,
+                                  color: badgeStyle.color,
+                                  fontSize: '12px',
+                                  fontWeight: '800',
+                                  lineHeight: 1,
+                                  boxShadow: badgeStyle.boxShadow || 'none'
+                                }}
+                              >
+                                #{rank}
+                              </span>
+                            </td>
 
-                          {/* Title */}
-                          <td style={{ padding: '10px 14px', maxWidth: '380px' }}>
-                            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                              <img
-                                src={art.featuredImage || '/img/index_800x400-image01.jpg'}
-                                alt=""
-                                onError={(e) => { e.target.src = '/img/index_800x400-image01.jpg'; }}
-                                style={{ width: '44px', height: '32px', objectFit: 'cover', borderRadius: '4px', flexShrink: 0 }}
-                              />
+                            {/* Title */}
+                            <td style={{ padding: '10px 14px', maxWidth: '380px' }}>
+                              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                <img
+                                  src={art.featuredImage || '/img/index_800x400-image01.jpg'}
+                                  alt=""
+                                  onError={(e) => { e.target.src = '/img/index_800x400-image01.jpg'; }}
+                                  style={{ width: '44px', height: '32px', objectFit: 'cover', borderRadius: '4px', flexShrink: 0 }}
+                                />
+                                <a
+                                  href={`/news/${art.slug || art._id}`}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  style={{ fontWeight: '700', color: '#0f172a', fontSize: '13px', lineHeight: 1.3, textDecoration: 'none', cursor: 'pointer' }}
+                                  onMouseEnter={(e) => { e.currentTarget.style.color = '#b71c1c'; }}
+                                  onMouseLeave={(e) => { e.currentTarget.style.color = '#0f172a'; }}
+                                >
+                                  {art.title}
+                                </a>
+                              </div>
+                            </td>
+
+                            {/* Category */}
+                            <td style={{ padding: '10px 12px', whiteSpace: 'nowrap' }}>
+                              <span style={{ backgroundColor: '#f8fafc', color: '#1e293b', border: '1px solid #e2e8f0', padding: '2px 7px', borderRadius: '4px', fontSize: '11px', fontWeight: '700' }}>
+                                {art.category === 'punjab' ? 'ਪੰਜਾਬ' : art.category === 'religion' ? 'ਧਰਮ' : art.category === 'sports' ? 'ਖੇਡਾਂ' : art.category === 'national' ? 'ਦੇਸ਼-ਵਿਦੇਸ਼' : art.category || 'ਆਮ'}
+                              </span>
+                            </td>
+
+                            {/* Language */}
+                            <td style={{ padding: '10px 12px', whiteSpace: 'nowrap' }}>
+                              <span style={{ fontSize: '10.5px', fontWeight: '800', color: art.language === 'en' ? '#4338ca' : art.language === 'hi' ? '#c2410c' : '#b71c1c' }}>
+                                {art.language === 'en' ? 'English' : art.language === 'hi' ? 'हिंदी' : 'ਪੰਜਾਬੀ'}
+                              </span>
+                            </td>
+
+                            {/* Author */}
+                            <td style={{ padding: '10px 12px', whiteSpace: 'nowrap', color: '#475569', fontSize: '12px' }}>
+                              {art.authorName || art.author?.name || 'ਪੱਤਰਕਾਰ'}
+                            </td>
+
+                            {/* Views */}
+                            <td style={{ padding: '10px 14px', textAlign: 'center', whiteSpace: 'nowrap' }}>
+                              <span style={{ backgroundColor: '#fee2e2', color: '#b71c1c', padding: '3px 9px', borderRadius: '12px', fontSize: '12px', fontWeight: '800', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                <i className="fa fa-fire" style={{ color: '#e11d48' }}></i>
+                                {(art.views || 0).toLocaleString('en-IN')}
+                              </span>
+                            </td>
+
+                            {/* Actions */}
+                            <td style={{ padding: '10px 14px', textAlign: 'right', whiteSpace: 'nowrap' }}>
                               <a
                                 href={`/news/${art.slug || art._id}`}
                                 target="_blank"
                                 rel="noreferrer"
-                                style={{ fontWeight: '700', color: '#0f172a', fontSize: '13px', lineHeight: 1.3, textDecoration: 'none', cursor: 'pointer' }}
-                                onMouseEnter={(e) => { e.currentTarget.style.color = '#b71c1c'; }}
-                                onMouseLeave={(e) => { e.currentTarget.style.color = '#0f172a'; }}
+                                style={{
+                                  backgroundColor: '#f1f5f9',
+                                  color: '#1e293b',
+                                  border: '1px solid #cbd5e1',
+                                  padding: '4px 8px',
+                                  borderRadius: '4px',
+                                  fontSize: '11.5px',
+                                  fontWeight: '700',
+                                  textDecoration: 'none',
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '4px'
+                                }}
                               >
-                                {art.title}
+                                <span>ਵੇਖੋ</span>
+                                <i className="fa fa-external-link"></i>
                               </a>
-                            </div>
-                          </td>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
 
-                          {/* Category */}
-                          <td style={{ padding: '10px 12px', whiteSpace: 'nowrap' }}>
-                            <span style={{ backgroundColor: '#f8fafc', color: '#1e293b', border: '1px solid #e2e8f0', padding: '2px 7px', borderRadius: '4px', fontSize: '11px', fontWeight: '700' }}>
-                              {art.category === 'punjab' ? 'ਪੰਜਾਬ' : art.category === 'religion' ? 'ਧਰਮ' : art.category === 'sports' ? 'ਖੇਡਾਂ' : art.category === 'national' ? 'ਦੇਸ਼-ਵਿਦੇਸ਼' : art.category || 'ਆਮ'}
-                            </span>
-                          </td>
+                {/* B. MOBILE VIEW: Responsive Card List (Visible on Mobile <= 768px) */}
+                <div className="mobile-leaderboard-card-list">
+                  {readersChoice.map((art, idx) => {
+                    const rank = idx + 1;
+                    let rankBg = '#f8fafc';
+                    let rankBorder = '#e2e8f0';
+                    let rankColor = '#475569';
+                    if (rank === 1) { rankBg = '#fef3c7'; rankBorder = '#f59e0b'; rankColor = '#b45309'; }
+                    else if (rank === 2) { rankBg = '#f1f5f9'; rankBorder = '#94a3b8'; rankColor = '#1e293b'; }
+                    else if (rank === 3) { rankBg = '#ffedd5'; rankBorder = '#fb923c'; rankColor = '#c2410c'; }
 
-                          {/* Language */}
-                          <td style={{ padding: '10px 12px', whiteSpace: 'nowrap' }}>
-                            <span style={{ fontSize: '10.5px', fontWeight: '800', color: art.language === 'en' ? '#4338ca' : art.language === 'hi' ? '#c2410c' : '#b71c1c' }}>
-                              {art.language === 'en' ? 'English' : art.language === 'hi' ? 'हिंदी' : 'ਪੰਜਾਬੀ'}
-                            </span>
-                          </td>
-
-                          {/* Author */}
-                          <td style={{ padding: '10px 12px', whiteSpace: 'nowrap', color: '#475569', fontSize: '12px' }}>
-                            {art.authorName || art.author?.name || 'ਪੱਤਰਕਾਰ'}
-                          </td>
-
-                          {/* Views */}
-                          <td style={{ padding: '10px 14px', textAlign: 'center', whiteSpace: 'nowrap' }}>
-                            <span style={{ backgroundColor: '#fee2e2', color: '#b71c1c', padding: '3px 9px', borderRadius: '12px', fontSize: '12px', fontWeight: '800', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                              <i className="fa fa-fire" style={{ color: '#e11d48' }}></i>
-                              {(art.views || 0).toLocaleString('en-IN')}
-                            </span>
-                          </td>
-
-                          {/* Actions */}
-                          <td style={{ padding: '10px 14px', textAlign: 'right', whiteSpace: 'nowrap' }}>
-                            <a
-                              href={`/news/${art.slug || art._id}`}
-                              target="_blank"
-                              rel="noreferrer"
+                    return (
+                      <div
+                        key={art._id}
+                        style={{
+                          padding: '12px 14px',
+                          borderBottom: '1px solid #edf2f7',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '8px'
+                        }}
+                      >
+                        {/* Meta: Rank, Category, Language, Views */}
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <span
                               style={{
-                                backgroundColor: '#f1f5f9',
-                                color: '#1e293b',
-                                border: '1px solid #cbd5e1',
-                                padding: '4px 8px',
-                                borderRadius: '4px',
-                                fontSize: '11.5px',
-                                fontWeight: '700',
-                                textDecoration: 'none',
+                                width: '26px',
+                                height: '26px',
+                                borderRadius: '50%',
+                                backgroundColor: rankBg,
+                                border: `1.5px solid ${rankBorder}`,
+                                color: rankColor,
                                 display: 'inline-flex',
                                 alignItems: 'center',
-                                gap: '4px'
+                                justifyContent: 'center',
+                                fontWeight: '800',
+                                fontSize: '11.5px'
                               }}
                             >
-                              <span>ਵੇਖੋ</span>
-                              <i className="fa fa-external-link"></i>
-                            </a>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
+                              #{rank}
+                            </span>
+                            <span style={{ backgroundColor: '#f1f5f9', color: '#1e293b', padding: '2px 7px', borderRadius: '4px', fontSize: '11px', fontWeight: '700' }}>
+                              {art.category === 'punjab' ? 'ਪੰਜਾਬ' : art.category === 'religion' ? 'ਧਰਮ' : art.category === 'sports' ? 'ਖੇਡਾਂ' : art.category === 'national' ? 'ਦੇਸ਼-ਵਿਦੇਸ਼' : art.category || 'ਆਮ'}
+                            </span>
+                            <span style={{ fontSize: '10.5px', fontWeight: '800', color: art.language === 'en' ? '#4338ca' : art.language === 'hi' ? '#c2410c' : '#b71c1c' }}>
+                              {art.language === 'en' ? 'EN' : art.language === 'hi' ? 'HI' : 'ਪੰ'}
+                            </span>
+                          </div>
+                          <span style={{ backgroundColor: '#fee2e2', color: '#b71c1c', padding: '2px 8px', borderRadius: '12px', fontSize: '11.5px', fontWeight: '800', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                            <i className="fa fa-fire" style={{ color: '#e11d48' }}></i>
+                            {(art.views || 0).toLocaleString('en-IN')}
+                          </span>
+                        </div>
+
+                        {/* Title & Thumbnail */}
+                        <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                          <img
+                            src={art.featuredImage || '/img/index_800x400-image01.jpg'}
+                            alt=""
+                            onError={(e) => { e.target.src = '/img/index_800x400-image01.jpg'; }}
+                            style={{ width: '58px', height: '42px', objectFit: 'cover', borderRadius: '4px', flexShrink: 0, border: '1px solid #e2e8f0' }}
+                          />
+                          <a
+                            href={`/news/${art.slug || art._id}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            style={{
+                              fontWeight: '700',
+                              color: '#0f172a',
+                              fontSize: '13px',
+                              lineHeight: 1.35,
+                              textDecoration: 'none',
+                              flex: 1
+                            }}
+                          >
+                            {art.title}
+                          </a>
+                        </div>
+
+                        {/* Footer: Reporter & Action Link */}
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '2px' }}>
+                          <span style={{ color: '#64748b', fontSize: '11px' }}>
+                            <i className="fa fa-user-circle" style={{ marginRight: '4px' }}></i>
+                            {art.authorName || art.author?.name || 'ਪੱਤਰਕਾਰ'}
+                          </span>
+                          <a
+                            href={`/news/${art.slug || art._id}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            style={{
+                              color: '#b71c1c',
+                              fontWeight: '700',
+                              fontSize: '11.5px',
+                              textDecoration: 'none',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '4px'
+                            }}
+                          >
+                            <span>ਖ਼ਬਰ ਵੇਖੋ</span>
+                            <i className="fa fa-external-link"></i>
+                          </a>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
             )}
           </div>
         </>

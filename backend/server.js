@@ -11,6 +11,7 @@ import articleRoutes from "./routes/articleRoutes.js";
 import breakingRoutes from "./routes/breakingRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
 import mukhwakRoutes from "./routes/mukhwakRoutes.js";
+import contactRoutes from "./routes/contactRoutes.js";
 
 dotenv.config();
 
@@ -57,6 +58,7 @@ app.use("/api/articles", articleRoutes);
 app.use("/api/breaking", breakingRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/mukhwak", mukhwakRoutes);
+app.use("/api/contact", contactRoutes);
 
 // Health Check Endpoint
 app.get("/api/health", (req, res) => {

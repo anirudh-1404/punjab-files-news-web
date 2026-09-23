@@ -6,6 +6,8 @@ export default function FixedNavbar() {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('home');
   const [punjabDropdownOpen, setPunjabDropdownOpen] = useState(false);
+  const [navSearchQuery, setNavSearchQuery] = useState('');
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -182,6 +184,34 @@ export default function FixedNavbar() {
               </button>
             </li>
 
+            {/* Interactive Mobile Search Chip */}
+            <li className="category-indicator-chip visible-xs visible-sm" style={{ display: 'inline-flex', alignItems: 'center' }}>
+              <button
+                type="button"
+                onClick={() => setMobileSearchOpen((prev) => !prev)}
+                aria-label="ਖ਼ਬਰਾਂ ਖੋਜੋ"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '5px',
+                  backgroundColor: mobileSearchOpen ? '#b71c1c' : '#ffffff',
+                  color: mobileSearchOpen ? '#ffffff' : '#1c2d5a',
+                  padding: '6px 12px',
+                  borderRadius: '6px',
+                  border: mobileSearchOpen ? '1px solid #b71c1c' : '1px solid rgba(28, 45, 90, 0.4)',
+                  fontSize: '12.5px',
+                  fontWeight: '800',
+                  whiteSpace: 'nowrap',
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+                  fontFamily: "'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif"
+                }}
+              >
+                <i className={`fa fa-${mobileSearchOpen ? 'times' : 'search'}`} style={{ color: mobileSearchOpen ? '#ffffff' : '#b71c1c' }}></i>
+                <span>{mobileSearchOpen ? 'ਬੰਦ ਕਰੋ' : 'ਖੋਜ'}</span>
+              </button>
+            </li>
+
             {/* 1. Home */}
             <li className={activeSection === 'home' ? 'active' : ''}>
               <a
@@ -334,9 +364,149 @@ export default function FixedNavbar() {
                 ਸੰਪਰਕ
               </a>
             </li>
+
+            {/* 11. Desktop Integrated Search Bar */}
+            <li className="navbar-search-item hidden-xs hidden-sm" style={{ marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', paddingLeft: '8px' }}>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (navSearchQuery.trim()) {
+                    navigate(`/search?q=${encodeURIComponent(navSearchQuery.trim())}`);
+                  }
+                }}
+                style={{
+                  position: 'relative',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  margin: 0
+                }}
+              >
+                <input
+                  type="text"
+                  placeholder="ਖ਼ਬਰਾਂ ਖੋਜੋ... (Search)"
+                  value={navSearchQuery}
+                  onChange={(e) => setNavSearchQuery(e.target.value)}
+                  style={{
+                    backgroundColor: '#ffffff',
+                    color: '#0f172a',
+                    border: '1.5px solid rgba(28, 45, 90, 0.4)',
+                    borderRadius: '20px',
+                    padding: '5px 32px 5px 12px',
+                    fontSize: '12.5px',
+                    fontWeight: '600',
+                    width: '160px',
+                    transition: 'all 0.25s ease',
+                    outline: 'none',
+                    boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.06)',
+                    fontFamily: "'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif"
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.width = '220px';
+                    e.target.style.borderColor = '#1c2d5a';
+                    e.target.style.boxShadow = '0 0 0 2px rgba(28, 45, 90, 0.15)';
+                  }}
+                  onBlur={(e) => {
+                    if (!navSearchQuery) e.target.style.width = '160px';
+                    e.target.style.borderColor = 'rgba(28, 45, 90, 0.4)';
+                    e.target.style.boxShadow = 'inset 0 1px 2px rgba(0,0,0,0.06)';
+                  }}
+                />
+                <button
+                  type="submit"
+                  aria-label="Search"
+                  style={{
+                    position: 'absolute',
+                    right: '3px',
+                    background: '#1c2d5a',
+                    color: '#ffffff',
+                    border: 'none',
+                    borderRadius: '50%',
+                    width: '24px',
+                    height: '24px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    fontSize: '11px',
+                    transition: 'background-color 0.15s ease'
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#b71c1c')}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#1c2d5a')}
+                >
+                  <i className="fa fa-search"></i>
+                </button>
+              </form>
+            </li>
           </ul>
         </div>
       </div>
+
+      {/* Mobile Expandable Search Bar Panel */}
+      {mobileSearchOpen && (
+        <div
+          className="visible-xs visible-sm"
+          style={{
+            padding: '10px 14px',
+            backgroundColor: '#12141a',
+            borderTop: '2px solid #ebb10d',
+            borderBottom: '2px solid #b71c1c',
+            boxShadow: '0 6px 16px rgba(0,0,0,0.4)',
+            zIndex: 9999
+          }}
+        >
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (navSearchQuery.trim()) {
+                setMobileSearchOpen(false);
+                navigate(`/search?q=${encodeURIComponent(navSearchQuery.trim())}`);
+              }
+            }}
+            style={{ display: 'flex', gap: '8px', alignItems: 'center' }}
+          >
+            <input
+              type="text"
+              placeholder="ਕੋਈ ਵੀ ਖ਼ਬਰ ਖੋਜੋ... (e.g. ਅੰਮ੍ਰਿਤਸਰ, ਖੇਡਾਂ)"
+              value={navSearchQuery}
+              onChange={(e) => setNavSearchQuery(e.target.value)}
+              autoFocus
+              style={{
+                flex: 1,
+                padding: '9px 14px',
+                borderRadius: '6px',
+                border: '1.5px solid #ebb10d',
+                backgroundColor: '#ffffff',
+                color: '#0f172a',
+                fontSize: '13.5px',
+                outline: 'none',
+                fontFamily: "'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif"
+              }}
+            />
+            <button
+              type="submit"
+              style={{
+                backgroundColor: '#b71c1c',
+                color: '#ffffff',
+                border: 'none',
+                borderRadius: '6px',
+                padding: '9px 18px',
+                fontSize: '13.5px',
+                fontWeight: '800',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                boxShadow: '0 2px 6px rgba(183,28,28,0.4)',
+                whiteSpace: 'nowrap',
+                fontFamily: "'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif"
+              }}
+            >
+              <i className="fa fa-search"></i>
+              <span>ਲੱਭੋ</span>
+            </button>
+          </form>
+        </div>
+      )}
 
       {/* 3. Mobile Floating Region Dropdown (Rendered OUTSIDE scroll-container so overflow-x never clips it!) */}
       {punjabDropdownOpen && (

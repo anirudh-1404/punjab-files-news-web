@@ -219,7 +219,7 @@ export default function AllNewsCategoryView({ currentUser }) {
   };
 
   return (
-    <div style={{ backgroundColor: '#ffffff', borderRadius: '10px', border: '1px solid #e2e8f0', padding: '24px', boxShadow: '0 2px 10px rgba(0,0,0,0.04)' }}>
+    <div className="admin-cms-card" style={{ backgroundColor: '#ffffff', borderRadius: '10px', border: '1px solid #e2e8f0', padding: '24px', boxShadow: '0 2px 10px rgba(0,0,0,0.04)' }}>
       {/* Top Header */}
       <div style={{ borderBottom: '2px solid #b71c1c', paddingBottom: '16px', marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '14px' }}>
         <div>
@@ -268,7 +268,7 @@ export default function AllNewsCategoryView({ currentUser }) {
 
       {/* 1. Category Switcher Tabs */}
       <div style={{ marginBottom: '18px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflowX: 'auto', paddingBottom: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflowX: 'auto', paddingBottom: '8px', WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none' }}>
           {CATEGORIES.map((cat) => {
             const isActive = activeCategory === cat.id;
             return (
@@ -349,7 +349,7 @@ export default function AllNewsCategoryView({ currentUser }) {
       </div>
 
       {/* 2. Secondary Filter & Search Bar */}
-      <div style={{ backgroundColor: '#f8fafc', padding: '14px 16px', borderRadius: '8px', border: '1px solid #e2e8f0', marginBottom: '20px', display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div className="cms-filter-bar" style={{ backgroundColor: '#f8fafc', padding: '14px 16px', borderRadius: '8px', border: '1px solid #e2e8f0', marginBottom: '20px', display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'center', justifyContent: 'space-between' }}>
         {/* Search Input */}
         <div style={{ flex: '1 1 240px', position: 'relative' }}>
           <i className="fa fa-search" style={{ position: 'absolute', left: '12px', top: '11px', color: '#94a3b8' }}></i>
@@ -371,7 +371,7 @@ export default function AllNewsCategoryView({ currentUser }) {
         </div>
 
         {/* Dropdown Filters */}
-        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
+        <div className="cms-filter-dropdowns" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
           {/* Status Filter */}
           <select
             value={activeStatus}
@@ -452,202 +452,347 @@ export default function AllNewsCategoryView({ currentUser }) {
           </p>
         </div>
       ) : (
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
-            <thead>
-              <tr style={{ backgroundColor: '#f1f5f9', borderBottom: '2px solid #cbd5e1', color: '#334155' }}>
-                <th style={{ padding: '12px 10px', width: '50px', fontWeight: '800', textAlign: 'center' }}>ਨੰ:</th>
-                <th style={{ padding: '12px 14px', fontWeight: '800' }}>ਖ਼ਬਰ (News)</th>
-                <th style={{ padding: '12px 10px', fontWeight: '800' }}>ਕੈਟੇਗਰੀ</th>
-                <th style={{ padding: '12px 10px', fontWeight: '800' }}>ਭਾਸ਼ਾ</th>
-                <th style={{ padding: '12px 10px', fontWeight: '800' }}>ਪੱਤਰਕਾਰ / ਮਿਤੀ</th>
-                <th style={{ padding: '12px 10px', fontWeight: '800' }}>ਵਿਊਜ਼ (Views)</th>
-                <th style={{ padding: '12px 10px', fontWeight: '800' }}>ਸਟੇਟਸ</th>
-                <th style={{ padding: '12px 14px', fontWeight: '800', textAlign: 'right' }}>ਕਾਰਵਾਈਆਂ (Actions)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {articles.map((art, idx) => (
-                <tr key={art._id} style={{ borderBottom: '1px solid #e2e8f0', transition: 'background 0.15s' }}>
-                  {/* Sr No (Symmetrical Box) */}
-                  <td style={{ padding: '12px 10px', textAlign: 'center', width: '50px', verticalAlign: 'middle' }}>
-                    <span
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        width: '30px',
-                        height: '30px',
-                        borderRadius: '6px',
-                        backgroundColor: '#f8fafc',
-                        border: '1px solid #e2e8f0',
-                        color: '#475569',
-                        fontSize: '12px',
-                        fontWeight: '800'
-                      }}
-                    >
-                      #{idx + 1}
-                    </span>
-                  </td>
+        <>
+          {/* Desktop Table View (hidden on mobile <= 768px) */}
+          <div className="desktop-table-view" style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+            <table style={{ width: '100%', minWidth: '780px', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
+              <thead>
+                <tr style={{ backgroundColor: '#f1f5f9', borderBottom: '2px solid #cbd5e1', color: '#334155' }}>
+                  <th style={{ padding: '12px 10px', width: '50px', fontWeight: '800', textAlign: 'center' }}>ਨੰ:</th>
+                  <th style={{ padding: '12px 14px', fontWeight: '800' }}>ਖ਼ਬਰ (News)</th>
+                  <th style={{ padding: '12px 10px', fontWeight: '800' }}>ਕੈਟੇਗਰੀ</th>
+                  <th style={{ padding: '12px 10px', fontWeight: '800' }}>ਭਾਸ਼ਾ</th>
+                  <th style={{ padding: '12px 10px', fontWeight: '800' }}>ਪੱਤਰਕਾਰ / ਮਿਤੀ</th>
+                  <th style={{ padding: '12px 10px', fontWeight: '800' }}>ਵਿਊਜ਼ (Views)</th>
+                  <th style={{ padding: '12px 10px', fontWeight: '800' }}>ਸਟੇਟਸ</th>
+                  <th style={{ padding: '12px 14px', fontWeight: '800', textAlign: 'right' }}>ਕਾਰਵਾਈਆਂ (Actions)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {articles.map((art, idx) => (
+                  <tr key={art._id} style={{ borderBottom: '1px solid #e2e8f0', transition: 'background 0.15s' }}>
+                    {/* Sr No (Symmetrical Box) */}
+                    <td style={{ padding: '12px 10px', textAlign: 'center', width: '50px', verticalAlign: 'middle' }}>
+                      <span
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          width: '30px',
+                          height: '30px',
+                          borderRadius: '6px',
+                          backgroundColor: '#f8fafc',
+                          border: '1px solid #e2e8f0',
+                          color: '#475569',
+                          fontSize: '12px',
+                          fontWeight: '800'
+                        }}
+                      >
+                        #{idx + 1}
+                      </span>
+                    </td>
 
-                  {/* Article Thumbnail & Title */}
-                  <td style={{ padding: '12px 14px', maxWidth: '340px' }}>
-                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                      <img
-                        src={art.featuredImage || '/img/index_800x400-image01.jpg'}
-                        alt={art.title}
-                        onError={(e) => { e.target.src = '/img/index_800x400-image01.jpg'; }}
-                        style={{ width: '56px', height: '42px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #e2e8f0', flexShrink: 0 }}
-                      />
-                      <div>
+                    {/* Article Thumbnail & Title */}
+                    <td style={{ padding: '12px 14px', maxWidth: '340px' }}>
+                      <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                        <img
+                          src={art.featuredImage || '/img/index_800x400-image01.jpg'}
+                          alt={art.title}
+                          onError={(e) => { e.target.src = '/img/index_800x400-image01.jpg'; }}
+                          style={{ width: '56px', height: '42px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #e2e8f0', flexShrink: 0 }}
+                        />
+                        <div>
+                          <a
+                            href={`/news/${art.slug || art._id}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            style={{
+                              fontWeight: '700',
+                              color: '#0f172a',
+                              fontSize: '13.5px',
+                              lineHeight: 1.3,
+                              marginBottom: '3px',
+                              textDecoration: 'none',
+                              display: 'block',
+                              cursor: 'pointer'
+                            }}
+                            onMouseEnter={(e) => { e.currentTarget.style.color = '#b71c1c'; }}
+                            onMouseLeave={(e) => { e.currentTarget.style.color = '#0f172a'; }}
+                          >
+                            {art.title}
+                          </a>
+                          {art.isBreaking && (
+                            <span style={{ backgroundColor: '#b71c1c', color: '#ffffff', fontSize: '10px', fontWeight: '800', padding: '1px 5px', borderRadius: '3px', marginRight: '6px' }}>
+                              <i className="fa fa-bolt"></i> ਬਰੇਕਿੰਗ
+                            </span>
+                          )}
+                          <span style={{ color: '#64748b', fontSize: '11.5px' }}>
+                            {art.excerpt ? art.excerpt.substring(0, 55) + '...' : ''}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+
+                    {/* Category */}
+                    <td style={{ padding: '12px 10px', whiteSpace: 'nowrap' }}>
+                      <span style={{ backgroundColor: '#f1f5f9', color: '#1e293b', border: '1px solid #cbd5e1', padding: '3px 8px', borderRadius: '4px', fontSize: '12px', fontWeight: '700' }}>
+                        {getCategoryLabel(art.category)}
+                      </span>
+                      {art.category === 'punjab' && art.punjabRegion && (
+                        <div style={{ fontSize: '10.5px', color: '#b71c1c', fontWeight: '700', marginTop: '3px' }}>
+                          {art.punjabRegion === 'majha' ? 'ਮਾਝਾ' : art.punjabRegion === 'malwa' ? 'ਮਾਲਵਾ' : art.punjabRegion === 'doaba' ? 'ਦੋਆਬਾ' : art.punjabRegion}
+                        </div>
+                      )}
+                    </td>
+
+                    {/* Language */}
+                    <td style={{ padding: '12px 10px', whiteSpace: 'nowrap' }}>
+                      {getLangBadge(art.language)}
+                    </td>
+
+                    {/* Author & Date */}
+                    <td style={{ padding: '12px 10px', whiteSpace: 'nowrap' }}>
+                      <div style={{ fontWeight: '700', color: '#1e293b' }}>
+                        {art.authorName || art.author?.name || 'ਪੱਤਰਕਾਰ'}
+                      </div>
+                      <div style={{ fontSize: '11.5px', color: '#64748b' }}>
+                        {art.publishedAt || art.createdAt ? formatArticleDate(art.publishedAt || art.createdAt, art.language) : '—'}
+                      </div>
+                    </td>
+
+                    {/* Views */}
+                    <td style={{ padding: '12px 10px', whiteSpace: 'nowrap' }}>
+                      <span style={{ fontWeight: '800', color: (art.views || 0) > 100 ? '#b71c1c' : '#334155', fontSize: '13px', display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                        <i className={`fa ${(art.views || 0) > 100 ? 'fa-fire' : 'fa-eye'}`} style={{ color: (art.views || 0) > 100 ? '#e11d48' : '#94a3b8' }}></i>
+                        {(art.views || 0).toLocaleString('en-IN')}
+                      </span>
+                    </td>
+
+                    {/* Status */}
+                    <td style={{ padding: '12px 10px', whiteSpace: 'nowrap' }}>
+                      {getStatusBadge(art.status)}
+                    </td>
+
+                    {/* Actions */}
+                    <td style={{ padding: '12px 14px', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                      <div style={{ display: 'inline-flex', gap: '6px' }}>
+                        {/* View live link */}
                         <a
                           href={`/news/${art.slug || art._id}`}
                           target="_blank"
                           rel="noreferrer"
+                          title="ਵੇਖੋ (View Live)"
                           style={{
-                            fontWeight: '700',
+                            backgroundColor: '#f1f5f9',
                             color: '#0f172a',
-                            fontSize: '13.5px',
-                            lineHeight: 1.3,
-                            marginBottom: '3px',
+                            border: '1px solid #cbd5e1',
+                            padding: '6px 10px',
+                            borderRadius: '4px',
+                            fontSize: '12px',
+                            cursor: 'pointer',
                             textDecoration: 'none',
-                            display: 'block',
-                            cursor: 'pointer'
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px'
                           }}
-                          onMouseEnter={(e) => { e.currentTarget.style.color = '#b71c1c'; }}
-                          onMouseLeave={(e) => { e.currentTarget.style.color = '#0f172a'; }}
                         >
-                          {art.title}
+                          <i className="fa fa-external-link"></i>
                         </a>
-                        {art.isBreaking && (
-                          <span style={{ backgroundColor: '#b71c1c', color: '#ffffff', fontSize: '10px', fontWeight: '800', padding: '1px 5px', borderRadius: '3px', marginRight: '6px' }}>
-                            <i className="fa fa-bolt"></i> ਬਰੇਕਿੰਗ
-                          </span>
-                        )}
-                        <span style={{ color: '#64748b', fontSize: '11.5px' }}>
-                          {art.excerpt ? art.excerpt.substring(0, 55) + '...' : ''}
-                        </span>
-                      </div>
-                    </div>
-                  </td>
 
-                  {/* Category */}
-                  <td style={{ padding: '12px 10px', whiteSpace: 'nowrap' }}>
-                    <span style={{ backgroundColor: '#f1f5f9', color: '#1e293b', border: '1px solid #cbd5e1', padding: '3px 8px', borderRadius: '4px', fontSize: '12px', fontWeight: '700' }}>
-                      {getCategoryLabel(art.category)}
+                        {/* Edit button */}
+                        <button
+                          type="button"
+                          onClick={() => openEditModal(art)}
+                          title="ਸੋਧੋ (Edit News)"
+                          style={{
+                            backgroundColor: '#1c2d5a',
+                            color: '#ffffff',
+                            border: 'none',
+                            padding: '6px 12px',
+                            borderRadius: '4px',
+                            fontSize: '12px',
+                            fontWeight: '700',
+                            cursor: 'pointer',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px'
+                          }}
+                        >
+                          <i className="fa fa-pencil"></i>
+                          <span>ਸੋਧੋ</span>
+                        </button>
+
+                        {/* Delete button */}
+                        <button
+                          type="button"
+                          onClick={() => openDeleteModal(art)}
+                          title="ਮਿਟਾਓ (Delete News)"
+                          style={{
+                            backgroundColor: '#fee2e2',
+                            color: '#b91c1c',
+                            border: '1px solid #fca5a5',
+                            padding: '6px 10px',
+                            borderRadius: '4px',
+                            fontSize: '12px',
+                            fontWeight: '700',
+                            cursor: 'pointer',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px'
+                          }}
+                        >
+                          <i className="fa fa-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Dedicated Mobile Card List (shown on mobile <= 768px) */}
+          <div className="mobile-news-card-list">
+            {articles.map((art, idx) => (
+              <div
+                key={art._id}
+                style={{
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '8px',
+                  padding: '12px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '10px',
+                  boxShadow: '0 1px 4px rgba(0,0,0,0.04)'
+                }}
+              >
+                {/* Header: Rank + Category + Status */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '6px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                    <span style={{ fontSize: '11px', fontWeight: '800', backgroundColor: '#f1f5f9', color: '#475569', padding: '2px 6px', borderRadius: '4px' }}>
+                      #{idx + 1}
                     </span>
-                    {art.category === 'punjab' && art.punjabRegion && (
-                      <div style={{ fontSize: '10.5px', color: '#b71c1c', fontWeight: '700', marginTop: '3px' }}>
-                        {art.punjabRegion === 'majha' ? 'ਮਾਝਾ' : art.punjabRegion === 'malwa' ? 'ਮਾਲਵਾ' : art.punjabRegion === 'doaba' ? 'ਦੋਆਬਾ' : art.punjabRegion}
-                      </div>
-                    )}
-                  </td>
-
-                  {/* Language */}
-                  <td style={{ padding: '12px 10px', whiteSpace: 'nowrap' }}>
+                    <span style={{ backgroundColor: '#fee2e2', color: '#b71c1c', fontSize: '11px', fontWeight: '800', padding: '2px 7px', borderRadius: '4px' }}>
+                      {getCategoryLabel(art.category)} {art.punjabRegion ? `• ${art.punjabRegion}` : ''}
+                    </span>
                     {getLangBadge(art.language)}
-                  </td>
+                  </div>
+                  <div>{getStatusBadge(art.status)}</div>
+                </div>
 
-                  {/* Author & Date */}
-                  <td style={{ padding: '12px 10px', whiteSpace: 'nowrap' }}>
-                    <div style={{ fontWeight: '700', color: '#1e293b' }}>
-                      {art.authorName || art.author?.name || 'ਪੱਤਰਕਾਰ'}
+                {/* Content: Thumbnail + Full Headline */}
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                  <img
+                    src={art.featuredImage || '/img/index_800x400-image01.jpg'}
+                    alt={art.title}
+                    onError={(e) => { e.target.src = '/img/index_800x400-image01.jpg'; }}
+                    style={{ width: '74px', height: '54px', objectFit: 'cover', borderRadius: '5px', border: '1px solid #e2e8f0', flexShrink: 0 }}
+                  />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <a
+                      href={`/news/${art.slug || art._id}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{
+                        fontWeight: '700',
+                        color: '#0f172a',
+                        fontSize: '13.5px',
+                        lineHeight: '1.35',
+                        marginBottom: '4px',
+                        textDecoration: 'none',
+                        display: 'block'
+                      }}
+                    >
+                      {art.title}
+                    </a>
+                    {art.isBreaking && (
+                      <span style={{ backgroundColor: '#b71c1c', color: '#ffffff', fontSize: '10px', fontWeight: '800', padding: '1px 5px', borderRadius: '3px', display: 'inline-block', marginBottom: '2px' }}>
+                        <i className="fa fa-bolt"></i> ਬਰੇਕਿੰਗ
+                      </span>
+                    )}
+                    <div style={{ fontSize: '11.5px', color: '#64748b', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', marginTop: '2px' }}>
+                      <span><i className="fa fa-user" style={{ marginRight: '3px' }}></i>{art.authorName || art.author?.name || 'ਪੱਤਰਕਾਰ'}</span>
+                      <span>•</span>
+                      <span>{art.publishedAt || art.createdAt ? formatArticleDate(art.publishedAt || art.createdAt, art.language) : '—'}</span>
                     </div>
-                    <div style={{ fontSize: '11.5px', color: '#64748b' }}>
-                      {art.publishedAt || art.createdAt ? formatArticleDate(art.publishedAt || art.createdAt, art.language) : '—'}
-                    </div>
-                  </td>
+                  </div>
+                </div>
 
-                  {/* Views */}
-                  <td style={{ padding: '12px 10px', whiteSpace: 'nowrap' }}>
-                    <span style={{ fontWeight: '800', color: (art.views || 0) > 100 ? '#b71c1c' : '#334155', fontSize: '13px', display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
-                      <i className={`fa ${(art.views || 0) > 100 ? 'fa-fire' : 'fa-eye'}`} style={{ color: (art.views || 0) > 100 ? '#e11d48' : '#94a3b8' }}></i>
-                      {(art.views || 0).toLocaleString('en-IN')}
-                    </span>
-                  </td>
+                {/* Footer: Views + Action Buttons */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid #f1f5f9', paddingTop: '8px', marginTop: '2px', flexWrap: 'wrap', gap: '8px' }}>
+                  <span style={{ fontWeight: '800', color: (art.views || 0) > 100 ? '#b71c1c' : '#334155', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    <i className={`fa ${(art.views || 0) > 100 ? 'fa-fire' : 'fa-eye'}`} style={{ color: (art.views || 0) > 100 ? '#e11d48' : '#94a3b8' }}></i>
+                    {(art.views || 0).toLocaleString('en-IN')} ਵਿਊਜ਼
+                  </span>
 
-                  {/* Status */}
-                  <td style={{ padding: '12px 10px', whiteSpace: 'nowrap' }}>
-                    {getStatusBadge(art.status)}
-                  </td>
+                  <div style={{ display: 'inline-flex', gap: '6px' }}>
+                    <a
+                      href={`/news/${art.slug || art._id}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{
+                        backgroundColor: '#eff6ff',
+                        color: '#1d4ed8',
+                        border: '1px solid #bfdbfe',
+                        padding: '5px 10px',
+                        borderRadius: '4px',
+                        fontSize: '11.5px',
+                        fontWeight: '700',
+                        textDecoration: 'none',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px'
+                      }}
+                    >
+                      <i className="fa fa-external-link"></i> ਵੇਖੋ
+                    </a>
 
-                  {/* Actions */}
-                  <td style={{ padding: '12px 14px', textAlign: 'right', whiteSpace: 'nowrap' }}>
-                    <div style={{ display: 'inline-flex', gap: '6px' }}>
-                      {/* View live link */}
-                      <a
-                        href={`/news/${art.slug || art._id}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        title="ਵੇਖੋ (View Live)"
-                        style={{
-                          backgroundColor: '#f1f5f9',
-                          color: '#0f172a',
-                          border: '1px solid #cbd5e1',
-                          padding: '6px 10px',
-                          borderRadius: '4px',
-                          fontSize: '12px',
-                          cursor: 'pointer',
-                          textDecoration: 'none',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '4px'
-                        }}
-                      >
-                        <i className="fa fa-external-link"></i>
-                      </a>
+                    <button
+                      type="button"
+                      onClick={() => openEditModal(art)}
+                      style={{
+                        backgroundColor: '#1c2d5a',
+                        color: '#ffffff',
+                        border: 'none',
+                        padding: '5px 10px',
+                        borderRadius: '4px',
+                        fontSize: '11.5px',
+                        fontWeight: '700',
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px'
+                      }}
+                    >
+                      <i className="fa fa-pencil"></i> ਸੋਧੋ
+                    </button>
 
-                      {/* Edit button */}
-                      <button
-                        type="button"
-                        onClick={() => openEditModal(art)}
-                        title="ਸੋਧੋ (Edit News)"
-                        style={{
-                          backgroundColor: '#1c2d5a',
-                          color: '#ffffff',
-                          border: 'none',
-                          padding: '6px 12px',
-                          borderRadius: '4px',
-                          fontSize: '12px',
-                          fontWeight: '700',
-                          cursor: 'pointer',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '4px'
-                        }}
-                      >
-                        <i className="fa fa-pencil"></i>
-                        <span>ਸੋਧੋ</span>
-                      </button>
-
-                      {/* Delete button */}
-                      <button
-                        type="button"
-                        onClick={() => openDeleteModal(art)}
-                        title="ਮਿਟਾਓ (Delete News)"
-                        style={{
-                          backgroundColor: '#fee2e2',
-                          color: '#b91c1c',
-                          border: '1px solid #fca5a5',
-                          padding: '6px 10px',
-                          borderRadius: '4px',
-                          fontSize: '12px',
-                          fontWeight: '700',
-                          cursor: 'pointer',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '4px'
-                        }}
-                      >
-                        <i className="fa fa-trash"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                    <button
+                      type="button"
+                      onClick={() => openDeleteModal(art)}
+                      style={{
+                        backgroundColor: '#fee2e2',
+                        color: '#b91c1c',
+                        border: '1px solid #fca5a5',
+                        padding: '5px 10px',
+                        borderRadius: '4px',
+                        fontSize: '11.5px',
+                        fontWeight: '700',
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px'
+                      }}
+                    >
+                      <i className="fa fa-trash"></i> ਮਿਟਾਓ
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
       )}
 
       {/* ========================================================= */}

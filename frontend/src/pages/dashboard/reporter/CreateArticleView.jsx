@@ -163,7 +163,7 @@ export default function CreateArticleView({ user, onArticleCreated }) {
   const canDirectPublish = Boolean(user?.canDirectPublish);
 
   return (
-    <div style={{ backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e2e8f0', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+    <div className="admin-cms-card" style={{ backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e2e8f0', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
       {/* Header */}
       <div style={{ borderBottom: '2px solid #b71c1c', paddingBottom: '14px', marginBottom: '22px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
         <div>
@@ -595,6 +595,7 @@ export default function CreateArticleView({ user, onArticleCreated }) {
         <button
           type="submit"
           disabled={loading}
+          className="admin-cms-submit-btn"
           style={{
             backgroundColor: '#b71c1c',
             color: '#ffffff',

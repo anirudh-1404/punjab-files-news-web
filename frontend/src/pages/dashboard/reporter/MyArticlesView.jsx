@@ -84,7 +84,7 @@ export default function MyArticlesView() {
   };
 
   return (
-    <div style={{ backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e2e8f0', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+    <div className="admin-cms-card" style={{ backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e2e8f0', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', borderBottom: '2px solid #b71c1c', paddingBottom: '14px', marginBottom: '20px' }}>
         <div>
@@ -97,7 +97,7 @@ export default function MyArticlesView() {
         </div>
 
         {/* Status Filters */}
-        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+        <div className="review-tabs-scroll" style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
           {[
             { key: 'all', label: 'ਸਭ (All)' },
             { key: 'published', label: 'ਲਾਈਵ (Live)' },
@@ -117,7 +117,8 @@ export default function MyArticlesView() {
                 border: filter === tab.key ? '1px solid #b71c1c' : '1px solid #cbd5e1',
                 backgroundColor: filter === tab.key ? '#b71c1c' : '#ffffff',
                 color: filter === tab.key ? '#ffffff' : '#334155',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                whiteSpace: 'nowrap'
               }}
             >
               {tab.label}
@@ -146,103 +147,226 @@ export default function MyArticlesView() {
           </p>
         </div>
       ) : (
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13.5px' }}>
-            <thead>
-              <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0', textAlign: 'left', color: '#475569', fontWeight: '700' }}>
-                <th style={{ padding: '10px 12px' }}>ਤਸਵੀਰ</th>
-                <th style={{ padding: '10px 12px' }}>ਸਿਰਲੇਖ (Title)</th>
-                <th style={{ padding: '10px 12px' }}>ਭਾਸ਼ਾ (Language)</th>
-                <th style={{ padding: '10px 12px' }}>ਕੈਟੇਗਰੀ</th>
-                <th style={{ padding: '10px 12px' }}>ਸਟੇਟਸ (Status)</th>
-                <th style={{ padding: '10px 12px' }}>ਮਿਤੀ</th>
-                <th style={{ padding: '10px 12px', textAlign: 'right' }}>ਕਾਰਵਾਈ (Actions)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((art) => (
-                <tr key={art._id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                  <td style={{ padding: '10px 12px', width: '60px' }}>
-                    <img
-                      src={art.featuredImage || '/img/index_800x400-image01.jpg'}
-                      alt=""
-                      style={{ width: '50px', height: '34px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #e2e8f0' }}
-                    />
-                  </td>
-                  <td style={{ padding: '10px 12px', maxWidth: '300px' }}>
+        <>
+          {/* Desktop Table View */}
+          <div className="desktop-table-view" style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+            <table style={{ width: '100%', minWidth: '720px', borderCollapse: 'collapse', fontSize: '13.5px' }}>
+              <thead>
+                <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0', textAlign: 'left', color: '#475569', fontWeight: '700' }}>
+                  <th style={{ padding: '10px 12px' }}>ਤਸਵੀਰ</th>
+                  <th style={{ padding: '10px 12px' }}>ਸਿਰਲੇਖ (Title)</th>
+                  <th style={{ padding: '10px 12px' }}>ਭਾਸ਼ਾ (Language)</th>
+                  <th style={{ padding: '10px 12px' }}>ਕੈਟੇਗਰੀ</th>
+                  <th style={{ padding: '10px 12px' }}>ਸਟੇਟਸ (Status)</th>
+                  <th style={{ padding: '10px 12px' }}>ਮਿਤੀ</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right' }}>ਕਾਰਵਾਈ (Actions)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((art) => (
+                  <tr key={art._id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                    <td style={{ padding: '10px 12px', width: '60px' }}>
+                      <img
+                        src={art.featuredImage || '/img/index_800x400-image01.jpg'}
+                        alt=""
+                        style={{ width: '50px', height: '34px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #e2e8f0' }}
+                      />
+                    </td>
+                    <td style={{ padding: '10px 12px', maxWidth: '300px' }}>
+                      {art.status === 'published' ? (
+                        <a
+                          href={`/news/${art.slug || art._id}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          style={{ fontWeight: '700', color: '#0f172a', display: 'block', textDecoration: 'none', cursor: 'pointer' }}
+                          onMouseEnter={(e) => { e.currentTarget.style.color = '#b71c1c'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.color = '#0f172a'; }}
+                        >
+                          {art.title}
+                        </a>
+                      ) : (
+                        <span style={{ fontWeight: '700', color: '#0f172a', display: 'block' }}>
+                          {art.title}
+                        </span>
+                      )}
+                      {art.isBreaking && (
+                        <span style={{ backgroundColor: '#b71c1c', color: '#fff', fontSize: '10px', fontWeight: '800', padding: '1px 5px', borderRadius: '2px', marginTop: '3px', display: 'inline-block' }}>
+                          ਬਰੇਕਿੰਗ
+                        </span>
+                      )}
+                      {art.status === 'rejected' && art.rejectionReason && (
+                        <div style={{ marginTop: '4px', fontSize: '11px', color: '#b91c1c', backgroundColor: '#fef2f2', padding: '3px 6px', borderRadius: '3px', borderLeft: '2px solid #b91c1c' }}>
+                          <strong>ਕਾਰਨ:</strong> {art.rejectionReason}
+                        </div>
+                      )}
+                    </td>
+                    <td style={{ padding: '10px 12px' }}>
+                      {art.language === 'hi' ? (
+                        <span style={{ backgroundColor: '#fffbeb', color: '#b45309', border: '1px solid #fde68a', fontSize: '11px', fontWeight: '800', padding: '2px 8px', borderRadius: '4px' }}>
+                          हिंदी (Hindi)
+                        </span>
+                      ) : art.language === 'en' ? (
+                        <span style={{ backgroundColor: '#f0f9ff', color: '#0369a1', border: '1px solid #bae6fd', fontSize: '11px', fontWeight: '800', padding: '2px 8px', borderRadius: '4px' }}>
+                          English
+                        </span>
+                      ) : (
+                        <span style={{ backgroundColor: '#fef2f2', color: '#b71c1c', border: '1px solid #fecaca', fontSize: '11px', fontWeight: '800', padding: '2px 8px', borderRadius: '4px' }}>
+                          ਪੰਜਾਬੀ (Punjabi)
+                        </span>
+                      )}
+                    </td>
+                    <td style={{ padding: '10px 12px' }}>
+                      <span style={{ textTransform: 'capitalize', fontWeight: '600', color: '#334155' }}>
+                        {art.category} {art.punjabRegion ? `(${art.punjabRegion})` : ''}
+                      </span>
+                    </td>
+                    <td style={{ padding: '10px 12px' }}>{getStatusBadge(art.status)}</td>
+                    <td style={{ padding: '10px 12px', color: '#64748b', fontSize: '12px' }}>
+                      {art.createdAt ? formatArticleDate(art.createdAt, art.language) : '—'}
+                    </td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right' }}>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(art._id, art.title)}
+                        style={{
+                          backgroundColor: 'transparent',
+                          border: 'none',
+                          color: '#b71c1c',
+                          cursor: 'pointer',
+                          padding: '4px 8px',
+                          fontSize: '13px'
+                        }}
+                        title="Delete"
+                      >
+                        <i className="fa fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Dedicated Mobile Card List */}
+          <div className="mobile-news-card-list">
+            {filtered.map((art) => (
+              <div
+                key={art._id}
+                style={{
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '8px',
+                  padding: '12px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '10px',
+                  boxShadow: '0 1px 4px rgba(0,0,0,0.04)'
+                }}
+              >
+                {/* Header: Category + Status Badge */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '6px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span style={{ backgroundColor: '#fee2e2', color: '#b71c1c', fontSize: '11px', fontWeight: '800', padding: '2px 7px', borderRadius: '4px' }}>
+                      {art.category} {art.punjabRegion ? `• ${art.punjabRegion}` : ''}
+                    </span>
+                    <span style={{ fontSize: '10.5px', fontWeight: '700', color: '#64748b' }}>
+                      {art.language === 'hi' ? 'हिंदी' : art.language === 'en' ? 'English' : 'ਪੰਜਾਬੀ'}
+                    </span>
+                  </div>
+                  <div>{getStatusBadge(art.status)}</div>
+                </div>
+
+                {/* Content: Thumbnail + Headline */}
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                  <img
+                    src={art.featuredImage || '/img/index_800x400-image01.jpg'}
+                    alt=""
+                    style={{ width: '70px', height: '50px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #e2e8f0', flexShrink: 0 }}
+                  />
+                  <div style={{ flex: 1, minWidth: 0 }}>
                     {art.status === 'published' ? (
                       <a
                         href={`/news/${art.slug || art._id}`}
                         target="_blank"
                         rel="noreferrer"
-                        style={{ fontWeight: '700', color: '#0f172a', display: 'block', textDecoration: 'none', cursor: 'pointer' }}
-                        onMouseEnter={(e) => { e.currentTarget.style.color = '#b71c1c'; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.color = '#0f172a'; }}
+                        style={{ fontWeight: '700', color: '#0f172a', fontSize: '13.5px', lineHeight: '1.35', display: 'block', textDecoration: 'none' }}
                       >
                         {art.title}
                       </a>
                     ) : (
-                      <span style={{ fontWeight: '700', color: '#0f172a', display: 'block' }}>
+                      <span style={{ fontWeight: '700', color: '#0f172a', fontSize: '13.5px', lineHeight: '1.35', display: 'block' }}>
                         {art.title}
                       </span>
                     )}
+
                     {art.isBreaking && (
-                      <span style={{ backgroundColor: '#b71c1c', color: '#fff', fontSize: '10px', fontWeight: '800', padding: '1px 5px', borderRadius: '2px', marginTop: '3px', display: 'inline-block' }}>
+                      <span style={{ backgroundColor: '#b71c1c', color: '#fff', fontSize: '10px', fontWeight: '800', padding: '1px 5px', borderRadius: '2px', marginTop: '2px', display: 'inline-block' }}>
                         ਬਰੇਕਿੰਗ
                       </span>
                     )}
-                    {art.status === 'rejected' && art.rejectionReason && (
-                      <div style={{ marginTop: '4px', fontSize: '11px', color: '#b91c1c', backgroundColor: '#fef2f2', padding: '3px 6px', borderRadius: '3px', borderLeft: '2px solid #b91c1c' }}>
-                        <strong>ਕਾਰਨ:</strong> {art.rejectionReason}
-                      </div>
-                    )}
-                  </td>
-                  <td style={{ padding: '10px 12px' }}>
-                    {art.language === 'hi' ? (
-                      <span style={{ backgroundColor: '#fffbeb', color: '#b45309', border: '1px solid #fde68a', fontSize: '11px', fontWeight: '800', padding: '2px 8px', borderRadius: '4px' }}>
-                        हिंदी (Hindi)
-                      </span>
-                    ) : art.language === 'en' ? (
-                      <span style={{ backgroundColor: '#f0f9ff', color: '#0369a1', border: '1px solid #bae6fd', fontSize: '11px', fontWeight: '800', padding: '2px 8px', borderRadius: '4px' }}>
-                        English
-                      </span>
-                    ) : (
-                      <span style={{ backgroundColor: '#fef2f2', color: '#b71c1c', border: '1px solid #fecaca', fontSize: '11px', fontWeight: '800', padding: '2px 8px', borderRadius: '4px' }}>
-                        ਪੰਜਾਬੀ (Punjabi)
-                      </span>
-                    )}
-                  </td>
-                  <td style={{ padding: '10px 12px' }}>
-                    <span style={{ textTransform: 'capitalize', fontWeight: '600', color: '#334155' }}>
-                      {art.category} {art.punjabRegion ? `(${art.punjabRegion})` : ''}
-                    </span>
-                  </td>
-                  <td style={{ padding: '10px 12px' }}>{getStatusBadge(art.status)}</td>
-                  <td style={{ padding: '10px 12px', color: '#64748b', fontSize: '12px' }}>
-                    {art.createdAt ? formatArticleDate(art.createdAt, art.language) : '—'}
-                  </td>
-                  <td style={{ padding: '10px 12px', textAlign: 'right' }}>
-                    <button
-                      type="button"
-                      onClick={() => handleDelete(art._id, art.title)}
+
+                    <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px' }}>
+                      {art.createdAt ? formatArticleDate(art.createdAt, art.language) : '—'}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Rejection notice if applicable */}
+                {art.status === 'rejected' && art.rejectionReason && (
+                  <div style={{ fontSize: '11.5px', color: '#b91c1c', backgroundColor: '#fef2f2', padding: '6px 8px', borderRadius: '4px', borderLeft: '3px solid #b91c1c' }}>
+                    <strong>ਕਾਰਨ:</strong> {art.rejectionReason}
+                  </div>
+                )}
+
+                {/* Footer Actions */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', borderTop: '1px solid #f1f5f9', paddingTop: '8px', gap: '8px' }}>
+                  {art.status === 'published' && (
+                    <a
+                      href={`/news/${art.slug || art._id}`}
+                      target="_blank"
+                      rel="noreferrer"
                       style={{
-                        backgroundColor: 'transparent',
-                        border: 'none',
-                        color: '#b71c1c',
-                        cursor: 'pointer',
-                        padding: '4px 8px',
-                        fontSize: '13px'
+                        backgroundColor: '#eff6ff',
+                        color: '#1d4ed8',
+                        border: '1px solid #bfdbfe',
+                        padding: '4px 10px',
+                        borderRadius: '4px',
+                        fontSize: '11.5px',
+                        fontWeight: '700',
+                        textDecoration: 'none',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px'
                       }}
-                      title="Delete"
                     >
-                      <i className="fa fa-trash"></i>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                      <i className="fa fa-external-link"></i> ਲਾਈਵ ਵੇਖੋ
+                    </a>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(art._id, art.title)}
+                    style={{
+                      backgroundColor: '#fee2e2',
+                      color: '#b91c1c',
+                      border: '1px solid #fca5a5',
+                      padding: '4px 10px',
+                      borderRadius: '4px',
+                      fontSize: '11.5px',
+                      fontWeight: '700',
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px'
+                    }}
+                  >
+                    <i className="fa fa-trash"></i> ਹਟਾਓ
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
       )}
     </div>
   );

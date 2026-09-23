@@ -31,6 +31,7 @@ import NewsDetailPage from './pages/NewsDetailPage';
 import AdminCMS from './pages/AdminCMS';
 import ContactPage from './pages/ContactPage';
 import CategoryNewsPage from './pages/CategoryNewsPage';
+import SearchPage from './pages/SearchPage';
 
 function ScrollToTopOnNavigate() {
   const { pathname } = useLocation();
@@ -140,6 +141,7 @@ export default function App() {
         <Route path="/article/:id" element={<NewsDetailPage />} />
         <Route path="/admin" element={<AdminCMS />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/search" element={<SearchPage />} />
         <Route path="/category/:category" element={<CategoryNewsPage />} />
         <Route path="/category/:category/:subRegion" element={<CategoryNewsPage />} />
       </Routes>

@@ -110,7 +110,7 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
   }, [articles, searchQuery]);
 
   return (
-    <div style={{ backgroundColor: '#ffffff', borderRadius: '10px', border: '1px solid #e2e8f0', padding: '24px', boxShadow: '0 2px 10px rgba(0,0,0,0.04)' }}>
+    <div className="admin-cms-card" style={{ backgroundColor: '#ffffff', borderRadius: '10px', border: '1px solid #e2e8f0', padding: '24px', boxShadow: '0 2px 10px rgba(0,0,0,0.04)' }}>
       {/* Top Header */}
       <div style={{ borderBottom: '2px solid #b71c1c', paddingBottom: '16px', marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '14px' }}>
         <div>
@@ -172,9 +172,9 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
       )}
 
       {/* Filter Tabs & Search Bar */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '14px', marginBottom: '22px', backgroundColor: '#f8fafc', padding: '10px 14px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+      <div className="review-filters-wrapper" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '14px', marginBottom: '22px', backgroundColor: '#f8fafc', padding: '10px 14px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
         {/* Filter Tabs */}
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+        <div className="review-tabs-scroll" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
           {isAdmin ? (
             <>
               {/* Admin Tab 1: Pending Final Approval */}
@@ -405,6 +405,7 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
             return (
               <div
                 key={art._id}
+                className="review-article-card"
                 style={{
                   border: isRejected
                     ? '1px solid #fecaca'
@@ -431,7 +432,7 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
                 }}
               >
                 {/* Thumbnail */}
-                <div style={{ position: 'relative', width: '120px', height: '85px', flexShrink: 0 }}>
+                <div className="review-thumb-col" style={{ position: 'relative', width: '120px', height: '85px', flexShrink: 0 }}>
                   <img
                     src={art.featuredImage || '/img/index_800x400-image01.jpg'}
                     alt=""
@@ -580,7 +581,7 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
                 </div>
 
                 {/* Right Action Column */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignSelf: 'center', minWidth: '165px' }}>
+                <div className="review-action-col" style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignSelf: 'center', minWidth: '165px' }}>
                   {/* EDITOR PERSPECTIVE */}
                   {!isAdmin && (
                     <>
@@ -869,6 +870,7 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
       {/* Rejection Reason Modal */}
       {rejectModalArticle && (
         <div
+          className="cms-modal-overlay"
           style={{
             position: 'fixed',
             top: 0,
@@ -880,16 +882,17 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
             alignItems: 'center',
             justifyContent: 'center',
             zIndex: 9999,
-            padding: '20px'
+            padding: '16px 12px'
           }}
         >
           <div
+            className="cms-modal-content"
             style={{
               backgroundColor: '#ffffff',
               borderRadius: '10px',
               maxWidth: '520px',
               width: '100%',
-              padding: '24px',
+              padding: '20px 16px',
               boxShadow: '0 10px 25px rgba(0,0,0,0.2)',
               position: 'relative'
             }}

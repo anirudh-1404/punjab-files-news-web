@@ -1,37 +1,44 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { contactAPI } from '../services/api';
 
 export default function ContactPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [message, setMessage] = useState('');
+  const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name.trim() || !email.trim() || !phone.trim() || !message.trim()) {
-      alert('ਕਿਰਪਾ ਕਰਕੇ ਸਾਰੇ ਖਾਨੇ ਭਰੋ (Please fill in all fields).');
+      setErrorMsg('ਕਿਰਪਾ ਕਰਕੇ ਸਾਰੇ ਖਾਨੇ ਭਰੋ (Please fill in all fields).');
       return;
     }
 
-    // Store in localStorage queries for demonstration
-    const existing = JSON.parse(localStorage.getItem('punjab_contact_queries') || '[]');
-    existing.unshift({
-      id: Date.now(),
-      name,
-      email,
-      phone,
-      message,
-      submittedAt: new Date().toISOString()
-    });
-    localStorage.setItem('punjab_contact_queries', JSON.stringify(existing));
+    try {
+      setSubmitting(true);
+      setErrorMsg('');
 
-    setSubmitted(true);
-    setName('');
-    setEmail('');
-    setPhone('');
-    setMessage('');
+      await contactAPI.submitMessage({
+        name: name.trim(),
+        email: email.trim(),
+        phone: phone.trim(),
+        message: message.trim()
+      });
+
+      setSubmitted(true);
+      setName('');
+      setEmail('');
+      setPhone('');
+      setMessage('');
+    } catch (err) {
+      setErrorMsg(err.message || 'ਸੁਨੇਹਾ ਭੇਜਣ ਵਿੱਚ ਖ਼ਾਮੀ ਆਈ। ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -72,8 +79,16 @@ export default function ContactPage() {
               </h4>
 
               {submitted && (
-                <div style={{ backgroundColor: '#dcfce7', color: '#15803d', padding: '12px 16px', borderRadius: '4px', marginBottom: '20px', fontWeight: '700', fontSize: '13.5px' }}>
-                  <i className="fa fa-check-circle" style={{ marginRight: '6px' }}></i> ਧੰਨਵਾਦ! ਤੁਹਾਡਾ ਸੁਨੇਹਾ ਸਫ਼ਲਤਾਪੂਰਵਕ ਦਰਜ ਹੋ ਗਿਆ ਹੈ। ਸਾਡੀ ਟੀਮ ਜਲਦ ਸੰਪਰਕ ਕਰੇਗੀ।
+                <div style={{ backgroundColor: '#dcfce7', border: '1px solid #86efac', color: '#15803d', padding: '14px 18px', borderRadius: '6px', marginBottom: '20px', fontWeight: '700', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <i className="fa fa-check-circle" style={{ fontSize: '18px' }}></i>
+                  <span>ਧੰਨਵਾਦ! ਤੁਹਾਡਾ ਸੁਨੇਹਾ ਸਫ਼ਲਤਾਪੂਰਵਕ ਦਰਜ ਹੋ ਗਿਆ ਹੈ। ਸਾਡੀ ਸੰਪਾਦਕੀ ਟੀਮ ਜਲਦ ਸੰਪਰਕ ਕਰੇਗੀ।</span>
+                </div>
+              )}
+
+              {errorMsg && (
+                <div style={{ backgroundColor: '#fee2e2', border: '1px solid #fca5a5', color: '#b91c1c', padding: '12px 16px', borderRadius: '6px', marginBottom: '20px', fontWeight: '700', fontSize: '13.5px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <i className="fa fa-exclamation-circle" style={{ fontSize: '16px' }}></i>
+                  <span>{errorMsg}</span>
                 </div>
               )}
 
@@ -141,6 +156,7 @@ export default function ContactPage() {
 
                 <button
                   type="submit"
+                  disabled={submitting}
                   style={{
                     backgroundColor: '#b71c1c',
                     color: '#ffffff',
@@ -149,11 +165,25 @@ export default function ContactPage() {
                     borderRadius: '4px',
                     fontSize: '14.5px',
                     fontWeight: '800',
-                    cursor: 'pointer',
-                    boxShadow: '0 2px 6px rgba(183, 28, 28, 0.4)'
+                    cursor: submitting ? 'not-allowed' : 'pointer',
+                    opacity: submitting ? 0.75 : 1,
+                    boxShadow: '0 2px 6px rgba(183, 28, 28, 0.4)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px'
                   }}
                 >
-                  <i className="fa fa-paper-plane" style={{ marginRight: '8px' }}></i> ਸੁਨੇਹਾ ਭੇਜੋ (Submit Query)
+                  {submitting ? (
+                    <>
+                      <i className="fa fa-spinner fa-spin"></i>
+                      <span>ਸੁਨੇਹਾ ਭੇਜਿਆ ਜਾ ਰਿਹਾ ਹੈ...</span>
+                    </>
+                  ) : (
+                    <>
+                      <i className="fa fa-paper-plane"></i>
+                      <span>ਸੁਨੇਹਾ ਭੇਜੋ (Submit Query)</span>
+                    </>
+                  )}
                 </button>
               </form>
             </div>

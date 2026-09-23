@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { useNavigate } from 'react-router-dom';
 import whiteLogo from '../../assets/punjab-files-logo-white.jpeg';
 
 export default function MobileNav() {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const [mobileDrawerSearch, setMobileDrawerSearch] = useState('');
   const [openDropdown, setOpenDropdown] = useState('punjab'); // Expanded by default so user immediately sees Punjab sub-regions
 
   // Listen for global custom event to open menu from anywhere (e.g. sticky category bar)
@@ -170,6 +173,64 @@ export default function MobileNav() {
               >
                 <i className="fa fa-times"></i>
               </button>
+            </div>
+
+            {/* Mobile Drawer Search Box */}
+            <div
+              style={{
+                padding: '12px 16px',
+                borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                backgroundColor: '#161922'
+              }}
+            >
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (mobileDrawerSearch.trim()) {
+                    setIsOpen(false);
+                    navigate(`/search?q=${encodeURIComponent(mobileDrawerSearch.trim())}`);
+                  }
+                }}
+                style={{ position: 'relative', display: 'flex', alignItems: 'center', margin: 0 }}
+              >
+                <input
+                  type="text"
+                  placeholder="ਖ਼ਬਰਾਂ ਖੋਜੋ... (Search news)"
+                  value={mobileDrawerSearch}
+                  onChange={(e) => setMobileDrawerSearch(e.target.value)}
+                  style={{
+                    width: '100%',
+                    backgroundColor: '#1f242e',
+                    color: '#ffffff',
+                    border: '1px solid rgba(235, 177, 13, 0.4)',
+                    borderRadius: '20px',
+                    padding: '8px 38px 8px 14px',
+                    fontSize: '13.5px',
+                    outline: 'none',
+                    fontFamily: "'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif"
+                  }}
+                />
+                <button
+                  type="submit"
+                  aria-label="ਖੋਜ ਕਰੋ"
+                  style={{
+                    position: 'absolute',
+                    right: '4px',
+                    background: '#b71c1c',
+                    border: 'none',
+                    borderRadius: '50%',
+                    width: '30px',
+                    height: '30px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#ffffff',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <i className="fa fa-search" style={{ fontSize: '12px' }}></i>
+                </button>
+              </form>
             </div>
 
             {/* Drawer Navigation List */}

@@ -275,69 +275,159 @@ export default function UserManagementView({ currentUser }) {
             <i className="fa fa-spinner fa-spin" style={{ fontSize: '24px' }}></i>
           </div>
         ) : (
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-              <thead>
-                <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0', textAlign: 'left', color: '#475569', fontWeight: '700' }}>
-                  <th style={{ padding: '10px 12px' }}>ਨਾਮ</th>
-                  <th style={{ padding: '10px 12px' }}>ਈਮੇਲ</th>
-                  <th style={{ padding: '10px 12px' }}>ਮੌਜੂਦਾ ਭੂਮਿਕਾ</th>
-                  <th style={{ padding: '10px 12px' }}>ਸਿੱਧਾ ਲਾਈਵ (Direct Publish)</th>
-                  <th style={{ padding: '10px 12px' }}>ਸਟੇਟਸ</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right' }}>ਕਾਰਵਾਈ (Actions)</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((u) => {
-                  const isSelf = currentUser && currentUser.id === u._id;
-                  return (
-                    <tr key={u._id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                      <td style={{ padding: '10px 12px', fontWeight: '700', color: '#0f172a' }}>
-                        {u.name} {isSelf && <span style={{ fontSize: '11px', color: '#b71c1c' }}>(ਤੁਸੀਂ)</span>}
-                      </td>
-                      <td style={{ padding: '10px 12px', color: '#475569' }}>{u.email}</td>
-                      <td style={{ padding: '10px 12px' }}>
+          <>
+            {/* Desktop Table View */}
+            <div className="desktop-table-view" style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+              <table style={{ width: '100%', minWidth: '620px', borderCollapse: 'collapse', fontSize: '13px' }}>
+                <thead>
+                  <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0', textAlign: 'left', color: '#475569', fontWeight: '700' }}>
+                    <th style={{ padding: '10px 12px' }}>ਨਾਮ</th>
+                    <th style={{ padding: '10px 12px' }}>ਈਮੇਲ</th>
+                    <th style={{ padding: '10px 12px' }}>ਮੌਜੂਦਾ ਭੂਮਿਕਾ</th>
+                    <th style={{ padding: '10px 12px' }}>ਸਿੱਧਾ ਲਾਈਵ (Direct Publish)</th>
+                    <th style={{ padding: '10px 12px' }}>ਸਟੇਟਸ</th>
+                    <th style={{ padding: '10px 12px', textAlign: 'right' }}>ਕਾਰਵਾਈ (Actions)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.map((u) => {
+                    const isSelf = currentUser && currentUser.id === u._id;
+                    return (
+                      <tr key={u._id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                        <td style={{ padding: '10px 12px', fontWeight: '700', color: '#0f172a' }}>
+                          {u.name} {isSelf && <span style={{ fontSize: '11px', color: '#b71c1c' }}>(ਤੁਸੀਂ)</span>}
+                        </td>
+                        <td style={{ padding: '10px 12px', color: '#475569' }}>{u.email}</td>
+                        <td style={{ padding: '10px 12px' }}>
+                          {isSelf ? (
+                            getRoleBadge(u.role)
+                          ) : (
+                            <select
+                              value={u.role}
+                              onChange={(e) => handleRoleChange(u._id, e.target.value)}
+                              style={{ padding: '4px 8px', fontSize: '12px', borderRadius: '4px', border: '1px solid #cbd5e1' }}
+                            >
+                              <option value="reporter">ਪੱਤਰਕਾਰ</option>
+                              <option value="editor">ਸੰਪਾਦਕ</option>
+                              <option value="admin">ਐਡਮਿਨ</option>
+                            </select>
+                          )}
+                        </td>
+                        <td style={{ padding: '10px 12px' }}>
+                          {u.role === 'reporter' ? (
+                            <button
+                              type="button"
+                              onClick={() => handleToggleDirectPublish(u._id, u.canDirectPublish, u.name)}
+                              style={{
+                                backgroundColor: u.canDirectPublish ? '#16a34a' : '#f1f5f9',
+                                color: u.canDirectPublish ? '#ffffff' : '#64748b',
+                                border: u.canDirectPublish ? 'none' : '1px solid #cbd5e1',
+                                padding: '3px 10px',
+                                borderRadius: '20px',
+                                fontSize: '11px',
+                                fontWeight: '800',
+                                cursor: 'pointer',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '4px'
+                              }}
+                            >
+                              <i className={u.canDirectPublish ? 'fa fa-bolt' : 'fa fa-ban'}></i>
+                              {u.canDirectPublish ? 'ਚਾਲੂ (Auto-Publish)' : 'ਬੰਦ (Approval Needed)'}
+                            </button>
+                          ) : (
+                            <span style={{ color: '#94a3b8', fontSize: '12px' }}>—</span>
+                          )}
+                        </td>
+                        <td style={{ padding: '10px 12px' }}>
+                          <button
+                            type="button"
+                            disabled={isSelf}
+                            onClick={() => handleToggleStatus(u._id, u.isActive)}
+                            style={{
+                              backgroundColor: u.isActive ? '#dcfce7' : '#fee2e2',
+                              color: u.isActive ? '#15803d' : '#b91c1c',
+                              border: 'none',
+                              padding: '3px 9px',
+                              borderRadius: '4px',
+                              fontSize: '11.5px',
+                              fontWeight: '700',
+                              cursor: isSelf ? 'default' : 'pointer'
+                            }}
+                          >
+                            {u.isActive ? 'ਸਰਗਰਮ (Active)' : 'ਬੰਦ (Inactive)'}
+                          </button>
+                        </td>
+                        <td style={{ padding: '10px 12px', textAlign: 'right' }}>
+                          {!isSelf && (
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteUser(u._id, u.name)}
+                              style={{
+                                backgroundColor: 'transparent',
+                                border: 'none',
+                                color: '#b71c1c',
+                                cursor: 'pointer',
+                                padding: '4px 8px',
+                                fontSize: '13px'
+                              }}
+                              title="Delete user"
+                            >
+                              <i className="fa fa-trash"></i>
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile User Card List */}
+            <div className="mobile-user-card-list">
+              {users.map((u) => {
+                const isSelf = currentUser && currentUser.id === u._id;
+                return (
+                  <div
+                    key={u._id}
+                    style={{
+                      backgroundColor: '#ffffff',
+                      border: '1px solid #e2e8f0',
+                      borderRadius: '8px',
+                      padding: '12px 14px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '10px',
+                      boxShadow: '0 1px 4px rgba(0,0,0,0.04)'
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+                      <div>
+                        <div style={{ fontWeight: '800', color: '#0f172a', fontSize: '14px' }}>
+                          {u.name} {isSelf && <span style={{ fontSize: '11px', color: '#b71c1c' }}>(ਤੁਸੀਂ)</span>}
+                        </div>
+                        <div style={{ fontSize: '12px', color: '#64748b' }}>{u.email}</div>
+                      </div>
+                      <div>
                         {isSelf ? (
                           getRoleBadge(u.role)
                         ) : (
                           <select
                             value={u.role}
                             onChange={(e) => handleRoleChange(u._id, e.target.value)}
-                            style={{ padding: '4px 8px', fontSize: '12px', borderRadius: '4px', border: '1px solid #cbd5e1' }}
+                            style={{ padding: '4px 8px', fontSize: '12px', borderRadius: '4px', border: '1px solid #cbd5e1', fontWeight: '700' }}
                           >
                             <option value="reporter">ਪੱਤਰਕਾਰ</option>
                             <option value="editor">ਸੰਪਾਦਕ</option>
                             <option value="admin">ਐਡਮਿਨ</option>
                           </select>
                         )}
-                      </td>
-                      <td style={{ padding: '10px 12px' }}>
-                        {u.role === 'reporter' ? (
-                          <button
-                            type="button"
-                            onClick={() => handleToggleDirectPublish(u._id, u.canDirectPublish, u.name)}
-                            style={{
-                              backgroundColor: u.canDirectPublish ? '#16a34a' : '#f1f5f9',
-                              color: u.canDirectPublish ? '#ffffff' : '#64748b',
-                              border: u.canDirectPublish ? 'none' : '1px solid #cbd5e1',
-                              padding: '3px 10px',
-                              borderRadius: '20px',
-                              fontSize: '11px',
-                              fontWeight: '800',
-                              cursor: 'pointer',
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: '4px'
-                            }}
-                          >
-                            <i className={u.canDirectPublish ? 'fa fa-bolt' : 'fa fa-ban'}></i>
-                            {u.canDirectPublish ? 'ਚਾਲੂ (Auto-Publish)' : 'ਬੰਦ (Approval Needed)'}
-                          </button>
-                        ) : (
-                          <span style={{ color: '#94a3b8', fontSize: '12px' }}>—</span>
-                        )}
-                      </td>
-                      <td style={{ padding: '10px 12px' }}>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid #f1f5f9', paddingTop: '8px', flexWrap: 'wrap', gap: '8px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                         <button
                           type="button"
                           disabled={isSelf}
@@ -346,41 +436,67 @@ export default function UserManagementView({ currentUser }) {
                             backgroundColor: u.isActive ? '#dcfce7' : '#fee2e2',
                             color: u.isActive ? '#15803d' : '#b91c1c',
                             border: 'none',
-                            padding: '3px 9px',
+                            padding: '4px 10px',
                             borderRadius: '4px',
                             fontSize: '11.5px',
                             fontWeight: '700',
                             cursor: isSelf ? 'default' : 'pointer'
                           }}
                         >
-                          {u.isActive ? 'ਸਰਗਰਮ (Active)' : 'ਬੰਦ (Inactive)'}
+                          {u.isActive ? '● ਸਰਗਰਮ' : '● ਬੰਦ'}
                         </button>
-                      </td>
-                      <td style={{ padding: '10px 12px', textAlign: 'right' }}>
-                        {!isSelf && (
+
+                        {u.role === 'reporter' && (
                           <button
                             type="button"
-                            onClick={() => handleDeleteUser(u._id, u.name)}
+                            onClick={() => handleToggleDirectPublish(u._id, u.canDirectPublish, u.name)}
                             style={{
-                              backgroundColor: 'transparent',
-                              border: 'none',
-                              color: '#b71c1c',
+                              backgroundColor: u.canDirectPublish ? '#16a34a' : '#f1f5f9',
+                              color: u.canDirectPublish ? '#ffffff' : '#64748b',
+                              border: u.canDirectPublish ? 'none' : '1px solid #cbd5e1',
+                              padding: '3px 8px',
+                              borderRadius: '16px',
+                              fontSize: '10.5px',
+                              fontWeight: '800',
                               cursor: 'pointer',
-                              padding: '4px 8px',
-                              fontSize: '13px'
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '4px'
                             }}
-                            title="Delete user"
                           >
-                            <i className="fa fa-trash"></i>
+                            <i className={u.canDirectPublish ? 'fa fa-bolt' : 'fa fa-ban'}></i>
+                            {u.canDirectPublish ? 'Auto-Publish' : 'Manual Approval'}
                           </button>
                         )}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                      </div>
+
+                      {!isSelf && (
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteUser(u._id, u.name)}
+                          style={{
+                            backgroundColor: '#fee2e2',
+                            border: '1px solid #fca5a5',
+                            color: '#b91c1c',
+                            cursor: 'pointer',
+                            padding: '4px 10px',
+                            borderRadius: '4px',
+                            fontSize: '12px',
+                            fontWeight: '700',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px'
+                          }}
+                        >
+                          <i className="fa fa-trash"></i> ਹਟਾਓ
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </>
         )}
       </div>
     </div>

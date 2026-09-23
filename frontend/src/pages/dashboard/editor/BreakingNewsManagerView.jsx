@@ -67,7 +67,7 @@ export default function BreakingNewsManagerView() {
   };
 
   return (
-    <div style={{ backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e2e8f0', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+    <div className="admin-cms-card" style={{ backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e2e8f0', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
       {/* Header */}
       <div style={{ borderBottom: '2px solid #b71c1c', paddingBottom: '14px', marginBottom: '22px' }}>
         <h3 style={{ margin: 0, fontSize: '20px', fontWeight: '800', color: '#0f172a' }}>
@@ -85,14 +85,14 @@ export default function BreakingNewsManagerView() {
       )}
 
       {/* Add New Ticker Form */}
-      <div style={{ backgroundColor: '#fff5f5', border: '1px solid #fed7d7', borderRadius: '6px', padding: '18px', marginBottom: '25px' }}>
+      <div style={{ backgroundColor: '#fff5f5', border: '1px solid #fed7d7', borderRadius: '6px', padding: '16px', marginBottom: '25px' }}>
         <h4 style={{ margin: '0 0 12px', fontSize: '15px', fontWeight: '800', color: '#b71c1c' }}>
           <i className="fa fa-bolt" style={{ marginRight: '6px' }}></i> ਨਵਾਂ ਬਰੇਕਿੰਗ ਅਲਰਟ ਸ਼ਾਮਲ ਕਰੋ (Add New Alert)
         </h4>
 
-        <form onSubmit={handleAdd} style={{ display: 'grid', gridTemplateColumns: '140px 1fr 110px auto', gap: '10px', alignItems: 'center' }}>
+        <form onSubmit={handleAdd} className="breaking-form-grid" style={{ display: 'grid', gridTemplateColumns: '140px 1fr 110px auto', gap: '10px', alignItems: 'center' }}>
           {/* Tag Select */}
-          <div>
+          <div className="breaking-tag-col">
             <select
               value={tag}
               onChange={(e) => setTag(e.target.value)}
@@ -107,7 +107,7 @@ export default function BreakingNewsManagerView() {
           </div>
 
           {/* Text Input */}
-          <div>
+          <div className="breaking-input-col">
             <input
               type="text"
               value={text}
@@ -119,7 +119,7 @@ export default function BreakingNewsManagerView() {
           </div>
 
           {/* Priority */}
-          <div>
+          <div className="breaking-priority-col">
             <select
               value={priority}
               onChange={(e) => setPriority(e.target.value)}
@@ -134,7 +134,7 @@ export default function BreakingNewsManagerView() {
           </div>
 
           {/* Submit */}
-          <div>
+          <div className="breaking-submit-col">
             <button
               type="submit"
               disabled={submitting}
@@ -175,6 +175,7 @@ export default function BreakingNewsManagerView() {
             {items.map((item) => (
               <div
                 key={item._id}
+                className="breaking-ticker-item"
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -183,7 +184,8 @@ export default function BreakingNewsManagerView() {
                   backgroundColor: '#f8fafc',
                   border: '1px solid #e2e8f0',
                   borderRadius: '5px',
-                  gap: '12px'
+                  gap: '12px',
+                  flexWrap: 'wrap'
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1 }}>

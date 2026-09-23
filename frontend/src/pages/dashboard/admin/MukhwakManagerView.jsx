@@ -511,105 +511,126 @@ export default function MukhwakManagerView({ currentUser }) {
             </button>
           </div>
         ) : (
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', textAlign: 'left' }}>
-              <thead>
-                <tr style={{ backgroundColor: '#f1f5f9', borderBottom: '1px solid #cbd5e1', color: '#475569', fontWeight: '700', fontSize: '12px' }}>
-                  <th style={{ padding: '12px 16px' }}>ਸਟੇਟਸ (Status)</th>
-                  <th style={{ padding: '12px 16px' }}>ਮਿਤੀ (Date)</th>
-                  <th style={{ padding: '12px 16px' }}>ਰਾਗ ਤੇ ਅੰਗ (Raag & Ang)</th>
-                  <th style={{ padding: '12px 16px' }}>ਗੁਰਬਾਣੀ ਤੁਕਾਂ (Excerpt)</th>
-                  <th style={{ padding: '12px 16px', textAlign: 'right' }}>ਕਾਰਵਾਈਆਂ (Actions)</th>
-                </tr>
-              </thead>
-              <tbody>
-                {mukhwaks.map((item) => {
-                  const isCurrentActive = Boolean(item.isActive);
-                  return (
-                    <tr
-                      key={item._id}
-                      style={{
-                        borderBottom: '1px solid #e2e8f0',
-                        backgroundColor: isCurrentActive ? '#fffdf5' : '#ffffff'
-                      }}
-                    >
-                      <td style={{ padding: '14px 16px' }}>
-                        {isCurrentActive ? (
-                          <span
+          <>
+            {/* Desktop Table View */}
+            <div className="desktop-table-view" style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+              <table style={{ width: '100%', minWidth: '680px', borderCollapse: 'collapse', fontSize: '13px', textAlign: 'left' }}>
+                <thead>
+                  <tr style={{ backgroundColor: '#f1f5f9', borderBottom: '1px solid #cbd5e1', color: '#475569', fontWeight: '700', fontSize: '12px' }}>
+                    <th style={{ padding: '12px 16px' }}>ਸਟੇਟਸ (Status)</th>
+                    <th style={{ padding: '12px 16px' }}>ਮਿਤੀ (Date)</th>
+                    <th style={{ padding: '12px 16px' }}>ਰਾਗ ਤੇ ਅੰਗ (Raag & Ang)</th>
+                    <th style={{ padding: '12px 16px' }}>ਗੁਰਬਾਣੀ ਤੁਕਾਂ (Excerpt)</th>
+                    <th style={{ padding: '12px 16px', textAlign: 'right' }}>ਕਾਰਵਾਈਆਂ (Actions)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {mukhwaks.map((item) => {
+                    const isCurrentActive = Boolean(item.isActive);
+                    return (
+                      <tr
+                        key={item._id}
+                        style={{
+                          borderBottom: '1px solid #e2e8f0',
+                          backgroundColor: isCurrentActive ? '#fffdf5' : '#ffffff'
+                        }}
+                      >
+                        <td style={{ padding: '14px 16px' }}>
+                          {isCurrentActive ? (
+                            <span
+                              style={{
+                                backgroundColor: '#dcfce7',
+                                color: '#15803d',
+                                border: '1px solid #86efac',
+                                padding: '3px 10px',
+                                borderRadius: '12px',
+                                fontSize: '11px',
+                                fontWeight: '800',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '4px'
+                              }}
+                            >
+                              ● ਲਾਈਵ (Active)
+                            </span>
+                          ) : (
+                            <span
+                              style={{
+                                backgroundColor: '#f1f5f9',
+                                color: '#64748b',
+                                padding: '3px 10px',
+                                borderRadius: '12px',
+                                fontSize: '11px',
+                                fontWeight: '700'
+                              }}
+                            >
+                              ਪੁਰਾਲੇਖ (Archived)
+                            </span>
+                          )}
+                        </td>
+
+                        <td style={{ padding: '14px 16px', fontWeight: '800', color: '#0f172a', whiteSpace: 'nowrap' }}>
+                          {item.date}
+                        </td>
+
+                        <td style={{ padding: '14px 16px' }}>
+                          <div style={{ fontWeight: '700', color: '#b71c1c' }}>{item.raag}</div>
+                          <div style={{ fontSize: '11.5px', color: '#64748b' }}>ਅੰਗ: {item.ang}</div>
+                        </td>
+
+                        <td style={{ padding: '14px 16px', maxWidth: '350px' }}>
+                          <div
                             style={{
-                              backgroundColor: '#dcfce7',
-                              color: '#15803d',
-                              border: '1px solid #86efac',
-                              padding: '3px 10px',
-                              borderRadius: '12px',
-                              fontSize: '11px',
-                              fontWeight: '800',
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: '4px'
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                              color: '#1e293b',
+                              fontWeight: '600'
                             }}
                           >
-                            ● ਲਾਈਵ (Active)
-                          </span>
-                        ) : (
-                          <span
+                            {item.gurbani?.split('\n')[0] || ''}
+                          </div>
+                          <div
                             style={{
-                              backgroundColor: '#f1f5f9',
+                              fontSize: '11.5px',
                               color: '#64748b',
-                              padding: '3px 10px',
-                              borderRadius: '12px',
-                              fontSize: '11px',
-                              fontWeight: '700'
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap'
                             }}
                           >
-                            ਪੁਰਾਲੇਖ (Archived)
-                          </span>
-                        )}
-                      </td>
+                            {item.viakhya}
+                          </div>
+                        </td>
 
-                      <td style={{ padding: '14px 16px', fontWeight: '800', color: '#0f172a', whiteSpace: 'nowrap' }}>
-                        {item.date}
-                      </td>
+                        <td style={{ padding: '14px 16px', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                          <div style={{ display: 'inline-flex', gap: '6px', alignItems: 'center' }}>
+                            {!isCurrentActive && (
+                              <button
+                                type="button"
+                                onClick={() => handleSetActive(item._id)}
+                                title="ਇਸ ਮੁੱਖ ਵਾਕ ਨੂੰ ਹੋਮਪੇਜ ਉੱਤੇ ਲਾਈਵ ਕਰੋ"
+                                style={{
+                                  backgroundColor: '#047857',
+                                  color: '#ffffff',
+                                  border: 'none',
+                                  padding: '6px 10px',
+                                  borderRadius: '4px',
+                                  fontSize: '11.5px',
+                                  fontWeight: '700',
+                                  cursor: 'pointer'
+                                }}
+                              >
+                                <i className="fa fa-check"></i> ਲਾਈਵ ਕਰੋ
+                              </button>
+                            )}
 
-                      <td style={{ padding: '14px 16px' }}>
-                        <div style={{ fontWeight: '700', color: '#b71c1c' }}>{item.raag}</div>
-                        <div style={{ fontSize: '11.5px', color: '#64748b' }}>ਅੰਗ: {item.ang}</div>
-                      </td>
-
-                      <td style={{ padding: '14px 16px', maxWidth: '350px' }}>
-                        <div
-                          style={{
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                            color: '#1e293b',
-                            fontWeight: '600'
-                          }}
-                        >
-                          {item.gurbani?.split('\n')[0] || ''}
-                        </div>
-                        <div
-                          style={{
-                            fontSize: '11.5px',
-                            color: '#64748b',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap'
-                          }}
-                        >
-                          {item.viakhya}
-                        </div>
-                      </td>
-
-                      <td style={{ padding: '14px 16px', textAlign: 'right', whiteSpace: 'nowrap' }}>
-                        <div style={{ display: 'inline-flex', gap: '6px', alignItems: 'center' }}>
-                          {!isCurrentActive && (
                             <button
                               type="button"
-                              onClick={() => handleSetActive(item._id)}
-                              title="ਇਸ ਮੁੱਖ ਵਾਕ ਨੂੰ ਹੋਮਪੇਜ ਉੱਤੇ ਲਾਈਵ ਕਰੋ"
+                              onClick={() => handleOpenEdit(item)}
+                              title="ਸੋਧੋ (Edit)"
                               style={{
-                                backgroundColor: '#047857',
+                                backgroundColor: '#1c2d5a',
                                 color: '#ffffff',
                                 border: 'none',
                                 padding: '6px 10px',
@@ -619,62 +640,148 @@ export default function MukhwakManagerView({ currentUser }) {
                                 cursor: 'pointer'
                               }}
                             >
-                              <i className="fa fa-check"></i> ਲਾਈਵ ਕਰੋ
+                              <i className="fa fa-pencil"></i> ਸੋਧੋ
                             </button>
-                          )}
 
-                          <button
-                            type="button"
-                            onClick={() => handleOpenEdit(item)}
-                            title="ਸੋਧੋ (Edit)"
-                            style={{
-                              backgroundColor: '#1c2d5a',
-                              color: '#ffffff',
-                              border: 'none',
-                              padding: '6px 10px',
-                              borderRadius: '4px',
-                              fontSize: '11.5px',
-                              fontWeight: '700',
-                              cursor: 'pointer'
-                            }}
-                          >
-                            <i className="fa fa-pencil"></i> ਸੋਧੋ
-                          </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setItemToDelete(item);
+                                setDeleteModalOpen(true);
+                              }}
+                              title="ਹਟਾਓ (Delete)"
+                              style={{
+                                backgroundColor: '#ef4444',
+                                color: '#ffffff',
+                                border: 'none',
+                                padding: '6px 10px',
+                                borderRadius: '4px',
+                                fontSize: '11.5px',
+                                fontWeight: '700',
+                                cursor: 'pointer'
+                              }}
+                            >
+                              <i className="fa fa-trash"></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
 
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setItemToDelete(item);
-                              setDeleteModalOpen(true);
-                            }}
-                            title="ਹਟਾਓ (Delete)"
-                            style={{
-                              backgroundColor: '#ef4444',
-                              color: '#ffffff',
-                              border: 'none',
-                              padding: '6px 10px',
-                              borderRadius: '4px',
-                              fontSize: '11.5px',
-                              fontWeight: '700',
-                              cursor: 'pointer'
-                            }}
-                          >
-                            <i className="fa fa-trash"></i>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+            {/* Mobile Mukhwak Card List */}
+            <div className="mobile-mukhwak-card-list">
+              {mukhwaks.map((item) => {
+                const isCurrentActive = Boolean(item.isActive);
+                return (
+                  <div
+                    key={item._id}
+                    style={{
+                      backgroundColor: isCurrentActive ? '#fffdf5' : '#ffffff',
+                      border: isCurrentActive ? '1px solid #fde68a' : '1px solid #e2e8f0',
+                      borderRadius: '8px',
+                      padding: '12px 14px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '10px',
+                      boxShadow: '0 1px 4px rgba(0,0,0,0.04)'
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '6px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        {isCurrentActive ? (
+                          <span style={{ backgroundColor: '#dcfce7', color: '#15803d', border: '1px solid #86efac', padding: '2px 8px', borderRadius: '12px', fontSize: '11px', fontWeight: '800' }}>
+                            ● ਲਾਈਵ (Active)
+                          </span>
+                        ) : (
+                          <span style={{ backgroundColor: '#f1f5f9', color: '#64748b', padding: '2px 8px', borderRadius: '12px', fontSize: '11px', fontWeight: '700' }}>
+                            ਪੁਰਾਲੇਖ
+                          </span>
+                        )}
+                        <span style={{ fontWeight: '800', color: '#0f172a', fontSize: '13px' }}>{item.date}</span>
+                      </div>
+
+                      <span style={{ fontSize: '11.5px', fontWeight: '800', color: '#b71c1c' }}>
+                        {item.raag} (ਅੰਗ: {item.ang})
+                      </span>
+                    </div>
+
+                    <div style={{ backgroundColor: '#fefce8', borderLeft: '3px solid #ebb10d', padding: '8px 10px', borderRadius: '0 4px 4px 0', fontSize: '13px', fontWeight: '700', color: '#0f172a', lineHeight: '1.5' }}>
+                      {item.gurbani?.split('\n')[0] || ''}
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', borderTop: '1px solid #f1f5f9', paddingTop: '8px', gap: '6px' }}>
+                      {!isCurrentActive && (
+                        <button
+                          type="button"
+                          onClick={() => handleSetActive(item._id)}
+                          style={{
+                            backgroundColor: '#047857',
+                            color: '#ffffff',
+                            border: 'none',
+                            padding: '5px 10px',
+                            borderRadius: '4px',
+                            fontSize: '11.5px',
+                            fontWeight: '700',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          <i className="fa fa-check"></i> ਲਾਈਵ ਕਰੋ
+                        </button>
+                      )}
+
+                      <button
+                        type="button"
+                        onClick={() => handleOpenEdit(item)}
+                        style={{
+                          backgroundColor: '#1c2d5a',
+                          color: '#ffffff',
+                          border: 'none',
+                          padding: '5px 10px',
+                          borderRadius: '4px',
+                          fontSize: '11.5px',
+                          fontWeight: '700',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        <i className="fa fa-pencil"></i> ਸੋਧੋ
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setItemToDelete(item);
+                          setDeleteModalOpen(true);
+                        }}
+                        style={{
+                          backgroundColor: '#fee2e2',
+                          color: '#b91c1c',
+                          border: '1px solid #fca5a5',
+                          padding: '5px 10px',
+                          borderRadius: '4px',
+                          fontSize: '11.5px',
+                          fontWeight: '700',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        <i className="fa fa-trash"></i> ਹਟਾਓ
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </>
         )}
       </div>
 
       {/* 3. ADD / EDIT MUKHWAK MODAL */}
       {modalOpen && (
         <div
+          className="cms-modal-overlay"
           style={{
             position: 'fixed',
             inset: 0,
@@ -683,10 +790,11 @@ export default function MukhwakManagerView({ currentUser }) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '20px'
+            padding: '16px 12px'
           }}
         >
           <div
+            className="cms-modal-content"
             style={{
               backgroundColor: '#ffffff',
               borderRadius: '10px',
@@ -1018,6 +1126,7 @@ export default function MukhwakManagerView({ currentUser }) {
       {/* 4. DELETE CONFIRMATION MODAL */}
       {deleteModalOpen && itemToDelete && (
         <div
+          className="cms-modal-overlay"
           style={{
             position: 'fixed',
             inset: 0,
@@ -1026,16 +1135,17 @@ export default function MukhwakManagerView({ currentUser }) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '20px'
+            padding: '16px 12px'
           }}
         >
           <div
+            className="cms-modal-content"
             style={{
               backgroundColor: '#ffffff',
               borderRadius: '8px',
               maxWidth: '450px',
               width: '100%',
-              padding: '24px',
+              padding: '20px 16px',
               boxShadow: '0 20px 25px -5px rgba(0,0,0,0.2)'
             }}
           >

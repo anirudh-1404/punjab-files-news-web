@@ -10,6 +10,8 @@ import ReviewQueueView from './editor/ReviewQueueView';
 import BreakingNewsManagerView from './editor/BreakingNewsManagerView';
 import CreateArticleView from './reporter/CreateArticleView';
 import MyArticlesView from './reporter/MyArticlesView';
+import ContactMessagesView from './admin/ContactMessagesView';
+import { contactAPI } from '../../services/api';
 
 export default function DashboardLayout({ user, onLogout }) {
   // Default tab based on role
@@ -20,6 +22,7 @@ export default function DashboardLayout({ user, onLogout }) {
   };
 
   const [activeTab, setActiveTab] = useState(() => getDefaultTab(user?.role));
+  const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
 
   // Available tabs for each role
   const getTabsForRole = () => {
@@ -36,6 +39,7 @@ export default function DashboardLayout({ user, onLogout }) {
       return [
         { id: 'review', label: 'ਸੰਪਾਦਕੀ ਸਮੀਖਿਆ', icon: 'fa-check-square-o', sub: 'Review Desk' },
         { id: 'breaking', label: 'ਬਰੇਕਿੰਗ ਨਿਊਜ਼', icon: 'fa-bolt', sub: 'Breaking Ticker' },
+        { id: 'contact_queries', label: 'ਸੰਪਰਕ ਸੁਨੇਹੇ', icon: 'fa-envelope-o', sub: 'Inquiries' },
         { id: 'mukhwak', label: 'ਮੁੱਖ ਵਾਕ (ਹੁਕਮਨਾਮਾ)', icon: 'fa-book', sub: 'Daily Mukhwak' }
       ];
     }
@@ -45,11 +49,25 @@ export default function DashboardLayout({ user, onLogout }) {
       { id: 'overview', label: 'ਓਵਰਵਿਊ', icon: 'fa-dashboard', sub: 'Overview' },
       { id: 'all_news', label: 'ਸਾਰੀਆਂ ਖ਼ਬਰਾਂ (ਕੈਟੇਗਰੀ ਵਾਈਜ਼)', icon: 'fa-newspaper-o', sub: 'All News & Categories' },
       { id: 'review', label: 'ਅੰਤਿਮ ਪ੍ਰਵਾਨਗੀ ਡੈਸਕ', icon: 'fa-check-square-o', sub: 'Final Approval Desk' },
+      { id: 'contact_queries', label: 'ਸੰਪਰਕ ਸੁਨੇਹੇ', icon: 'fa-envelope-o', sub: 'Inquiries' },
       { id: 'users', label: 'ਸਟਾਫ਼ ਪ੍ਰਬੰਧਨ', icon: 'fa-users', sub: 'Staff Management' },
       { id: 'breaking', label: 'ਬਰੇਕਿੰਗ ਨਿਊਜ਼', icon: 'fa-bolt', sub: 'Breaking News' },
       { id: 'mukhwak', label: 'ਮੁੱਖ ਵਾਕ (ਹੁਕਮਨਾਮਾ)', icon: 'fa-book', sub: 'Daily Mukhwak' }
     ];
   };
+
+  // Fetch initial unread contact messages count for admin/editor
+  React.useEffect(() => {
+    if (['admin', 'editor'].includes(user?.role)) {
+      contactAPI
+        .getMessages()
+        .then((res) => {
+          const unread = (res.messages || []).filter((m) => m.status === 'unread').length;
+          setUnreadMessagesCount(unread);
+        })
+        .catch(() => {});
+    }
+  }, [user?.role]);
 
   // Keep activeTab in sync with allowed tabs for the current role
   React.useEffect(() => {
@@ -86,118 +104,141 @@ export default function DashboardLayout({ user, onLogout }) {
   const roleInfo = getRoleBadge(user?.role);
 
   return (
-    <div style={{ backgroundColor: '#f1f5f9', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div className="admin-dashboard-wrapper" style={{ backgroundColor: '#f1f5f9', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Top Brand Header Bar */}
       <header
+        className="admin-cms-header"
         style={{
-          backgroundColor: '#000000',
+          backgroundColor: '#0a0d14',
           borderBottom: '3px solid #b71c1c',
-          padding: '12px 0',
+          padding: '10px 0',
           position: 'sticky',
           top: 0,
           zIndex: 1000,
-          boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+          boxShadow: '0 4px 14px rgba(0,0,0,0.2)'
         }}
       >
-        <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
-          {/* Brand Logo & Portal Name */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-              <img
-                src={whiteLogo}
-                alt="Punjab Files Logo"
-                style={{ height: '48px', width: 'auto', display: 'block' }}
-              />
-            </Link>
-            <div style={{ borderLeft: '1px solid rgba(255,255,255,0.2)', paddingLeft: '14px' }}>
-              <span style={{ color: '#ffffff', fontSize: '15px', fontWeight: '800', display: 'block', letterSpacing: '0.3px' }}>
-                ਨਿਊਜ਼ਰੂਮ ਪੋਰਟਲ (Newsroom CMS)
-              </span>
-              <span style={{ color: '#ebb10d', fontSize: '11px', fontWeight: '700' }}>
-                Punjab Files Broadcast & Digital Media
-              </span>
+        <div className="container">
+          <div className="admin-header-flex">
+            {/* Left: Brand Logo & Portal Title */}
+            <div className="admin-header-brand">
+              <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+                <img
+                  src={whiteLogo}
+                  alt="Punjab Files Logo"
+                  className="admin-logo-img"
+                  style={{ height: '42px', width: 'auto', display: 'block' }}
+                />
+              </Link>
+              <div className="admin-portal-titles" style={{ borderLeft: '1px solid rgba(255,255,255,0.2)', paddingLeft: '12px' }}>
+                <span className="portal-main-title" style={{ color: '#ffffff', fontSize: '14.5px', fontWeight: '800', display: 'block', letterSpacing: '0.3px', lineHeight: 1.2 }}>
+                  ਨਿਊਜ਼ਰੂਮ ਪੋਰਟਲ (Newsroom CMS)
+                </span>
+                <span className="portal-sub-title" style={{ color: '#ebb10d', fontSize: '11px', fontWeight: '700', display: 'block' }}>
+                  Punjab Files Broadcast & Digital Media
+                </span>
+              </div>
             </div>
-          </div>
 
-          {/* User Profile Info & Actions */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
-            {/* User Pill */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', backgroundColor: 'rgba(255,255,255,0.08)', padding: '6px 14px', borderRadius: '30px', border: '1px solid rgba(255,255,255,0.12)' }}>
-              <div
+            {/* Right: User Profile Info & Action Controls */}
+            <div className="admin-header-controls">
+              {/* User Identity Pill */}
+              <div className="admin-user-pill">
+                <div
+                  style={{
+                    width: '30px',
+                    height: '30px',
+                    borderRadius: '50%',
+                    backgroundColor: roleInfo.bg,
+                    color: '#ffffff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: '800',
+                    fontSize: '12.5px',
+                    flexShrink: 0
+                  }}
+                >
+                  {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                </div>
+                <div className="admin-user-text">
+                  <span style={{ display: 'block', color: '#ffffff', fontSize: '12.5px', fontWeight: '700', lineHeight: 1.2, whiteSpace: 'nowrap' }}>
+                    {user?.name || 'Staff User'}
+                  </span>
+                  <span style={{ display: 'block', color: roleInfo.bg === '#1c2d5a' ? '#93c5fd' : roleInfo.bg === '#b71c1c' ? '#fca5a5' : '#86efac', fontSize: '10px', fontWeight: '700', whiteSpace: 'nowrap' }}>
+                    {roleInfo.label}
+                  </span>
+                </div>
+              </div>
+
+              {/* View Live Website Button */}
+              <Link
+                to="/"
+                className="admin-btn-view-site"
+                title="ਵੈੱਬਸਾਈਟ ਦੇਖੋ"
                 style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '50%',
-                  backgroundColor: roleInfo.bg,
-                  color: '#ffffff',
-                  display: 'flex',
+                  backgroundColor: 'rgba(255,255,255,0.08)',
+                  color: '#e2e8f0',
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  padding: '6px 12px',
+                  borderRadius: '6px',
+                  fontSize: '12px',
+                  fontWeight: '700',
+                  textDecoration: 'none',
+                  display: 'inline-flex',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  fontWeight: '800',
-                  fontSize: '13px'
+                  gap: '6px',
+                  whiteSpace: 'nowrap',
+                  transition: 'all 0.15s ease'
                 }}
               >
-                {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
-              </div>
-              <div>
-                <span style={{ display: 'block', color: '#ffffff', fontSize: '13px', fontWeight: '700', lineHeight: 1.2 }}>
-                  {user?.name || 'Staff User'}
-                </span>
-                <span style={{ display: 'block', color: roleInfo.bg === '#1c2d5a' ? '#93c5fd' : roleInfo.bg === '#b71c1c' ? '#fca5a5' : '#86efac', fontSize: '10.5px', fontWeight: '700' }}>
-                  {roleInfo.label}
-                </span>
-              </div>
+                <i className="fa fa-globe" style={{ color: '#ebb10d' }}></i>
+                <span className="btn-label-desktop">ਵੈੱਬਸਾਈਟ ਦੇਖੋ</span>
+              </Link>
+
+              {/* Logout Button */}
+              <button
+                type="button"
+                onClick={onLogout}
+                className="admin-btn-logout"
+                title="ਲੌਗਆਊਟ ਕਰੋ"
+                style={{
+                  backgroundColor: '#b71c1c',
+                  color: '#ffffff',
+                  border: 'none',
+                  padding: '6px 12px',
+                  borderRadius: '6px',
+                  fontSize: '12px',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  whiteSpace: 'nowrap',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                <i className="fa fa-sign-out"></i>
+                <span>ਲੌਗਆਊਟ</span>
+              </button>
             </div>
-
-            {/* View Website */}
-            <Link
-              to="/"
-              style={{
-                backgroundColor: 'transparent',
-                color: '#e2e8f0',
-                border: '1px solid rgba(255,255,255,0.25)',
-                padding: '7px 14px',
-                borderRadius: '4px',
-                fontSize: '12.5px',
-                fontWeight: '700',
-                textDecoration: 'none',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px'
-              }}
-            >
-              <i className="fa fa-globe" style={{ color: '#ebb10d' }}></i>
-              <span>ਵੈੱਬਸਾਈਟ ਦੇਖੋ</span>
-            </Link>
-
-            {/* Logout Button */}
-            <button
-              type="button"
-              onClick={onLogout}
-              style={{
-                backgroundColor: '#b71c1c',
-                color: '#ffffff',
-                border: 'none',
-                padding: '7px 14px',
-                borderRadius: '4px',
-                fontSize: '12.5px',
-                fontWeight: '700',
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px'
-              }}
-            >
-              <i className="fa fa-sign-out"></i>
-              <span>ਲੌਗਆਊਟ</span>
-            </button>
           </div>
         </div>
       </header>
 
-      {/* Navigation Tabs Bar */}
-      <div style={{ backgroundColor: '#ffffff', borderBottom: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.02)' }}>
-        <div className="container" style={{ display: 'flex', gap: '4px', overflowX: 'auto', padding: '0 15px' }}>
+      {/* Navigation Tabs Bar with Touch Scrolling */}
+      <div className="admin-cms-tabs-bar" style={{ backgroundColor: '#ffffff', borderBottom: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.03)' }}>
+        <div
+          className="container admin-tabs-scroll-container"
+          style={{
+            display: 'flex',
+            gap: '4px',
+            overflowX: 'auto',
+            padding: '0 15px',
+            WebkitOverflowScrolling: 'touch',
+            scrollbarWidth: 'none'
+          }}
+        >
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
             return (
@@ -205,24 +246,41 @@ export default function DashboardLayout({ user, onLogout }) {
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
+                className={`admin-tab-btn ${isActive ? 'active' : ''}`}
                 style={{
-                  padding: '14px 18px',
+                  padding: '12px 16px',
                   backgroundColor: 'transparent',
                   border: 'none',
                   borderBottom: isActive ? '3px solid #b71c1c' : '3px solid transparent',
                   color: isActive ? '#b71c1c' : '#475569',
                   fontWeight: isActive ? '800' : '600',
-                  fontSize: '14px',
+                  fontSize: '13.5px',
                   cursor: 'pointer',
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '8px',
                   whiteSpace: 'nowrap',
-                  transition: 'all 0.2s ease'
+                  transition: 'all 0.15s ease',
+                  flexShrink: 0
                 }}
               >
                 <i className={`fa ${tab.icon}`} style={{ color: isActive ? '#b71c1c' : '#94a3b8' }}></i>
                 <span>{tab.label}</span>
+                {tab.id === 'contact_queries' && unreadMessagesCount > 0 && (
+                  <span
+                    style={{
+                      backgroundColor: '#dc2626',
+                      color: '#ffffff',
+                      fontSize: '11px',
+                      fontWeight: '800',
+                      padding: '1px 6px',
+                      borderRadius: '10px',
+                      lineHeight: 1.2
+                    }}
+                  >
+                    {unreadMessagesCount}
+                  </span>
+                )}
               </button>
             );
           })}
@@ -230,7 +288,7 @@ export default function DashboardLayout({ user, onLogout }) {
       </div>
 
       {/* Main Content Area */}
-      <main style={{ flex: 1, padding: '28px 0 50px' }}>
+      <main className="admin-cms-main" style={{ flex: 1, padding: '24px 0 50px' }}>
         <div className="container">
           {activeTab === 'overview' && user?.role === 'admin' && (
             <OverviewStatsView user={user} onNavigate={setActiveTab} />
@@ -254,6 +312,10 @@ export default function DashboardLayout({ user, onLogout }) {
 
           {activeTab === 'breaking' && ['admin', 'editor'].includes(user?.role) && (
             <BreakingNewsManagerView />
+          )}
+
+          {activeTab === 'contact_queries' && ['admin', 'editor'].includes(user?.role) && (
+            <ContactMessagesView onUnreadCountChange={setUnreadMessagesCount} />
           )}
 
           {activeTab === 'users' && user?.role === 'admin' && (
