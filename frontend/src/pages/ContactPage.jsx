@@ -94,8 +94,8 @@ export default function ContactPage() {
 
               <form onSubmit={handleSubmit}>
                 {/* Name */}
-                <div style={{ marginBottom: '16px' }}>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#000000', marginBottom: '6px' }}>
+                <div style={{ marginBottom: '18px' }}>
+                  <label style={{ display: 'block', fontSize: '13.5px', fontWeight: '700', color: '#0f172a', marginBottom: '7px' }}>
                     ਪੂਰਾ ਨਾਂਅ (Full Name) *
                   </label>
                   <input
@@ -104,44 +104,100 @@ export default function ContactPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
-                    style={{ width: '100%', padding: '10px 12px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '14px', color: '#000000' }}
+                    style={{
+                      width: '100%',
+                      boxSizing: 'border-box',
+                      padding: '11px 14px',
+                      border: '1.5px solid #cbd5e1',
+                      borderRadius: '6px',
+                      fontSize: '14px',
+                      color: '#0f172a',
+                      backgroundColor: '#ffffff',
+                      outline: 'none',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = '#b71c1c';
+                      e.target.style.boxShadow = '0 0 0 3px rgba(183, 28, 28, 0.12)';
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = '#cbd5e1';
+                      e.target.style.boxShadow = 'none';
+                    }}
                   />
                 </div>
 
-                {/* Email and Phone */}
-                <div className="row">
-                  <div className="col-sm-6 col-xs-12" style={{ marginBottom: '16px' }}>
-                    <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#000000', marginBottom: '6px' }}>
-                      ਈਮੇਲ ਪਤਾ (Email Address) *
-                    </label>
-                    <input
-                      type="email"
-                      placeholder="name@example.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      style={{ width: '100%', padding: '10px 12px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '14px', color: '#000000' }}
-                    />
-                  </div>
+                {/* Email Address */}
+                <div style={{ marginBottom: '18px' }}>
+                  <label style={{ display: 'block', fontSize: '13.5px', fontWeight: '700', color: '#0f172a', marginBottom: '7px' }}>
+                    ਈਮੇਲ ਪਤਾ (Email Address) *
+                  </label>
+                  <input
+                    type="email"
+                    placeholder="name@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    style={{
+                      width: '100%',
+                      boxSizing: 'border-box',
+                      padding: '11px 14px',
+                      border: '1.5px solid #cbd5e1',
+                      borderRadius: '6px',
+                      fontSize: '14px',
+                      color: '#0f172a',
+                      backgroundColor: '#ffffff',
+                      outline: 'none',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = '#b71c1c';
+                      e.target.style.boxShadow = '0 0 0 3px rgba(183, 28, 28, 0.12)';
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = '#cbd5e1';
+                      e.target.style.boxShadow = 'none';
+                    }}
+                  />
+                </div>
 
-                  <div className="col-sm-6 col-xs-12" style={{ marginBottom: '16px' }}>
-                    <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#000000', marginBottom: '6px' }}>
-                      ਸੰਪਰਕ ਨੰਬਰ (Contact Number) *
-                    </label>
-                    <input
-                      type="tel"
-                      placeholder="+91 98765 43210"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      required
-                      style={{ width: '100%', padding: '10px 12px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '14px', color: '#000000' }}
-                    />
-                  </div>
+                {/* Contact Number */}
+                <div style={{ marginBottom: '18px' }}>
+                  <label style={{ display: 'block', fontSize: '13.5px', fontWeight: '700', color: '#0f172a', marginBottom: '7px' }}>
+                    ਸੰਪਰਕ ਨੰਬਰ (Contact Number) *
+                  </label>
+                  <input
+                    type="tel"
+                    placeholder="+91 98765 43210"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    required
+                    style={{
+                      width: '100%',
+                      boxSizing: 'border-box',
+                      padding: '11px 14px',
+                      border: '1.5px solid #cbd5e1',
+                      borderRadius: '6px',
+                      fontSize: '14px',
+                      color: '#0f172a',
+                      backgroundColor: '#ffffff',
+                      outline: 'none',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = '#b71c1c';
+                      e.target.style.boxShadow = '0 0 0 3px rgba(183, 28, 28, 0.12)';
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = '#cbd5e1';
+                      e.target.style.boxShadow = 'none';
+                    }}
+                  />
                 </div>
 
                 {/* Message */}
-                <div style={{ marginBottom: '20px' }}>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#000000', marginBottom: '6px' }}>
+                <div style={{ marginBottom: '22px' }}>
+                  <label style={{ display: 'block', fontSize: '13.5px', fontWeight: '700', color: '#0f172a', marginBottom: '7px' }}>
                     ਸੁਨੇਹਾ ਜਾਂ ਖ਼ਬਰ ਦਾ ਵੇਰਵਾ (Message / News Details) *
                   </label>
                   <textarea
@@ -150,7 +206,27 @@ export default function ContactPage() {
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     required
-                    style={{ width: '100%', padding: '12px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '14px', lineHeight: '1.6', color: '#000000' }}
+                    style={{
+                      width: '100%',
+                      boxSizing: 'border-box',
+                      padding: '12px 14px',
+                      border: '1.5px solid #cbd5e1',
+                      borderRadius: '6px',
+                      fontSize: '14px',
+                      lineHeight: '1.6',
+                      color: '#0f172a',
+                      backgroundColor: '#ffffff',
+                      outline: 'none',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = '#b71c1c';
+                      e.target.style.boxShadow = '0 0 0 3px rgba(183, 28, 28, 0.12)';
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = '#cbd5e1';
+                      e.target.style.boxShadow = 'none';
+                    }}
                   ></textarea>
                 </div>
 
