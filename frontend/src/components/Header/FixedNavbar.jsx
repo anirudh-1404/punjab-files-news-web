@@ -154,8 +154,22 @@ export default function FixedNavbar() {
     <div className="navbar" id="fixed-navbar" style={{ position: 'relative' }}>
       {/* Main Red Navbar Menu with Punjabi Categories */}
       <div className="main-menu" id="fixed-navbar-toggle">
-        <div className="container nav-scroll-container">
-          <ul className="nav navbar-nav horizontal-category-nav">
+        <div
+          className="container"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            position: 'relative'
+          }}
+        >
+          <div
+            className="nav-scroll-container"
+            style={{
+              flex: '1 1 auto'
+            }}
+          >
+            <ul className="nav navbar-nav horizontal-category-nav">
             {/* Interactive Mobile Menu Chip */}
             <li className="category-indicator-chip visible-xs visible-sm" style={{ display: 'inline-flex', alignItems: 'center' }}>
               <button
@@ -223,12 +237,17 @@ export default function FixedNavbar() {
             </li>
 
             {/* 2. Punjab with Single-Arrow Interactive Tri-Region Dropdown */}
-            <li className={`dropdown punjab-nav-item ${activeSection === 'punjab' ? 'active' : ''} ${punjabDropdownOpen ? 'open' : ''}`}>
+            <li
+              className={`dropdown punjab-nav-item ${activeSection === 'punjab' ? 'active' : ''} ${punjabDropdownOpen ? 'open' : ''}`}
+              onMouseEnter={() => setPunjabDropdownOpen(true)}
+              onMouseLeave={() => setPunjabDropdownOpen(false)}
+              style={{ position: 'relative' }}
+            >
               <a
                 href="/category/punjab"
                 onClick={(e) => {
                   e.preventDefault();
-                  setPunjabDropdownOpen(prev => !prev);
+                  setPunjabDropdownOpen((prev) => !prev);
                 }}
                 style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}
               >
@@ -236,8 +255,25 @@ export default function FixedNavbar() {
                 <i className={`fa fa-chevron-${punjabDropdownOpen ? 'up' : 'down'}`} style={{ fontSize: '11px', marginLeft: '3px' }}></i>
               </a>
 
-              {/* Desktop Dropdown (hidden on mobile, relies on standard desktop styles) */}
-              <ul className="dropdown-menu hidden-xs hidden-sm">
+              {/* Desktop Dropdown */}
+              <ul
+                className="dropdown-menu hidden-xs hidden-sm"
+                style={{
+                  display: punjabDropdownOpen ? 'block' : 'none',
+                  position: 'absolute',
+                  top: '100%',
+                  left: 0,
+                  minWidth: '220px',
+                  backgroundColor: '#1c2d5a',
+                  border: '2px solid #ebb10d',
+                  borderRadius: '0 0 8px 8px',
+                  boxShadow: '0 12px 30px rgba(0, 0, 0, 0.5)',
+                  padding: '6px 0',
+                  margin: 0,
+                  zIndex: 999999,
+                  listStyle: 'none'
+                }}
+              >
                 <li>
                   <Link
                     to="/category/punjab"
@@ -245,8 +281,29 @@ export default function FixedNavbar() {
                       setActiveSection('punjab');
                       setPunjabDropdownOpen(false);
                     }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '10px',
+                      padding: '10px 18px',
+                      color: '#ffffff',
+                      fontSize: '13.5px',
+                      fontWeight: '700',
+                      textDecoration: 'none',
+                      borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                      transition: 'all 0.15s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#b71c1c';
+                      e.currentTarget.style.paddingLeft = '22px';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.paddingLeft = '18px';
+                    }}
                   >
-                    ਸਾਰਾ ਪੰਜਾਬ (All Punjab)
+                    <i className="fa fa-globe" style={{ color: '#ebb10d' }}></i>
+                    <span>ਸਾਰਾ ਪੰਜਾਬ (All Punjab)</span>
                   </Link>
                 </li>
                 <li>
@@ -256,8 +313,29 @@ export default function FixedNavbar() {
                       setActiveSection('punjab');
                       setPunjabDropdownOpen(false);
                     }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '10px',
+                      padding: '10px 18px',
+                      color: '#ffffff',
+                      fontSize: '13px',
+                      fontWeight: '700',
+                      textDecoration: 'none',
+                      borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                      transition: 'all 0.15s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#b71c1c';
+                      e.currentTarget.style.paddingLeft = '22px';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.paddingLeft = '18px';
+                    }}
                   >
-                    ਮਾਝਾ (Majha)
+                    <i className="fa fa-compass" style={{ color: '#ebb10d' }}></i>
+                    <span>ਮਾਝਾ (Majha)</span>
                   </Link>
                 </li>
                 <li>
@@ -267,8 +345,29 @@ export default function FixedNavbar() {
                       setActiveSection('punjab');
                       setPunjabDropdownOpen(false);
                     }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '10px',
+                      padding: '10px 18px',
+                      color: '#ffffff',
+                      fontSize: '13px',
+                      fontWeight: '700',
+                      textDecoration: 'none',
+                      borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                      transition: 'all 0.15s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#b71c1c';
+                      e.currentTarget.style.paddingLeft = '22px';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.paddingLeft = '18px';
+                    }}
                   >
-                    ਮਾਲਵਾ (Malwa)
+                    <i className="fa fa-compass" style={{ color: '#ebb10d' }}></i>
+                    <span>ਮਾਲਵਾ (Malwa)</span>
                   </Link>
                 </li>
                 <li>
@@ -278,8 +377,28 @@ export default function FixedNavbar() {
                       setActiveSection('punjab');
                       setPunjabDropdownOpen(false);
                     }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '10px',
+                      padding: '10px 18px',
+                      color: '#ffffff',
+                      fontSize: '13px',
+                      fontWeight: '700',
+                      textDecoration: 'none',
+                      transition: 'all 0.15s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#b71c1c';
+                      e.currentTarget.style.paddingLeft = '22px';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.paddingLeft = '18px';
+                    }}
                   >
-                    ਦੋਆਬਾ (Doaba)
+                    <i className="fa fa-compass" style={{ color: '#ebb10d' }}></i>
+                    <span>ਦੋਆਬਾ (Doaba)</span>
                   </Link>
                 </li>
               </ul>
@@ -364,82 +483,96 @@ export default function FixedNavbar() {
                 ਸੰਪਰਕ
               </a>
             </li>
-
-            {/* 11. Desktop Integrated Search Bar */}
-            <li className="navbar-search-item hidden-xs hidden-sm" style={{ marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', paddingLeft: '8px' }}>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  if (navSearchQuery.trim()) {
-                    navigate(`/search?q=${encodeURIComponent(navSearchQuery.trim())}`);
-                  }
-                }}
-                style={{
-                  position: 'relative',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  margin: 0
-                }}
-              >
-                <input
-                  type="text"
-                  placeholder="ਖ਼ਬਰਾਂ ਖੋਜੋ... (Search)"
-                  value={navSearchQuery}
-                  onChange={(e) => setNavSearchQuery(e.target.value)}
-                  style={{
-                    backgroundColor: '#ffffff',
-                    color: '#0f172a',
-                    border: '1.5px solid rgba(28, 45, 90, 0.4)',
-                    borderRadius: '20px',
-                    padding: '5px 32px 5px 12px',
-                    fontSize: '12.5px',
-                    fontWeight: '600',
-                    width: '160px',
-                    transition: 'all 0.25s ease',
-                    outline: 'none',
-                    boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.06)',
-                    fontFamily: "'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif"
-                  }}
-                  onFocus={(e) => {
-                    e.target.style.width = '220px';
-                    e.target.style.borderColor = '#1c2d5a';
-                    e.target.style.boxShadow = '0 0 0 2px rgba(28, 45, 90, 0.15)';
-                  }}
-                  onBlur={(e) => {
-                    if (!navSearchQuery) e.target.style.width = '160px';
-                    e.target.style.borderColor = 'rgba(28, 45, 90, 0.4)';
-                    e.target.style.boxShadow = 'inset 0 1px 2px rgba(0,0,0,0.06)';
-                  }}
-                />
-                <button
-                  type="submit"
-                  aria-label="Search"
-                  style={{
-                    position: 'absolute',
-                    right: '3px',
-                    background: '#1c2d5a',
-                    color: '#ffffff',
-                    border: 'none',
-                    borderRadius: '50%',
-                    width: '24px',
-                    height: '24px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    fontSize: '11px',
-                    transition: 'background-color 0.15s ease'
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#b71c1c')}
-                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#1c2d5a')}
-                >
-                  <i className="fa fa-search"></i>
-                </button>
-              </form>
-            </li>
           </ul>
         </div>
+
+        {/* Right: High-End Desktop Search Bar (Aligned to Far Right) */}
+        <div
+          className="navbar-search-desktop-wrapper hidden-xs hidden-sm"
+          style={{
+            flexShrink: 0,
+            marginLeft: '20px',
+            display: 'flex',
+            alignItems: 'center'
+          }}
+        >
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (navSearchQuery.trim()) {
+                navigate(`/search?q=${encodeURIComponent(navSearchQuery.trim())}`);
+              }
+            }}
+            style={{
+              position: 'relative',
+              display: 'flex',
+              alignItems: 'center',
+              margin: 0
+            }}
+          >
+            <input
+              type="text"
+              placeholder="ਖ਼ਬਰਾਂ ਖੋਜੋ... (Search news)"
+              value={navSearchQuery}
+              onChange={(e) => setNavSearchQuery(e.target.value)}
+              style={{
+                backgroundColor: '#ffffff',
+                color: '#0f172a',
+                border: '1.5px solid rgba(28, 45, 90, 0.45)',
+                borderRadius: '24px',
+                padding: '7px 40px 7px 16px',
+                fontSize: '13px',
+                fontWeight: '600',
+                width: '210px',
+                height: '35px',
+                boxSizing: 'border-box',
+                outline: 'none',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+                transition: 'all 0.25s ease',
+                fontFamily: "'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif"
+              }}
+              onFocus={(e) => {
+                e.target.style.width = '270px';
+                e.target.style.borderColor = '#1c2d5a';
+                e.target.style.boxShadow = '0 0 0 3px rgba(28, 45, 90, 0.2)';
+              }}
+              onBlur={(e) => {
+                if (!navSearchQuery) e.target.style.width = '210px';
+                e.target.style.borderColor = 'rgba(28, 45, 90, 0.45)';
+                e.target.style.boxShadow = '0 2px 6px rgba(0,0,0,0.1)';
+              }}
+            />
+            <button
+              type="submit"
+              aria-label="Search"
+              style={{
+                position: 'absolute',
+                right: '3px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                backgroundColor: '#1c2d5a',
+                color: '#ffffff',
+                border: 'none',
+                borderRadius: '50%',
+                width: '29px',
+                height: '29px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                fontSize: '12px',
+                boxShadow: '0 1px 4px rgba(0,0,0,0.2)',
+                transition: 'background-color 0.15s ease'
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#b71c1c')}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#1c2d5a')}
+            >
+              <i className="fa fa-search"></i>
+            </button>
+          </form>
+        </div>
       </div>
+    </div>
 
       {/* Mobile Expandable Search Bar Panel */}
       {mobileSearchOpen && (

@@ -1756,6 +1756,23 @@ html.lenis, html.lenis body {
   box-shadow: inset 0 -3px 0 0 #ebb10d !important;
 }
 
+/* Desktop Punjab Dropdown Rules (Never cut off by overflow) */
+@media (min-width: 769px) {
+  #fixed-navbar .nav-scroll-container {
+    overflow: visible !important;
+  }
+  #fixed-navbar .navbar-nav {
+    overflow: visible !important;
+  }
+  #fixed-navbar .punjab-nav-item {
+    position: relative !important;
+  }
+  #fixed-navbar .punjab-nav-item.open > .dropdown-menu,
+  #fixed-navbar .punjab-nav-item:hover > .dropdown-menu {
+    display: block !important;
+  }
+}
+
 /* ====================================================
    15. ADVANCED RESPONSIVE SYSTEM (MOBILE & TABLET)
 ==================================================== */

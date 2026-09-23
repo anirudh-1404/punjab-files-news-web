@@ -16,6 +16,70 @@ const CATEGORY_MAP = {
 
 const POPULAR_TAGS = ['ਪੰਜਾਬ', 'ਸ੍ਰੀ ਦਰਬਾਰ ਸਾਹਿਬ', 'ਅੰਮ੍ਰਿਤਸਰ', 'ਲੁਧਿਆਣਾ', 'ਖੇਡਾਂ', 'ਸਿਹਤ', 'ਮਨੋਰੰਜਨ', 'ਵਿਰਾਸਤ'];
 
+// Expand bilingual search terms (English <-> Punjabi / Transliterations)
+const BILINGUAL_KEYWORDS = {
+  punjab: ["ਪੰਜਾਬ", "punjab", "panjab"],
+  panjab: ["ਪੰਜਾਬ", "punjab", "panjab"],
+  amritsar: ["ਅੰਮ੍ਰਿਤਸਰ", "amritsar"],
+  ludhiana: ["ਲੁਧਿਆਣਾ", "ludhiana"],
+  jalandhar: ["ਜਲੰਧਰ", "jalandhar"],
+  bathinda: ["ਬਠਿੰਡਾ", "bathinda", "bhatinda"],
+  bhatinda: ["ਬਠਿੰਡਾ", "bathinda", "bhatinda"],
+  patiala: ["ਪਟਿਆਲਾ", "patiala"],
+  gurdaspur: ["ਗੁਰਦਾਸਪੁਰ", "gurdaspur"],
+  tarn: ["ਤਰਨਤਾਰਨ", "ਤਰਨ", "tarn"],
+  tarntaran: ["ਤਰਨਤਾਰਨ", "tarntaran"],
+  sangrur: ["ਸੰਗਰੂਰ", "sangrur"],
+  moga: ["ਮੋਗਾ", "moga"],
+  firozpur: ["ਫ਼ਿਰੋਜ਼ਪੁਰ", "firozpur", "ferozepur"],
+  ferozepur: ["ਫ਼ਿਰੋਜ਼ਪੁਰ", "firozpur", "ferozepur"],
+  hushiarpur: ["ਹੁਸ਼ਿਆਰਪੁਰ", "hushiarpur", "hoshiarpur"],
+  hoshiarpur: ["ਹੁਸ਼ਿਆਰਪੁਰ", "hushiarpur", "hoshiarpur"],
+  kapurthala: ["ਕਪੂਰਥਲਾ", "kapurthala"],
+  pathankot: ["ਪਠਾਨਕੋਟ", "pathankot"],
+  majha: ["ਮਾਝਾ", "majha"],
+  malwa: ["ਮਾਲਵਾ", "malwa"],
+  doaba: ["ਦੋਆਬਾ", "doaba"],
+  sports: ["ਖੇਡ", "ਖੇਡਾਂ", "sport", "sports"],
+  sport: ["ਖੇਡ", "ਖੇਡਾਂ", "sport", "sports"],
+  health: ["ਸਿਹਤ", "health"],
+  religion: ["ਧਰਮ", "religion"],
+  religious: ["ਧਰਮ", "religious"],
+  entertainment: ["ਮਨੋਰੰਜਨ", "entertainment", "cinema"],
+  cinema: ["ਮਨੋਰੰਜਨ", "cinema"],
+  travel: ["ਸੈਰ-ਸਪਾਟਾ", "ਵਿਰਸਾ", "travel"],
+  heritage: ["ਵਿਰਸਾ", "heritage"],
+  world: ["ਦੇਸ਼-ਵਿਦੇਸ਼", "ਵਿਦੇਸ਼", "world"],
+  national: ["ਦੇਸ਼-ਵਿਦੇਸ਼", "ਰਾਸ਼ਟਰੀ", "national"],
+  farmer: ["ਕਿਸਾਨ", "ਖੇਤੀ", "farmer"],
+  farmers: ["ਕਿਸਾਨ", "ਖੇਤੀ", "farmers"],
+  kisan: ["ਕਿਸਾਨ", "kisan"],
+  police: ["ਪੁਲਿਸ", "police"],
+  crime: ["ਜੁਰਮ", "ਅਪਰਾਧ", "crime"],
+  darbar: ["ਦਰਬਾਰ", "darbar"],
+  mukhwak: ["ਮੁੱਖਵਾਕ", "ਹੁਕਮਨਾਮਾ", "mukhwak"],
+  hukamnama: ["ਹੁਕਮਨਾਮਾ", "ਮੁੱਖਵਾਕ", "hukamnama"],
+  live: ["ਲਾਈਵ", "live"],
+  modi: ["ਮੋਦੀ", "modi"],
+  mann: ["ਮਾਨ", "ਭਗਵੰਤ", "mann"],
+  bhagwant: ["ਭਗਵੰਤ", "ਮਾਨ", "bhagwant"]
+};
+
+const getSearchTerms = (str) => {
+  if (!str) return [];
+  const clean = str.trim();
+  const lower = clean.toLowerCase();
+  const terms = new Set([clean, lower]);
+
+  Object.keys(BILINGUAL_KEYWORDS).forEach((key) => {
+    if (lower.includes(key)) {
+      BILINGUAL_KEYWORDS[key].forEach((t) => terms.add(t));
+    }
+  });
+
+  return Array.from(terms);
+};
+
 export default function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParam = searchParams.get('q') || '';
@@ -44,18 +108,25 @@ export default function SearchPage() {
 
       // Also search local store for complete coverage
       const localAll = getAllArticles();
-      const lowerQ = (query || '').toLowerCase().trim();
-      const localMatches = lowerQ
+      const searchTerms = getSearchTerms(query);
+      const localMatches = searchTerms.length > 0
         ? localAll.filter((art) => {
             const title = (art.title || '').toLowerCase();
             const excerpt = (art.excerpt || '').toLowerCase();
             const content = (art.content || '').toLowerCase();
             const author = (art.author || art.authorName || '').toLowerCase();
-            return (
-              title.includes(lowerQ) ||
-              excerpt.includes(lowerQ) ||
-              content.includes(lowerQ) ||
-              author.includes(lowerQ)
+            const cat = (art.category || '').toLowerCase();
+            const region = (art.punjabRegion || '').toLowerCase();
+            const slug = (art.slug || '').toLowerCase();
+
+            return searchTerms.some((term) =>
+              title.includes(term) ||
+              excerpt.includes(term) ||
+              content.includes(term) ||
+              author.includes(term) ||
+              cat.includes(term) ||
+              region.includes(term) ||
+              slug.includes(term)
             );
           })
         : localAll;

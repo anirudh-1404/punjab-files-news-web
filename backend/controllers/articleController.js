@@ -1,5 +1,69 @@
 import Article from "../models/Article.js";
 
+// Expand bilingual search terms (English <-> Punjabi / Transliterations)
+const BILINGUAL_KEYWORDS = {
+  punjab: ["ਪੰਜਾਬ", "punjab", "panjab"],
+  panjab: ["ਪੰਜਾਬ", "punjab", "panjab"],
+  amritsar: ["ਅੰਮ੍ਰਿਤਸਰ", "amritsar"],
+  ludhiana: ["ਲੁਧਿਆਣਾ", "ludhiana"],
+  jalandhar: ["ਜਲੰਧਰ", "jalandhar"],
+  bathinda: ["ਬਠਿੰਡਾ", "bathinda", "bhatinda"],
+  bhatinda: ["ਬਠਿੰਡਾ", "bathinda", "bhatinda"],
+  patiala: ["ਪਟਿਆਲਾ", "patiala"],
+  gurdaspur: ["ਗੁਰਦਾਸਪੁਰ", "gurdaspur"],
+  tarn: ["ਤਰਨਤਾਰਨ", "ਤਰਨ", "tarn"],
+  tarntaran: ["ਤਰਨਤਾਰਨ", "tarntaran"],
+  sangrur: ["ਸੰਗਰੂਰ", "sangrur"],
+  moga: ["ਮੋਗਾ", "moga"],
+  firozpur: ["ਫ਼ਿਰੋਜ਼ਪੁਰ", "firozpur", "ferozepur"],
+  ferozepur: ["ਫ਼ਿਰੋਜ਼ਪੁਰ", "firozpur", "ferozepur"],
+  hushiarpur: ["ਹੁਸ਼ਿਆਰਪੁਰ", "hushiarpur", "hoshiarpur"],
+  hoshiarpur: ["ਹੁਸ਼ਿਆਰਪੁਰ", "hushiarpur", "hoshiarpur"],
+  kapurthala: ["ਕਪੂਰਥਲਾ", "kapurthala"],
+  pathankot: ["ਪਠਾਨਕੋਟ", "pathankot"],
+  majha: ["ਮਾਝਾ", "majha"],
+  malwa: ["ਮਾਲਵਾ", "malwa"],
+  doaba: ["ਦੋਆਬਾ", "doaba"],
+  sports: ["ਖੇਡ", "ਖੇਡਾਂ", "sport", "sports"],
+  sport: ["ਖੇਡ", "ਖੇਡਾਂ", "sport", "sports"],
+  health: ["ਸਿਹਤ", "health"],
+  religion: ["ਧਰਮ", "religion"],
+  religious: ["ਧਰਮ", "religious"],
+  entertainment: ["ਮਨੋਰੰਜਨ", "entertainment", "cinema"],
+  cinema: ["ਮਨੋਰੰਜਨ", "cinema"],
+  travel: ["ਸੈਰ-ਸਪਾਟਾ", "ਵਿਰਸਾ", "travel"],
+  heritage: ["ਵਿਰਸਾ", "heritage"],
+  world: ["ਦੇਸ਼-ਵਿਦੇਸ਼", "ਵਿਦੇਸ਼", "world"],
+  national: ["ਦੇਸ਼-ਵਿਦੇਸ਼", "ਰਾਸ਼ਟਰੀ", "national"],
+  farmer: ["ਕਿਸਾਨ", "ਖੇਤੀ", "farmer"],
+  farmers: ["ਕਿਸਾਨ", "ਖੇਤੀ", "farmers"],
+  kisan: ["ਕਿਸਾਨ", "kisan"],
+  police: ["ਪੁਲਿਸ", "police"],
+  crime: ["ਜੁਰਮ", "ਅਪਰਾਧ", "crime"],
+  darbar: ["ਦਰਬਾਰ", "darbar"],
+  mukhwak: ["ਮੁੱਖਵਾਕ", "ਹੁਕਮਨਾਮਾ", "mukhwak"],
+  hukamnama: ["ਹੁਕਮਨਾਮਾ", "ਮੁੱਖਵਾਕ", "hukamnama"],
+  live: ["ਲਾਈਵ", "live"],
+  modi: ["ਮੋਦੀ", "modi"],
+  mann: ["ਮਾਨ", "ਭਗਵੰਤ", "mann"],
+  bhagwant: ["ਭਗਵੰਤ", "ਮਾਨ", "bhagwant"]
+};
+
+const getSearchTerms = (str) => {
+  if (!str) return [];
+  const clean = str.trim();
+  const lower = clean.toLowerCase();
+  const terms = new Set([clean, lower]);
+
+  Object.keys(BILINGUAL_KEYWORDS).forEach((key) => {
+    if (lower.includes(key)) {
+      BILINGUAL_KEYWORDS[key].forEach((t) => terms.add(t));
+    }
+  });
+
+  return Array.from(terms);
+};
+
 // @desc    Get all published articles (Public with filters)
 // @route   GET /api/articles
 // @access  Public
@@ -21,13 +85,21 @@ export const getPublishedArticles = async (req, res) => {
       query.language = language;
     }
 
-    if (search) {
-      query.$or = [
-        { title: { $regex: search, $options: "i" } },
-        { excerpt: { $regex: search, $options: "i" } },
-        { content: { $regex: search, $options: "i" } },
-        { authorName: { $regex: search, $options: "i" } }
-      ];
+    if (search && search.trim()) {
+      const searchTerms = getSearchTerms(search);
+      const orClauses = [];
+      searchTerms.forEach((term) => {
+        orClauses.push(
+          { title: { $regex: term, $options: "i" } },
+          { excerpt: { $regex: term, $options: "i" } },
+          { content: { $regex: term, $options: "i" } },
+          { authorName: { $regex: term, $options: "i" } },
+          { category: { $regex: term, $options: "i" } },
+          { punjabRegion: { $regex: term, $options: "i" } },
+          { slug: { $regex: term, $options: "i" } }
+        );
+      });
+      query.$or = orClauses;
     }
 
     const pageNum = parseInt(page, 10) || 1;
@@ -303,11 +375,19 @@ export const getReviewDeskArticles = async (req, res) => {
     }
 
     if (search && search.trim()) {
-      queryFilter.$or = [
-        { title: { $regex: search.trim(), $options: "i" } },
-        { authorName: { $regex: search.trim(), $options: "i" } },
-        { excerpt: { $regex: search.trim(), $options: "i" } }
-      ];
+      const searchTerms = getSearchTerms(search);
+      const orClauses = [];
+      searchTerms.forEach((term) => {
+        orClauses.push(
+          { title: { $regex: term, $options: "i" } },
+          { authorName: { $regex: term, $options: "i" } },
+          { excerpt: { $regex: term, $options: "i" } },
+          { content: { $regex: term, $options: "i" } },
+          { category: { $regex: term, $options: "i" } },
+          { slug: { $regex: term, $options: "i" } }
+        );
+      });
+      queryFilter.$or = orClauses;
     }
 
     let sortOption = { updatedAt: -1, createdAt: -1 };
