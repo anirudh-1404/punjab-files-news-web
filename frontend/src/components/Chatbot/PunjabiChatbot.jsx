@@ -412,14 +412,14 @@ export default function PunjabiChatbot() {
       className="punjabi-chatbot-container"
       style={{ position: 'fixed', bottom: '25px', right: '25px', zIndex: 99990 }}
     >
-      {/* Floating animation keyframes */}
+      {/* Floating animation keyframes and light scrollbar styles */}
       <style>{`
         @keyframes floatSpeechCloud {
           0%, 100% {
             transform: translateY(0px);
           }
           50% {
-            transform: translateY(-6px);
+            transform: translateY(-5px);
           }
         }
         @keyframes botTypingBounce {
@@ -429,6 +429,26 @@ export default function PunjabiChatbot() {
           40% {
             transform: scale(1);
           }
+        }
+        .punjabi-chat-messages {
+          scrollbar-width: thin;
+          scrollbar-color: #cbd5e1 transparent;
+          overflow-y: auto !important;
+          overflow-x: hidden !important;
+        }
+        .punjabi-chat-messages::-webkit-scrollbar {
+          width: 5px;
+          height: 0px;
+        }
+        .punjabi-chat-messages::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .punjabi-chat-messages::-webkit-scrollbar-thumb {
+          background: #cbd5e1;
+          border-radius: 999px;
+        }
+        .punjabi-chat-messages::-webkit-scrollbar-thumb:hover {
+          background: #94a3b8;
         }
       `}</style>
 
@@ -451,15 +471,15 @@ export default function PunjabiChatbot() {
               style={{
                 backgroundColor: '#ffffff',
                 color: '#0f172a',
-                padding: '10px 14px 11px',
-                borderRadius: '16px',
-                border: '2px solid #ebb10d',
-                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.18)',
-                fontSize: '13.5px',
-                fontWeight: '800',
+                padding: '9px 13px',
+                borderRadius: '14px',
+                border: '1.5px solid #e2e8f0',
+                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.1)',
+                fontSize: '13px',
+                fontWeight: '700',
                 cursor: 'pointer',
                 marginBottom: '10px',
-                maxWidth: '220px',
+                maxWidth: '210px',
                 position: 'relative',
                 fontFamily: "'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif",
                 lineHeight: '1.4',
@@ -468,11 +488,11 @@ export default function PunjabiChatbot() {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-3px)';
-                e.currentTarget.style.boxShadow = '0 12px 28px rgba(235, 177, 13, 0.35)';
+                e.currentTarget.style.boxShadow = '0 12px 28px rgba(0, 0, 0, 0.15)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'none';
-                e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.18)';
+                e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.1)';
               }}
             >
               <button
@@ -502,40 +522,40 @@ export default function PunjabiChatbot() {
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '5px',
+                  gap: '4px',
                   color: '#b71c1c',
-                  fontSize: '11.5px',
+                  fontSize: '11px',
                   marginBottom: '2px'
                 }}
               >
                 <span>ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ ਜੀ!</span>
                 <span>🙏</span>
               </div>
-              <div style={{ color: '#0f172a' }}>ਕੋਈ ਵੀ ਖ਼ਬਰ ਜਾਂ ਸਵਾਲ ਪੁੱਛੋ!</div>
+              <div style={{ color: '#0f172a' }}>ਕੋਈ ਵੀ ਖ਼ਬਰ ਜਾਂ ਸਵਾਲ ਪੁੱਛੋ</div>
 
               {/* Triangle Tail */}
               <div
                 style={{
                   position: 'absolute',
-                  bottom: '-10px',
+                  bottom: '-8px',
                   right: '28px',
                   width: 0,
                   height: 0,
-                  borderLeft: '9px solid transparent',
-                  borderRight: '9px solid transparent',
-                  borderTop: '10px solid #ebb10d'
+                  borderLeft: '7px solid transparent',
+                  borderRight: '7px solid transparent',
+                  borderTop: '8px solid #e2e8f0'
                 }}
               />
               <div
                 style={{
                   position: 'absolute',
-                  bottom: '-7px',
+                  bottom: '-6px',
                   right: '29px',
                   width: 0,
                   height: 0,
-                  borderLeft: '8px solid transparent',
-                  borderRight: '8px solid transparent',
-                  borderTop: '8px solid #ffffff'
+                  borderLeft: '6px solid transparent',
+                  borderRight: '6px solid transparent',
+                  borderTop: '7px solid #ffffff'
                 }}
               />
             </div>
@@ -549,24 +569,24 @@ export default function PunjabiChatbot() {
             aria-label="ਓਪਨ ਪੰਜਾਬੀ ਸਹਾਇਕ ਚੈਟਬਾਕਸ"
             style={{
               position: 'relative',
-              width: '72px',
-              height: '72px',
+              width: '66px',
+              height: '66px',
               borderRadius: '50%',
               padding: 0,
-              border: '3px solid #ebb10d',
+              border: '2.5px solid #ebb10d',
               backgroundColor: '#ffffff',
-              boxShadow: '0 8px 25px rgba(28, 45, 90, 0.35)',
+              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.18)',
               cursor: 'pointer',
               overflow: 'visible',
               transition: 'transform 0.25s ease, box-shadow 0.25s ease'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'scale(1.08) translateY(-3px)';
-              e.currentTarget.style.boxShadow = '0 12px 30px rgba(183, 28, 28, 0.45)';
+              e.currentTarget.style.transform = 'scale(1.06) translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 12px 28px rgba(0, 0, 0, 0.25)';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = 'none';
-              e.currentTarget.style.boxShadow = '0 8px 25px rgba(28, 45, 90, 0.35)';
+              e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.18)';
             }}
           >
             <img
@@ -587,13 +607,13 @@ export default function PunjabiChatbot() {
               style={{
                 position: 'absolute',
                 bottom: '2px',
-                right: '3px',
-                width: '15px',
-                height: '15px',
+                right: '2px',
+                width: '14px',
+                height: '14px',
                 backgroundColor: '#22c55e',
-                border: '2.5px solid #ffffff',
+                border: '2px solid #ffffff',
                 borderRadius: '50%',
-                boxShadow: '0 0 6px rgba(34, 197, 94, 0.8)'
+                boxShadow: '0 0 6px rgba(34, 197, 94, 0.7)'
               }}
             />
           </button>
@@ -605,30 +625,29 @@ export default function PunjabiChatbot() {
         <div
           className="punjabi-chat-dialog"
           style={{
-            width: '380px',
+            width: '360px',
             maxWidth: 'calc(100vw - 24px)',
-            height: '520px',
-            maxHeight: 'min(520px, 82vh)',
+            height: '500px',
+            maxHeight: 'min(500px, 80vh)',
             backgroundColor: '#ffffff',
-            borderRadius: '14px',
-            boxShadow: '0 14px 45px rgba(0,0,0,0.28)',
-            border: '1.5px solid #cbd5e1',
+            borderRadius: '16px',
+            boxShadow: '0 12px 35px -5px rgba(0, 0, 0, 0.16), 0 1px 3px rgba(0, 0, 0, 0.08)',
+            border: '1px solid #e2e8f0',
             display: 'flex',
             flexDirection: 'column',
             overflow: 'hidden',
             fontFamily: "'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif"
           }}
         >
-          {/* Header */}
+          {/* Header - Clean White & Minimalist (No Red) */}
           <div
             style={{
-              backgroundColor: '#b71c1c',
+              backgroundColor: '#ffffff',
               padding: '12px 14px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              color: '#ffffff',
-              boxShadow: '0 2px 6px rgba(0,0,0,0.1)'
+              borderBottom: '1px solid #f1f5f9'
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -636,47 +655,47 @@ export default function PunjabiChatbot() {
                 src={turbanMascot}
                 alt="ਪੰਜਾਬੀ ਸਹਾਇਕ"
                 style={{
-                  width: '38px',
-                  height: '38px',
+                  width: '36px',
+                  height: '36px',
                   borderRadius: '50%',
                   objectFit: 'cover',
                   objectPosition: 'center 10%',
-                  border: '2px solid #ebb10d',
-                  backgroundColor: '#ffffff'
+                  border: '1.5px solid #e2e8f0',
+                  backgroundColor: '#f8fafc'
                 }}
               />
               <div>
                 <h5
                   style={{
                     margin: 0,
-                    fontSize: '14.5px',
-                    fontWeight: '800',
-                    color: '#ffffff',
-                    letterSpacing: '0.2px'
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    color: '#0f172a',
+                    letterSpacing: '0.1px'
                   }}
                 >
-                  ਪੰਜਾਬੀ ਸਹਾਇਕ (News Assistant)
+                  ਪੰਜਾਬੀ ਸਹਾਇਕ
                 </h5>
                 <span
                   style={{
                     fontSize: '11px',
-                    color: '#fef08a',
+                    color: '#16a34a',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '5px',
-                    fontWeight: '700'
+                    gap: '4px',
+                    fontWeight: '600'
                   }}
                 >
                   <span
                     style={{
-                      width: '7px',
-                      height: '7px',
+                      width: '6px',
+                      height: '6px',
                       borderRadius: '50%',
                       backgroundColor: '#22c55e',
                       display: 'inline-block'
                     }}
                   ></span>
-                  ਲਾਈਵ ਡਾਟਾਬੇਸ ਨਾਲ ਕਨੈਕਟਡ
+                  ਆਨਲਾਈਨ • ਪੰਜਾਬ ਫਾਈਲਜ਼
                 </span>
               </div>
             </div>
@@ -685,9 +704,9 @@ export default function PunjabiChatbot() {
               type="button"
               onClick={() => setIsOpen(false)}
               style={{
-                background: 'rgba(255,255,255,0.2)',
+                background: '#f1f5f9',
                 border: 'none',
-                color: '#ffffff',
+                color: '#64748b',
                 width: '28px',
                 height: '28px',
                 borderRadius: '50%',
@@ -696,10 +715,16 @@ export default function PunjabiChatbot() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                transition: 'background-color 0.2s'
+                transition: 'all 0.15s ease'
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.35)')}
-              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.2)')}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#e2e8f0';
+                e.currentTarget.style.color = '#0f172a';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#f1f5f9';
+                e.currentTarget.style.color = '#64748b';
+              }}
               title="ਮਿਨੀਮਾਈਜ਼ ਕਰੋ"
             >
               ×
@@ -708,14 +733,14 @@ export default function PunjabiChatbot() {
 
           {/* Messages Container */}
           <div
+            className="punjabi-chat-messages"
             style={{
               flex: 1,
               padding: '14px',
-              overflowY: 'auto',
               backgroundColor: '#f8fafc',
               display: 'flex',
               flexDirection: 'column',
-              gap: '12px'
+              gap: '11px'
             }}
           >
             {messages.map((m, idx) => (
@@ -723,7 +748,7 @@ export default function PunjabiChatbot() {
                 key={idx}
                 style={{
                   alignSelf: m.sender === 'user' ? 'flex-end' : 'flex-start',
-                  maxWidth: '90%',
+                  maxWidth: '88%',
                   display: 'flex',
                   alignItems: 'flex-start',
                   gap: '8px'
@@ -734,30 +759,34 @@ export default function PunjabiChatbot() {
                     src={turbanMascot}
                     alt=""
                     style={{
-                      width: '26px',
-                      height: '26px',
+                      width: '24px',
+                      height: '24px',
                       borderRadius: '50%',
                       objectFit: 'cover',
                       objectPosition: 'center 10%',
-                      border: '1.5px solid #ebb10d',
+                      border: '1px solid #e2e8f0',
                       flexShrink: 0,
-                      marginTop: '3px'
+                      marginTop: '2px'
                     }}
                   />
                 )}
 
                 <div
                   style={{
-                    backgroundColor: m.sender === 'user' ? '#b71c1c' : '#ffffff',
+                    backgroundColor: m.sender === 'user' ? '#1e293b' : '#ffffff',
                     color: m.sender === 'user' ? '#ffffff' : '#0f172a',
-                    padding: '10px 14px',
+                    padding: '9px 13px',
                     borderRadius:
-                      m.sender === 'user' ? '12px 12px 2px 12px' : '12px 12px 12px 2px',
+                      m.sender === 'user' ? '14px 14px 3px 14px' : '14px 14px 14px 3px',
                     fontSize: '13px',
                     lineHeight: '1.5',
-                    boxShadow: '0 2px 5px rgba(0,0,0,0.06)',
+                    boxShadow:
+                      m.sender === 'user'
+                        ? '0 2px 6px rgba(30, 41, 59, 0.15)'
+                        : '0 1px 3px rgba(0,0,0,0.05)',
                     border: m.sender === 'user' ? 'none' : '1px solid #e2e8f0',
-                    whiteSpace: 'pre-line'
+                    whiteSpace: 'pre-line',
+                    wordBreak: 'break-word'
                   }}
                 >
                   {/* Message Main Text */}
@@ -767,10 +796,10 @@ export default function PunjabiChatbot() {
                   {m.articles && m.articles.length > 0 && (
                     <div
                       style={{
-                        marginTop: '10px',
+                        marginTop: '9px',
                         display: 'flex',
                         flexDirection: 'column',
-                        gap: '8px'
+                        gap: '6px'
                       }}
                     >
                       {m.articles.map((art, aIdx) => (
@@ -778,25 +807,23 @@ export default function PunjabiChatbot() {
                           key={aIdx}
                           onClick={() => handleNavigate(`/article/${art.slug || art._id}`)}
                           style={{
-                            backgroundColor: '#f8fafc',
-                            border: '1px solid #cbd5e1',
-                            borderRadius: '8px',
-                            padding: '8px 10px',
+                            backgroundColor: '#ffffff',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '7px',
+                            padding: '7px 9px',
                             cursor: 'pointer',
-                            transition: 'all 0.2s ease',
+                            transition: 'all 0.15s ease',
                             display: 'flex',
                             gap: '8px',
                             alignItems: 'center'
                           }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.borderColor = '#b71c1c';
-                            e.currentTarget.style.backgroundColor = '#fff';
-                            e.currentTarget.style.boxShadow = '0 3px 8px rgba(183, 28, 28, 0.15)';
+                            e.currentTarget.style.borderColor = '#cbd5e1';
+                            e.currentTarget.style.backgroundColor = '#f1f5f9';
                           }}
                           onMouseLeave={(e) => {
-                            e.currentTarget.style.borderColor = '#cbd5e1';
-                            e.currentTarget.style.backgroundColor = '#f8fafc';
-                            e.currentTarget.style.boxShadow = 'none';
+                            e.currentTarget.style.borderColor = '#e2e8f0';
+                            e.currentTarget.style.backgroundColor = '#ffffff';
                           }}
                         >
                           {art.featuredImage && (
@@ -804,9 +831,9 @@ export default function PunjabiChatbot() {
                               src={art.featuredImage}
                               alt=""
                               style={{
-                                width: '44px',
-                                height: '44px',
-                                borderRadius: '4px',
+                                width: '38px',
+                                height: '38px',
+                                borderRadius: '5px',
                                 objectFit: 'cover',
                                 flexShrink: 0
                               }}
@@ -816,7 +843,7 @@ export default function PunjabiChatbot() {
                             <div
                               style={{
                                 fontSize: '12px',
-                                fontWeight: '700',
+                                fontWeight: '600',
                                 color: '#0f172a',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
@@ -828,16 +855,16 @@ export default function PunjabiChatbot() {
                             <div
                               style={{
                                 fontSize: '11px',
-                                color: '#b71c1c',
-                                fontWeight: '700',
+                                color: '#2563eb',
+                                fontWeight: '600',
                                 marginTop: '2px',
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: '4px'
+                                gap: '3px'
                               }}
                             >
                               <span>ਪੜ੍ਹੋ</span>
-                              <i className="fa fa-angle-right" style={{ fontSize: '11px' }}></i>
+                              <i className="fa fa-angle-right" style={{ fontSize: '10px' }}></i>
                             </div>
                           </div>
                         </div>
@@ -847,26 +874,32 @@ export default function PunjabiChatbot() {
 
                   {/* Primary Action Button */}
                   {m.action && (
-                    <div style={{ marginTop: '10px' }}>
+                    <div style={{ marginTop: '9px' }}>
                       <button
                         type="button"
                         onClick={() => handleNavigate(m.action.link)}
                         style={{
-                          backgroundColor: '#0f172a',
-                          color: '#ffffff',
-                          border: 'none',
-                          padding: '6px 12px',
+                          backgroundColor: '#f1f5f9',
+                          color: '#0f172a',
+                          border: '1px solid #cbd5e1',
+                          padding: '5px 11px',
                           borderRadius: '6px',
                           fontSize: '11.5px',
-                          fontWeight: '700',
+                          fontWeight: '600',
                           cursor: 'pointer',
                           display: 'inline-flex',
                           alignItems: 'center',
                           gap: '6px',
-                          transition: 'background-color 0.2s'
+                          transition: 'all 0.15s ease'
                         }}
-                        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#b71c1c')}
-                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#0f172a')}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = '#0f172a';
+                          e.currentTarget.style.color = '#ffffff';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = '#f1f5f9';
+                          e.currentTarget.style.color = '#0f172a';
+                        }}
                       >
                         <span>{m.action.label}</span>
                         <i className="fa fa-arrow-right" style={{ fontSize: '10px' }}></i>
@@ -878,7 +911,7 @@ export default function PunjabiChatbot() {
                   {m.chips && m.chips.length > 0 && (
                     <div
                       style={{
-                        marginTop: '10px',
+                        marginTop: '9px',
                         display: 'flex',
                         flexWrap: 'wrap',
                         gap: '5px'
@@ -891,24 +924,22 @@ export default function PunjabiChatbot() {
                           onClick={() => handleSend(chip.replace(/^[^\w\s\u0A00-\u0A7F]+/, '').trim())}
                           style={{
                             fontSize: '11px',
-                            background: '#f1f5f9',
-                            color: '#0f172a',
-                            border: '1px solid #cbd5e1',
-                            borderRadius: '12px',
+                            background: '#ffffff',
+                            color: '#334155',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '14px',
                             padding: '3px 8px',
                             cursor: 'pointer',
-                            fontWeight: '600',
+                            fontWeight: '500',
                             transition: 'all 0.15s ease'
                           }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.borderColor = '#b71c1c';
-                            e.currentTarget.style.color = '#b71c1c';
-                            e.currentTarget.style.backgroundColor = '#ffffff';
+                            e.currentTarget.style.borderColor = '#94a3b8';
+                            e.currentTarget.style.backgroundColor = '#f8fafc';
                           }}
                           onMouseLeave={(e) => {
-                            e.currentTarget.style.borderColor = '#cbd5e1';
-                            e.currentTarget.style.color = '#0f172a';
-                            e.currentTarget.style.backgroundColor = '#f1f5f9';
+                            e.currentTarget.style.borderColor = '#e2e8f0';
+                            e.currentTarget.style.backgroundColor = '#ffffff';
                           }}
                         >
                           {chip}
@@ -939,14 +970,14 @@ export default function PunjabiChatbot() {
                     borderRadius: '50%',
                     objectFit: 'cover',
                     objectPosition: 'center 10%',
-                    border: '1.5px solid #ebb10d'
+                    border: '1px solid #e2e8f0'
                   }}
                 />
                 <div
                   style={{
                     backgroundColor: '#ffffff',
                     border: '1px solid #e2e8f0',
-                    padding: '8px 14px',
+                    padding: '7px 12px',
                     borderRadius: '12px',
                     display: 'flex',
                     alignItems: 'center',
@@ -955,20 +986,20 @@ export default function PunjabiChatbot() {
                 >
                   <span
                     style={{
-                      width: '6px',
-                      height: '6px',
+                      width: '5px',
+                      height: '5px',
                       borderRadius: '50%',
-                      backgroundColor: '#b71c1c',
+                      backgroundColor: '#64748b',
                       display: 'inline-block',
                       animation: 'botTypingBounce 1.4s infinite ease-in-out both'
                     }}
                   />
                   <span
                     style={{
-                      width: '6px',
-                      height: '6px',
+                      width: '5px',
+                      height: '5px',
                       borderRadius: '50%',
-                      backgroundColor: '#ebb10d',
+                      backgroundColor: '#94a3b8',
                       display: 'inline-block',
                       animation: 'botTypingBounce 1.4s infinite ease-in-out both',
                       animationDelay: '0.2s'
@@ -976,10 +1007,10 @@ export default function PunjabiChatbot() {
                   />
                   <span
                     style={{
-                      width: '6px',
-                      height: '6px',
+                      width: '5px',
+                      height: '5px',
                       borderRadius: '50%',
-                      backgroundColor: '#0f172a',
+                      backgroundColor: '#cbd5e1',
                       display: 'inline-block',
                       animation: 'botTypingBounce 1.4s infinite ease-in-out both',
                       animationDelay: '0.4s'
@@ -990,7 +1021,7 @@ export default function PunjabiChatbot() {
                       marginLeft: '6px',
                       fontSize: '11px',
                       color: '#64748b',
-                      fontWeight: '600'
+                      fontWeight: '500'
                     }}
                   >
                     ਜਵਾਬ ਲੱਭ ਰਿਹਾ ਹੈ...
@@ -1002,7 +1033,7 @@ export default function PunjabiChatbot() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input Footer */}
+          {/* Input Footer - Clean Minimalist Pill */}
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -1010,45 +1041,63 @@ export default function PunjabiChatbot() {
             }}
             style={{
               display: 'flex',
-              borderTop: '1px solid #e2e8f0',
-              backgroundColor: '#ffffff'
+              alignItems: 'center',
+              padding: '8px 10px',
+              borderTop: '1px solid #f1f5f9',
+              backgroundColor: '#ffffff',
+              gap: '6px'
             }}
           >
-            <input
-              ref={inputRef}
-              type="text"
-              placeholder="ਕੁਝ ਵੀ ਪੁੱਛੋ (Ask any question)..."
-              value={inputVal}
-              onChange={(e) => setInputVal(e.target.value)}
-              disabled={loading}
+            <div
               style={{
                 flex: 1,
-                border: 'none',
-                padding: '12px 14px',
-                fontSize: '13.5px',
-                outline: 'none',
-                color: '#0f172a',
-                backgroundColor: '#ffffff'
+                display: 'flex',
+                alignItems: 'center',
+                backgroundColor: '#f8fafc',
+                border: '1px solid #e2e8f0',
+                borderRadius: '20px',
+                padding: '2px 12px'
               }}
-            />
+            >
+              <input
+                ref={inputRef}
+                type="text"
+                placeholder="ਕੁਝ ਵੀ ਪੁੱਛੋ (Ask any question)..."
+                value={inputVal}
+                onChange={(e) => setInputVal(e.target.value)}
+                disabled={loading}
+                style={{
+                  flex: 1,
+                  border: 'none',
+                  background: 'transparent',
+                  padding: '7px 0',
+                  fontSize: '13px',
+                  outline: 'none',
+                  color: '#0f172a'
+                }}
+              />
+            </div>
             <button
               type="submit"
               disabled={loading || !inputVal.trim()}
               style={{
-                backgroundColor: inputVal.trim() && !loading ? '#b71c1c' : '#cbd5e1',
-                color: '#ffffff',
+                backgroundColor: inputVal.trim() && !loading ? '#0f172a' : '#e2e8f0',
+                color: inputVal.trim() && !loading ? '#ffffff' : '#94a3b8',
                 border: 'none',
-                padding: '0 18px',
-                fontSize: '14px',
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                fontSize: '12px',
                 cursor: inputVal.trim() && !loading ? 'pointer' : 'default',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                transition: 'background-color 0.2s ease'
+                transition: 'all 0.15s ease',
+                flexShrink: 0
               }}
               title="ਸੁਨੇਹਾ ਭੇਜੋ"
             >
-              <i className="fa fa-paper-plane"></i>
+              <i className="fa fa-paper-plane" style={{ marginLeft: '-1px' }}></i>
             </button>
           </form>
         </div>
