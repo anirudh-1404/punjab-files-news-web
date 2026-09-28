@@ -257,7 +257,7 @@ export default function FixedNavbar() {
 
               {/* Desktop Dropdown */}
               <ul
-                className="dropdown-menu hidden-xs hidden-sm"
+                className="dropdown-menu punjab-dropdown-list hidden-xs hidden-sm"
                 style={{
                   display: punjabDropdownOpen ? 'block' : 'none',
                   position: 'absolute',
@@ -265,6 +265,7 @@ export default function FixedNavbar() {
                   left: 0,
                   minWidth: '220px',
                   backgroundColor: '#1c2d5a',
+                  background: '#1c2d5a',
                   border: '2px solid #ebb10d',
                   borderRadius: '0 0 8px 8px',
                   boxShadow: '0 12px 30px rgba(0, 0, 0, 0.5)',
@@ -277,6 +278,7 @@ export default function FixedNavbar() {
                 <li>
                   <Link
                     to="/category/punjab"
+                    className="punjab-dropdown-link"
                     onClick={() => {
                       setActiveSection('punjab');
                       setPunjabDropdownOpen(false);
@@ -302,13 +304,14 @@ export default function FixedNavbar() {
                       e.currentTarget.style.paddingLeft = '18px';
                     }}
                   >
-                    <i className="fa fa-globe" style={{ color: '#ebb10d' }}></i>
-                    <span>ਸਾਰਾ ਪੰਜਾਬ (All Punjab)</span>
+                    <i className="fa fa-globe" style={{ color: '#ebb10d', fontSize: '14px', width: '16px', textAlign: 'center' }}></i>
+                    <span style={{ color: '#ffffff', fontWeight: 700, fontSize: '13.5px' }}>ਸਾਰਾ ਪੰਜਾਬ (All Punjab)</span>
                   </Link>
                 </li>
                 <li>
                   <Link
                     to="/category/punjab/majha"
+                    className="punjab-dropdown-link"
                     onClick={() => {
                       setActiveSection('punjab');
                       setPunjabDropdownOpen(false);
@@ -334,13 +337,14 @@ export default function FixedNavbar() {
                       e.currentTarget.style.paddingLeft = '18px';
                     }}
                   >
-                    <i className="fa fa-compass" style={{ color: '#ebb10d' }}></i>
-                    <span>ਮਾਝਾ (Majha)</span>
+                    <i className="fa fa-compass" style={{ color: '#ebb10d', fontSize: '14px', width: '16px', textAlign: 'center' }}></i>
+                    <span style={{ color: '#ffffff', fontWeight: 700, fontSize: '13px' }}>ਮਾਝਾ (Majha)</span>
                   </Link>
                 </li>
                 <li>
                   <Link
                     to="/category/punjab/malwa"
+                    className="punjab-dropdown-link"
                     onClick={() => {
                       setActiveSection('punjab');
                       setPunjabDropdownOpen(false);
@@ -366,13 +370,14 @@ export default function FixedNavbar() {
                       e.currentTarget.style.paddingLeft = '18px';
                     }}
                   >
-                    <i className="fa fa-compass" style={{ color: '#ebb10d' }}></i>
-                    <span>ਮਾਲਵਾ (Malwa)</span>
+                    <i className="fa fa-compass" style={{ color: '#ebb10d', fontSize: '14px', width: '16px', textAlign: 'center' }}></i>
+                    <span style={{ color: '#ffffff', fontWeight: 700, fontSize: '13px' }}>ਮਾਲਵਾ (Malwa)</span>
                   </Link>
                 </li>
                 <li>
                   <Link
                     to="/category/punjab/doaba"
+                    className="punjab-dropdown-link"
                     onClick={() => {
                       setActiveSection('punjab');
                       setPunjabDropdownOpen(false);
@@ -397,8 +402,8 @@ export default function FixedNavbar() {
                       e.currentTarget.style.paddingLeft = '18px';
                     }}
                   >
-                    <i className="fa fa-compass" style={{ color: '#ebb10d' }}></i>
-                    <span>ਦੋਆਬਾ (Doaba)</span>
+                    <i className="fa fa-compass" style={{ color: '#ebb10d', fontSize: '14px', width: '16px', textAlign: 'center' }}></i>
+                    <span style={{ color: '#ffffff', fontWeight: 700, fontSize: '13px' }}>ਦੋਆਬਾ (Doaba)</span>
                   </Link>
                 </li>
               </ul>
@@ -718,14 +723,14 @@ export default function FixedNavbar() {
                 gap: '12px',
                 padding: '11px 18px',
                 color: '#ffffff',
-                fontSize: '14.5px',
+                fontSize: '14px',
                 fontWeight: '700',
                 textDecoration: 'none',
-                borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
+                borderBottom: '1px solid rgba(255, 255, 255, 0.08)'
               }}
             >
-              <i className="fa fa-globe" style={{ color: '#b71c1c', fontSize: '15px' }}></i>
-              <span>ਸਾਰਾ ਪੰਜਾਬ (All Punjab)</span>
+              <i className="fa fa-globe" style={{ color: '#ebb10d', fontSize: '15px', width: '18px', textAlign: 'center' }}></i>
+              <span style={{ color: '#ffffff', fontWeight: 700 }}>ਸਾਰਾ ਪੰਜਾਬ (All Punjab)</span>
             </Link>
 
             <Link
@@ -738,15 +743,16 @@ export default function FixedNavbar() {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '12px',
-                padding: '10px 18px',
-                color: '#e2e8f0',
+                padding: '11px 18px',
+                color: '#ffffff',
                 fontSize: '14px',
+                fontWeight: '700',
                 textDecoration: 'none',
-                borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
+                borderBottom: '1px solid rgba(255, 255, 255, 0.08)'
               }}
             >
-              <i className="fa fa-compass" style={{ color: '#ebb10d', fontSize: '14px' }}></i>
-              <span>ਮਾਝਾ (Majha)</span>
+              <i className="fa fa-compass" style={{ color: '#ebb10d', fontSize: '15px', width: '18px', textAlign: 'center' }}></i>
+              <span style={{ color: '#ffffff', fontWeight: 700 }}>ਮਾਝਾ (Majha)</span>
             </Link>
 
             <Link
@@ -759,15 +765,16 @@ export default function FixedNavbar() {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '12px',
-                padding: '10px 18px',
-                color: '#e2e8f0',
+                padding: '11px 18px',
+                color: '#ffffff',
                 fontSize: '14px',
+                fontWeight: '700',
                 textDecoration: 'none',
-                borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
+                borderBottom: '1px solid rgba(255, 255, 255, 0.08)'
               }}
             >
-              <i className="fa fa-compass" style={{ color: '#ebb10d', fontSize: '14px' }}></i>
-              <span>ਮਾਲਵਾ (Malwa)</span>
+              <i className="fa fa-compass" style={{ color: '#ebb10d', fontSize: '15px', width: '18px', textAlign: 'center' }}></i>
+              <span style={{ color: '#ffffff', fontWeight: 700 }}>ਮਾਲਵਾ (Malwa)</span>
             </Link>
 
             <Link
@@ -780,14 +787,15 @@ export default function FixedNavbar() {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '12px',
-                padding: '10px 18px',
-                color: '#e2e8f0',
+                padding: '11px 18px',
+                color: '#ffffff',
                 fontSize: '14px',
+                fontWeight: '700',
                 textDecoration: 'none'
               }}
             >
-              <i className="fa fa-compass" style={{ color: '#ebb10d', fontSize: '14px' }}></i>
-              <span>ਦੋਆਬਾ (Doaba)</span>
+              <i className="fa fa-compass" style={{ color: '#ebb10d', fontSize: '15px', width: '18px', textAlign: 'center' }}></i>
+              <span style={{ color: '#ffffff', fontWeight: 700 }}>ਦੋਆਬਾ (Doaba)</span>
             </Link>
           </div>
         </div>

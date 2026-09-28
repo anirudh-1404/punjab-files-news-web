@@ -145,14 +145,97 @@ iframe {
   border-bottom: 3px solid var(--brand-crimson) !important;
 }
 
-.main-menu .dropdown-menu {
-  border-top: 3px solid var(--brand-gold) !important;
-  background-color: #ffffff !important;
+.main-menu .dropdown-menu,
+#fixed-navbar .dropdown-menu,
+.punjab-nav-item .dropdown-menu,
+.punjab-dropdown-list {
+  background-color: #1c2d5a !important;
+  background: #1c2d5a !important;
+  border: 2px solid #ebb10d !important;
+  border-radius: 0 0 8px 8px !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5) !important;
+  padding: 6px 0 !important;
+  margin: 0 !important;
+  list-style: none !important;
+  z-index: 999999 !important;
 }
 
-.main-menu .dropdown-menu > li > a:hover {
-  background-color: #f8fafc !important;
-  color: var(--brand-crimson) !important;
+.main-menu .dropdown-menu > li,
+#fixed-navbar .dropdown-menu li,
+.punjab-nav-item .dropdown-menu li {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.main-menu .dropdown-menu > li > a,
+#fixed-navbar .dropdown-menu li a,
+.punjab-nav-item .dropdown-menu li a,
+.punjab-dropdown-link {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 10px 18px !important;
+  color: #ffffff !important;
+  font-size: 13.5px !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  text-align: left !important;
+  transition: all 0.15s ease !important;
+}
+
+.main-menu .dropdown-menu > li:last-child > a,
+#fixed-navbar .dropdown-menu li:last-child a,
+.punjab-nav-item .dropdown-menu li:last-child a {
+  border-bottom: none !important;
+}
+
+.main-menu .dropdown-menu > li > a span,
+#fixed-navbar .dropdown-menu li a span,
+.punjab-nav-item .dropdown-menu li a span,
+.punjab-dropdown-link span {
+  color: #ffffff !important;
+  font-size: 13.5px !important;
+  font-weight: 700 !important;
+  display: inline-block !important;
+}
+
+.main-menu .dropdown-menu > li > a i,
+#fixed-navbar .dropdown-menu li a i,
+.punjab-nav-item .dropdown-menu li a i,
+.punjab-dropdown-link i {
+  color: #ebb10d !important;
+  font-size: 14px !important;
+  width: 16px !important;
+  text-align: center !important;
+}
+
+.main-menu .dropdown-menu > li > a:hover,
+#fixed-navbar .dropdown-menu li a:hover,
+.punjab-nav-item .dropdown-menu li a:hover,
+.punjab-dropdown-link:hover {
+  background-color: #b71c1c !important;
+  color: #ffffff !important;
+  padding-left: 22px !important;
+}
+
+.main-menu .dropdown-menu > li > a:hover span,
+#fixed-navbar .dropdown-menu li a:hover span,
+.punjab-nav-item .dropdown-menu li a:hover span,
+.punjab-dropdown-link:hover span {
+  color: #ffffff !important;
+}
+
+.main-menu .dropdown-menu > li > a:hover i,
+#fixed-navbar .dropdown-menu li a:hover i,
+.punjab-nav-item .dropdown-menu li a:hover i,
+.punjab-dropdown-link:hover i {
+  color: #ebb10d !important;
 }
 
 /* Clearfix and dynamic height for header, navbar, sub-menu and hero sections */
