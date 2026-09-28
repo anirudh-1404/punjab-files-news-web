@@ -96,6 +96,68 @@ export default function NewsDetailPage() {
     };
   }, [id]);
 
+  // Dynamic Open Graph, Twitter Cards, and SEO Meta Tags for Social Media Previews
+  useEffect(() => {
+    if (!article) return;
+
+    const originalTitle = document.title;
+    document.title = `${article.title} | ਪੰਜਾਬ ਫਾਈਲਜ਼ (Punjab Files)`;
+
+    const appliedTags = [];
+    const setOrUpdateMeta = (attrName, attrValue, content) => {
+      if (!content) return;
+      let el = document.querySelector(`meta[${attrName}="${attrValue}"]`);
+      let created = false;
+      let prevContent = null;
+      if (!el) {
+        el = document.createElement('meta');
+        el.setAttribute(attrName, attrValue);
+        document.head.appendChild(el);
+        created = true;
+      } else {
+        prevContent = el.getAttribute('content');
+      }
+      el.setAttribute('content', content);
+      appliedTags.push({ el, created, prevContent, attrName, attrValue });
+    };
+
+    const currentUrl = window.location.href;
+    const desc = article.excerpt || (article.content ? article.content.slice(0, 160) : '') || article.title;
+    let imgUrl = article.featuredImage || '/img/index_800x400-image01.jpg';
+    if (imgUrl.startsWith('/')) {
+      imgUrl = `${window.location.origin}${imgUrl}`;
+    }
+
+    // Standard SEO
+    setOrUpdateMeta('name', 'description', desc);
+
+    // OpenGraph (Facebook, WhatsApp, LinkedIn)
+    setOrUpdateMeta('property', 'og:type', 'article');
+    setOrUpdateMeta('property', 'og:site_name', 'Punjab Files');
+    setOrUpdateMeta('property', 'og:title', article.title);
+    setOrUpdateMeta('property', 'og:description', desc);
+    setOrUpdateMeta('property', 'og:url', currentUrl);
+    setOrUpdateMeta('property', 'og:image', imgUrl);
+    setOrUpdateMeta('property', 'og:image:alt', article.title);
+
+    // Twitter / X Card
+    setOrUpdateMeta('name', 'twitter:card', 'summary_large_image');
+    setOrUpdateMeta('name', 'twitter:title', article.title);
+    setOrUpdateMeta('name', 'twitter:description', desc);
+    setOrUpdateMeta('name', 'twitter:image', imgUrl);
+
+    return () => {
+      document.title = originalTitle;
+      appliedTags.forEach(({ el, created, prevContent }) => {
+        if (created) {
+          if (el.parentNode) el.parentNode.removeChild(el);
+        } else if (prevContent !== null) {
+          el.setAttribute('content', prevContent);
+        }
+      });
+    };
+  }, [article]);
+
   if (loading) {
     return (
       <div className="container" style={{ padding: '90px 15px', textAlign: 'center' }}>
@@ -319,23 +381,26 @@ export default function NewsDetailPage() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                   {/* WhatsApp */}
                   <a
-                    href={`https://api.whatsapp.com/send?text=${encodeURIComponent(shareTitle + ' ' + shareUrl)}`}
+                    href={`https://api.whatsapp.com/send?text=${encodeURIComponent(shareTitle + '\n\n' + shareUrl)}`}
                     target="_blank"
                     rel="noreferrer"
                     style={{
                       backgroundColor: '#25D366',
                       color: '#ffffff',
-                      padding: '5px 12px',
-                      borderRadius: '4px',
+                      padding: '6px 13px',
+                      borderRadius: '5px',
                       fontSize: '12px',
                       fontWeight: '700',
                       textDecoration: 'none',
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '5px'
+                      gap: '6px',
+                      transition: 'transform 0.15s ease'
                     }}
+                    onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-1px)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.transform = 'none')}
                   >
-                    <i className="fa fa-whatsapp" style={{ fontSize: '14px' }}></i> WhatsApp
+                    <i className="fa fa-whatsapp" style={{ fontSize: '15px' }}></i> WhatsApp
                   </a>
 
                   {/* Facebook */}
@@ -346,17 +411,20 @@ export default function NewsDetailPage() {
                     style={{
                       backgroundColor: '#1877F2',
                       color: '#ffffff',
-                      padding: '5px 12px',
-                      borderRadius: '4px',
+                      padding: '6px 13px',
+                      borderRadius: '5px',
                       fontSize: '12px',
                       fontWeight: '700',
                       textDecoration: 'none',
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '5px'
+                      gap: '6px',
+                      transition: 'transform 0.15s ease'
                     }}
+                    onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-1px)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.transform = 'none')}
                   >
-                    <i className="fa fa-facebook" style={{ fontSize: '14px' }}></i> Facebook
+                    <i className="fa fa-facebook" style={{ fontSize: '15px' }}></i> Facebook
                   </a>
 
                   {/* Twitter/X */}
@@ -367,38 +435,70 @@ export default function NewsDetailPage() {
                     style={{
                       backgroundColor: '#000000',
                       color: '#ffffff',
-                      padding: '5px 12px',
-                      borderRadius: '4px',
+                      padding: '6px 13px',
+                      borderRadius: '5px',
                       fontSize: '12px',
                       fontWeight: '700',
                       textDecoration: 'none',
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '5px'
+                      gap: '6px',
+                      transition: 'transform 0.15s ease'
                     }}
+                    onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-1px)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.transform = 'none')}
                   >
                     <i className="fa fa-twitter" style={{ fontSize: '14px' }}></i> X / Twitter
                   </a>
 
-                  {/* Copy Link / Instagram */}
+                  {/* Telegram */}
+                  <a
+                    href={`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      backgroundColor: '#229ED9',
+                      color: '#ffffff',
+                      padding: '6px 13px',
+                      borderRadius: '5px',
+                      fontSize: '12px',
+                      fontWeight: '700',
+                      textDecoration: 'none',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      transition: 'transform 0.15s ease'
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-1px)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.transform = 'none')}
+                  >
+                    <i className="fa fa-paper-plane" style={{ fontSize: '13px' }}></i> Telegram
+                  </a>
+
+                  {/* Dedicated Copy Link Button */}
                   <button
                     type="button"
                     onClick={handleCopyLink}
                     style={{
-                      backgroundColor: '#E1306C',
+                      backgroundColor: copied ? '#15803d' : '#334155',
                       color: '#ffffff',
                       border: 'none',
-                      padding: '5px 12px',
-                      borderRadius: '4px',
+                      padding: '6px 13px',
+                      borderRadius: '5px',
                       fontSize: '12px',
                       fontWeight: '700',
                       cursor: 'pointer',
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '5px'
+                      gap: '6px',
+                      transition: 'all 0.15s ease'
                     }}
+                    onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-1px)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.transform = 'none')}
+                    title="ਲਿੰਕ ਕਾਪੀ ਕਰੋ"
                   >
-                    <i className="fa fa-instagram" style={{ fontSize: '14px' }}></i> {copied ? 'ਕਾਪੀ ਹੋ ਗਿਆ!' : 'Instagram'}
+                    <i className={copied ? "fa fa-check" : "fa fa-link"} style={{ fontSize: '14px' }}></i>
+                    <span>{copied ? 'ਲਿੰਕ ਕਾਪੀ ਹੋ ਗਿਆ!' : 'ਲਿੰਕ ਕਾਪੀ ਕਰੋ'}</span>
                   </button>
 
                   {/* YouTube */}
@@ -409,17 +509,20 @@ export default function NewsDetailPage() {
                     style={{
                       backgroundColor: '#FF0000',
                       color: '#ffffff',
-                      padding: '5px 12px',
-                      borderRadius: '4px',
+                      padding: '6px 13px',
+                      borderRadius: '5px',
                       fontSize: '12px',
                       fontWeight: '700',
                       textDecoration: 'none',
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '5px'
+                      gap: '6px',
+                      transition: 'transform 0.15s ease'
                     }}
+                    onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-1px)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.transform = 'none')}
                   >
-                    <i className="fa fa-youtube" style={{ fontSize: '14px' }}></i> YouTube
+                    <i className="fa fa-youtube-play" style={{ fontSize: '15px' }}></i> YouTube
                   </a>
                 </div>
               </div>

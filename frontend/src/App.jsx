@@ -32,6 +32,7 @@ import AdminCMS from './pages/AdminCMS';
 import ContactPage from './pages/ContactPage';
 import CategoryNewsPage from './pages/CategoryNewsPage';
 import SearchPage from './pages/SearchPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 function ScrollToTopOnNavigate() {
   const { pathname } = useLocation();
@@ -144,6 +145,7 @@ export default function App() {
         <Route path="/search" element={<SearchPage />} />
         <Route path="/category/:category" element={<CategoryNewsPage />} />
         <Route path="/category/:category/:subRegion" element={<CategoryNewsPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
       {/* Global Footer - Hidden on /admin */}
