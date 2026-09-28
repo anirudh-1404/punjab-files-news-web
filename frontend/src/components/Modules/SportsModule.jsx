@@ -1,62 +1,63 @@
 import React, { useState, useEffect } from 'react';
 import { articleAPI } from '../../services/api';
-
-const sportsArticles = [
-  {
-    id: 'sport-1',
-    title: 'ਕਬੱਡੀ ਕੱਪ 2026: ਪੰਜਾਬ ਦੇ ਜਾਫੀਆਂ ਤੇ ਧਾਵੀਆਂ ਦਾ ਦਮਦਾਰ ਪ੍ਰਦਰਸ਼ਨ, ਜੇਤੂ ਟੀਮ ਨੂੰ ਮਿਲਿਆ ਟਰੈਕਟਰ ਇਨਾਮ',
-    category: 'ਕਬੱਡੀ',
-    time: '20 ਮਿੰਟ ਪਹਿਲਾਂ',
-    img: '/img/index_800x400-image18.jpg',
-    desc: 'ਪੰਜਾਬ ਦੇ ਪ੍ਰਮੁੱਖ ਪਿੰਡਾਂ ਵਿੱਚ ਹੋਏ ਖੇਡ ਮੇਲਿਆਂ ਵਿੱਚ ਹਜ਼ਾਰਾਂ ਦਰਸ਼ਕਾਂ ਦੀ ਹਾਜ਼ਰੀ, ਨੌਜਵਾਨਾਂ ਵਿੱਚ ਖੇਡਾਂ ਪ੍ਰਤੀ ਭਾਰੀ ਉਤਸ਼ਾਹ।'
-  },
-  {
-    id: 'sport-2',
-    title: 'ਕ੍ਰਿਕਟ ਲੀਗ: ਪੰਜਾਬ ਦੇ ਤੇਜ਼ ਗੇਂਦਬਾਜ਼ ਨੇ ਤਿੰਨ ਓਵਰਾਂ ਵਿੱਚ ਝਟਕਾਈਆਂ ਚਾਰ ਵਿਕਟਾਂ, ਜਿੱਤਿਆ ਮੈਨ ਆਫ਼ ਦਾ ਮੈਚ',
-    category: 'ਕ੍ਰਿਕਟ',
-    time: '45 ਮਿੰਟ ਪਹਿਲਾਂ',
-    img: '/img/index_800x400-image25.jpg',
-    desc: 'ਸ਼ਾਨਦਾਰ ਸਵਿੰਗ ਗੇਂਦਬਾਜ਼ੀ ਨਾਲ ਵਿਰੋਧੀ ਟੀਮ ਨੂੰ ਸਸਤੇ ਵਿੱਚ ਸਮੇਟਿਆ, ਟੀਮ ਨੇ ਪਲੇਆਫ ਵਿੱਚ ਬਣਾਈ ਜਗ੍ਹਾ।'
-  },
-  {
-    id: 'sport-3',
-    title: 'ਹਾਕੀ ਇੰਡੀਆ ਕੈਂਪ: ਓਲੰਪਿਕ ਤਿਆਰੀਆਂ ਲਈ ਪੰਜਾਬ ਦੇ 6 ਸਟਾਰ ਖਿਡਾਰੀਆਂ ਦੀ ਕੌਮੀ ਟੀਮ ਵਿੱਚ ਚੋਣ',
-    category: 'ਹਾਕੀ',
-    time: '1 ਘੰਟਾ ਪਹਿਲਾਂ',
-    img: '/img/index_800x400-image26.jpg',
-    desc: 'ਜਲੰਧਰ ਅਤੇ ਅੰਮ੍ਰਿਤਸਰ ਦੀਆਂ ਹਾਕੀ ਅਕੈਡਮੀਆਂ ਦੇ ਖਿਡਾਰੀਆਂ ਨੇ ਆਪਣੀ ਪ੍ਰਤਿਭਾ ਦਾ ਲੋਹਾ ਮਨਵਾਇਆ।'
-  },
-  {
-    id: 'sport-4',
-    title: 'ਸੂਬਾਈ ਐਥਲੈਟਿਕਸ ਮੀਟ: 100 ਮੀਟਰ ਦੌੜ ਵਿੱਚ ਲੁਧਿਆਣਾ ਦੀ ਖਿਡਾਰਨ ਨੇ ਤੋੜਿਆ ਪੁਰਾਣਾ ਰਿਕਾਰਡ',
-    category: 'ਐਥਲੈਟਿਕਸ',
-    time: '2 ਘੰਟੇ ਪਹਿਲਾਂ',
-    img: '/img/index_800x400-image27.jpg',
-    desc: 'ਸੋਨ ਤਗਮਾ ਜਿੱਤਣ ਮਗਰੋਂ ਖਿਡਾਰਨ ਨੇ ਕਿਹਾ- ਅਗਲਾ ਟੀਚਾ ਏਸ਼ੀਆਈ ਖੇਡਾਂ ਵਿੱਚ ਦੇਸ਼ ਦਾ ਤਿਰੰਗਾ ਲਹਿਰਾਉਣਾ ਹੈ।'
-  }
-];
+import { getAllArticles } from '../../services/articleStore';
 
 export default function SportsModule() {
-  const [articles, setArticles] = useState(sportsArticles);
+  const [articles, setArticles] = useState([]);
 
   useEffect(() => {
     let isMounted = true;
-    articleAPI.getPublished({ category: 'sport' }).then((res) => {
-      if (isMounted && res && res.data && res.data.length > 0) {
-        const fromApi = res.data.map(item => ({
-          id: item.slug || item._id,
-          slug: item.slug,
-          title: item.title,
-          category: item.category === 'sport' || item.category === 'sports' ? 'ਖੇਡਾਂ' : item.category,
-          time: item.publishedAt ? new Date(item.publishedAt).toLocaleTimeString('pa-IN', { hour: '2-digit', minute: '2-digit' }) : 'ਤਾਜ਼ਾ',
-          img: item.featuredImage || '/img/index_800x400-image18.jpg',
-          desc: item.excerpt || (item.content ? item.content.substring(0, 110) + '...' : '')
-        }));
-        setArticles([...fromApi, ...sportsArticles.slice(fromApi.length)].slice(0, 4));
+
+    const loadSportsArticles = async () => {
+      try {
+        const res = await articleAPI.getPublished({ category: 'sport' });
+        if (isMounted && res && res.data && res.data.length > 0) {
+          const fromApi = res.data.map((item) => ({
+            id: item.slug || item._id,
+            slug: item.slug,
+            title: item.title,
+            category: item.category === 'sport' || item.category === 'sports' ? 'ਖੇਡਾਂ' : item.category,
+            time: item.publishedAt ? new Date(item.publishedAt).toLocaleTimeString('pa-IN', { hour: '2-digit', minute: '2-digit' }) : 'ਤਾਜ਼ਾ',
+            img: item.featuredImage || '/img/index_800x400-image18.jpg',
+            desc: item.excerpt || (item.content ? item.content.substring(0, 110) + '...' : '')
+          }));
+          setArticles(fromApi.slice(0, 4));
+          return;
+        }
+      } catch (err) {}
+
+      const all = getAllArticles({ category: 'sport' });
+      if (isMounted) {
+        if (all && all.length > 0) {
+          const mapped = all.slice(0, 4).map((item) => ({
+            id: item.slug || item.id,
+            slug: item.slug,
+            title: item.title,
+            category: 'ਖੇਡਾਂ',
+            time: item.publicationTime || 'ਤਾਜ਼ਾ',
+            img: item.featuredImage || '/img/index_800x400-image18.jpg',
+            desc: item.excerpt || (item.content ? item.content.substring(0, 110) + '...' : '')
+          }));
+          setArticles(mapped);
+        } else {
+          setArticles([]);
+        }
       }
-    }).catch(() => {});
-    return () => { isMounted = false; };
+    };
+
+    loadSportsArticles();
+    window.addEventListener('storage', loadSportsArticles);
+    window.addEventListener('punjab_articles_updated', loadSportsArticles);
+    return () => {
+      isMounted = false;
+      window.removeEventListener('storage', loadSportsArticles);
+      window.removeEventListener('punjab_articles_updated', loadSportsArticles);
+    };
   }, []);
+
+  if (articles.length === 0) {
+    return null;
+  }
 
   return (
     <section className="module" id="sport" style={{ backgroundColor: '#ffffff', paddingTop: '14px', paddingBottom: '20px', borderBottom: '1px solid #e2e8f0' }}>

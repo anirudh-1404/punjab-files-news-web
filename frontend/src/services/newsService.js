@@ -166,61 +166,16 @@ function formatItems(items, defaultCategory = 'ਖ਼ਬਰਾਂ', defaultSourc
  * Get all live Punjabi news categories
  */
 export async function getLivePunjabiNews() {
-  // Check local cache
   try {
-    const cached = localStorage.getItem(CACHE_KEY);
-    if (cached) {
-      const parsed = JSON.parse(cached);
-      if (Date.now() - parsed.timestamp < CACHE_TTL) {
-        return parsed.data;
-      }
-    }
-  } catch (e) {
-    // Ignore storage errors
-  }
+    localStorage.removeItem(CACHE_KEY);
+  } catch (e) {}
 
-  // Fetch feeds
-  const [topItems, punjabItems, sportsItems, worldItems, bbcItems] = await Promise.all([
-    fetchFeed(FEEDS.top),
-    fetchFeed(FEEDS.punjab),
-    fetchFeed(FEEDS.sports),
-    fetchFeed(FEEDS.world),
-    fetchFeed(FEEDS.bbc)
-  ]);
-
-  const formattedTop = formatItems(topItems, 'ਬ੍ਰੇਕਿੰਗ ਨਿਊਜ਼', 'ਪੰਜਾਬ ਨਿਊਜ਼');
-  const formattedPunjab = formatItems(punjabItems, 'ਪੰਜਾਬ', 'ਪੰਜਾਬ ਸਪੈਸ਼ਲ');
-  const formattedSports = formatItems(sportsItems, 'ਖੇਡਾਂ', 'ਸਪੋਰਟਸ ਡੈਸਕ');
-  const formattedWorld = formatItems(worldItems, 'ਦੇਸ਼-ਵਿਦੇਸ਼', 'ਕੌਮਾਂਤਰੀ ਡੈਸਕ');
-  const formattedBBC = formatItems(bbcItems, 'ਵਿਸ਼ੇਸ਼ ਖ਼ਬਰਾਂ', 'ਬੀਬੀਸੀ ਪੰਜਾਬੀ');
-
-  const combined = {
-    breaking: formattedTop.length > 0 ? formattedTop : null,
-    punjab: formattedPunjab.length > 0 ? formattedPunjab : null,
-    sports: formattedSports.length > 0 ? formattedSports : null,
-    world: formattedWorld.length > 0 ? formattedWorld : null,
-    bbc: formattedBBC.length > 0 ? formattedBBC : null,
-    all: [
-      ...formattedTop,
-      ...formattedPunjab,
-      ...formattedSports,
-      ...formattedWorld,
-      ...formattedBBC
-    ]
+  return {
+    breaking: null,
+    punjab: null,
+    sports: null,
+    world: null,
+    bbc: null,
+    all: []
   };
-
-  // Cache data
-  try {
-    localStorage.setItem(
-      CACHE_KEY,
-      JSON.stringify({
-        timestamp: Date.now(),
-        data: combined
-      })
-    );
-  } catch (e) {
-    // Ignore storage errors
-  }
-
-  return combined;
 }

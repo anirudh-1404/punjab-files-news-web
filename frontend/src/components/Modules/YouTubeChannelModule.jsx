@@ -1,46 +1,47 @@
-import React, { useState } from 'react';
-
-const defaultVideos = [
-  {
-    id: 'vid-1',
-    title: 'ਪੰਜਾਬ ਵਿਧਾਨ ਸਭਾ ਵਿੱਚ ਕਿਸਾਨੀ ਮੁੱਦਿਆਂ ’ਤੇ ਗਰਮਾ-ਗਰਮ ਬਹਿਸ | Exclusive Ground Report',
-    duration: '14:28',
-    views: '45K views',
-    time: '1 ਦਿਨ ਪਹਿਲਾਂ',
-    thumbnail: '/img/index_800x400-image07.jpg',
-    youtubeId: 'KMWcefrAKLg'
-  },
-  {
-    id: 'vid-2',
-    title: 'ਸੱਚਖੰਡ ਸ੍ਰੀ ਹਰਿਮੰਦਰ ਸਾਹਿਬ ਅੰਮ੍ਰਿਤ ਵੇਲੇ ਦੇ ਅਲੌਕਿਕ ਦਰਸ਼ਨ ਦੀਦਾਰੇ | ਧਾਰਮਿਕ ਪ੍ਰੋਗਰਾਮ',
-    duration: '22:15',
-    views: '88K views',
-    time: '2 ਦਿਨ ਪਹਿਲਾਂ',
-    thumbnail: '/img/darbar-sahib-mukhwak.jpg',
-    youtubeId: 'KMWcefrAKLg'
-  },
-  {
-    id: 'vid-3',
-    title: 'ਕਬੱਡੀ ਵਿਸ਼ਵ ਕੱਪ 2026: ਪੰਜਾਬ ਦੇ ਜਾਫੀਆਂ ਤੇ ਧਾਵੀਆਂ ਦਾ ਸ਼ਾਨਦਾਰ ਪ੍ਰਦਰਸ਼ਨ | Sports Highlights',
-    duration: '18:40',
-    views: '62K views',
-    time: '3 ਦਿਨ ਪਹਿਲਾਂ',
-    thumbnail: '/img/index_800x400-image06.jpg',
-    youtubeId: 'KMWcefrAKLg'
-  },
-  {
-    id: 'vid-4',
-    title: 'ਸਰਹੱਦੀ ਪਿੰਡਾਂ ਦੀ ਦਾਸਤਾਨ: ਨਹਿਰੀ ਪਾਣੀ ਪਹੁੰਚਣ ਮਗਰੋਂ ਕਿਸਾਨਾਂ ਦੇ ਚਿਹਰਿਆਂ ’ਤੇ ਖੁਸ਼ੀ | Special Report',
-    duration: '11:05',
-    views: '31K views',
-    time: '4 ਦਿਨ ਪਹਿਲਾਂ',
-    thumbnail: '/img/index_800x400-image08.jpg',
-    youtubeId: 'KMWcefrAKLg'
-  }
-];
+import React, { useState, useEffect } from 'react';
+import { articleAPI } from '../../services/api';
+import { getAllArticles } from '../../services/articleStore';
 
 export default function YouTubeChannelModule() {
+  const [videos, setVideos] = useState([]);
   const [activeVideo, setActiveVideo] = useState(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    const loadVideos = async () => {
+      try {
+        const res = await articleAPI.getPublished({ limit: 10 });
+        if (isMounted && res && res.data) {
+          const videoArticles = res.data.filter(a => a.videoUrl || a.youtubeId);
+          if (videoArticles.length > 0) {
+            setVideos(videoArticles.map(a => ({
+              id: a.slug || a._id,
+              title: a.title,
+              duration: 'ਵੀਡੀਓ',
+              views: `${a.views || 1} views`,
+              time: a.publishedAt ? new Date(a.publishedAt).toLocaleTimeString('pa-IN', { hour: '2-digit', minute: '2-digit' }) : 'ਤਾਜ਼ਾ',
+              thumbnail: a.featuredImage || '/img/index_800x400-image07.jpg',
+              youtubeId: a.youtubeId || 'KMWcefrAKLg'
+            })));
+            return;
+          }
+        }
+      } catch (e) {}
+
+      const local = getAllArticles();
+      if (isMounted) {
+        const localVideos = local.filter(a => a.videoUrl || a.youtubeId);
+        setVideos(localVideos);
+      }
+    };
+
+    loadVideos();
+    return () => { isMounted = false; };
+  }, []);
+
+  if (videos.length === 0) {
+    return null;
+  }
 
   return (
     <section className="module" id="youtube-section" style={{ backgroundColor: '#f8fafc', paddingTop: '14px', paddingBottom: '22px', borderBottom: '1px solid #e2e8f0' }}>
@@ -143,7 +144,7 @@ export default function YouTubeChannelModule() {
 
         {/* Video Cards Grid */}
         <div className="row">
-          {defaultVideos.map((video) => (
+          {videos.map((video) => (
             <div className="col-md-3 col-sm-6 col-xs-12" key={video.id} style={{ marginBottom: '20px' }}>
               <div
                 style={{

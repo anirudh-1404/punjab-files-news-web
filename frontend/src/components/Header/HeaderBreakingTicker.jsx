@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { breakingAPI } from '../../services/api';
 import { getStoredBreaking } from '../../services/articleStore';
-import { getLivePunjabiNews } from '../../services/newsService';
 
 export default function HeaderBreakingTicker() {
   const [news, setNews] = useState(() => getStoredBreaking());
@@ -26,22 +25,11 @@ export default function HeaderBreakingTicker() {
         console.warn('Backend breaking fetch fallback:', err.message);
       }
 
-      // Fallback: stored breaking news + live RSS
+      // Fallback: stored breaking news from admin
       const stored = getStoredBreaking();
       if (isMounted && stored && stored.length > 0) {
         setNews(stored);
       }
-
-      getLivePunjabiNews().then((data) => {
-        if (isMounted && data && data.breaking && data.breaking.length > 0) {
-          const liveItems = data.breaking.map((item, idx) => ({
-            id: 'live-' + idx,
-            tag: item.source || 'ਤਾਜ਼ਾ',
-            text: item.title
-          }));
-          setNews([...stored, ...liveItems]);
-        }
-      });
     };
 
     loadBackendBreaking();

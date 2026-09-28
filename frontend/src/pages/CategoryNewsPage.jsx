@@ -49,133 +49,6 @@ const CATEGORY_NAMES = {
   'art-entertainment': 'ਮਨੋਰੰਜਨ ਤੇ ਸਿਨੇਮਾ (Entertainment)'
 };
 
-// Fallback regional articles
-const FALLBACK_ARTICLES = {
-  majha: [
-    {
-      _id: 'art-majha-1',
-      title: 'ਸ੍ਰੀ ਅੰਮ੍ਰਿਤਸਰ: ਵਿਰਾਸਤੀ ਮਾਰਗ ਦੇ ਨਵੀਨੀਕਰਨ ਪ੍ਰਾਜੈਕਟ ਨੂੰ ਮਨਜ਼ੂਰੀ, ਸ਼ਰਧਾਲੂਆਂ ਲਈ ਨਵੀਆਂ ਸਹੂਲਤਾਂ',
-      excerpt: 'ਸੱਚਖੰਡ ਸ੍ਰੀ ਹਰਿਮੰਦਰ ਸਾਹਿਬ ਆਉਣ ਵਾਲੇ ਦੇਸ਼-ਵਿਦੇਸ਼ ਦੇ ਸ਼ਰਧਾਲੂਆਂ ਦੀ ਸਹੂਲਤ ਲਈ ਵਿਸ਼ੇਸ਼ ਪ੍ਰਬੰਧ ਮੁਕੰਮਲ ਕੀਤੇ ਗਏ ਹਨ।',
-      category: 'punjab',
-      punjabRegion: 'majha',
-      district: 'ਅੰਮ੍ਰਿਤਸਰ',
-      authorName: 'ਗੁਰਪ੍ਰੀਤ ਸਿੰਘ (ਅੰਮ੍ਰਿਤਸਰ ਬਿਊਰੋ)',
-      createdAt: new Date().toISOString(),
-      views: 342,
-      featuredImage: '/img/index_800x400-image01.jpg',
-      slug: 'amritsar-heritage-street-project-approved'
-    },
-    {
-      _id: 'art-majha-2',
-      title: 'ਗੁਰਦਾਸਪੁਰ ਤੇ ਤਰਨਤਾਰਨ: ਸਰਹੱਦੀ ਖੇਤਰਾਂ ਦੇ ਕਿਸਾਨਾਂ ਲਈ ਨਹਿਰੀ ਪਾਣੀ ਦੀ ਸਪਲਾਈ ਬਹਾਲ',
-      excerpt: 'ਨਹਿਰੀ ਵਿਭਾਗ ਵੱਲੋਂ ਟੇਲਾਂ ਤੱਕ ਪਾਣੀ ਪਹੁੰਚਾਉਣ ਲਈ ਵਿਸ਼ੇਸ਼ ਨਿਗਰਾਨ ਟੀਮਾਂ ਤਾਇਨਾਤ ਕੀਤੀਆਂ ਗਈਆਂ ਹਨ।',
-      category: 'punjab',
-      punjabRegion: 'majha',
-      district: 'ਗੁਰਦਾਸਪੁਰ',
-      authorName: 'ਹਰਮਨਜੋਤ ਸਿੰਘ (ਤਰਨਤਾਰਨ)',
-      createdAt: new Date(Date.now() - 3600000).toISOString(),
-      views: 215,
-      featuredImage: '/img/index_800x400-image08.jpg',
-      slug: 'gurdaspur-tarn-taran-farmers-canal-water'
-    },
-    {
-      _id: 'art-majha-3',
-      title: 'ਪਠਾਨਕੋਟ: ਪਹਾੜੀ ਇਲਾਕਿਆਂ ਵਿੱਚ ਮੀਂਹ ਮਗਰੋਂ ਰਾਵੀ ਦਰਿਆ ਦੇ ਪਾਣੀ ਦੇ ਪੱਧਰ ਦੀ ਲਗਾਤਾਰ ਨਿਗਰਾਨੀ',
-      excerpt: 'ਜ਼ਿਲ੍ਹਾ ਪ੍ਰਸ਼ਾਸਨ ਨੇ ਕਿਸੇ ਵੀ ਹੜ੍ਹ ਵਰਗੀ ਸਥਿਤੀ ਨਾਲ ਨਜਿੱਠਣ ਲਈ ਕੰਟਰੋਲ ਰੂਮ ਸਥਾਪਿਤ ਕੀਤੇ।',
-      category: 'punjab',
-      punjabRegion: 'majha',
-      district: 'ਪਠਾਨਕੋਟ',
-      authorName: 'ਪੱਤਰਕਾਰ ਬਿਊਰੋ',
-      createdAt: new Date(Date.now() - 7200000).toISOString(),
-      views: 189,
-      featuredImage: '/img/index_800x400-image11.jpg',
-      slug: 'pathankot-ravi-river-monitoring'
-    }
-  ],
-  malwa: [
-    {
-      _id: 'art-malwa-1',
-      title: 'ਲੁਧਿਆਣਾ ਤੇ ਬਠਿੰਡਾ: ਨਵੀਂ ਉਦਯੋਗਿਕ ਨੀਤੀ ਨਾਲ ਹਜ਼ਾਰਾਂ ਨੌਜਵਾਨਾਂ ਲਈ ਰੁਜ਼ਗਾਰ ਦੇ ਖੁੱਲ੍ਹਣਗੇ ਰਾਹ',
-      excerpt: 'ਟੈਕਸਟਾਈਲ ਅਤੇ ਆਟੋ ਪਾਰਟਸ ਸਨਅਤਾਂ ਨੂੰ ਨਿਵੇਸ਼ ਲਈ ਵਿਸ਼ੇਸ਼ ਛੋਟਾਂ ਅਤੇ ਸਬਸਿਡੀਆਂ ਦੇਣ ਦਾ ਫ਼ੈਸਲਾ।',
-      category: 'punjab',
-      punjabRegion: 'malwa',
-      district: 'ਲੁਧਿਆਣਾ',
-      authorName: 'ਜਸਵੀਰ ਸਿੰਘ (ਲੁਧਿਆਣਾ)',
-      createdAt: new Date().toISOString(),
-      views: 420,
-      featuredImage: '/img/index_800x400-image02.jpg',
-      slug: 'ludhiana-bathinda-industrial-policy-jobs'
-    },
-    {
-      _id: 'art-malwa-2',
-      title: 'ਪਟਿਆਲਾ ਤੇ ਸੰਗਰੂਰ: ਖੇਤੀਬਾੜੀ ਖੋਜ ਕੇਂਦਰ ਵੱਲੋਂ ਸਾਉਣੀ ਦੀਆਂ ਫ਼ਸਲਾਂ ਲਈ ਨਵੀਂ ਐਡਵਾਈਜ਼ਰੀ ਜਾਰੀ',
-      excerpt: 'ਮਾਹਿਰਾਂ ਨੇ ਕਿਸਾਨਾਂ ਨੂੰ ਘੱਟ ਪਾਣੀ ਵਾਲੀਆਂ ਕਿੱਸਮਾਂ ਅਪਣਾਉਣ ਦੀ ਦਿੱਤੀ ਸਲਾਹ।',
-      category: 'punjab',
-      punjabRegion: 'malwa',
-      district: 'ਪਟਿਆਲਾ',
-      authorName: 'ਅਮਨਦੀਪ ਕੌਰ (ਪਟਿਆਲਾ)',
-      createdAt: new Date(Date.now() - 3600000).toISOString(),
-      views: 290,
-      featuredImage: '/img/index_800x400-image09.jpg',
-      slug: 'patiala-sangrur-agriculture-advisory'
-    },
-    {
-      _id: 'art-malwa-3',
-      title: 'ਮੋਗਾ ਤੇ ਫ਼ਿਰੋਜ਼ਪੁਰ: ਸਰਹੱਦੀ ਪਿੰਡਾਂ ਵਿੱਚ ਸੋਲਰ ਲਾਈਟਾਂ ਅਤੇ ਪੱਕੀਆਂ ਸੜਕਾਂ ਦੇ ਪ੍ਰਾਜੈਕਟ ਮੁਕੰਮਲ',
-      excerpt: 'ਪੇਂਡੂ ਵਿਕਾਸ ਵਿਭਾਗ ਵੱਲੋਂ ਬੁਨਿਆਦੀ ਢਾਂਚੇ ਨੂੰ ਮਜ਼ਬੂਤ ਕਰਨ ਲਈ ਫੰਡ ਜਾਰੀ ਕੀਤੇ ਗਏ।',
-      category: 'punjab',
-      punjabRegion: 'malwa',
-      district: 'ਮੋਗਾ',
-      authorName: 'ਸਟਾਫ਼ ਰਿਪੋਰਟਰ',
-      createdAt: new Date(Date.now() - 7200000).toISOString(),
-      views: 175,
-      featuredImage: '/img/index_800x400-image12.jpg',
-      slug: 'moga-ferozepur-solar-lights-roads'
-    }
-  ],
-  doaba: [
-    {
-      _id: 'art-doaba-1',
-      title: 'ਜਲੰਧਰ: ਸਪੋਰਟਸ ਇੰਡਸਟਰੀ ਲਈ ਵਿਸ਼ੇਸ਼ ਕਲੱਸਟਰ ਪ੍ਰਾਜੈਕਟ ਸ਼ੁਰੂ, ਕੌਮਾਂਤਰੀ ਨਿਰਯਾਤ ਵਿੱਚ ਵਾਧਾ',
-      excerpt: 'ਵਿਸ਼ਵ ਪ੍ਰਸਿੱਧ ਖੇਡ ਸਮਾਨ ਬਣਾਉਣ ਵਾਲੇ ਨਿਰਮਾਤਾਵਾਂ ਨੂੰ ਵਿਸ਼ਵ ਪੱਧਰੀ ਟੈਸਟਿੰਗ ਲੈਬ ਮਿਲੇਗੀ।',
-      category: 'punjab',
-      punjabRegion: 'doaba',
-      district: 'ਜਲੰਧਰ',
-      authorName: 'ਰਮਨਦੀਪ ਸਿੰਘ (ਜਲੰਧਰ)',
-      createdAt: new Date().toISOString(),
-      views: 380,
-      featuredImage: '/img/index_800x400-image03.jpg',
-      slug: 'jalandhar-sports-industry-cluster'
-    },
-    {
-      _id: 'art-doaba-2',
-      title: 'ਹੁਸ਼ਿਆਰਪੁਰ ਤੇ ਕਪੂਰਥਲਾ: ਵਾਤਾਵਰਨ ਸੰਭਾਲ ਮੁਹਿੰਮ ਤਹਿਤ ਲੱਖਾਂ ਬੂਟੇ ਲਗਾਉਣ ਦਾ ਟੀਚਾ',
-      excerpt: 'ਪਿੰਡਾਂ ਅਤੇ ਨਹਿਰਾਂ ਦੇ ਕਿਨਾਰੇ ਹਰਿਆਵਲ ਵਧਾਉਣ ਲਈ ਸਮਾਜ ਸੇਵੀ ਸੰਸਥਾਵਾਂ ਦਾ ਵੱਡਾ ਸਹਿਯੋਗ।',
-      category: 'punjab',
-      punjabRegion: 'doaba',
-      district: 'ਹੁਸ਼ਿਆਰਪੁਰ',
-      authorName: 'ਕੁਲਵੰਤ ਸਿੰਘ (ਹੁਸ਼ਿਆਰਪੁਰ)',
-      createdAt: new Date(Date.now() - 3600000).toISOString(),
-      views: 245,
-      featuredImage: '/img/index_800x400-image10.jpg',
-      slug: 'hoshiarpur-kapurthala-tree-plantation'
-    },
-    {
-      _id: 'art-doaba-3',
-      title: 'ਨਵਾਂਸ਼ਹਿਰ (SBS ਨਗਰ): ਨੌਜਵਾਨਾਂ ਲਈ ਮੁਫ਼ਤ ਤਕਨੀਕੀ ਸਿਖਲਾਈ ਕੋਰਸਾਂ ਦੀ ਸ਼ੁਰੂਆਤ',
-      excerpt: 'ਸਰਕਾਰੀ ਆਈ.ਟੀ.ਆਈ. ਕੇਂਦਰਾਂ ਵਿੱਚ ਨਵੇਂ ਬੈਚਾਂ ਲਈ ਦਾਖ਼ਲਾ ਪ੍ਰਕਿਰਿਆ ਆਰੰਭ ਹੋਈ।',
-      category: 'punjab',
-      punjabRegion: 'doaba',
-      district: 'ਨਵਾਂਸ਼ਹਿਰ',
-      authorName: 'ਦੋਆਬਾ ਬਿਊਰੋ',
-      createdAt: new Date(Date.now() - 7200000).toISOString(),
-      views: 198,
-      featuredImage: '/img/index_800x400-image14.jpg',
-      slug: 'nawanshahr-technical-training-courses'
-    }
-  ]
-};
-
 export default function CategoryNewsPage() {
   const { category = 'punjab', subRegion } = useParams();
   const [articles, setArticles] = useState([]);
@@ -203,38 +76,21 @@ export default function CategoryNewsPage() {
         const res = await articleAPI.getPublished(queryParams);
         let liveArticles = Array.isArray(res?.data) ? res.data : [];
 
-        // 2. Fallback / supplementary articles if empty or few
-        if (category === 'punjab' && subRegion && FALLBACK_ARTICLES[subRegion.toLowerCase()]) {
-          const fallbackList = FALLBACK_ARTICLES[subRegion.toLowerCase()];
-          // Combine live with fallback avoiding duplicate slugs
-          const existingSlugs = new Set(liveArticles.map((a) => a.slug || a._id));
-          const additions = fallbackList.filter((f) => !existingSlugs.has(f.slug));
-          liveArticles = [...liveArticles, ...additions];
-        } else if (category === 'punjab' && (!subRegion || subRegion === 'all')) {
-          // Combine all three regions
-          const allFallbacks = [
-            ...FALLBACK_ARTICLES.majha,
-            ...FALLBACK_ARTICLES.malwa,
-            ...FALLBACK_ARTICLES.doaba
-          ];
-          const existingSlugs = new Set(liveArticles.map((a) => a.slug || a._id));
-          const additions = allFallbacks.filter((f) => !existingSlugs.has(f.slug));
-          liveArticles = [...liveArticles, ...additions];
-        }
-
         if (isMounted) {
           setArticles(liveArticles);
-          // Trending articles from general store
+          // Trending articles from general store or api
           const allStoreArticles = getAllArticles();
           setTrendingArticles(allStoreArticles.slice(0, 5));
         }
       } catch (err) {
-        console.warn('Backend load error, using local regional store:', err);
+        console.warn('Backend load error, checking local store:', err);
         if (isMounted) {
-          const fallbackList = subRegion && FALLBACK_ARTICLES[subRegion.toLowerCase()]
-            ? FALLBACK_ARTICLES[subRegion.toLowerCase()]
-            : [...FALLBACK_ARTICLES.majha, ...FALLBACK_ARTICLES.malwa, ...FALLBACK_ARTICLES.doaba];
-          setArticles(fallbackList);
+          const filter = { category };
+          if (subRegion && subRegion !== 'all') {
+            filter.punjabRegion = subRegion.toLowerCase();
+          }
+          const localList = getAllArticles(filter);
+          setArticles(localList);
           setTrendingArticles(getAllArticles().slice(0, 5));
         }
       } finally {

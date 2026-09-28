@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { articleAPI, uploadAPI } from '../../../services/api';
+import { createNewArticle } from '../../../services/articleStore';
 
 const IMAGE_PRESETS = [
   { label: 'ਅੰਮ੍ਰਿਤਸਰ / ਦਰਬਾਰ ਸਾਹਿਬ', url: '/img/darbar-sahib-mukhwak.jpg' },
@@ -135,6 +136,24 @@ export default function CreateArticleView({ user, onArticleCreated }) {
         isBreaking,
         status: user?.canDirectPublish ? 'published' : 'pending_editor'
       });
+
+      // Sync to local store if direct published
+      try {
+        if (user?.canDirectPublish) {
+          createNewArticle({
+            title: title.trim(),
+            content: content.trim(),
+            excerpt: excerpt.trim(),
+            category,
+            punjabRegion: category === 'punjab' ? punjabRegion : null,
+            language,
+            featuredImage,
+            isBreaking
+          });
+        }
+      } catch (e) {}
+
+      window.dispatchEvent(new Event('punjab_articles_updated'));
 
       setFeedback({
         type: 'success',

@@ -1,62 +1,63 @@
 import React, { useState, useEffect } from 'react';
 import { articleAPI } from '../../services/api';
-
-const healthArticles = [
-  {
-    id: 'health-1',
-    title: 'ਸੰਤੁਲਿਤ ਖ਼ੁਰਾਕ ਤੇ ਦੇਸੀ ਨੁਸਖ਼ੇ: ਮੌਸਮੀ ਬਿਮਾਰੀਆਂ ਤੋਂ ਬਚਾਅ ਲਈ ਆਯੁਰਵੈਦਿਕ ਡਾਕਟਰਾਂ ਦੇ ਅਹਿਮ ਸੁਝਾਅ',
-    category: 'ਪੌਸ਼ਟਿਕ ਖ਼ੁਰਾਕ',
-    time: '25 ਮਿੰਟ ਪਹਿਲਾਂ',
-    img: '/img/index_800x400-image19.jpg',
-    desc: 'ਘਿਓ, ਮੱਖਣ ਅਤੇ ਮੌਸਮੀ ਸਬਜ਼ੀਆਂ ਦੇ ਸੰਤੁਲਿਤ ਉਪਯੋਗ ਨਾਲ ਇਮਿਊਨਿਟੀ ਵਧਾਉਣ ਅਤੇ ਤੰਦਰੁਸਤ ਰਹਿਣ ਦੇ ਤਰੀਕੇ।'
-  },
-  {
-    id: 'health-2',
-    title: 'ਮਾਨਸਿਕ ਤਣਾਅ ਅਤੇ ਨੀਂਦ ਦੀ ਸਮੱਸਿਆ: ਰੋਜ਼ਾਨਾ 30 ਮਿੰਟ ਯੋਗਾ ਤੇ ਧਿਆਨ ਨਾਲ ਮਨ ਨੂੰ ਮਿਲਦੀ ਹੈ ਸ਼ਾਂਤੀ',
-    category: 'ਮਾਨਸਿਕ ਸਿਹਤ',
-    time: '1 ਘੰਟਾ ਪਹਿਲਾਂ',
-    img: '/img/index_800x400-image32.jpg',
-    desc: 'ਡਾਕਟਰਾਂ ਅਨੁਸਾਰ ਡਿਜੀਟਲ ਸਕ੍ਰੀਨ ਸਮਾਂ ਘਟਾ ਕੇ ਅਤੇ ਕੁਦਰਤ ਦੇ ਨੇੜੇ ਰਹਿ ਕੇ ਦਿਮਾਗੀ ਥਕਾਵਟ ਤੋਂ ਰਾਹਤ ਪਾਈ ਜਾ ਸਕਦੀ ਹੈ।'
-  },
-  {
-    id: 'health-3',
-    title: 'ਪੰਜਾਬ ਵਿੱਚ ਨਵੀਂ ਮੈਡੀਕਲ ਤਕਨਾਲੋਜੀ: ਦਿਲ ਅਤੇ ਸ਼ੂਗਰ ਦੇ ਮਰੀਜ਼ਾਂ ਲਈ ਆਧੁਨਿਕ ਜਾਂਚ ਸਹੂਲਤਾਂ ਦੀ ਸ਼ੁਰੂਆਤ',
-    category: 'ਮੈਡੀਕਲ ਰਿਪੋਰਟ',
-    time: '2 ਘੰਟੇ ਪਹਿਲਾਂ',
-    img: '/img/index_800x400-image34.jpg',
-    desc: 'ਜ਼ਿਲ੍ਹਾ ਪੱਧਰੀ ਹਸਪਤਾਲਾਂ ਵਿੱਚ ਵਿਸ਼ਵ ਪੱਧਰੀ ਲੈਬਾਂ ਅਤੇ ਮੁਫ਼ਤ ਜਾਂਚ ਕੈਂਪਾਂ ਰਾਹੀਂ ਲੋਕਾਂ ਨੂੰ ਮਿਲ ਰਹੀ ਹੈ ਰਾਹਤ।'
-  },
-  {
-    id: 'health-4',
-    title: 'ਪੇਂਡੂ ਖੇਤਰਾਂ ਵਿੱਚ ਮੁਫ਼ਤ ਸਿਹਤ ਕੈਂਪ: 500 ਤੋਂ ਵੱਧ ਬਜ਼ੁਰਗਾਂ ਅਤੇ ਬੱਚਿਆਂ ਦੀਆਂ ਅੱਖਾਂ ਦੀ ਹੋਈ ਜਾਂਚ',
-    category: 'ਸਿਹਤ ਕੈਂਪ',
-    time: '3 ਘੰਟੇ ਪਹਿਲਾਂ',
-    img: '/img/index_800x400-image35.jpg',
-    desc: 'ਸਮਾਜ ਸੇਵੀ ਸੰਸਥਾਵਾਂ ਅਤੇ ਡਾਕਟਰਾਂ ਦੀ ਟੀਮ ਵੱਲੋਂ ਲੋੜਵੰਦਾਂ ਨੂੰ ਐਨਕਾਂ ਅਤੇ ਦਵਾਈਆਂ ਮੁਫ਼ਤ ਵੰਡੀਆਂ ਗਈਆਂ।'
-  }
-];
+import { getAllArticles } from '../../services/articleStore';
 
 export default function HealthModule() {
-  const [articles, setArticles] = useState(healthArticles);
+  const [articles, setArticles] = useState([]);
 
   useEffect(() => {
     let isMounted = true;
-    articleAPI.getPublished({ category: 'health' }).then((res) => {
-      if (isMounted && res && res.data && res.data.length > 0) {
-        const fromApi = res.data.map(item => ({
-          id: item.slug || item._id,
-          slug: item.slug,
-          title: item.title,
-          category: item.category === 'health' ? 'ਸਿਹਤ' : item.category,
-          time: item.publishedAt ? new Date(item.publishedAt).toLocaleTimeString('pa-IN', { hour: '2-digit', minute: '2-digit' }) : 'ਤਾਜ਼ਾ',
-          img: item.featuredImage || '/img/index_800x400-image19.jpg',
-          desc: item.excerpt || (item.content ? item.content.substring(0, 110) + '...' : '')
-        }));
-        setArticles([...fromApi, ...healthArticles.slice(fromApi.length)].slice(0, 4));
+
+    const loadHealthArticles = async () => {
+      try {
+        const res = await articleAPI.getPublished({ category: 'health' });
+        if (isMounted && res && res.data && res.data.length > 0) {
+          const fromApi = res.data.map((item) => ({
+            id: item.slug || item._id,
+            slug: item.slug,
+            title: item.title,
+            category: item.category === 'health' ? 'ਸਿਹਤ' : item.category,
+            time: item.publishedAt ? new Date(item.publishedAt).toLocaleTimeString('pa-IN', { hour: '2-digit', minute: '2-digit' }) : 'ਤਾਜ਼ਾ',
+            img: item.featuredImage || '/img/index_800x400-image19.jpg',
+            desc: item.excerpt || (item.content ? item.content.substring(0, 110) + '...' : '')
+          }));
+          setArticles(fromApi.slice(0, 4));
+          return;
+        }
+      } catch (err) {}
+
+      const all = getAllArticles({ category: 'health' });
+      if (isMounted) {
+        if (all && all.length > 0) {
+          const mapped = all.slice(0, 4).map((item) => ({
+            id: item.slug || item.id,
+            slug: item.slug,
+            title: item.title,
+            category: 'ਸਿਹਤ',
+            time: item.publicationTime || 'ਤਾਜ਼ਾ',
+            img: item.featuredImage || '/img/index_800x400-image19.jpg',
+            desc: item.excerpt || (item.content ? item.content.substring(0, 110) + '...' : '')
+          }));
+          setArticles(mapped);
+        } else {
+          setArticles([]);
+        }
       }
-    }).catch(() => {});
-    return () => { isMounted = false; };
+    };
+
+    loadHealthArticles();
+    window.addEventListener('storage', loadHealthArticles);
+    window.addEventListener('punjab_articles_updated', loadHealthArticles);
+    return () => {
+      isMounted = false;
+      window.removeEventListener('storage', loadHealthArticles);
+      window.removeEventListener('punjab_articles_updated', loadHealthArticles);
+    };
   }, []);
+
+  if (articles.length === 0) {
+    return null;
+  }
 
   return (
     <section className="module" id="health" style={{ backgroundColor: '#fcfdfe', paddingTop: '14px', paddingBottom: '20px', borderBottom: '1px solid #e2e8f0' }}>

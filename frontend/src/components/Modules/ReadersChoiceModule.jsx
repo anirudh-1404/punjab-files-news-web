@@ -2,21 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { articleAPI } from '../../services/api';
 import { getReadersChoiceTop10 } from '../../services/articleStore';
 
-const defaultTopArticles = [
-  { id: 'top-1', rank: '01', title: 'ਸੱਚਖੰਡ ਸ੍ਰੀ ਹਰਿਮੰਦਰ ਸਾਹਿਬ ਤੋਂ ਅੱਜ ਦਾ ਪਵਿੱਤਰ ਮੁੱਖਵਾਕ: ਗੁਰੂ ਕਿਰਪਾ ਨਾਲ ਜੀਵਨ ਵਿੱਚ ਆਨੰਦ', category: 'ਧਰਮ', views: 3120 },
-  { id: 'top-2', rank: '02', title: 'ਸ੍ਰੀ ਅੰਮ੍ਰਿਤਸਰ: ਵਿਰਾਸਤੀ ਮਾਰਗ ਦੇ ਨਵੀਨੀਕਰਨ ਪ੍ਰਾਜੈਕਟ ਨੂੰ ਮਨਜ਼ੂਰੀ, ਸ਼ਰਧਾਲੂਆਂ ਲਈ ਨਵੀਆਂ ਸਹੂਲਤਾਂ', category: 'ਮਾਝਾ', views: 2450 },
-  { id: 'top-3', rank: '03', title: 'ਲੁਧਿਆਣਾ ਤੇ ਬਠਿੰਡਾ: ਨਵੀਂ ਉਦਯੋਗਿਕ ਨੀਤੀ ਨਾਲ ਹਜ਼ਾਰਾਂ ਨੌਜਵਾਨਾਂ ਲਈ ਰੁਜ਼ਗਾਰ ਦੇ ਖੁੱਲ੍ਹਣਗੇ ਰਾਹ', category: 'ਮਾਲਵਾ', views: 2180 },
-  { id: 'top-4', rank: '04', title: 'ਜਲੰਧਰ: ਸਪੋਰਟਸ ਇੰਡਸਟਰੀ ਲਈ ਵਿਸ਼ੇਸ਼ ਕਲੱਸਟਰ ਪ੍ਰਾਜੈਕਟ ਸ਼ੁਰੂ, ਕੌਮਾਂਤਰੀ ਨਿਰਯਾਤ ਵਿੱਚ ਵਾਧਾ', category: 'ਦੋਆਬਾ', views: 1940 },
-  { id: 'top-5', rank: '05', title: 'ਗੁਰਦਾਸਪੁਰ ਤੇ ਤਰਨਤਾਰਨ: ਸਰਹੱਦੀ ਖੇਤਰਾਂ ਦੇ ਕਿਸਾਨਾਂ ਲਈ ਨਹਿਰੀ ਪਾਣੀ ਦੀ ਸਪਲਾਈ ਬਹਾਲ ਕਰਨ ਦਾ ਕਾਰਜ ਆਰੰਭ', category: 'ਮਾਝਾ', views: 1820 },
-  { id: 'top-6', rank: '06', title: 'ਪੰਜਾਬ ਵਿਧਾਨ ਸਭਾ ਸੈਸ਼ਨ: ਲੋਕ ਹਿੱਤ ਦੇ ਅਹਿਮ ਬਿੱਲ ਪਾਸ, ਨਵੇਂ ਪ੍ਰੋਜੈਕਟਾਂ ਨੂੰ ਮਨਜ਼ੂਰੀ', category: 'ਰਾਜਨੀਤੀ', views: 1720 },
-  { id: 'top-7', rank: '07', title: 'ਕੌਮਾਂਤਰੀ ਪੰਜਾਬੀ ਡਾਇਸਪੋਰਾ: ਕੈਨੇਡਾ ਤੇ ਯੂਕੇ ਵਿੱਚ ਪੰਜਾਬੀ ਨੌਜਵਾਨਾਂ ਨੇ ਮਾਰੀਆਂ ਮੱਲਾਂ', category: 'ਦੇਸ਼-ਵਿਦੇਸ਼', views: 1650 },
-  { id: 'top-8', rank: '08', title: 'ਖੇਡਾਂ ਵਤਨ ਪੰਜਾਬ ਦੀਆਂ ਦਾ ਧਮਾਕੇਦਾਰ ਆਗਾਜ਼, ਹਜ਼ਾਰਾਂ ਖਿਡਾਰੀ ਮੈਦਾਨ ਵਿੱਚ', category: 'ਖੇਡਾਂ', views: 1530 },
-  { id: 'top-9', rank: '09', title: 'ਗੁਰਦਾਸਪੁਰ ਤੇ ਤਰਨਤਾਰਨ: ਸਰਹੱਦੀ ਖੇਤਰਾਂ ਦੇ ਕਿਸਾਨਾਂ ਲਈ ਨਹਿਰੀ ਪਾਣੀ ਦੀ ਸਪਲਾਈ ਬਹਾਲ', category: 'ਮਾਝਾ', views: 1410 },
-  { id: 'top-10', rank: '10', title: 'ਪੇਂਡੂ ਸਿਹਤ ਸੁਧਾਰ ਮਿਸ਼ਨ: ਹਰ ਪਿੰਡ ਵਿੱਚ ਮੈਡੀਕਲ ਸਹੂਲਤਾਂ ਦਾ ਹੋਵੇਗਾ ਵਿਸਥਾਰ', category: 'ਸਿਹਤ', views: 1180 }
-];
-
 export default function ReadersChoiceModule() {
-  const [topArticles, setTopArticles] = useState(defaultTopArticles);
+  const [topArticles, setTopArticles] = useState([]);
 
   useEffect(() => {
     let isMounted = true;
@@ -33,8 +20,7 @@ export default function ReadersChoiceModule() {
             views: item.views || 1000
           }));
 
-          const combined = [...fromApi, ...defaultTopArticles.slice(fromApi.length)].slice(0, 10);
-          setTopArticles(combined);
+          setTopArticles(fromApi.slice(0, 10));
           return;
         }
       } catch (err) {
@@ -42,8 +28,19 @@ export default function ReadersChoiceModule() {
       }
 
       const top = getReadersChoiceTop10();
-      if (isMounted && top && top.length > 0) {
-        setTopArticles(top);
+      if (isMounted) {
+        if (top && top.length > 0) {
+          const mapped = top.map((item, idx) => ({
+            id: item.slug || item.id,
+            rank: String(idx + 1).padStart(2, '0'),
+            title: item.title,
+            category: item.category === 'punjab' ? (item.punjabRegion || 'ਪੰਜਾਬ') : item.category,
+            views: item.views || 1
+          }));
+          setTopArticles(mapped);
+        } else {
+          setTopArticles([]);
+        }
       }
     };
 
@@ -56,6 +53,10 @@ export default function ReadersChoiceModule() {
       window.removeEventListener('punjab_articles_updated', loadTopNews);
     };
   }, []);
+
+  if (topArticles.length === 0) {
+    return null;
+  }
 
   const leftCol = topArticles.slice(0, 5);
   const rightCol = topArticles.slice(5, 10);

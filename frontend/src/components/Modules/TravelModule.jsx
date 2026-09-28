@@ -1,62 +1,63 @@
 import React, { useState, useEffect } from 'react';
 import { articleAPI } from '../../services/api';
-
-const travelArticles = [
-  {
-    id: 'travel-1',
-    title: 'ਅੰਮ੍ਰਿਤਸਰ ਹੈਰੀਟੇਜ ਵਾਕ: ਗੁਰੂ ਨਗਰੀ ਦੇ ਪੁਰਾਤਨ ਬਾਜ਼ਾਰਾਂ, ਦਰਵਾਜ਼ਿਆਂ ਤੇ ਇਤਿਹਾਸਕ ਵਿਰਾਸਤ ਦੇ ਦੀਦਾਰ',
-    category: 'ਇਤਿਹਾਸਕ ਯਾਤਰਾ',
-    time: '35 ਮਿੰਟ ਪਹਿਲਾਂ',
-    img: '/img/index_800x400-image05.jpg',
-    desc: 'ਟਾਊਨ ਹਾਲ ਤੋਂ ਸ੍ਰੀ ਹਰਿਮੰਦਰ ਸਾਹਿਬ ਤੱਕ ਪੈਦਲ ਰਸਤੇ ’ਤੇ ਪੰਜਾਬ ਦੇ ਅਮੀਰ ਸੱਭਿਆਚਾਰ ਅਤੇ ਵਾਸਤੂਕਲਾ ਦੀ ਝਲਕ।'
-  },
-  {
-    id: 'travel-2',
-    title: 'ਸ੍ਰੀ ਅਨੰਦਪੁਰ ਸਾਹਿਬ ਤੇ ਵਿਰਾਸਤ-ਏ-ਖ਼ਾਲਸਾ: ਖ਼ਾਲਸਾ ਪੰਥ ਦੀ ਸਿਰਜਣਾ ਭੂਮੀ ਅਤੇ ਵਿਸ਼ਵ ਪ੍ਰਸਿੱਧ ਅਜਾਇਬ ਘਰ',
-    category: 'ਧਾਰਮਿਕ ਸਥਾਨ',
-    time: '1 ਘੰਟਾ ਪਹਿਲਾਂ',
-    img: '/img/index_800x400-image06.jpg',
-    desc: 'ਸ਼ਿਵਾਲਿਕ ਦੀਆਂ ਪਹਾੜੀਆਂ ਦੀ ਗੋਦ ਵਿੱਚ ਵਸੇ ਪਵਿੱਤਰ ਅਸਥਾਨਾਂ ਦੇ ਦਰਸ਼ਨਾਂ ਲਈ ਸੰਗਤਾਂ ਦਾ ਲਗਾਤਾਰ ਆਗਮਨ।'
-  },
-  {
-    id: 'travel-3',
-    title: 'ਪਟਿਆਲਾ ਦਾ ਸ਼ਾਹੀ ਕਿਲ੍ਹਾ ਮੁਬਾਰਕ: ਸਿੱਖ ਰਾਜਸ਼ਾਹੀ ਵਾਸਤੂਕਲਾ, ਦਰਬਾਰ ਹਾਲ ਅਤੇ ਸ਼ੀਸ਼ ਮਹਿਲ ਦਾ ਸ਼ਾਨਦਾਰ ਇਤਿਹਾਸ',
-    category: 'ਪੁਰਾਤਨ ਕਿਲ੍ਹੇ',
-    time: '2 ਘੰਟੇ ਪਹਿਲਾਂ',
-    img: '/img/index_800x400-image07.jpg',
-    desc: 'ਮਹਾਰਾਜਾ ਆਲਾ ਸਿੰਘ ਦੁਆਰਾ ਸਥਾਪਿਤ ਕਿਲ੍ਹੇ ਦੀ ਪੁਨਰ-ਸੁਰਜੀਤੀ ਮਗਰੋਂ ਸੈਲਾਨੀਆਂ ਦੀ ਗਿਣਤੀ ਵਿੱਚ ਭਾਰੀ ਵਾਧਾ।'
-  },
-  {
-    id: 'travel-4',
-    title: 'ਅਟਾਰੀ-ਵਾਹਗਾ ਸਰਹੱਦ: ਦੇਸ਼ ਭਗਤੀ ਦੇ ਜਜ਼ਬੇ ਨਾਲ ਭਰਪੂਰ ਬੀਟਿੰਗ ਰੀਟ੍ਰੀਟ ਸਮਾਰੋਹ ਦੇਖਣ ਲਈ ਪੁੱਜ ਰਹੇ ਹਜ਼ਾਰਾਂ ਸੈਲਾਨੀ',
-    category: 'ਸਰਹੱਦੀ ਸੈਰ',
-    time: '4 ਘੰਟੇ ਪਹਿਲਾਂ',
-    img: '/img/index_800x400-image08.jpg',
-    desc: 'ਸੂਰਜ ਡੁੱਬਣ ਵੇਲੇ ਬੀਐਸਐਫ ਦੇ ਜਵਾਨਾਂ ਵੱਲੋਂ ਪੇਸ਼ ਕੀਤਾ ਜਾਣ ਵਾਲਾ ਪਰੇਡ ਪ੍ਰਦਰਸ਼ਨ ਦਰਸ਼ਕਾਂ ਦੇ ਰੌਂਗਟੇ ਖੜ੍ਹੇ ਕਰਦਾ ਹੈ।'
-  }
-];
+import { getAllArticles } from '../../services/articleStore';
 
 export default function TravelModule() {
-  const [articles, setArticles] = useState(travelArticles);
+  const [articles, setArticles] = useState([]);
 
   useEffect(() => {
     let isMounted = true;
-    articleAPI.getPublished({ category: 'travel' }).then((res) => {
-      if (isMounted && res && res.data && res.data.length > 0) {
-        const fromApi = res.data.map(item => ({
-          id: item.slug || item._id,
-          slug: item.slug,
-          title: item.title,
-          category: item.category === 'travel' ? 'ਸੈਰ-ਸਪਾਟਾ' : item.category,
-          time: item.publishedAt ? new Date(item.publishedAt).toLocaleTimeString('pa-IN', { hour: '2-digit', minute: '2-digit' }) : 'ਤਾਜ਼ਾ',
-          img: item.featuredImage || '/img/index_800x400-image05.jpg',
-          desc: item.excerpt || (item.content ? item.content.substring(0, 110) + '...' : '')
-        }));
-        setArticles([...fromApi, ...travelArticles.slice(fromApi.length)].slice(0, 4));
+
+    const loadTravelArticles = async () => {
+      try {
+        const res = await articleAPI.getPublished({ category: 'travel' });
+        if (isMounted && res && res.data && res.data.length > 0) {
+          const fromApi = res.data.map((item) => ({
+            id: item.slug || item._id,
+            slug: item.slug,
+            title: item.title,
+            category: item.category === 'travel' ? 'ਸੈਰ-ਸਪਾਟਾ' : item.category,
+            time: item.publishedAt ? new Date(item.publishedAt).toLocaleTimeString('pa-IN', { hour: '2-digit', minute: '2-digit' }) : 'ਤਾਜ਼ਾ',
+            img: item.featuredImage || '/img/index_800x400-image05.jpg',
+            desc: item.excerpt || (item.content ? item.content.substring(0, 110) + '...' : '')
+          }));
+          setArticles(fromApi.slice(0, 4));
+          return;
+        }
+      } catch (err) {}
+
+      const all = getAllArticles({ category: 'travel' });
+      if (isMounted) {
+        if (all && all.length > 0) {
+          const mapped = all.slice(0, 4).map((item) => ({
+            id: item.slug || item.id,
+            slug: item.slug,
+            title: item.title,
+            category: 'ਸੈਰ-ਸਪਾਟਾ',
+            time: item.publicationTime || 'ਤਾਜ਼ਾ',
+            img: item.featuredImage || '/img/index_800x400-image05.jpg',
+            desc: item.excerpt || (item.content ? item.content.substring(0, 110) + '...' : '')
+          }));
+          setArticles(mapped);
+        } else {
+          setArticles([]);
+        }
       }
-    }).catch(() => {});
-    return () => { isMounted = false; };
+    };
+
+    loadTravelArticles();
+    window.addEventListener('storage', loadTravelArticles);
+    window.addEventListener('punjab_articles_updated', loadTravelArticles);
+    return () => {
+      isMounted = false;
+      window.removeEventListener('storage', loadTravelArticles);
+      window.removeEventListener('punjab_articles_updated', loadTravelArticles);
+    };
   }, []);
+
+  if (articles.length === 0) {
+    return null;
+  }
 
   return (
     <section className="module" id="travel" style={{ backgroundColor: '#ffffff', paddingTop: '14px', paddingBottom: '20px', borderBottom: '1px solid #e2e8f0' }}>

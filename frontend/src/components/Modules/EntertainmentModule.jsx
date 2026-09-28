@@ -1,62 +1,63 @@
 import React, { useState, useEffect } from 'react';
 import { articleAPI } from '../../services/api';
-
-const entertainmentArticles = [
-  {
-    id: 'ent-1',
-    title: 'ਨਵੀਂ ਪੰਜਾਬੀ ਫ਼ਿਲਮ ਦਾ ਧਮਾਕੇਦਾਰ ਟਰੇਲਰ ਰਿਲੀਜ਼: ਦਰਸ਼ਕਾਂ ਵੱਲੋਂ ਜ਼ਬਰਦਸਤ ਹੁੰਗਾਰਾ, ਯੂਟਿਊਬ ’ਤੇ ਨੰਬਰ 1 ਟਰੈਂਡਿੰਗ',
-    category: 'ਪੰਜਾਬੀ ਸਿਨੇਮਾ',
-    time: '15 ਮਿੰਟ ਪਹਿਲਾਂ',
-    img: '/img/art-entertainment_370x185-image04.jpg',
-    desc: 'ਪਰਿਵਾਰਕ ਡਰਾਮਾ ਅਤੇ ਕਾਮੇਡੀ ਨਾਲ ਭਰਪੂਰ ਇਸ ਫ਼ਿਲਮ ਵਿੱਚ ਮੁੱਖ ਕਿਰਦਾਰਾਂ ਦੀ ਅਦਾਕਾਰੀ ਨੇ ਦਰਸ਼ਕਾਂ ਦੇ ਦਿਲ ਜਿੱਤੇ।'
-  },
-  {
-    id: 'ent-2',
-    title: 'ਸੂਫ਼ੀ ਤੇ ਲੋਕ ਸੰਗੀਤ ਸੰਮੇਲਨ: ਪੰਜਾਬ ਦੇ ਨੌਜਵਾਨ ਗਾਇਕਾਂ ਨੇ ਤੂੰਬੀ, ਅਲਗੋਜ਼ੇ ਅਤੇ ਢੱਡ-ਸਾਰੰਗੀ ਨਾਲ ਬੰਨ੍ਹਿਆ ਸਮਾਂ',
-    category: 'ਲੋਕ ਸੰਗੀਤ',
-    time: '1 ਘੰਟਾ ਪਹਿਲਾਂ',
-    img: '/img/index_800x400-image16.jpg',
-    desc: 'ਸੱਭਿਆਚਾਰਕ ਮੰਚ ਵੱਲੋਂ ਪੁਰਾਤਨ ਲੋਕ ਗੀਤਾਂ ਅਤੇ ਸੂਫ਼ੀਆਨਾ ਕਲਾਮ ਨੂੰ ਸੰਭਾਲਣ ਲਈ ਕਰਵਾਇਆ ਗਿਆ ਵਿਸ਼ੇਸ਼ ਪ੍ਰੋਗਰਾਮ।'
-  },
-  {
-    id: 'ent-3',
-    title: 'ਪੰਜਾਬ ਨਾਟਸ਼ਾਲਾ ਵਿਖੇ ਨਵੇਂ ਨਾਟਕ ਦਾ ਮੰਚਨ: ਸਮਾਜਿਕ ਮੁੱਦਿਆਂ ਤੇ ਨਸ਼ਿਆਂ ਖ਼ਿਲਾਫ਼ ਕਲਾਕਾਰਾਂ ਵੱਲੋਂ ਪ੍ਰਭਾਵਸ਼ਾਲੀ ਪੇਸ਼ਕਾਰੀ',
-    category: 'ਥੀਏਟਰ ਤੇ ਰੰਗਮੰਚ',
-    time: '2 ਘੰਟੇ ਪਹਿਲਾਂ',
-    img: '/img/index_800x400-image17.jpg',
-    desc: 'ਨਾਟਕ ਦੇਖਣ ਪੁੱਜੇ ਦਰਸ਼ਕਾਂ ਨੇ ਕਲਾਕਾਰਾਂ ਦੀ ਸ਼ਲਾਘਾ ਕੀਤੀ; ਡਾਇਰੈਕਟਰ ਨੇ ਕਿਹਾ ਕਿ ਰੰਗਮੰਚ ਸਮਾਜ ਦਾ ਸ਼ੀਸ਼ਾ ਹੈ।'
-  },
-  {
-    id: 'ent-4',
-    title: 'ਸਲਾਨਾ ਵਿਰਾਸਤੀ ਮੇਲਾ: ਗਿੱਧੇ ਅਤੇ ਭੰਗੜੇ ਦੀਆਂ ਧਮਾਲਾਂ, ਪਰਵਾਸੀ ਪੰਜਾਬੀਆਂ ਨੇ ਮਾਣਿਆ ਅਮੀਰ ਪੰਜਾਬੀ ਸੱਭਿਆਚਾਰ',
-    category: 'ਸੱਭਿਆਚਾਰਕ ਮੇਲਾ',
-    time: '3 ਘੰਟੇ ਪਹਿਲਾਂ',
-    img: '/img/index_800x400-image21.jpg',
-    desc: 'ਚਰਖ਼ਾ ਕੱਤਣਾ, ਫੁਲਕਾਰੀ ਅਤੇ ਪੁਰਾਤਨ ਪੇਂਡੂ ਘਰੇਲੂ ਵਸਤਾਂ ਦੀ ਪ੍ਰਦਰਸ਼ਨੀ ਵਿਸ਼ੇਸ਼ ਖਿੱਚ ਦਾ ਕੇਂਦਰ ਰਹੀ।'
-  }
-];
+import { getAllArticles } from '../../services/articleStore';
 
 export default function EntertainmentModule() {
-  const [articles, setArticles] = useState(entertainmentArticles);
+  const [articles, setArticles] = useState([]);
 
   useEffect(() => {
     let isMounted = true;
-    articleAPI.getPublished({ category: 'art-entertainment' }).then((res) => {
-      if (isMounted && res && res.data && res.data.length > 0) {
-        const fromApi = res.data.map(item => ({
-          id: item.slug || item._id,
-          slug: item.slug,
-          title: item.title,
-          category: item.category === 'art-entertainment' || item.category === 'entertainment' ? 'ਮਨੋਰੰਜਨ' : item.category,
-          time: item.publishedAt ? new Date(item.publishedAt).toLocaleTimeString('pa-IN', { hour: '2-digit', minute: '2-digit' }) : 'ਤਾਜ਼ਾ',
-          img: item.featuredImage || '/img/art-entertainment_370x185-image04.jpg',
-          desc: item.excerpt || (item.content ? item.content.substring(0, 110) + '...' : '')
-        }));
-        setArticles([...fromApi, ...entertainmentArticles.slice(fromApi.length)].slice(0, 4));
+
+    const loadEntertainmentArticles = async () => {
+      try {
+        const res = await articleAPI.getPublished({ category: 'art-entertainment' });
+        if (isMounted && res && res.data && res.data.length > 0) {
+          const fromApi = res.data.map((item) => ({
+            id: item.slug || item._id,
+            slug: item.slug,
+            title: item.title,
+            category: item.category === 'art-entertainment' || item.category === 'entertainment' ? 'ਮਨੋਰੰਜਨ' : item.category,
+            time: item.publishedAt ? new Date(item.publishedAt).toLocaleTimeString('pa-IN', { hour: '2-digit', minute: '2-digit' }) : 'ਤਾਜ਼ਾ',
+            img: item.featuredImage || '/img/art-entertainment_370x185-image04.jpg',
+            desc: item.excerpt || (item.content ? item.content.substring(0, 110) + '...' : '')
+          }));
+          setArticles(fromApi.slice(0, 4));
+          return;
+        }
+      } catch (err) {}
+
+      const all = getAllArticles({ category: 'art-entertainment' });
+      if (isMounted) {
+        if (all && all.length > 0) {
+          const mapped = all.slice(0, 4).map((item) => ({
+            id: item.slug || item.id,
+            slug: item.slug,
+            title: item.title,
+            category: 'ਮਨੋਰੰਜਨ',
+            time: item.publicationTime || 'ਤਾਜ਼ਾ',
+            img: item.featuredImage || '/img/art-entertainment_370x185-image04.jpg',
+            desc: item.excerpt || (item.content ? item.content.substring(0, 110) + '...' : '')
+          }));
+          setArticles(mapped);
+        } else {
+          setArticles([]);
+        }
       }
-    }).catch(() => {});
-    return () => { isMounted = false; };
+    };
+
+    loadEntertainmentArticles();
+    window.addEventListener('storage', loadEntertainmentArticles);
+    window.addEventListener('punjab_articles_updated', loadEntertainmentArticles);
+    return () => {
+      isMounted = false;
+      window.removeEventListener('storage', loadEntertainmentArticles);
+      window.removeEventListener('punjab_articles_updated', loadEntertainmentArticles);
+    };
   }, []);
+
+  if (articles.length === 0) {
+    return null;
+  }
 
   return (
     <section className="module" id="art-entertainment" style={{ backgroundColor: '#fcfdfe', paddingTop: '14px', paddingBottom: '20px', borderBottom: '1px solid #e2e8f0' }}>

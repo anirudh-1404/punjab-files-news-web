@@ -3,35 +3,8 @@ import { articleAPI } from '../../services/api';
 import { getAllArticles } from '../../services/articleStore';
 import { formatArticleDate } from '../../services/dateUtils';
 
-const defaultReligionItems = [
-  {
-    id: 'rel-1',
-    title: 'ਸੱਚਖੰਡ ਸ੍ਰੀ ਹਰਿਮੰਦਰ ਸਾਹਿਬ ਤੋਂ ਅੱਜ ਦਾ ਪਵਿੱਤਰ ਮੁੱਖਵਾਕ: ਗੁਰੂ ਕਿਰਪਾ ਨਾਲ ਜੀਵਨ ਵਿੱਚ ਆਨੰਦ',
-    publicationDate: '11 ਸਤੰਬਰ 2026',
-    publicationTime: 'ਸਵੇਰੇ 04:30 ਵਜੇ',
-    featuredImage: '/img/index_800x400-image04.jpg',
-    excerpt: 'ਸੋਰਠਿ ਮਹਲਾ ੫ ਘਰੁ ੨ ਚਉਪਦੇ ॥ ਗੁਰੁ ਪੂਰਾ ਭੇਟਿਆ ਵਡਭਾਗੀ ਮਨਹਿ ਭਇਆ ਪਰਗਾਸਾ ॥ ਅੰਗ ੬੧੪'
-  },
-  {
-    id: 'rel-2',
-    title: 'ਸ੍ਰੀ ਅਨੰਦਪੁਰ ਸਾਹਿਬ ਤੇ ਕੀਰਤਪੁਰ ਸਾਹਿਬ: ਇਤਿਹਾਸਕ ਗੁਰਦੁਆਰਾ ਸਾਹਿਬਾਨ ਦੇ ਸੁੰਦਰੀਕਰਨ ਦਾ ਕਾਰਜ ਆਰੰਭ',
-    publicationDate: '10 ਸਤੰਬਰ 2026',
-    publicationTime: 'ਸ਼ਾਮ 06:15 ਵਜੇ',
-    featuredImage: '/img/index_800x400-image16.jpg',
-    excerpt: 'ਸ਼੍ਰੋਮਣੀ ਗੁਰਦੁਆਰਾ ਪ੍ਰਬੰਧਕ ਕਮੇਟੀ ਵੱਲੋਂ ਪੁਰਾਤਨ ਵਿਰਾਸਤੀ ਇਮਾਰਤਸਾਜ਼ੀ ਦੀ ਸਾਂਭ-ਸੰਭਾਲ ਲਈ ਮਾਹਿਰ ਟੀਮਾਂ ਤਾਇਨਾਤ।'
-  },
-  {
-    id: 'rel-3',
-    title: 'ਤਖ਼ਤ ਸ੍ਰੀ ਦਮਦਮਾ ਸਾਹਿਬ ਤਲਵੰਡੀ ਸਾਬੋ: ਗੁਰਮਤਿ ਸਮਾਗਮ ਵਿੱਚ ਸੰਗਤਾਂ ਦਾ ਭਾਰੀ ਇਕੱਠ',
-    publicationDate: '09 ਸਤੰਬਰ 2026',
-    publicationTime: 'ਸਵੇਰੇ 10:00 ਵਜੇ',
-    featuredImage: '/img/index_800x400-image06.jpg',
-    excerpt: 'ਸ੍ਰੀ ਗੁਰੂ ਗ੍ਰੰਥ ਸਾਹਿਬ ਜੀ ਦੇ ਸੰਪੂਰਨਤਾ ਦਿਵਸ ਨੂੰ ਸਮਰਪਿਤ ਮਹਾਨ ਕੀਰਤਨ ਦਰਬਾਰ ਦਾ ਆਯੋਜਨ ਕੀਤਾ ਗਿਆ।'
-  }
-];
-
 export default function ReligionModule() {
-  const [religionItems, setReligionItems] = useState(defaultReligionItems);
+  const [religionItems, setReligionItems] = useState([]);
 
   useEffect(() => {
     let isMounted = true;
@@ -57,8 +30,8 @@ export default function ReligionModule() {
 
       const all = getAllArticles();
       const filtered = all.filter((a) => a.category === 'religion');
-      if (isMounted && filtered && filtered.length > 0) {
-        setReligionItems(filtered);
+      if (isMounted) {
+        setReligionItems(filtered && filtered.length > 0 ? filtered : []);
       }
     };
 
@@ -71,6 +44,10 @@ export default function ReligionModule() {
       window.removeEventListener('punjab_articles_updated', loadData);
     };
   }, []);
+
+  if (religionItems.length === 0) {
+    return null;
+  }
 
   return (
     <section className="module" id="religion" style={{ backgroundColor: '#ffffff', paddingTop: '14px', paddingBottom: '20px', borderBottom: '1px solid #e2e8f0' }}>

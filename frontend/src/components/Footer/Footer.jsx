@@ -1,21 +1,38 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import blackLogo from '../../assets/punjab-files-black-logo.jpeg';
+import { articleAPI } from '../../services/api';
+import { getAllArticles } from '../../services/articleStore';
 
 export default function Footer() {
-  const newsPosts = [
-    { title: 'ਪੰਜਾਬ ਵਿੱਚ ਨਵੇਂ ਪ੍ਰਾਜੈਕਟਾਂ ਅਤੇ ਵਿਕਾਸ ਯੋਜਨਾਵਾਂ ਦਾ ਰੋਡਮੈਪ ਤਿਆਰ।', img: '/img/index_370x185-image01.jpg' },
-    { title: 'ਖੇਤੀਬਾੜੀ ਅਤੇ ਕਿਸਾਨੀ ਭਲਾਈ ਨੀਤੀਆਂ ਬਾਰੇ ਵਿਸ਼ੇਸ਼ ਜ਼ਮੀਨੀ ਰਿਪੋਰਟ।', img: '/img/index_370x185-image14.jpg' },
-    { title: 'ਸਿਹਤ ਸੰਭਾਲ ਅਤੇ ਪੇਂਡੂ ਹਸਪਤਾਲਾਂ ਵਿੱਚ ਨਵੀਆਂ ਸਹੂਲਤਾਂ ਸ਼ੁਰੂ।', img: '/img/food_370x185-image05.jpg' },
-    { title: 'ਪੰਜਾਬੀ ਸਾਹਿਤ, ਨਾਟਕ ਅਤੇ ਸੱਭਿਆਚਾਰਕ ਮੇਲਿਆਂ ਦੀਆਂ ਰੌਣਕਾਂ।', img: '/img/index_370x185-image03.jpg' }
-  ];
+  const [latestPosts, setLatestPosts] = useState([]);
 
-  const watchListenPosts = [
-    { title: 'ਪੰਜਾਬੀ ਵਿਰਸਾ ਅਤੇ ਸੰਗੀਤ ਲੜੀ: ਪ੍ਰੰਪਰਾਗਤ ਲੋਕ ਧੁਨਾਂ।', img: '/img/art-entertainment_370x185-image04.jpg' },
-    { title: 'ਲਾਈਵ ਸਟ੍ਰੀਮਿੰਗ ਅਤੇ ਵਿਸ਼ੇਸ਼ ਇੰਟਰਵਿਊ ਹੁਣ ਉਪਲਬਧ ਹਨ।', img: '/img/index_370x185-image15.jpg' },
-    { title: 'ਹਫ਼ਤਾਵਾਰੀ ਪੋਡਕਾਸਟ: ਸਮਾਜਿਕ ਤੇ ਆਰਥਿਕ ਮੁੱਦਿਆਂ ਤੇ ਚਰਚਾ।', img: '/img/index_370x185-image08.jpg' },
-    { title: 'ਪੰਜਾਬ ਫਾਈਲਜ਼ ਲਾਈਵ ਨਿਊਜ਼ ਬੁਲੇਟਿਨ ਹਰ ਪਲ ਤੁਹਾਡੇ ਨਾਲ।', img: '/img/index_370x185-image16.jpg' }
-  ];
+  useEffect(() => {
+    let isMounted = true;
+    const loadFooterPosts = async () => {
+      try {
+        const res = await articleAPI.getPublished({ limit: 4 });
+        if (isMounted && res && res.data && res.data.length > 0) {
+          setLatestPosts(res.data.slice(0, 4));
+          return;
+        }
+      } catch (e) {}
+
+      const local = getAllArticles();
+      if (isMounted) {
+        setLatestPosts(local.slice(0, 4));
+      }
+    };
+
+    loadFooterPosts();
+    window.addEventListener('storage', loadFooterPosts);
+    window.addEventListener('punjab_articles_updated', loadFooterPosts);
+    return () => {
+      isMounted = false;
+      window.removeEventListener('storage', loadFooterPosts);
+      window.removeEventListener('punjab_articles_updated', loadFooterPosts);
+    };
+  }, []);
 
   // Tags matching the Navbar categories and dropdown sections
   const tags = [
@@ -28,16 +45,10 @@ export default function Footer() {
     { name: 'ਸੈਰ-ਸਪਾਟਾ', href: '#travel' },
     { name: 'ਮਨੋਰੰਜਨ', href: '#art-entertainment' },
     { name: 'ਲਾਈਵ ਟੀਵੀ', href: '#live-tv' },
-    { name: 'ਹੋਰ', href: '#more' },
-    { name: 'ਪੰਨੇ', href: '#pages' },
     { name: 'ਸੰਪਰਕ', href: '/contact' },
-    { name: 'ਮੇਗਾ ਮੇਨੂ', href: '#mega' },
     { name: 'ਮਾਝਾ', href: '#punjab' },
     { name: 'ਮਾਲਵਾ', href: '#punjab' },
-    { name: 'ਦੋਆਬਾ', href: '#punjab' },
-    { name: 'ਆਟੋ / ਗੱਡੀਆਂ', href: '#autos' },
-    { name: 'ਵਪਾਰ ਤੇ ਆਫਰ', href: '#deals' },
-    { name: 'ਵਾਤਾਵਰਨ', href: '#environment' }
+    { name: 'ਦੋਆਬਾ', href: '#punjab' }
   ];
 
   return (
@@ -76,24 +87,32 @@ export default function Footer() {
               <div className="col-sm-6 col-md-3">
                 <h3 className="title-left title-style03 underline03">ਤਾਜ਼ਾ ਖ਼ਬਰਾਂ</h3>
                 <div className="footer-post">
-                  <ul>
-                    {newsPosts.map((post, idx) => (
-                      <li key={idx}>
-                        <div className="item">
-                          <div className="item-image">
-                            <a className="img-link" href="#news">
-                              <img className="img-responsive img-full" src={post.img} alt="" />
-                            </a>
+                  {latestPosts.length > 0 ? (
+                    <ul>
+                      {latestPosts.map((post, idx) => (
+                        <li key={post.slug || post.id || post._id || idx}>
+                          <div className="item">
+                            {post.featuredImage && (
+                              <div className="item-image">
+                                <Link className="img-link" to={`/news/${post.slug || post.id || post._id}`}>
+                                  <img className="img-responsive img-full" src={post.featuredImage} alt={post.title} />
+                                </Link>
+                              </div>
+                            )}
+                            <div className="item-content">
+                              <p className="ellipsis">
+                                <Link to={`/news/${post.slug || post.id || post._id}`}>{post.title}</Link>
+                              </p>
+                            </div>
                           </div>
-                          <div className="item-content">
-                            <p className="ellipsis">
-                              <a href="#news">{post.title}</a>
-                            </p>
-                          </div>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p style={{ color: '#94a3b8', fontSize: '13px', lineHeight: '1.6' }}>
+                      ਸਾਡੀ ਸੰਪਾਦਕੀ ਟੀਮ ਵੱਲੋਂ ਨਵੀਆਂ ਖ਼ਬਰਾਂ ਜਲਦ ਹੀ ਅੱਪਡੇਟ ਕੀਤੀਆਂ ਜਾਣਗੀਆਂ।
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -102,22 +121,30 @@ export default function Footer() {
                 <h3 className="title-left title-style03 underline03">ਦੇਖੋ ਅਤੇ ਸੁਣੋ</h3>
                 <div className="footer-post">
                   <ul>
-                    {watchListenPosts.map((post, idx) => (
-                      <li key={idx}>
-                        <div className="item">
-                          <div className="item-image">
-                            <a className="img-link" href="#watch">
-                              <img className="img-responsive img-full" src={post.img} alt="" />
+                    <li>
+                      <div className="item">
+                        <div className="item-content" style={{ marginLeft: 0 }}>
+                          <p style={{ margin: '0 0 6px' }}>
+                            <a href="#live-tv" style={{ color: '#ffffff', fontWeight: '700' }}>
+                              <span style={{ color: '#ef4444', marginRight: '6px' }}>●</span> 24x7 ਲਾਈਵ ਟੀਵੀ ਪ੍ਰਸਾਰਣ
                             </a>
-                          </div>
-                          <div className="item-content">
-                            <p className="ellipsis">
-                              <a href="#watch">{post.title}</a>
-                            </p>
-                          </div>
+                          </p>
+                          <span style={{ color: '#94a3b8', fontSize: '12px' }}>ਪੰਜਾਬ ਫਾਈਲਜ਼ ਲਾਈਵ ਸਟੂਡੀਓ</span>
                         </div>
-                      </li>
-                    ))}
+                      </div>
+                    </li>
+                    <li style={{ marginTop: '12px' }}>
+                      <div className="item">
+                        <div className="item-content" style={{ marginLeft: 0 }}>
+                          <p style={{ margin: '0 0 6px' }}>
+                            <a href="#main-section" style={{ color: '#ffffff', fontWeight: '700' }}>
+                              <i className="fa fa-book" style={{ color: '#f59e0b', marginRight: '6px' }}></i> ਸ੍ਰੀ ਦਰਬਾਰ ਸਾਹਿਬ ਮੁੱਖ ਵਾਕ
+                            </a>
+                          </p>
+                          <span style={{ color: '#94a3b8', fontSize: '12px' }}>ਸੱਚਖੰਡ ਸ੍ਰੀ ਹਰਿਮੰਦਰ ਸਾਹਿਬ ਅੰਮ੍ਰਿਤਸਰ</span>
+                        </div>
+                      </div>
+                    </li>
                   </ul>
                 </div>
               </div>

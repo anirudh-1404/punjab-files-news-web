@@ -1,49 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { articleAPI } from '../../services/api';
-import { getLivePunjabiNews } from '../../services/newsService';
-
-const defaultWorldItems = [
-  {
-    title: 'ਵਿਸ਼ਵ ਸੰਮੇਲਨ',
-    desc: 'ਕੌਮਾਂਤਰੀ ਪੱਧਰ ’ਤੇ ਆਰਥਿਕ ਸਹਿਯੋਗ ਅਤੇ ਵਪਾਰਕ ਸਾਂਝ ਨੂੰ ਮਜ਼ਬੂਤ ਕਰਨ ਲਈ ਅਹਿਮ ਸਮਝੌਤਾ।',
-    category: 'ਖ਼ਬਰਾਂ',
-    labelClass: 'label-1',
-    img: '/img/index_800x400-image01.jpg',
-    link: '#news'
-  },
-  {
-    title: 'ਸਿਆਸੀ ਸਰਗਰਮੀਆਂ',
-    desc: 'ਵਿਧਾਨ ਸਭਾ ਸੈਸ਼ਨ ਦੌਰਾਨ ਜਨਤਕ ਮੁੱਦਿਆਂ ਅਤੇ ਬਜਟ ਅਲਾਟਮੈਂਟ ’ਤੇ ਵਿਸਥਾਰਪੂਰਵਕ ਚਰਚਾ।',
-    category: 'ਰਾਜਨੀਤੀ',
-    labelClass: 'label-3',
-    img: '/img/index_800x400-image02.jpg',
-    link: '#politics'
-  },
-  {
-    title: 'ਪੁਲਾੜ ਅਤੇ ਤਕਨਾਲੋਜੀ',
-    desc: 'ਵਿਗਿਆਨੀਆਂ ਵੱਲੋਂ ਨਵੇਂ ਪੁਲਾੜ ਮਿਸ਼ਨ ਦੀ ਸਫ਼ਲ ਸ਼ੁਰੂਆਤ, ਖਗੋਲ ਵਿਗਿਆਨ ਵਿੱਚ ਨਵਾਂ ਇਤਿਹਾਸ।',
-    category: 'ਵਿਗਿਆਨ',
-    labelClass: 'label-5',
-    img: '/img/index_800x400-image03.jpg',
-    link: '#tech'
-  },
-  {
-    title: 'ਸਿਹਤ ਸੰਭਾਲ ਪ੍ਰੋਗਰਾਮ',
-    desc: 'ਪੇਂਡੂ ਖੇਤਰਾਂ ਵਿੱਚ ਮੈਡੀਕਲ ਸਹੂਲਤਾਂ ਦਾ ਵਿਸਥਾਰ, ਮਾਹਿਰ ਡਾਕਟਰਾਂ ਵੱਲੋਂ ਮੁਫ਼ਤ ਜਾਂਚ ਕੈਂਪ।',
-    category: 'ਸਿਹਤ',
-    labelClass: 'label-2',
-    img: '/img/index_800x400-image04.jpg',
-    link: '#health'
-  }
-];
+import { getAllArticles } from '../../services/articleStore';
 
 export default function WorldNewsModule() {
-  const [items, setItems] = useState(defaultWorldItems);
+  const [items, setItems] = useState([]);
 
   useEffect(() => {
     let isMounted = true;
     const labels = ['label-1', 'label-3', 'label-5', 'label-2'];
-    const cats = ['ਖ਼ਬਰਾਂ', 'ਰਾਜਨੀਤੀ', 'ਵਿਗਿਆਨ', 'ਸਿਹਤ'];
 
     const loadWorldArticles = async () => {
       try {
@@ -54,36 +18,48 @@ export default function WorldNewsModule() {
             desc: item.excerpt || (item.content ? item.content.substring(0, 110) + '...' : item.title),
             category: item.category === 'world' ? 'ਕੌਮਾਂਤਰੀ' : item.category,
             labelClass: labels[idx % labels.length],
-            img: item.featuredImage || defaultWorldItems[idx % defaultWorldItems.length].img,
+            img: item.featuredImage || '/img/index_800x400-image01.jpg',
             link: `/news/${item.slug || item._id}`
           }));
 
-          const combined = [...fromApi, ...defaultWorldItems.slice(fromApi.length)].slice(0, 4);
-          setItems(combined);
+          setItems(fromApi.slice(0, 4));
           return;
         }
       } catch (err) {
         // Fallback
       }
 
-      getLivePunjabiNews().then((data) => {
-        if (isMounted && data && data.world && data.world.length >= 4) {
-          const mapped = data.world.slice(0, 4).map((item, idx) => ({
+      const all = getAllArticles({ category: 'world' });
+      if (isMounted) {
+        if (all && all.length > 0) {
+          const mapped = all.slice(0, 4).map((item, idx) => ({
             title: item.title,
-            desc: item.desc || item.title,
-            category: cats[idx] || item.category,
-            labelClass: labels[idx] || 'label-1',
-            img: item.img || defaultWorldItems[idx].img,
-            link: item.link
+            desc: item.excerpt || (item.content ? item.content.substring(0, 110) + '...' : item.title),
+            category: item.category === 'world' ? 'ਕੌਮਾਂਤਰੀ' : item.category,
+            labelClass: labels[idx % labels.length],
+            img: item.featuredImage || '/img/index_800x400-image01.jpg',
+            link: `/news/${item.slug || item.id}`
           }));
           setItems(mapped);
+        } else {
+          setItems([]);
         }
-      });
+      }
     };
 
     loadWorldArticles();
-    return () => { isMounted = false; };
+    window.addEventListener('storage', loadWorldArticles);
+    window.addEventListener('punjab_articles_updated', loadWorldArticles);
+    return () => {
+      isMounted = false;
+      window.removeEventListener('storage', loadWorldArticles);
+      window.removeEventListener('punjab_articles_updated', loadWorldArticles);
+    };
   }, []);
+
+  if (items.length === 0) {
+    return null;
+  }
 
   const col1 = items.slice(0, 2);
   const col2 = items.slice(2, 4);

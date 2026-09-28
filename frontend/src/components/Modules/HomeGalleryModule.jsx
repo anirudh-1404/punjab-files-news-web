@@ -1,23 +1,51 @@
 import React, { useState, useEffect } from 'react';
-
-const galleryItems = [
-  { img: '/img/index_slider-large-image01.jpg', title: 'ਤਸਵੀਰ 1' },
-  { img: '/img/index_slider-large-image02.jpg', title: 'ਤਸਵੀਰ 2' },
-  { img: '/img/index_slider-large-image03.jpg', title: 'ਤਸਵੀਰ 3' },
-  { img: '/img/index_slider-large-image04.jpg', title: 'ਤਸਵੀਰ 4' },
-  { img: '/img/index_slider-large-image05.jpg', title: 'ਤਸਵੀਰ 5' },
-  { img: '/img/index_slider-large-image06.jpg', title: 'ਤਸਵੀਰ 6' }
-];
+import { articleAPI } from '../../services/api';
+import { getAllArticles } from '../../services/articleStore';
 
 export default function HomeGalleryModule() {
+  const [galleryItems, setGalleryItems] = useState([]);
   const [startIndex, setStartIndex] = useState(0);
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+
+    let isMounted = true;
+    const loadGallery = async () => {
+      try {
+        const res = await articleAPI.getPublished({ limit: 12 });
+        if (isMounted && res && res.data && res.data.length > 0) {
+          const withImages = res.data
+            .filter((a) => a.featuredImage)
+            .map((a) => ({ img: a.featuredImage, title: a.title, id: a.slug || a._id }));
+          if (withImages.length > 0) {
+            setGalleryItems(withImages);
+            return;
+          }
+        }
+      } catch (e) {}
+
+      const local = getAllArticles();
+      if (isMounted) {
+        const withImages = local
+          .filter((a) => a.featuredImage)
+          .map((a) => ({ img: a.featuredImage, title: a.title, id: a.slug || a.id }));
+        setGalleryItems(withImages);
+      }
+    };
+
+    loadGallery();
+
+    return () => {
+      isMounted = false;
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
+
+  if (galleryItems.length === 0) {
+    return null;
+  }
 
   const itemsPerPage = windowWidth < 640 ? 1 : windowWidth < 992 ? 2 : 4;
 
@@ -30,7 +58,7 @@ export default function HomeGalleryModule() {
   };
 
   const visibleItems = [];
-  for (let i = 0; i < itemsPerPage; i++) {
+  for (let i = 0; i < Math.min(itemsPerPage, galleryItems.length); i++) {
     visibleItems.push(galleryItems[(startIndex + i) % galleryItems.length]);
   }
 

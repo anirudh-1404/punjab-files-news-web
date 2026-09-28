@@ -3,72 +3,15 @@ import { Link } from 'react-router-dom';
 import { articleAPI } from '../services/api';
 import { getAllArticles } from '../services/articleStore';
 
-const fallbackRegionalNews = {
-  majha: [
-    {
-      id: 'art-1',
-      title: 'ਸ੍ਰੀ ਅੰਮ੍ਰਿਤਸਰ: ਵਿਰਾਸਤੀ ਮਾਰਗ ਦੇ ਨਵੀਨੀਕਰਨ ਪ੍ਰਾਜੈਕਟ ਨੂੰ ਮਨਜ਼ੂਰੀ, ਸ਼ਰਧਾਲੂਆਂ ਲਈ ਨਵੀਆਂ ਸਹੂਲਤਾਂ',
-      desc: 'ਸੱਚਖੰਡ ਸ੍ਰੀ ਹਰਿਮੰਦਰ ਸਾਹਿਬ ਆਉਣ ਵਾਲੇ ਦੇਸ਼-ਵਿਦੇਸ਼ ਦੇ ਸ਼ਰਧਾਲੂਆਂ ਦੀ ਸਹੂਲਤ ਲਈ ਵਿਸ਼ੇਸ਼ ਪ੍ਰਬੰਧ ਮੁਕੰਮਲ।',
-      region: 'ਮਾਝਾ',
-      district: 'ਅੰਮ੍ਰਿਤਸਰ',
-      time: '15 ਮਿੰਟ ਪਹਿਲਾਂ',
-      img: '/img/index_800x400-image01.jpg'
-    },
-    {
-      id: 'art-9',
-      title: 'ਗੁਰਦਾਸਪੁਰ ਤੇ ਤਰਨਤਾਰਨ: ਸਰਹੱਦੀ ਖੇਤਰਾਂ ਦੇ ਕਿਸਾਨਾਂ ਲਈ ਨਹਿਰੀ ਪਾਣੀ ਦੀ ਸਪਲਾਈ ਬਹਾਲ',
-      desc: 'ਨਹਿਰੀ ਵਿਭਾਗ ਵੱਲੋਂ ਟੇਲਾਂ ਤੱਕ ਪਾਣੀ ਪਹੁੰਚਾਉਣ ਲਈ ਵਿਸ਼ੇਸ਼ ਨਿਗਰਾਨ ਟੀਮਾਂ ਤਾਇਨਾਤ।',
-      region: 'ਮਾਝਾ',
-      district: 'ਗੁਰਦਾਸਪੁਰ',
-      time: '30 ਮਿੰਟ ਪਹਿਲਾਂ',
-      img: '/img/index_800x400-image08.jpg'
-    }
-  ],
-  malwa: [
-    {
-      id: 'art-2',
-      title: 'ਲੁਧਿਆਣਾ ਤੇ ਬਠਿੰਡਾ: ਨਵੀਂ ਉਦਯੋਗਿਕ ਨੀਤੀ ਨਾਲ ਹਜ਼ਾਰਾਂ ਨੌਜਵਾਨਾਂ ਲਈ ਰੁਜ਼ਗਾਰ ਦੇ ਖੁੱਲ੍ਹਣਗੇ ਰਾਹ',
-      desc: 'ਟੈਕਸਟਾਈਲ ਅਤੇ ਆਟੋ ਪਾਰਟਸ ਸਨਅਤਾਂ ਨੂੰ ਨਿਵੇਸ਼ ਲਈ ਵਿਸ਼ੇਸ਼ ਛੋਟਾਂ ਅਤੇ ਸਬਸਿਡੀਆਂ ਦੇਣ ਦਾ ਫ਼ੈਸਲਾ।',
-      region: 'ਮਾਲਵਾ',
-      district: 'ਲੁਧਿਆਣਾ',
-      time: '20 ਮਿੰਟ ਪਹਿਲਾਂ',
-      img: '/img/index_800x400-image02.jpg'
-    },
-    {
-      id: 'art-10',
-      title: 'ਪਟਿਆਲਾ ਤੇ ਸੰਗਰੂਰ: ਖੇਤੀਬਾੜੀ ਖੋਜ ਕੇਂਦਰ ਵੱਲੋਂ ਸਾਉਣੀ ਦੀਆਂ ਫ਼ਸਲਾਂ ਲਈ ਨਵੀਂ ਐਡਵਾਈਜ਼ਰੀ ਜਾਰੀ',
-      desc: 'ਮਾਹਿਰਾਂ ਨੇ ਕਿਸਾਨਾਂ ਨੂੰ ਘੱਟ ਪਾਣੀ ਵਾਲੀਆਂ ਕਿੱਸਮਾਂ ਅਪਣਾਉਣ ਦੀ ਦਿੱਤੀ ਸਲਾਹ।',
-      region: 'ਮਾਲਵਾ',
-      district: 'ਪਟਿਆਲਾ',
-      time: '45 ਮਿੰਟ ਪਹਿਲਾਂ',
-      img: '/img/index_800x400-image09.jpg'
-    }
-  ],
-  doaba: [
-    {
-      id: 'art-3',
-      title: 'ਜਲੰਧਰ: ਸਪੋਰਟਸ ਇੰਡਸਟਰੀ ਲਈ ਵਿਸ਼ੇਸ਼ ਕਲੱਸਟਰ ਪ੍ਰਾਜੈਕਟ ਸ਼ੁਰੂ, ਕੌਮਾਂਤਰੀ ਨਿਰਯਾਤ ਵਿੱਚ ਵਾਧਾ',
-      desc: 'ਵਿਸ਼ਵ ਪ੍ਰਸਿੱਧ ਖੇਡ ਸਮਾਨ ਬਣਾਉਣ ਵਾਲੇ ਨਿਰਮਾਤਾਵਾਂ ਨੂੰ ਵਿਸ਼ਵ ਪੱਧਰੀ ਟੈਸਟਿੰਗ ਲੈਬ ਮਿਲੇਗੀ।',
-      region: 'ਦੋਆਬਾ',
-      district: 'ਜਲੰਧਰ',
-      time: '25 ਮਿੰਟ ਪਹਿਲਾਂ',
-      img: '/img/index_800x400-image03.jpg'
-    },
-    {
-      id: 'art-11',
-      title: 'ਹੁਸ਼ਿਆਰਪੁਰ ਤੇ ਕਪੂਰਥਲਾ: ਵਾਤਾਵਰਨ ਸੰਭਾਲ ਮੁਹਿੰਮ ਤਹਿਤ ਲੱਖਾਂ ਬੂਟੇ ਲਗਾਉਣ ਦਾ ਟੀਚਾ',
-      desc: 'ਪਿੰਡਾਂ ਅਤੇ ਨਹਿਰਾਂ ਦੇ ਕਿਨਾਰੇ ਹਰਿਆਵਲ ਵਧਾਉਣ ਲਈ ਸਮਾਜ ਸੇਵੀ ਸੰਸਥਾਵਾਂ ਦਾ ਵੱਡਾ ਸਹਿਯੋਗ।',
-      region: 'ਦੋਆਬਾ',
-      district: 'ਹੁਸ਼ਿਆਰਪੁਰ',
-      time: '1 ਘੰਟਾ ਪਹਿਲਾਂ',
-      img: '/img/index_800x400-image10.jpg'
-    }
-  ]
+const emptyRegionalNews = {
+  majha: [],
+  malwa: [],
+  doaba: []
 };
 
 export default function DarbarSahibAndPunjabModule() {
   const [activeRegion, setActiveRegion] = useState('all');
-  const [regionalNews, setRegionalNews] = useState(fallbackRegionalNews);
+  const [regionalNews, setRegionalNews] = useState(emptyRegionalNews);
 
   useEffect(() => {
     let isMounted = true;
@@ -109,9 +52,9 @@ export default function DarbarSahibAndPunjabModule() {
           }));
 
           setRegionalNews({
-            majha: majhaFromApi.length > 0 ? [...majhaFromApi, ...fallbackRegionalNews.majha].slice(0, 4) : fallbackRegionalNews.majha,
-            malwa: malwaFromApi.length > 0 ? [...malwaFromApi, ...fallbackRegionalNews.malwa].slice(0, 4) : fallbackRegionalNews.malwa,
-            doaba: doabaFromApi.length > 0 ? [...doabaFromApi, ...fallbackRegionalNews.doaba].slice(0, 4) : fallbackRegionalNews.doaba
+            majha: majhaFromApi.slice(0, 4),
+            malwa: malwaFromApi.slice(0, 4),
+            doaba: doabaFromApi.slice(0, 4)
           });
           return;
         }
@@ -121,42 +64,46 @@ export default function DarbarSahibAndPunjabModule() {
 
       // Fallback if API was unavailable
       const allLocal = getAllArticles({ category: 'punjab' });
-      if (isMounted && allLocal && allLocal.length > 0) {
-        const majha = allLocal.filter((a) => a.punjabRegion === 'majha').map((a) => ({
-          id: a.id,
-          title: a.title,
-          desc: a.excerpt || a.content.substring(0, 110) + '...',
-          region: 'ਮਾਝਾ',
-          district: 'ਮਾਝਾ ਬਿਊਰੋ',
-          time: a.publicationTime || 'ਤਾਜ਼ਾ',
-          img: a.featuredImage
-        }));
+      if (isMounted) {
+        if (allLocal && allLocal.length > 0) {
+          const majha = allLocal.filter((a) => a.punjabRegion === 'majha').map((a) => ({
+            id: a.id,
+            title: a.title,
+            desc: a.excerpt || a.content.substring(0, 110) + '...',
+            region: 'ਮਾਝਾ',
+            district: 'ਮਾਝਾ ਬਿਊਰੋ',
+            time: a.publicationTime || 'ਤਾਜ਼ਾ',
+            img: a.featuredImage
+          }));
 
-        const malwa = allLocal.filter((a) => a.punjabRegion === 'malwa').map((a) => ({
-          id: a.id,
-          title: a.title,
-          desc: a.excerpt || a.content.substring(0, 110) + '...',
-          region: 'ਮਾਲਵਾ',
-          district: 'ਮਾਲਵਾ ਬਿਊਰੋ',
-          time: a.publicationTime || 'ਤਾਜ਼ਾ',
-          img: a.featuredImage
-        }));
+          const malwa = allLocal.filter((a) => a.punjabRegion === 'malwa').map((a) => ({
+            id: a.id,
+            title: a.title,
+            desc: a.excerpt || a.content.substring(0, 110) + '...',
+            region: 'ਮਾਲਵਾ',
+            district: 'ਮਾਲਵਾ ਬਿਊਰੋ',
+            time: a.publicationTime || 'ਤਾਜ਼ਾ',
+            img: a.featuredImage
+          }));
 
-        const doaba = allLocal.filter((a) => a.punjabRegion === 'doaba').map((a) => ({
-          id: a.id,
-          title: a.title,
-          desc: a.excerpt || a.content.substring(0, 110) + '...',
-          region: 'ਦੋਆਬਾ',
-          district: 'ਦੋਆਬਾ ਬਿਊਰੋ',
-          time: a.publicationTime || 'ਤਾਜ਼ਾ',
-          img: a.featuredImage
-        }));
+          const doaba = allLocal.filter((a) => a.punjabRegion === 'doaba').map((a) => ({
+            id: a.id,
+            title: a.title,
+            desc: a.excerpt || a.content.substring(0, 110) + '...',
+            region: 'ਦੋਆਬਾ',
+            district: 'ਦੋਆਬਾ ਬਿਊਰੋ',
+            time: a.publicationTime || 'ਤਾਜ਼ਾ',
+            img: a.featuredImage
+          }));
 
-        setRegionalNews({
-          majha: majha.length > 0 ? majha : fallbackRegionalNews.majha,
-          malwa: malwa.length > 0 ? malwa : fallbackRegionalNews.malwa,
-          doaba: doaba.length > 0 ? doaba : fallbackRegionalNews.doaba
-        });
+          setRegionalNews({
+            majha: majha.slice(0, 4),
+            malwa: malwa.slice(0, 4),
+            doaba: doaba.slice(0, 4)
+          });
+        } else {
+          setRegionalNews(emptyRegionalNews);
+        }
       }
     };
 
@@ -183,16 +130,20 @@ export default function DarbarSahibAndPunjabModule() {
     if (activeRegion === 'majha') return regionalNews.majha;
     if (activeRegion === 'malwa') return regionalNews.malwa;
     if (activeRegion === 'doaba') return regionalNews.doaba;
-    // 'all': combine from each
+    // 'all': combine all available items
     return [
-      regionalNews.majha[0] || fallbackRegionalNews.majha[0],
-      regionalNews.malwa[0] || fallbackRegionalNews.malwa[0],
-      regionalNews.doaba[0] || fallbackRegionalNews.doaba[0],
-      regionalNews.majha[1] || fallbackRegionalNews.majha[1]
-    ].filter(Boolean);
+      ...regionalNews.majha,
+      ...regionalNews.malwa,
+      ...regionalNews.doaba
+    ].slice(0, 4);
   };
 
   const newsToDisplay = getFilteredNews();
+
+  // If no articles have been published from admin yet, don't show an empty module
+  if (newsToDisplay.length === 0) {
+    return null;
+  }
 
   return (
     <section className="module" id="punjab" style={{ backgroundColor: '#ffffff', paddingTop: '14px', paddingBottom: '20px', borderBottom: '1px solid #e2e8f0' }}>
