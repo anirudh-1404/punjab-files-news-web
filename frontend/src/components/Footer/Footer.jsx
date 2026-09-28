@@ -64,21 +64,44 @@ export default function Footer() {
                   ਪੰਜਾਬ ਫਾਈਲਜ਼ 24 ਘੰਟੇ ਨਿਰਪੱਖ, ਸੱਚੀਆਂ ਅਤੇ ਭਰੋਸੇਯੋਗ ਖ਼ਬਰਾਂ ਪਹੁੰਚਾਉਣ ਲਈ ਵਚਨਬੱਧ ਹੈ। ਅਸੀਂ ਤੁਹਾਨੂੰ ਜ਼ਮੀਨੀ ਹਕੀਕਤਾਂ, ਤਾਜ਼ਾ ਸਮਾਚਾਰ ਅਤੇ ਸਾਰਥਕ ਵਿਸ਼ਲੇਸ਼ਣ ਮੁਹੱਈਆ ਕਰਵਾਉਂਦੇ ਹਾਂ।
                 </p>
                 <div className="site-logo" style={{ marginTop: '18px' }}>
-                  <Link to="/" style={{ textDecoration: 'none', display: 'inline-block' }}>
+                  <Link to="/" style={{ textDecoration: 'none', display: 'inline-flex', flexDirection: 'column', alignItems: 'center' }}>
                     <img
                       src={blackLogo}
                       alt="Punjab Files Logo"
                       style={{
-                        height: '115px',
-                        maxHeight: '125px',
+                        height: '110px',
+                        maxHeight: '120px',
                         maxWidth: '280px',
                         width: 'auto',
                         objectFit: 'contain',
                         borderRadius: '6px',
                         display: 'block',
-                        marginBottom: '10px'
+                        marginBottom: '6px'
                       }}
                     />
+                    <div
+                      className="footer-brand-punchline"
+                      style={{
+                        marginTop: '4px',
+                        fontSize: '13.5px',
+                        fontWeight: '800',
+                        color: '#ebb10d',
+                        letterSpacing: '0.8px',
+                        fontFamily: "'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif",
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '100%',
+                        maxWidth: '280px',
+                        gap: '8px',
+                        lineHeight: 1.2,
+                        userSelect: 'none'
+                      }}
+                    >
+                      <span style={{ display: 'inline-block', width: '18px', height: '1.5px', backgroundColor: '#ebb10d', opacity: 0.7 }}></span>
+                      <span>ਪੰਜਾਬ ਦੀ ਗੱਲ, ਪੰਜਾਬ ਦੇ ਨਾਲ</span>
+                      <span style={{ display: 'inline-block', width: '18px', height: '1.5px', backgroundColor: '#ebb10d', opacity: 0.7 }}></span>
+                    </div>
                   </Link>
                 </div>
               </div>

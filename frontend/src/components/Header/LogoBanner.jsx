@@ -68,22 +68,43 @@ export default function LogoBanner() {
         flex: 1
       }}
     >
-      {/* Left: Prominent Brand Logo (No Tagline) */}
+      {/* Left: Prominent Brand Logo & Integrated Punchline */}
       <div className="header-brand-block">
-        <a href="/" style={{ display: 'inline-block', textDecoration: 'none' }}>
+        <a href="/" style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', textDecoration: 'none' }}>
           <img
             src={whiteLogo}
             alt="Punjab Files"
             className="brand-logo-img"
             style={{
-              height: '115px',
-              maxHeight: '125px',
+              height: '110px',
+              maxHeight: '120px',
               maxWidth: '440px',
               width: 'auto',
               objectFit: 'contain',
               display: 'block'
             }}
           />
+          <div
+            className="header-brand-punchline"
+            style={{
+              marginTop: '4px',
+              fontSize: '14px',
+              fontWeight: '800',
+              color: '#b71c1c',
+              letterSpacing: '0.8px',
+              fontFamily: "'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif",
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '10px',
+              width: '100%',
+              userSelect: 'none'
+            }}
+          >
+            <span style={{ display: 'inline-block', width: '24px', height: '1.5px', backgroundColor: '#b71c1c', opacity: 0.6 }}></span>
+            <span>ਪੰਜਾਬ ਦੀ ਗੱਲ, ਪੰਜਾਬ ਦੇ ਨਾਲ</span>
+            <span style={{ display: 'inline-block', width: '24px', height: '1.5px', backgroundColor: '#b71c1c', opacity: 0.6 }}></span>
+          </div>
         </a>
       </div>
 

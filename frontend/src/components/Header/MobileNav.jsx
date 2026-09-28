@@ -146,12 +146,24 @@ export default function MobileNav() {
                 backgroundColor: '#1a1d24'
               }}
             >
-              <a href="/" onClick={() => setIsOpen(false)} style={{ display: 'flex', alignItems: 'center' }}>
+              <a href="/" onClick={() => setIsOpen(false)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textDecoration: 'none' }}>
                 <img
                   src={whiteLogo}
                   alt="Punjab Files Logo"
-                  style={{ height: '42px', width: 'auto', objectFit: 'contain' }}
+                  style={{ height: '38px', width: 'auto', objectFit: 'contain' }}
                 />
+                <span
+                  style={{
+                    fontSize: '11px',
+                    fontWeight: '800',
+                    color: '#ebb10d',
+                    fontFamily: "'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif",
+                    marginTop: '3px',
+                    letterSpacing: '0.4px'
+                  }}
+                >
+                  ਪੰਜਾਬ ਦੀ ਗੱਲ, ਪੰਜਾਬ ਦੇ ਨਾਲ
+                </span>
               </a>
               <button
                 type="button"
