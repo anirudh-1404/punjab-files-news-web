@@ -84,10 +84,31 @@ export function getReadersChoiceTop10() {
     .slice(0, 10);
 }
 
-export function getRelatedArticles(currentId, category, limit = 4) {
+export function getRelatedArticles(currentId, category, limit = 4, excludeTitle = '', excludeSlug = '', excludeMongoId = '') {
   const articles = getStoredArticles();
+  const normId = String(currentId || '').trim().toLowerCase();
+  const normTitle = String(excludeTitle || '').trim().toLowerCase();
+  const normSlug = String(excludeSlug || '').trim().toLowerCase();
+  const normMongoId = String(excludeMongoId || '').trim().toLowerCase();
+
   return articles
-    .filter((a) => a.id !== currentId && (category ? a.category === category : true))
+    .filter((a) => {
+      const aId = String(a.id || '').trim().toLowerCase();
+      const aSlug = String(a.slug || '').trim().toLowerCase();
+      const aMongoId = String(a._id || '').trim().toLowerCase();
+      const aTitle = String(a.title || '').trim().toLowerCase();
+
+      // Strictly exclude the current article
+      if (normId && (aId === normId || aSlug === normId || aMongoId === normId)) return false;
+      if (normSlug && (aSlug === normSlug || aId === normSlug)) return false;
+      if (normMongoId && (aMongoId === normMongoId || aId === normMongoId)) return false;
+      if (normTitle && aTitle === normTitle) return false;
+
+      // Must strictly match the requested category
+      if (category && category !== 'all' && a.category !== category) return false;
+
+      return true;
+    })
     .slice(0, limit);
 }
 

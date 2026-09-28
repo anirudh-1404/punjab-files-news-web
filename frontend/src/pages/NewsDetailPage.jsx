@@ -48,12 +48,29 @@ export default function NewsDetailPage() {
             isBreaking: apiArt.isBreaking
           });
 
-          // Fetch related articles from backend
+          // Fetch related articles from backend (strictly other articles in the same category)
           try {
-            const relRes = await articleAPI.getPublished({ category: apiArt.category, limit: 4 });
-            if (isMounted && relRes && relRes.data) {
-              const filteredRel = relRes.data
-                .filter(item => item._id !== apiArt._id && item.slug !== apiArt.slug)
+            const relRes = await articleAPI.getPublished({ category: apiArt.category, limit: 10 });
+            const currentMongoId = String(apiArt._id || '').trim();
+            const currentSlug = String(apiArt.slug || '').trim().toLowerCase();
+            const currentTitle = String(apiArt.title || '').trim().toLowerCase();
+            const currentIdParam = String(id || '').trim().toLowerCase();
+
+            let filteredRel = [];
+            if (relRes && Array.isArray(relRes.data)) {
+              filteredRel = relRes.data
+                .filter(item => {
+                  const itemMongoId = String(item._id || '').trim();
+                  const itemSlug = String(item.slug || '').trim().toLowerCase();
+                  const itemTitle = String(item.title || '').trim().toLowerCase();
+
+                  // Strictly exclude current article
+                  if (currentMongoId && itemMongoId === currentMongoId) return false;
+                  if (currentSlug && itemSlug === currentSlug) return false;
+                  if (currentTitle && itemTitle === currentTitle) return false;
+                  if (currentIdParam && (itemSlug === currentIdParam || itemMongoId === currentIdParam)) return false;
+                  return true;
+                })
                 .slice(0, 3)
                 .map(item => ({
                   id: item.slug || item._id,
@@ -61,14 +78,21 @@ export default function NewsDetailPage() {
                   category: item.category,
                   featuredImage: item.featuredImage || '/img/index_800x400-image01.jpg'
                 }));
+            }
+
+            if (isMounted) {
               if (filteredRel.length > 0) {
                 setRelated(filteredRel);
               } else {
-                setRelated(getRelatedArticles(id, apiArt.category, 3));
+                const localRel = getRelatedArticles(id, apiArt.category, 3, currentTitle, currentSlug, currentMongoId);
+                setRelated(localRel);
               }
             }
           } catch {
-            setRelated(getRelatedArticles(id, apiArt.category, 3));
+            if (isMounted) {
+              const localRel = getRelatedArticles(id, apiArt.category, 3, apiArt.title, apiArt.slug, apiArt._id);
+              setRelated(localRel);
+            }
           }
 
           setLoading(false);
@@ -83,7 +107,7 @@ export default function NewsDetailPage() {
       if (isMounted && found) {
         setArticle(found);
         incrementArticleViews(found.id);
-        const rel = getRelatedArticles(found.id, found.category, 3);
+        const rel = getRelatedArticles(found.id || found.slug || id, found.category, 3, found.title, found.slug, found._id);
         setRelated(rel);
       }
       if (isMounted) setLoading(false);
@@ -531,68 +555,92 @@ export default function NewsDetailPage() {
             {/* ========================================================
                 ALSO READ / RELATED NEWS (ਸੰਬੰਧਿਤ ਖ਼ਬਰਾਂ)
             ======================================================== */}
-            {related && related.length > 0 && (
-              <div style={{ marginTop: '35px' }}>
-                <div className="module-title" style={{ marginBottom: '18px' }}>
-                  <h3 className="title">
-                    <span className="bg-1" style={{ backgroundColor: '#1c2d5a' }}>ਇਹ ਵੀ ਪੜ੍ਹੋ (Also Read)</span>
-                  </h3>
-                  <h3 className="subtitle">ਇਸੇ ਵਿਸ਼ੇ ਨਾਲ ਸੰਬੰਧਿਤ ਹੋਰ ਅਹਿਮ ਖ਼ਬਰਾਂ</h3>
-                </div>
+            {(() => {
+              const displayRelated = (related || []).filter((relItem) => {
+                if (!article) return false;
+                const curId = String(article.id || '').trim().toLowerCase();
+                const curSlug = String(article.slug || '').trim().toLowerCase();
+                const curMongoId = String(article._id || '').trim().toLowerCase();
+                const curTitle = String(article.title || '').trim().toLowerCase();
+                const urlId = String(id || '').trim().toLowerCase();
 
-                <div className="row">
-                  {related.map((relItem) => (
-                    <div className="col-sm-4 col-xs-12" key={relItem.id} style={{ marginBottom: '15px' }}>
-                      <div
-                        style={{
-                          backgroundColor: '#ffffff',
-                          border: '1px solid #e2e8f0',
-                          borderRadius: '4px',
-                          overflow: 'hidden',
-                          height: '100%',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          boxShadow: '0 2px 6px rgba(0,0,0,0.03)'
-                        }}
-                      >
-                        <div style={{ width: '100%', height: '125px', overflow: 'hidden', backgroundColor: '#edf2f7' }}>
-                          <Link to={`/news/${relItem.id}`}>
-                            <img
-                              src={relItem.featuredImage}
-                              alt={relItem.title}
-                              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                            />
-                          </Link>
-                        </div>
-                        <div style={{ padding: '10px 12px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                          <span style={{ fontSize: '10px', color: '#b71c1c', fontWeight: '700', textTransform: 'uppercase', marginBottom: '4px' }}>
-                            {relItem.category}
-                          </span>
-                          <h4
-                            style={{
-                              margin: 0,
-                              fontSize: '12.5px',
-                              fontWeight: '800',
-                              lineHeight: '1.35',
-                              color: '#000000',
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                              display: '-webkit-box',
-                              WebkitLineClamp: 2,
-                              WebkitBoxOrient: 'vertical'
-                            }}
-                          >
-                            <Link to={`/news/${relItem.id}`} style={{ color: '#000000', textDecoration: 'none', fontWeight: '800' }}>
-                              {relItem.title}
+                const relId = String(relItem.id || relItem.slug || '').trim().toLowerCase();
+                const relTitle = String(relItem.title || '').trim().toLowerCase();
+
+                if (relId && (relId === curId || relId === curSlug || relId === curMongoId || relId === urlId)) {
+                  return false;
+                }
+                if (relTitle && curTitle && relTitle === curTitle) {
+                  return false;
+                }
+                return true;
+              });
+
+              if (displayRelated.length === 0) return null;
+
+              return (
+                <div style={{ marginTop: '35px' }}>
+                  <div className="module-title" style={{ marginBottom: '18px' }}>
+                    <h3 className="title">
+                      <span className="bg-1" style={{ backgroundColor: '#1c2d5a' }}>ਇਹ ਵੀ ਪੜ੍ਹੋ (Also Read)</span>
+                    </h3>
+                    <h3 className="subtitle">ਇਸੇ ਵਿਸ਼ੇ ਨਾਲ ਸੰਬੰਧਿਤ ਹੋਰ ਅਹਿਮ ਖ਼ਬਰਾਂ</h3>
+                  </div>
+
+                  <div className="row">
+                    {displayRelated.map((relItem) => (
+                      <div className="col-sm-4 col-xs-12" key={relItem.id} style={{ marginBottom: '15px' }}>
+                        <div
+                          style={{
+                            backgroundColor: '#ffffff',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '4px',
+                            overflow: 'hidden',
+                            height: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            boxShadow: '0 2px 6px rgba(0,0,0,0.03)'
+                          }}
+                        >
+                          <div style={{ width: '100%', height: '125px', overflow: 'hidden', backgroundColor: '#edf2f7' }}>
+                            <Link to={`/news/${relItem.id}`}>
+                              <img
+                                src={relItem.featuredImage}
+                                alt={relItem.title}
+                                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                              />
                             </Link>
-                          </h4>
+                          </div>
+                          <div style={{ padding: '10px 12px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                            <span style={{ fontSize: '10px', color: '#b71c1c', fontWeight: '700', textTransform: 'uppercase', marginBottom: '4px' }}>
+                              {relItem.category}
+                            </span>
+                            <h4
+                              style={{
+                                margin: 0,
+                                fontSize: '12.5px',
+                                fontWeight: '800',
+                                lineHeight: '1.35',
+                                color: '#000000',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                display: '-webkit-box',
+                                WebkitLineClamp: 2,
+                                WebkitBoxOrient: 'vertical'
+                              }}
+                            >
+                              <Link to={`/news/${relItem.id}`} style={{ color: '#000000', textDecoration: 'none', fontWeight: '800' }}>
+                                {relItem.title}
+                              </Link>
+                            </h4>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              );
+            })()}
           </div>
 
           {/* Right Sidebar (col-md-4) */}
