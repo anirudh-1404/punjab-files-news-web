@@ -299,7 +299,7 @@ export default function DashboardLayout({ user, onLogout }) {
           )}
 
           {activeTab === 'all_news' && user?.role === 'admin' && (
-            <AllNewsCategoryView currentUser={user} />
+            <AllNewsCategoryView currentUser={user} onNavigate={setActiveTab} />
           )}
 
           {activeTab === 'categories' && user?.role === 'admin' && (

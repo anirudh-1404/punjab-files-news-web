@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { articleAPI, userAPI, breakingAPI } from '../../../services/api';
+import { articleAPI, userAPI, breakingAPI, categoryAPI } from '../../../services/api';
 
 export default function OverviewStatsView({ user, onNavigate }) {
   const [stats, setStats] = useState({
@@ -7,6 +7,7 @@ export default function OverviewStatsView({ user, onNavigate }) {
     pendingCount: 0,
     breakingCount: 0,
     usersCount: 0,
+    categoriesCount: 0,
     totalViews: 0
   });
   const [readersChoice, setReadersChoice] = useState([]);
@@ -24,12 +25,18 @@ export default function OverviewStatsView({ user, onNavigate }) {
         ]);
 
         let usersCount = 0;
+        let categoriesCount = 0;
         if (user?.role === 'admin') {
           try {
-            const usersRes = await userAPI.getUsers();
+            const [usersRes, catRes] = await Promise.all([
+              userAPI.getUsers().catch(() => ({ count: 0 })),
+              categoryAPI.getAll().catch(() => ({ data: [] }))
+            ]);
             usersCount = usersRes.count || 0;
+            categoriesCount = catRes.count || (catRes.data ? catRes.data.length : 0);
           } catch {
             usersCount = 0;
+            categoriesCount = 0;
           }
         }
 
@@ -40,6 +47,7 @@ export default function OverviewStatsView({ user, onNavigate }) {
           pendingCount: pendingRes.count || 0,
           breakingCount: breakingRes.count || 0,
           usersCount,
+          categoriesCount,
           totalViews
         });
         setReadersChoice(readersRes.data || readersRes.articles || []);
@@ -89,6 +97,14 @@ export default function OverviewStatsView({ user, onNavigate }) {
   ];
 
   if (user?.role === 'admin') {
+    cards.push({
+      title: 'ਕੁੱਲ ਕੈਟੇਗਰੀਆਂ (Categories)',
+      sub: 'Manageable News Categories',
+      value: stats.categoriesCount || 0,
+      icon: 'fa-tags',
+      bg: '#ffffff',
+      color: '#0284c7'
+    });
     cards.push({
       title: 'ਕੁੱਲ ਸਟਾਫ਼ ਮੈਂਬਰ (Staff Members)',
       sub: 'Registered Staff (Reporters & Editors)',
@@ -158,6 +174,17 @@ export default function OverviewStatsView({ user, onNavigate }) {
                 style={{ backgroundColor: '#b71c1c', color: '#ffffff' }}
               >
                 <i className="fa fa-newspaper-o"></i> <span>ਸਾਰੀਆਂ ਖ਼ਬਰਾਂ (All News)</span>
+              </button>
+            )}
+
+            {user?.role === 'admin' && (
+              <button
+                type="button"
+                onClick={() => onNavigate('categories')}
+                className="quick-action-btn"
+                style={{ backgroundColor: '#0284c7', color: '#ffffff' }}
+              >
+                <i className="fa fa-tags"></i> <span>ਕੈਟੇਗਰੀ ਮੈਨੇਜਰ (Categories)</span>
               </button>
             )}
 

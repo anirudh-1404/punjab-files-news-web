@@ -170,8 +170,13 @@ export const articleAPI = {
     return {
       ...res,
       data: res.data || res.articles || [],
+      articles: res.articles || res.data || [],
       counts: res.counts || { pending: 0, published: 0, rejected: 0, total: 0 }
     };
+  },
+
+  getAll: async (params = {}) => {
+    return articleAPI.getReviewDeskArticles(params);
   },
 
   updateStatus: async (id, status, rejectionReason = null) => {

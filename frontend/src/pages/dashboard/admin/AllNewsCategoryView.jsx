@@ -22,7 +22,7 @@ const PUNJAB_REGIONS = [
   { id: 'doaba', label: 'ਦੋਆਬਾ (Doaba)' }
 ];
 
-export default function AllNewsCategoryView({ currentUser }) {
+export default function AllNewsCategoryView({ currentUser, onNavigate }) {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [categoriesList, setCategoriesList] = useState(CATEGORIES);
@@ -302,7 +302,7 @@ export default function AllNewsCategoryView({ currentUser }) {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
             <h3 style={{ margin: 0, fontSize: '21px', fontWeight: '800', color: '#0f172a' }}>
-              ਸਾਰੀਆਂ ਖ਼ਬਰਾਂ (All News & Category Manager)
+              ਸਾਰੀਆਂ ਖ਼ਬਰਾਂ (All News Articles)
             </h3>
             <span style={{ backgroundColor: '#1c2d5a', color: '#ffffff', fontSize: '12px', fontWeight: '800', padding: '3px 10px', borderRadius: '12px' }}>
               {articles.length} ਖ਼ਬਰਾਂ (Articles Found)
@@ -313,26 +313,54 @@ export default function AllNewsCategoryView({ currentUser }) {
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={fetchArticles}
-          style={{
-            backgroundColor: '#f8fafc',
-            border: '1px solid #cbd5e1',
-            padding: '7px 16px',
-            borderRadius: '6px',
-            fontSize: '13px',
-            fontWeight: '700',
-            color: '#334155',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}
-        >
-          <i className="fa fa-refresh"></i>
-          <span>ਤਾਜ਼ਾ ਕਰੋ (Refresh)</span>
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+          {onNavigate && (
+            <button
+              type="button"
+              onClick={() => onNavigate('categories')}
+              style={{
+                backgroundColor: '#1c2d5a',
+                border: '1px solid #1c2d5a',
+                padding: '7px 16px',
+                borderRadius: '6px',
+                fontSize: '13px',
+                fontWeight: '700',
+                color: '#ffffff',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                boxShadow: '0 2px 6px rgba(28, 45, 90, 0.25)',
+                transition: 'all 0.15s ease'
+              }}
+              title="ਕੈਟੇਗਰੀਆਂ ਸ਼ਾਮਲ ਕਰੋ ਜਾਂ ਸੋਧੋ (Add or manage news categories)"
+            >
+              <i className="fa fa-tags" style={{ color: '#ebb10d' }}></i>
+              <span>ਕੈਟੇਗਰੀ ਮੈਨੇਜਰ (Manage Categories)</span>
+            </button>
+          )}
+
+          <button
+            type="button"
+            onClick={fetchArticles}
+            style={{
+              backgroundColor: '#f8fafc',
+              border: '1px solid #cbd5e1',
+              padding: '7px 16px',
+              borderRadius: '6px',
+              fontSize: '13px',
+              fontWeight: '700',
+              color: '#334155',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}
+          >
+            <i className="fa fa-refresh"></i>
+            <span>ਤਾਜ਼ਾ ਕਰੋ (Refresh)</span>
+          </button>
+        </div>
       </div>
 
       {/* Notification Toast */}
@@ -524,9 +552,32 @@ export default function AllNewsCategoryView({ currentUser }) {
         <div style={{ textAlign: 'center', padding: '50px 20px', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px dashed #cbd5e1' }}>
           <i className="fa fa-newspaper-o" style={{ fontSize: '36px', color: '#94a3b8', marginBottom: '10px' }}></i>
           <h4 style={{ margin: '0 0 6px', color: '#334155', fontSize: '16px' }}>ਕੋਈ ਖ਼ਬਰ ਨਹੀਂ ਮਿਲੀ (No Articles Found)</h4>
-          <p style={{ margin: 0, color: '#64748b', fontSize: '13px' }}>
-            ਇਸ ਕੈਟੇਗਰੀ ਜਾਂ ਫਿਲਟਰ ਤਹਿਤ ਕੋਈ ਖ਼ਬਰ ਮੌਜੂਦ ਨਹੀਂ ਹੈ (No articles found under this filter).
+          <p style={{ margin: '0 0 14px', color: '#64748b', fontSize: '13px' }}>
+            ਇਸ ਕੈਟੇਗਰੀ ਜਾਂ ਫਿਲਟਰ ਤਹਿਤ ਅਜੇ ਕੋਈ ਖ਼ਬਰ ਮੌਜੂਦ ਨਹੀਂ ਹੈ (No articles found under this filter/category).
           </p>
+          {onNavigate && (
+            <button
+              type="button"
+              onClick={() => onNavigate('create')}
+              style={{
+                backgroundColor: '#b71c1c',
+                color: '#ffffff',
+                border: 'none',
+                padding: '8px 18px',
+                borderRadius: '6px',
+                fontSize: '13px',
+                fontWeight: '700',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                boxShadow: '0 2px 6px rgba(183, 28, 28, 0.25)'
+              }}
+            >
+              <i className="fa fa-pencil-square-o"></i>
+              <span>ਇਸ ਕੈਟੇਗਰੀ ਵਿੱਚ ਖ਼ਬਰ ਲਿਖੋ (Write News in this Category)</span>
+            </button>
+          )}
         </div>
       ) : (
         <>
