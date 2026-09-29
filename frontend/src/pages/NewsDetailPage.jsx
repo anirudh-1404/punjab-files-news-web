@@ -57,7 +57,9 @@ export default function NewsDetailPage() {
             featuredImage: apiArt.featuredImage || '/img/index_800x400-image01.jpg',
             mediaType: apiArt.mediaType || (apiArt.videoUrl ? 'video' : 'image'),
             videoUrl: apiArt.videoUrl || null,
-            isBreaking: apiArt.isBreaking
+            isBreaking: apiArt.isBreaking,
+            seoTitle: apiArt.seoTitle || null,
+            metaDescription: apiArt.metaDescription || null
           });
 
           // Fetch related articles from backend (strictly other articles in the same category)
@@ -146,7 +148,17 @@ export default function NewsDetailPage() {
     if (!article) return;
 
     const originalTitle = document.title;
-    document.title = `${article.title} | ਪੰਜਾਬ ਫਾਈਲਜ਼ (Punjab Files)`;
+    // SEO Title: use custom seoTitle if set, otherwise fallback to article title
+    const effectiveSeoTitle = article.seoTitle
+      ? article.seoTitle
+      : `${article.title} | ਪੰਜਾਬ ਫਾਈਲਜ਼ (Punjab Files)`;
+    document.title = effectiveSeoTitle;
+
+    // Meta Description: use custom metaDescription if set, otherwise fallback to excerpt or content snippet
+    const effectiveDesc = article.metaDescription
+      || article.excerpt
+      || (article.content ? article.content.slice(0, 160) : '')
+      || article.title;
 
     const appliedTags = [];
     const setOrUpdateMeta = (attrName, attrValue, content) => {
@@ -174,7 +186,7 @@ export default function NewsDetailPage() {
     }
 
     // Standard SEO
-    setOrUpdateMeta('name', 'description', desc);
+    setOrUpdateMeta('name', 'description', effectiveDesc);
 
     // OpenGraph (Facebook, WhatsApp, LinkedIn)
     setOrUpdateMeta('property', 'og:type', 'article');

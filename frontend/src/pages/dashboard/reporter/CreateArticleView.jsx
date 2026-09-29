@@ -54,6 +54,9 @@ export default function CreateArticleView({ user, onArticleCreated }) {
   const [uploadingMedia, setUploadingMedia] = useState(false);
   const [uploadError, setUploadError] = useState('');
   const [isBreaking, setIsBreaking] = useState(false);
+  const [seoTitle, setSeoTitle] = useState('');
+  const [metaDescription, setMetaDescription] = useState('');
+  const [seoExpanded, setSeoExpanded] = useState(false);
   const [loading, setLoading] = useState(false);
   const [feedback, setFeedback] = useState({ type: '', message: '' });
 
@@ -157,6 +160,8 @@ export default function CreateArticleView({ user, onArticleCreated }) {
         mediaType,
         videoUrl: mediaType === 'video' ? videoUrl : null,
         isBreaking,
+        seoTitle: seoTitle.trim() || undefined,
+        metaDescription: metaDescription.trim() || undefined,
         status: (user?.role === 'admin' || user?.role === 'editor' || user?.canDirectPublish) ? 'published' : 'pending_editor'
       });
 
@@ -190,6 +195,8 @@ export default function CreateArticleView({ user, onArticleCreated }) {
       setContent('');
       setExcerpt('');
       setIsBreaking(false);
+      setSeoTitle('');
+      setMetaDescription('');
 
       if (onArticleCreated) {
         onArticleCreated(res.article);
@@ -645,6 +652,133 @@ export default function CreateArticleView({ user, onArticleCreated }) {
             style={{ width: '100%', padding: '12px 14px', border: '1px solid #cbd5e1', borderRadius: '5px', fontSize: '14px', lineHeight: '1.6', fontFamily: 'inherit' }}
             required
           />
+        </div>
+
+        {/* SEO Fields — Collapsible Panel */}
+        <div style={{ marginBottom: '20px', border: '1px solid #e2e8f0', borderRadius: '8px', overflow: 'hidden' }}>
+          {/* Panel Header / Toggle */}
+          <div
+            onClick={() => setSeoExpanded((p) => !p)}
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '12px 16px',
+              backgroundColor: seoExpanded ? '#f0f9ff' : '#f8fafc',
+              borderBottom: seoExpanded ? '1px solid #bae6fd' : 'none',
+              cursor: 'pointer',
+              userSelect: 'none'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <i className="fa fa-search" style={{ color: '#0369a1', fontSize: '14px' }}></i>
+              <span style={{ fontSize: '13.5px', fontWeight: '800', color: '#0f172a' }}>
+                🔍 SEO Settings (Google Search Optimization)
+              </span>
+              <span style={{ fontSize: '11px', backgroundColor: '#dbeafe', color: '#1d4ed8', padding: '2px 7px', borderRadius: '4px', fontWeight: '700' }}>
+                Optional
+              </span>
+            </div>
+            <i className={`fa fa-chevron-${seoExpanded ? 'up' : 'down'}`} style={{ color: '#64748b', fontSize: '12px' }}></i>
+          </div>
+
+          {/* Panel Body */}
+          {seoExpanded && (
+            <div style={{ padding: '16px', backgroundColor: '#ffffff' }}>
+              <p style={{ margin: '0 0 14px', fontSize: '12.5px', color: '#64748b', lineHeight: '1.6' }}>
+                <i className="fa fa-info-circle" style={{ marginRight: '5px', color: '#0369a1' }}></i>
+                Ye fields Google search mein teri khabar kaisi dikhegi usko control karti hain.
+                Khali chorr de toh article ka title aur excerpt automatically use hoga.
+              </p>
+
+              {/* SEO Title */}
+              <div style={{ marginBottom: '14px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '5px' }}>
+                  <label style={{ fontSize: '13px', fontWeight: '700', color: '#1e293b', margin: 0 }}>
+                    <i className="fa fa-tag" style={{ color: '#b71c1c', marginRight: '5px' }}></i>
+                    SEO Title (Google Search Title)
+                  </label>
+                  <span style={{
+                    fontSize: '11px', fontWeight: '700',
+                    color: seoTitle.length > 100 ? '#b71c1c' : '#64748b'
+                  }}>
+                    {seoTitle.length}/120
+                  </span>
+                </div>
+                <input
+                  type="text"
+                  value={seoTitle}
+                  onChange={(e) => setSeoTitle(e.target.value)}
+                  maxLength={120}
+                  placeholder={`Default: "${title.trim() ? title.trim().slice(0, 60) + '...' : 'Your article title'} | Punjab Files"`}
+                  style={{
+                    width: '100%', padding: '9px 12px',
+                    border: '1px solid #cbd5e1', borderRadius: '5px',
+                    fontSize: '13.5px', color: '#0f172a'
+                  }}
+                />
+                <p style={{ margin: '4px 0 0', fontSize: '11.5px', color: '#64748b' }}>
+                  Google browser tab aur search result mein blue link ke roop mein dikhai deti hai. (~50-60 characters ideal)
+                </p>
+              </div>
+
+              {/* Meta Description */}
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '5px' }}>
+                  <label style={{ fontSize: '13px', fontWeight: '700', color: '#1e293b', margin: 0 }}>
+                    <i className="fa fa-align-left" style={{ color: '#b71c1c', marginRight: '5px' }}></i>
+                    Meta Description (Google Search Snippet)
+                  </label>
+                  <span style={{
+                    fontSize: '11px', fontWeight: '700',
+                    color: metaDescription.length > 280 ? '#b71c1c' : metaDescription.length > 160 ? '#d97706' : '#64748b'
+                  }}>
+                    {metaDescription.length}/320
+                  </span>
+                </div>
+                <textarea
+                  rows={3}
+                  value={metaDescription}
+                  onChange={(e) => setMetaDescription(e.target.value)}
+                  maxLength={320}
+                  placeholder="Google search result mein title ke neeche grey text mein dikhegi. ~150-160 characters ideal hain..."
+                  style={{
+                    width: '100%', padding: '9px 12px',
+                    border: '1px solid #cbd5e1', borderRadius: '5px',
+                    fontSize: '13.5px', color: '#0f172a',
+                    resize: 'vertical', fontFamily: 'inherit', lineHeight: '1.5'
+                  }}
+                />
+                <p style={{ margin: '4px 0 0', fontSize: '11.5px', color: '#64748b' }}>
+                  WhatsApp, Facebook, aur Twitter share preview mein bhi yahi description dikhai deti hai.
+                </p>
+              </div>
+
+              {/* Live Google Preview */}
+              {(seoTitle || title) && (
+                <div
+                  style={{
+                    marginTop: '14px', padding: '12px 14px',
+                    backgroundColor: '#f8fafc',
+                    border: '1px solid #e2e8f0', borderRadius: '6px'
+                  }}
+                >
+                  <p style={{ margin: '0 0 8px', fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                    Google Search Preview:
+                  </p>
+                  <div style={{ fontFamily: 'Arial, sans-serif' }}>
+                    <div style={{ fontSize: '16px', color: '#1a0dab', fontWeight: '400', lineHeight: '1.3' }}>
+                      {seoTitle.trim() || `${title.trim().slice(0, 55)}${title.trim().length > 55 ? '...' : ''} | Punjab Files`}
+                    </div>
+                    <div style={{ fontSize: '12px', color: '#006621', marginTop: '2px' }}>
+                      punjabfiles.com/news/{(title.trim() || 'your-news-slug').toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').slice(0, 40)}
+                    </div>
+                    <div style={{ fontSize: '13px', color: '#545454', marginTop: '3px', lineHeight: '1.5' }}>
+                      {(metaDescription.trim() || (excerpt.trim() || (content.trim() ? content.trim().slice(0, 155) : ''))).slice(0, 155)}{((metaDescription || excerpt || content).length > 155 ? '...' : '')}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Breaking News Checkbox */}

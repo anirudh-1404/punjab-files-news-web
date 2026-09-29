@@ -66,6 +66,18 @@ const articleSchema = new mongoose.Schema(
       type: Boolean,
       default: false
     },
+    seoTitle: {
+      type: String,
+      trim: true,
+      maxlength: [120, "SEO Title cannot exceed 120 characters"],
+      default: null
+    },
+    metaDescription: {
+      type: String,
+      trim: true,
+      maxlength: [320, "Meta Description cannot exceed 320 characters"],
+      default: null
+    },
     views: {
       type: Number,
       default: 0
