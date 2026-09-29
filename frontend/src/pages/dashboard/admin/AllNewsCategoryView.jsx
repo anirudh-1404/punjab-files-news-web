@@ -204,6 +204,18 @@ export default function AllNewsCategoryView({ currentUser }) {
     return found ? found.label : (cat ? cat.toUpperCase() : 'ਅਣਪਛਾਤੀ');
   };
 
+  const getCategoryLabelWithEn = (cat) => {
+    const found = categoriesList.find((c) => c.id === cat);
+    if (!found) return cat ? cat.toUpperCase() : 'ਅਣਪਛਾਤੀ (Unknown)';
+    return `${found.label} (${found.labelEn || found.label})`;
+  };
+
+  const getRegionLabel = (region) => {
+    if (!region) return '';
+    const found = PUNJAB_REGIONS.find((r) => r.id === region.toLowerCase());
+    return found ? found.label : region;
+  };
+
   const getStatusBadge = (st) => {
     if (st === 'published') {
       return (
@@ -487,17 +499,17 @@ export default function AllNewsCategoryView({ currentUser }) {
         <>
           {/* Desktop Table View (hidden on mobile <= 768px) */}
           <div className="desktop-table-view" style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
-            <table style={{ width: '100%', minWidth: '780px', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
+            <table style={{ width: '100%', minWidth: '950px', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
               <thead>
                 <tr style={{ backgroundColor: '#f1f5f9', borderBottom: '2px solid #cbd5e1', color: '#334155' }}>
                   <th style={{ padding: '12px 10px', width: '50px', fontWeight: '800', textAlign: 'center' }}>ਨੰ: (No.)</th>
-                  <th style={{ padding: '12px 14px', fontWeight: '800' }}>ਖ਼ਬਰ (News Title)</th>
-                  <th style={{ padding: '12px 10px', fontWeight: '800' }}>ਕੈਟੇਗਰੀ (Category)</th>
-                  <th style={{ padding: '12px 10px', fontWeight: '800' }}>ਭਾਸ਼ਾ (Language)</th>
-                  <th style={{ padding: '12px 10px', fontWeight: '800' }}>ਪੱਤਰਕਾਰ / ਮਿਤੀ (Author / Date)</th>
-                  <th style={{ padding: '12px 10px', fontWeight: '800' }}>ਵਿਊਜ਼ (Views)</th>
-                  <th style={{ padding: '12px 10px', fontWeight: '800' }}>ਸਟੇਟਸ (Status)</th>
-                  <th style={{ padding: '12px 14px', fontWeight: '800', textAlign: 'right' }}>ਕਾਰਵਾਈਆਂ (Actions)</th>
+                  <th style={{ padding: '12px 14px', fontWeight: '800', minWidth: '240px' }}>ਖ਼ਬਰ (News Title)</th>
+                  <th style={{ padding: '12px 12px', fontWeight: '800', minWidth: '140px' }}>ਕੈਟੇਗਰੀ (Category)</th>
+                  <th style={{ padding: '12px 10px', fontWeight: '800', minWidth: '100px' }}>ਭਾਸ਼ਾ (Language)</th>
+                  <th style={{ padding: '12px 12px', fontWeight: '800', minWidth: '130px' }}>ਪੱਤਰਕਾਰ / ਮਿਤੀ (Author / Date)</th>
+                  <th style={{ padding: '12px 10px', fontWeight: '800', minWidth: '80px' }}>ਵਿਊਜ਼ (Views)</th>
+                  <th style={{ padding: '12px 10px', fontWeight: '800', minWidth: '120px' }}>ਸਟੇਟਸ (Status)</th>
+                  <th style={{ padding: '12px 14px', fontWeight: '800', minWidth: '140px', textAlign: 'right' }}>ਕਾਰਵਾਈਆਂ (Actions)</th>
                 </tr>
               </thead>
               <tbody>
@@ -525,7 +537,7 @@ export default function AllNewsCategoryView({ currentUser }) {
                     </td>
 
                     {/* Article Thumbnail & Title */}
-                    <td style={{ padding: '12px 14px', maxWidth: '340px' }}>
+                    <td style={{ padding: '12px 14px', minWidth: '240px', verticalAlign: 'middle' }}>
                       <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
                         <img
                           src={art.featuredImage || '/img/index_800x400-image01.jpg'}
@@ -533,7 +545,7 @@ export default function AllNewsCategoryView({ currentUser }) {
                           onError={(e) => { e.target.src = '/img/index_800x400-image01.jpg'; }}
                           style={{ width: '56px', height: '42px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #e2e8f0', flexShrink: 0 }}
                         />
-                        <div>
+                        <div style={{ minWidth: 0 }}>
                           <a
                             href={`/news/${art.slug || art._id}`}
                             target="_blank"
@@ -542,7 +554,7 @@ export default function AllNewsCategoryView({ currentUser }) {
                               fontWeight: '700',
                               color: '#0f172a',
                               fontSize: '13.5px',
-                              lineHeight: 1.3,
+                              lineHeight: 1.35,
                               marginBottom: '3px',
                               textDecoration: 'none',
                               display: 'block',
@@ -558,42 +570,74 @@ export default function AllNewsCategoryView({ currentUser }) {
                               <i className="fa fa-bolt"></i> ਬਰੇਕਿੰਗ (Breaking)
                             </span>
                           )}
-                          <span style={{ color: '#64748b', fontSize: '11.5px' }}>
-                            {art.excerpt ? art.excerpt.substring(0, 55) + '...' : ''}
+                          <span style={{ color: '#64748b', fontSize: '11.5px', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {art.excerpt ? art.excerpt.substring(0, 70) + '...' : ''}
                           </span>
                         </div>
                       </div>
                     </td>
 
-                    {/* Category */}
-                    <td style={{ padding: '12px 10px', whiteSpace: 'nowrap' }}>
-                      <span style={{ backgroundColor: '#f1f5f9', color: '#1e293b', border: '1px solid #cbd5e1', padding: '3px 8px', borderRadius: '4px', fontSize: '12px', fontWeight: '700' }}>
-                        {getCategoryLabel(art.category)}
-                      </span>
-                      {art.category === 'punjab' && art.punjabRegion && (
-                        <div style={{ fontSize: '10.5px', color: '#b71c1c', fontWeight: '700', marginTop: '3px' }}>
-                          {art.punjabRegion === 'majha' ? 'ਮਾਝਾ (Majha)' : art.punjabRegion === 'malwa' ? 'ਮਾਲਵਾ (Malwa)' : art.punjabRegion === 'doaba' ? 'ਦੋਆਬਾ (Doaba)' : art.punjabRegion}
-                        </div>
-                      )}
+                    {/* Category & Region */}
+                    <td style={{ padding: '12px 12px', verticalAlign: 'middle', whiteSpace: 'nowrap' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'flex-start' }}>
+                        <span
+                          style={{
+                            backgroundColor: '#eff6ff',
+                            color: '#1d4ed8',
+                            border: '1px solid #bfdbfe',
+                            padding: '3px 9px',
+                            borderRadius: '5px',
+                            fontSize: '11.5px',
+                            fontWeight: '800',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '5px',
+                            lineHeight: 1.3
+                          }}
+                        >
+                          <i className="fa fa-folder-o" style={{ fontSize: '10px', color: '#2563eb' }}></i>
+                          {getCategoryLabelWithEn(art.category)}
+                        </span>
+                        {art.category === 'punjab' && art.punjabRegion && (
+                          <span
+                            style={{
+                              backgroundColor: '#fff1f2',
+                              color: '#9f1239',
+                              border: '1px solid #fecdd3',
+                              padding: '2.5px 8px',
+                              borderRadius: '5px',
+                              fontSize: '11px',
+                              fontWeight: '800',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '4px',
+                              lineHeight: 1.3
+                            }}
+                          >
+                            <i className="fa fa-map-marker" style={{ fontSize: '10px', color: '#e11d48' }}></i>
+                            {getRegionLabel(art.punjabRegion)}
+                          </span>
+                        )}
+                      </div>
                     </td>
 
                     {/* Language */}
-                    <td style={{ padding: '12px 10px', whiteSpace: 'nowrap' }}>
+                    <td style={{ padding: '12px 10px', verticalAlign: 'middle', whiteSpace: 'nowrap' }}>
                       {getLangBadge(art.language)}
                     </td>
 
                     {/* Author & Date */}
-                    <td style={{ padding: '12px 10px', whiteSpace: 'nowrap' }}>
+                    <td style={{ padding: '12px 12px', verticalAlign: 'middle', whiteSpace: 'nowrap' }}>
                       <div style={{ fontWeight: '700', color: '#1e293b' }}>
                         {art.authorName || art.author?.name || 'ਪੱਤਰਕਾਰ (Reporter)'}
                       </div>
-                      <div style={{ fontSize: '11.5px', color: '#64748b' }}>
+                      <div style={{ fontSize: '11.5px', color: '#64748b', marginTop: '2px' }}>
                         {art.publishedAt || art.createdAt ? formatArticleDate(art.publishedAt || art.createdAt, art.language) : '—'}
                       </div>
                     </td>
 
                     {/* Views */}
-                    <td style={{ padding: '12px 10px', whiteSpace: 'nowrap' }}>
+                    <td style={{ padding: '12px 10px', verticalAlign: 'middle', whiteSpace: 'nowrap' }}>
                       <span style={{ fontWeight: '800', color: (art.views || 0) > 100 ? '#b71c1c' : '#334155', fontSize: '13px', display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
                         <i className={`fa ${(art.views || 0) > 100 ? 'fa-fire' : 'fa-eye'}`} style={{ color: (art.views || 0) > 100 ? '#e11d48' : '#94a3b8' }}></i>
                         {(art.views || 0).toLocaleString('en-IN')}
@@ -601,12 +645,12 @@ export default function AllNewsCategoryView({ currentUser }) {
                     </td>
 
                     {/* Status */}
-                    <td style={{ padding: '12px 10px', whiteSpace: 'nowrap' }}>
+                    <td style={{ padding: '12px 10px', verticalAlign: 'middle', whiteSpace: 'nowrap' }}>
                       {getStatusBadge(art.status)}
                     </td>
 
                     {/* Actions */}
-                    <td style={{ padding: '12px 14px', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                    <td style={{ padding: '12px 14px', verticalAlign: 'middle', textAlign: 'right', whiteSpace: 'nowrap' }}>
                       <div style={{ display: 'inline-flex', gap: '6px' }}>
                         {/* View live link */}
                         <a
@@ -699,15 +743,22 @@ export default function AllNewsCategoryView({ currentUser }) {
                   boxShadow: '0 1px 4px rgba(0,0,0,0.04)'
                 }}
               >
-                {/* Header: Rank + Category + Status */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '6px' }}>
+                {/* Header: Rank + Category + Region + Language + Status */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
                     <span style={{ fontSize: '11px', fontWeight: '800', backgroundColor: '#f1f5f9', color: '#475569', padding: '2px 6px', borderRadius: '4px' }}>
                       #{idx + 1}
                     </span>
-                    <span style={{ backgroundColor: '#fee2e2', color: '#b71c1c', fontSize: '11px', fontWeight: '800', padding: '2px 7px', borderRadius: '4px' }}>
-                      {getCategoryLabel(art.category)} {art.punjabRegion ? `• ${art.punjabRegion}` : ''}
+                    <span style={{ backgroundColor: '#eff6ff', color: '#1d4ed8', border: '1px solid #bfdbfe', fontSize: '11px', fontWeight: '800', padding: '2.5px 7px', borderRadius: '4px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <i className="fa fa-folder-o" style={{ fontSize: '9.5px', color: '#2563eb' }}></i>
+                      {getCategoryLabelWithEn(art.category)}
                     </span>
+                    {art.category === 'punjab' && art.punjabRegion && (
+                      <span style={{ backgroundColor: '#fff1f2', color: '#9f1239', border: '1px solid #fecdd3', fontSize: '11px', fontWeight: '800', padding: '2.5px 7px', borderRadius: '4px', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                        <i className="fa fa-map-marker" style={{ fontSize: '9.5px', color: '#e11d48' }}></i>
+                        {getRegionLabel(art.punjabRegion)}
+                      </span>
+                    )}
                     {getLangBadge(art.language)}
                   </div>
                   <div>{getStatusBadge(art.status)}</div>

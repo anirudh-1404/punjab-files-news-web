@@ -488,9 +488,16 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
                       </span>
                     )}
 
-                    <span style={{ backgroundColor: '#fee2e2', color: '#b71c1c', fontSize: '10.5px', fontWeight: '800', padding: '2px 7px', borderRadius: '4px', textTransform: 'uppercase' }}>
-                      {art.category} {art.punjabRegion ? `• ${art.punjabRegion}` : ''}
+                    <span style={{ backgroundColor: '#eff6ff', color: '#1d4ed8', border: '1px solid #bfdbfe', fontSize: '11px', fontWeight: '800', padding: '2px 7px', borderRadius: '4px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <i className="fa fa-folder-o" style={{ fontSize: '9.5px', color: '#2563eb' }}></i>
+                      {art.category === 'punjab' ? 'ਪੰਜਾਬ (Punjab)' : art.category === 'religion' ? 'ਧਰਮ ਤੇ ਵਿਰਾਸਤ (Religion)' : art.category === 'world' || art.category === 'national' ? 'ਦੇਸ਼-ਵਿਦੇਸ਼ (National & World)' : art.category === 'sport' || art.category === 'sports' ? 'ਖੇਡਾਂ (Sports)' : art.category === 'health' ? 'ਸਿਹਤ (Health)' : art.category === 'travel' ? 'ਸੈਰ-ਸਪਾਟਾ (Travel)' : art.category === 'art-entertainment' || art.category === 'entertainment' ? 'ਮਨੋਰੰਜਨ (Entertainment)' : art.category === 'business' ? 'ਵਪਾਰ (Business)' : art.category}
                     </span>
+                    {art.category === 'punjab' && art.punjabRegion && (
+                      <span style={{ backgroundColor: '#fff1f2', color: '#9f1239', border: '1px solid #fecdd3', fontSize: '10.5px', fontWeight: '800', padding: '2px 7px', borderRadius: '4px', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                        <i className="fa fa-map-marker" style={{ fontSize: '9.5px', color: '#e11d48' }}></i>
+                        {art.punjabRegion === 'majha' ? 'ਮਾਝਾ (Majha)' : art.punjabRegion === 'malwa' ? 'ਮਾਲਵਾ (Malwa)' : art.punjabRegion === 'doaba' ? 'ਦੋਆਬਾ (Doaba)' : art.punjabRegion}
+                      </span>
+                    )}
 
                     {/* Language Badge */}
                     <span

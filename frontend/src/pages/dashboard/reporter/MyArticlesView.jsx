@@ -215,10 +215,19 @@ export default function MyArticlesView() {
                         </span>
                       )}
                     </td>
-                    <td style={{ padding: '10px 12px' }}>
-                      <span style={{ textTransform: 'capitalize', fontWeight: '600', color: '#334155' }}>
-                        {art.category} {art.punjabRegion ? `(${art.punjabRegion})` : ''}
-                      </span>
+                    <td style={{ padding: '10px 12px', verticalAlign: 'middle', whiteSpace: 'nowrap' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'flex-start' }}>
+                        <span style={{ backgroundColor: '#eff6ff', color: '#1d4ed8', border: '1px solid #bfdbfe', fontSize: '11px', fontWeight: '800', padding: '2px 7px', borderRadius: '4px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <i className="fa fa-folder-o" style={{ fontSize: '9.5px', color: '#2563eb' }}></i>
+                          {art.category === 'punjab' ? 'ਪੰਜਾਬ (Punjab)' : art.category === 'religion' ? 'ਧਰਮ ਤੇ ਵਿਰਾਸਤ (Religion)' : art.category === 'world' || art.category === 'national' ? 'ਦੇਸ਼-ਵਿਦੇਸ਼ (National & World)' : art.category === 'sport' || art.category === 'sports' ? 'ਖੇਡਾਂ (Sports)' : art.category === 'health' ? 'ਸਿਹਤ (Health)' : art.category === 'travel' ? 'ਸੈਰ-ਸਪਾਟਾ (Travel)' : art.category === 'art-entertainment' || art.category === 'entertainment' ? 'ਮਨੋਰੰਜਨ (Entertainment)' : art.category === 'business' ? 'ਵਪਾਰ (Business)' : art.category}
+                        </span>
+                        {art.category === 'punjab' && art.punjabRegion && (
+                          <span style={{ backgroundColor: '#fff1f2', color: '#9f1239', border: '1px solid #fecdd3', fontSize: '10.5px', fontWeight: '800', padding: '2px 7px', borderRadius: '4px', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                            <i className="fa fa-map-marker" style={{ fontSize: '9.5px', color: '#e11d48' }}></i>
+                            {art.punjabRegion === 'majha' ? 'ਮਾਝਾ (Majha)' : art.punjabRegion === 'malwa' ? 'ਮਾਲਵਾ (Malwa)' : art.punjabRegion === 'doaba' ? 'ਦੋਆਬਾ (Doaba)' : art.punjabRegion}
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td style={{ padding: '10px 12px' }}>{getStatusBadge(art.status)}</td>
                     <td style={{ padding: '10px 12px', color: '#64748b', fontSize: '12px' }}>
@@ -266,9 +275,16 @@ export default function MyArticlesView() {
                 {/* Header: Category + Status Badge */}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '6px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <span style={{ backgroundColor: '#fee2e2', color: '#b71c1c', fontSize: '11px', fontWeight: '800', padding: '2px 7px', borderRadius: '4px' }}>
-                      {art.category} {art.punjabRegion ? `• ${art.punjabRegion}` : ''}
+                    <span style={{ backgroundColor: '#eff6ff', color: '#1d4ed8', border: '1px solid #bfdbfe', fontSize: '11px', fontWeight: '800', padding: '2px 7px', borderRadius: '4px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <i className="fa fa-folder-o" style={{ fontSize: '9.5px', color: '#2563eb' }}></i>
+                      {art.category === 'punjab' ? 'ਪੰਜਾਬ (Punjab)' : art.category === 'religion' ? 'ਧਰਮ ਤੇ ਵਿਰਾਸਤ (Religion)' : art.category === 'world' || art.category === 'national' ? 'ਦੇਸ਼-ਵਿਦੇਸ਼ (National & World)' : art.category === 'sport' || art.category === 'sports' ? 'ਖੇਡਾਂ (Sports)' : art.category === 'health' ? 'ਸਿਹਤ (Health)' : art.category === 'travel' ? 'ਸੈਰ-ਸਪਾਟਾ (Travel)' : art.category === 'art-entertainment' || art.category === 'entertainment' ? 'ਮਨੋਰੰਜਨ (Entertainment)' : art.category === 'business' ? 'ਵਪਾਰ (Business)' : art.category}
                     </span>
+                    {art.category === 'punjab' && art.punjabRegion && (
+                      <span style={{ backgroundColor: '#fff1f2', color: '#9f1239', border: '1px solid #fecdd3', fontSize: '10.5px', fontWeight: '800', padding: '2px 7px', borderRadius: '4px', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                        <i className="fa fa-map-marker" style={{ fontSize: '9.5px', color: '#e11d48' }}></i>
+                        {art.punjabRegion === 'majha' ? 'ਮਾਝਾ (Majha)' : art.punjabRegion === 'malwa' ? 'ਮਾਲਵਾ (Malwa)' : art.punjabRegion === 'doaba' ? 'ਦੋਆਬਾ (Doaba)' : art.punjabRegion}
+                      </span>
+                    )}
                     <span style={{ fontSize: '10.5px', fontWeight: '700', color: '#64748b' }}>
                       {art.language === 'hi' ? 'हिंदी' : art.language === 'en' ? 'English' : 'ਪੰਜਾਬੀ'}
                     </span>
