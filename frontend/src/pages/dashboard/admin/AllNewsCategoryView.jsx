@@ -983,15 +983,14 @@ export default function AllNewsCategoryView({ currentUser, onNavigate }) {
             if (e.target === e.currentTarget) closeEditModal();
           }}
         >
-          <form
-            onSubmit={handleSaveEdit}
+          <div
             className="admin-edit-modal-card"
             style={{
               backgroundColor: '#ffffff',
               borderRadius: '10px',
               maxWidth: '800px',
               width: '100%',
-              height: '88vh',
+              height: '86vh',
               maxHeight: '850px',
               display: 'flex',
               flexDirection: 'column',
@@ -1049,18 +1048,23 @@ export default function AllNewsCategoryView({ currentUser, onNavigate }) {
               </button>
             </div>
 
-            {/* Scrollable Form Body (Guaranteed to Scroll smoothly) */}
+            {/* Scrollable Form Body Container (Explicit height on plain DIV guarantees scrolling) */}
             <div
+              id="adminEditModalBody"
               className="admin-modal-body"
               style={{
                 flex: '1 1 auto',
-                overflowY: 'scroll',
+                height: 'calc(86vh - 120px)',
+                maxHeight: 'calc(86vh - 120px)',
+                overflowY: 'auto',
+                overflowX: 'hidden',
                 padding: '20px 24px',
-                minHeight: 0,
                 WebkitOverflowScrolling: 'touch',
-                backgroundColor: '#ffffff'
+                backgroundColor: '#ffffff',
+                boxSizing: 'border-box'
               }}
             >
+              <form id="editArticleForm" onSubmit={handleSaveEdit}>
                 {/* Title */}
                 <div style={{ marginBottom: '16px' }}>
                   <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#334155', marginBottom: '6px' }}>
@@ -1360,69 +1364,75 @@ export default function AllNewsCategoryView({ currentUser, onNavigate }) {
                     <span>ਇਸ ਖ਼ਬਰ ਨੂੰ 'ਬਰੇਕਿੰਗ ਨਿਊਜ਼ ਟਿੱਕਰ' ਵਿੱਚ ਸ਼ਾਮਲ ਕਰੋ (Mark as Breaking News)</span>
                   </label>
                 </div>
-              </div>
+              </form>
+            </div>
 
-              {/* Pinned Bottom Action Footer (Always Visible at Bottom) */}
-              <div
+            {/* Pinned Bottom Action Footer (Always Visible at Bottom) */}
+            <div
+              className="admin-modal-footer"
+              style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                gap: '10px',
+                borderTop: '1px solid #e2e8f0',
+                padding: '12px 24px',
+                backgroundColor: '#f8fafc',
+                flexShrink: 0,
+                height: '62px',
+                alignItems: 'center',
+                boxSizing: 'border-box'
+              }}
+            >
+              <button
+                type="button"
+                onClick={closeEditModal}
+                disabled={isSavingEdit}
                 style={{
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  gap: '10px',
-                  borderTop: '1px solid #e2e8f0',
-                  padding: '12px 24px',
-                  backgroundColor: '#f8fafc',
-                  flexShrink: 0
+                  backgroundColor: '#ffffff',
+                  color: '#475569',
+                  border: '1px solid #cbd5e1',
+                  padding: '9px 18px',
+                  borderRadius: '6px',
+                  fontSize: '13px',
+                  fontWeight: '700',
+                  cursor: 'pointer'
                 }}
               >
-                <button
-                  type="button"
-                  onClick={closeEditModal}
-                  disabled={isSavingEdit}
-                  style={{
-                    backgroundColor: '#ffffff',
-                    color: '#475569',
-                    border: '1px solid #cbd5e1',
-                    padding: '9px 18px',
-                    borderRadius: '6px',
-                    fontSize: '13px',
-                    fontWeight: '700',
-                    cursor: 'pointer'
-                  }}
-                >
-                  ਰੱਦ ਕਰੋ (Cancel)
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSavingEdit}
-                  style={{
-                    backgroundColor: '#1c2d5a',
-                    color: '#ffffff',
-                    border: 'none',
-                    padding: '9px 22px',
-                    borderRadius: '6px',
-                    fontSize: '13px',
-                    fontWeight: '700',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    boxShadow: '0 2px 6px rgba(28, 45, 90, 0.3)'
-                  }}
-                >
-                  {isSavingEdit ? (
-                    <>
-                      <i className="fa fa-spinner fa-spin"></i>
-                      <span>ਸੇਵ ਹੋ ਰਿਹਾ ਹੈ... (Saving...)</span>
-                    </>
-                  ) : (
-                    <>
-                      <i className="fa fa-check"></i>
-                      <span>ਤਬਦੀਲੀਆਂ ਸੇਵ ਕਰੋ (Save Changes)</span>
-                    </>
-                  )}
-                </button>
-              </div>
-          </form>
+                ਰੱਦ ਕਰੋ (Cancel)
+              </button>
+              <button
+                type="submit"
+                form="editArticleForm"
+                disabled={isSavingEdit}
+                style={{
+                  backgroundColor: '#1c2d5a',
+                  color: '#ffffff',
+                  border: 'none',
+                  padding: '9px 22px',
+                  borderRadius: '6px',
+                  fontSize: '13px',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  boxShadow: '0 2px 6px rgba(28, 45, 90, 0.3)'
+                }}
+              >
+                {isSavingEdit ? (
+                  <>
+                    <i className="fa fa-spinner fa-spin"></i>
+                    <span>ਸੇਵ ਹੋ ਰਿਹਾ ਹੈ... (Saving...)</span>
+                  </>
+                ) : (
+                  <>
+                    <i className="fa fa-check"></i>
+                    <span>ਤਬਦੀਲੀਆਂ ਸੇਵ ਕਰੋ (Save Changes)</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
