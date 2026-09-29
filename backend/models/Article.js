@@ -27,22 +27,8 @@ const articleSchema = new mongoose.Schema(
     category: {
       type: String,
       required: [true, "Category is required"],
-      enum: [
-        "punjab",
-        "religion",
-        "world",
-        "sport",
-        "sports",
-        "health",
-        "travel",
-        "art-entertainment",
-        "entertainment",
-        "deals",
-        "environment",
-        "autos",
-        "general",
-        "politics"
-      ],
+      trim: true,
+      lowercase: true,
       default: "punjab"
     },
     punjabRegion: {

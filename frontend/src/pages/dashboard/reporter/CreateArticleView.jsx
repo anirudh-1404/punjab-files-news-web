@@ -1,17 +1,7 @@
-import React, { useState } from 'react';
-import { articleAPI, uploadAPI } from '../../../services/api';
+import React, { useState, useEffect } from 'react';
+import { articleAPI, uploadAPI, categoryAPI } from '../../../services/api';
 import { createNewArticle } from '../../../services/articleStore';
 import { transliterateGurmukhiToEnglish } from '../../../services/slugUtils';
-
-const IMAGE_PRESETS = [
-  { label: 'ਅੰਮ੍ਰਿਤਸਰ / ਦਰਬਾਰ ਸਾਹਿਬ', url: '/img/darbar-sahib-mukhwak.jpg' },
-  { label: 'ਪੰਜਾਬ ਖ਼ਬਰਾਂ 1', url: '/img/index_800x400-image01.jpg' },
-  { label: 'ਸਨਅਤ / ਉਦਯੋਗ', url: '/img/index_800x400-image02.jpg' },
-  { label: 'ਖੇਡਾਂ / ਕਬੱਡੀ / ਸਪੋਰਟਸ', url: '/img/index_800x400-image03.jpg' },
-  { label: 'ਧਾਰਮਿਕ / ਗੁਰਦੁਆਰਾ', url: '/img/index_800x400-image04.jpg' },
-  { label: 'ਸਿਹਤ / ਹਸਪਤਾਲ', url: '/img/index_800x400-image14.jpg' },
-  { label: 'ਸੱਭਿਆਚਾਰ / ਵਿਰਸਾ', url: '/img/index_800x400-image10.jpg' }
-];
 
 const LANG_OPTIONS = [
   { key: 'pa', label: 'ਪੰਜਾਬੀ (Punjabi)', desc: 'ਗੁਰਮੁਖੀ ਲਿੱਪੀ ਵਿੱਚ ਖ਼ਬਰ ਲਿਖੋ', flag: '🇮🇳' },
@@ -55,16 +45,38 @@ export default function CreateArticleView({ user, onArticleCreated }) {
   const [content, setContent] = useState('');
   const [excerpt, setExcerpt] = useState('');
   const [category, setCategory] = useState('punjab');
+  const [categories, setCategories] = useState([]);
   const [punjabRegion, setPunjabRegion] = useState('majha');
   const [language, setLanguage] = useState('pa');
   const [mediaType, setMediaType] = useState('image'); // 'image' | 'video'
-  const [featuredImage, setFeaturedImage] = useState('/img/index_800x400-image01.jpg');
+  const [featuredImage, setFeaturedImage] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
   const [uploadingMedia, setUploadingMedia] = useState(false);
   const [uploadError, setUploadError] = useState('');
   const [isBreaking, setIsBreaking] = useState(false);
   const [loading, setLoading] = useState(false);
   const [feedback, setFeedback] = useState({ type: '', message: '' });
+
+  // Load active categories dynamically
+  useEffect(() => {
+    let isMounted = true;
+    const loadCategories = async () => {
+      try {
+        const res = await categoryAPI.getAll();
+        if (isMounted && res && res.data && res.data.length > 0) {
+          setCategories(res.data);
+        }
+      } catch (e) {
+        console.error('Error fetching categories in CreateArticleView:', e);
+      }
+    };
+    loadCategories();
+    window.addEventListener('punjab_categories_updated', loadCategories);
+    return () => {
+      isMounted = false;
+      window.removeEventListener('punjab_categories_updated', loadCategories);
+    };
+  }, []);
 
   const currentLang = LANG_CONFIG[language] || LANG_CONFIG.pa;
 
@@ -117,6 +129,14 @@ export default function CreateArticleView({ user, onArticleCreated }) {
       setFeedback({
         type: 'error',
         message: 'ਕਿਰਪਾ ਕਰਕੇ ਸਿਰਲੇਖ ਅਤੇ ਖ਼ਬਰ ਦਾ ਵੇਰਵਾ ਲਾਜ਼ਮੀ ਦਰਜ ਕਰੋ (Title and Content are required).'
+      });
+      return;
+    }
+
+    if (mediaType === 'image' && !featuredImage.trim()) {
+      setFeedback({
+        type: 'error',
+        message: 'ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੇ ਸਿਸਟਮ ਵਿੱਚੋਂ ਖ਼ਬਰ ਲਈ ਫ਼ੋਟੋ ਅਪਲੋਡ ਕਰੋ (Please upload an image for the article).'
       });
       return;
     }
@@ -366,17 +386,25 @@ export default function CreateArticleView({ user, onArticleCreated }) {
               onChange={(e) => setCategory(e.target.value)}
               style={{ width: '100%', padding: '9px 12px', border: '1px solid #cbd5e1', borderRadius: '5px', fontSize: '13.5px' }}
             >
-              <option value="punjab">ਪੰਜਾਬ (Punjab)</option>
-              <option value="religion">ਧਰਮ (Religion)</option>
-              <option value="world">ਦੇਸ਼-ਵਿਦੇਸ਼ (National & World)</option>
-              <option value="sport">ਖੇਡਾਂ (Sports)</option>
-              <option value="health">ਸਿਹਤ (Health & Wellness)</option>
-              <option value="travel">ਸੈਰ-ਸਪਾਟਾ (Travel & Heritage)</option>
-              <option value="art-entertainment">ਮਨੋਰੰਜਨ (Entertainment)</option>
-              <option value="politics">ਰਾਜਨੀਤੀ (Politics)</option>
-              <option value="deals">ਵਪਾਰ ਤੇ ਆਫਰ (Business / Deals)</option>
-              <option value="environment">ਵਾਤਾਵਰਨ (Environment)</option>
-              <option value="autos">ਆਟੋ / ਗੱਡੀਆਂ (Autos)</option>
+              {categories.length > 0 ? (
+                categories.map((cat) => (
+                  <option key={cat.slug} value={cat.slug}>
+                    {cat.namePa} ({cat.nameEn})
+                  </option>
+                ))
+              ) : (
+                <>
+                  <option value="punjab">ਪੰਜਾਬ (Punjab)</option>
+                  <option value="religion">ਧਰਮ (Religion)</option>
+                  <option value="world">ਦੇਸ਼-ਵਿਦੇਸ਼ (National & World)</option>
+                  <option value="sport">ਖੇਡਾਂ (Sports)</option>
+                  <option value="health">ਸਿਹਤ (Health)</option>
+                  <option value="travel">ਸੈਰ-ਸਪਾਟਾ (Travel)</option>
+                  <option value="art-entertainment">ਮਨੋਰੰਜਨ (Entertainment)</option>
+                  <option value="politics">ਰਾਜਨੀਤੀ (Politics)</option>
+                  <option value="business">ਵਪਾਰ (Business)</option>
+                </>
+              )}
             </select>
           </div>
 
@@ -531,64 +559,59 @@ export default function CreateArticleView({ user, onArticleCreated }) {
               />
             </div>
           ) : (
-            featuredImage && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px', backgroundColor: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '6px', marginBottom: '12px' }}>
-                <img
-                  src={featuredImage}
-                  alt="Selected preview"
-                  style={{ width: '80px', height: '52px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #cbd5e1' }}
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = '/img/index_800x400-image01.jpg';
-                  }}
-                />
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px' }}>
-                    <span style={{ fontSize: '11px', fontWeight: '800', backgroundColor: featuredImage.includes('cloudinary') ? '#047857' : '#1c2d5a', color: '#ffffff', padding: '1px 6px', borderRadius: '3px' }}>
-                      {featuredImage.includes('cloudinary') ? '✓ Cloudinary Uploaded' : 'ਮੌਜੂਦਾ ਲਿੰਕ (Preset)'}
-                    </span>
-                  </div>
-                  <div style={{ fontSize: '12px', color: '#334155', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
-                    {featuredImage}
+            featuredImage ? (
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', padding: '12px', backgroundColor: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '6px', marginBottom: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
+                  <img
+                    src={featuredImage}
+                    alt="Selected preview"
+                    style={{ width: '80px', height: '52px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #cbd5e1' }}
+                  />
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px' }}>
+                      <span style={{ fontSize: '11px', fontWeight: '800', backgroundColor: '#047857', color: '#ffffff', padding: '1px 6px', borderRadius: '3px' }}>
+                        ✓ ਫ਼ੋਟੋ ਅਪਲੋਡ ਹੋਈ (Photo Uploaded)
+                      </span>
+                    </div>
+                    <div style={{ fontSize: '12px', color: '#334155', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', maxWidth: '320px' }}>
+                      {featuredImage}
+                    </div>
                   </div>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => setFeaturedImage('')}
+                  style={{
+                    backgroundColor: '#fee2e2',
+                    border: '1px solid #fca5a5',
+                    color: '#b71c1c',
+                    padding: '5px 12px',
+                    borderRadius: '4px',
+                    fontSize: '12px',
+                    fontWeight: '700',
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap'
+                  }}
+                >
+                  <i className="fa fa-trash"></i> ਹਟਾਓ (Remove)
+                </button>
+              </div>
+            ) : (
+              <div style={{ padding: '14px 16px', backgroundColor: '#f8fafc', border: '1px dashed #cbd5e1', borderRadius: '6px', textAlign: 'center', color: '#64748b', fontSize: '12.5px', marginBottom: '10px' }}>
+                <i className="fa fa-image" style={{ fontSize: '20px', color: '#94a3b8', display: 'block', marginBottom: '4px' }}></i>
+                ਕੋਈ ਫ਼ੋਟੋ ਨਹੀਂ ਚੁਣੀ ਗਈ। ਉੱਪਰ ਦਿੱਤੇ ਬਟਨ <strong>'ਫ਼ੋਟੋ ਅਪਲੋਡ ਕਰੋ'</strong> 'ਤੇ ਕਲਿੱਕ ਕਰਕੇ ਆਪਣੇ ਸਿਸਟਮ ਵਿੱਚੋਂ ਫ਼ੋਟੋ ਚੁਣੋ।
               </div>
             )
           )}
 
-          {/* Presets & URL Fallback */}
+          {/* Optional Direct URL Fallback */}
           {mediaType === 'image' && (
             <div style={{ marginTop: '8px' }}>
-              <span style={{ fontSize: '11.5px', fontWeight: '700', color: '#64748b', display: 'block', marginBottom: '6px' }}>
-                ਜਾਂ ਪਹਿਲਾਂ ਤੋਂ ਮੌਜੂਦ ਪੰਜਾਬ ਫਾਈਲਜ਼ ਲਾਇਬ੍ਰੇਰੀ ਵਿੱਚੋਂ ਚੁਣੋ (Or choose preset):
-              </span>
-              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '10px' }}>
-                {IMAGE_PRESETS.map((preset, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => setFeaturedImage(preset.url)}
-                    style={{
-                      fontSize: '11px',
-                      fontWeight: '600',
-                      padding: '3px 8px',
-                      borderRadius: '4px',
-                      border: featuredImage === preset.url ? '1px solid #b71c1c' : '1px solid #cbd5e1',
-                      backgroundColor: featuredImage === preset.url ? '#b71c1c' : '#ffffff',
-                      color: featuredImage === preset.url ? '#ffffff' : '#334155',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    {preset.label}
-                  </button>
-                ))}
-              </div>
-
               <input
                 type="text"
                 value={featuredImage}
                 onChange={(e) => setFeaturedImage(e.target.value)}
-                placeholder="ਕਸਟਮ ਫ਼ੋਟੋ URL ਪਾਓ (ਜੇਕਰ ਬਾਹਰੀ ਲਿੰਕ ਹੋਵੇ)"
+                placeholder="ਜਾਂ ਬਾਹਰੀ ਫ਼ੋਟੋ ਦਾ ਸਿੱਧਾ ਵੈੱਬ URL ਪਾਓ (External Image URL - Optional)..."
                 style={{ width: '100%', padding: '7px 10px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '12px' }}
               />
             </div>

@@ -6,6 +6,7 @@ import OverviewStatsView from './admin/OverviewStatsView';
 import UserManagementView from './admin/UserManagementView';
 import MukhwakManagerView from './admin/MukhwakManagerView';
 import AllNewsCategoryView from './admin/AllNewsCategoryView';
+import CategoryManagerView from './admin/CategoryManagerView';
 import ReviewQueueView from './editor/ReviewQueueView';
 import BreakingNewsManagerView from './editor/BreakingNewsManagerView';
 import CreateArticleView from './reporter/CreateArticleView';
@@ -48,6 +49,7 @@ export default function DashboardLayout({ user, onLogout }) {
     return [
       { id: 'overview', label: 'ਓਵਰਵਿਊ', icon: 'fa-dashboard', sub: 'Overview' },
       { id: 'all_news', label: 'ਸਾਰੀਆਂ ਖ਼ਬਰਾਂ (ਕੈਟੇਗਰੀ ਵਾਈਜ਼)', icon: 'fa-newspaper-o', sub: 'All News & Categories' },
+      { id: 'categories', label: 'ਕੈਟੇਗਰੀ ਮੈਨੇਜਰ', icon: 'fa-tags', sub: 'Categories' },
       { id: 'review', label: 'ਅੰਤਿਮ ਪ੍ਰਵਾਨਗੀ ਡੈਸਕ', icon: 'fa-check-square-o', sub: 'Final Approval Desk' },
       { id: 'contact_queries', label: 'ਸੰਪਰਕ ਸੁਨੇਹੇ', icon: 'fa-envelope-o', sub: 'Inquiries' },
       { id: 'users', label: 'ਸਟਾਫ਼ ਪ੍ਰਬੰਧਨ', icon: 'fa-users', sub: 'Staff Management' },
@@ -296,6 +298,10 @@ export default function DashboardLayout({ user, onLogout }) {
 
           {activeTab === 'all_news' && user?.role === 'admin' && (
             <AllNewsCategoryView currentUser={user} />
+          )}
+
+          {activeTab === 'categories' && user?.role === 'admin' && (
+            <CategoryManagerView />
           )}
 
           {activeTab === 'create' && user?.role === 'reporter' && (

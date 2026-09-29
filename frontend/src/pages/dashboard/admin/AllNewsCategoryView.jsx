@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { articleAPI } from '../../../services/api';
+import { articleAPI, categoryAPI } from '../../../services/api';
 import { formatArticleDate } from '../../../services/dateUtils';
 import { transliterateGurmukhiToEnglish } from '../../../services/slugUtils';
 
@@ -25,6 +25,7 @@ const PUNJAB_REGIONS = [
 export default function AllNewsCategoryView({ currentUser }) {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [categoriesList, setCategoriesList] = useState(CATEGORIES);
   const [activeCategory, setActiveCategory] = useState('all');
   const [activeRegion, setActiveRegion] = useState('all');
   const [activeStatus, setActiveStatus] = useState('all');
@@ -76,16 +77,44 @@ export default function AllNewsCategoryView({ currentUser }) {
     fetchArticles();
   }, [fetchArticles]);
 
+  // Load dynamic categories
+  useEffect(() => {
+    let isMounted = true;
+    const loadCategories = async () => {
+      try {
+        const res = await categoryAPI.getAll();
+        if (isMounted && res && res.data && res.data.length > 0) {
+          const dynamic = [
+            { id: 'all', label: 'ਸਾਰੀਆਂ', labelEn: 'All News', icon: 'fa-th-large' },
+            ...res.data.map((c) => ({
+              id: c.slug,
+              label: c.namePa,
+              labelEn: c.nameEn,
+              icon: c.icon || 'fa-newspaper-o'
+            }))
+          ];
+          setCategoriesList(dynamic);
+        }
+      } catch (e) {}
+    };
+    loadCategories();
+    window.addEventListener('punjab_categories_updated', loadCategories);
+    return () => {
+      isMounted = false;
+      window.removeEventListener('punjab_categories_updated', loadCategories);
+    };
+  }, []);
+
   // Dynamic counts per category from current full or filtered list
   const categoryCounts = useMemo(() => {
     const counts = { all: articles.length };
-    CATEGORIES.forEach((c) => {
+    categoriesList.forEach((c) => {
       if (c.id !== 'all') {
         counts[c.id] = articles.filter((a) => a.category === c.id).length;
       }
     });
     return counts;
-  }, [articles]);
+  }, [articles, categoriesList]);
 
   // Trigger Edit
   const openEditModal = (art) => {
@@ -171,8 +200,8 @@ export default function AllNewsCategoryView({ currentUser }) {
 
   // Helpers
   const getCategoryLabel = (cat) => {
-    const found = CATEGORIES.find((c) => c.id === cat);
-    return found ? found.label : cat;
+    const found = categoriesList.find((c) => c.id === cat);
+    return found ? found.label : (cat ? cat.toUpperCase() : 'ਅਣਪਛਾਤੀ');
   };
 
   const getStatusBadge = (st) => {
@@ -272,7 +301,7 @@ export default function AllNewsCategoryView({ currentUser }) {
       {/* 1. Category Switcher Tabs */}
       <div style={{ marginBottom: '18px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflowX: 'auto', paddingBottom: '8px', WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none' }}>
-          {CATEGORIES.map((cat) => {
+          {categoriesList.map((cat) => {
             const isActive = activeCategory === cat.id;
             return (
               <button
@@ -903,7 +932,7 @@ export default function AllNewsCategoryView({ currentUser }) {
                     onChange={(e) => setEditFormData({ ...editFormData, category: e.target.value })}
                     style={{ width: '100%', padding: '9px 10px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '13px', fontWeight: '600' }}
                   >
-                    {CATEGORIES.filter((c) => c.id !== 'all').map((c) => (
+                    {categoriesList.filter((c) => c.id !== 'all').map((c) => (
                       <option key={c.id} value={c.id}>{c.label} ({c.labelEn})</option>
                     ))}
                   </select>

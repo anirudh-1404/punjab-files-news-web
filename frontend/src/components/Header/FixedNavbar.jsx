@@ -1,23 +1,50 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { categoryAPI } from '../../services/api';
+
+const CORE_SLUGS = ['punjab', 'religion', 'world', 'sport', 'health', 'travel', 'art-entertainment'];
 
 export default function FixedNavbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('home');
   const [punjabDropdownOpen, setPunjabDropdownOpen] = useState(false);
+  const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
+  const [categories, setCategories] = useState([]);
   const [navSearchQuery, setNavSearchQuery] = useState('');
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
 
-  // Close dropdown on outside click
+  // Close dropdowns on outside click
   useEffect(() => {
     const handleOutsideClick = (e) => {
       if (!e.target.closest('.punjab-nav-item')) {
         setPunjabDropdownOpen(false);
       }
+      if (!e.target.closest('.more-nav-item')) {
+        setMoreDropdownOpen(false);
+      }
     };
     document.addEventListener('click', handleOutsideClick);
     return () => document.removeEventListener('click', handleOutsideClick);
+  }, []);
+
+  // Fetch dynamic categories
+  useEffect(() => {
+    let isMounted = true;
+    const loadCategories = async () => {
+      try {
+        const res = await categoryAPI.getAll();
+        if (isMounted && res && res.data && res.data.length > 0) {
+          setCategories(res.data);
+        }
+      } catch (e) {}
+    };
+    loadCategories();
+    window.addEventListener('punjab_categories_updated', loadCategories);
+    return () => {
+      isMounted = false;
+      window.removeEventListener('punjab_categories_updated', loadCategories);
+    };
   }, []);
 
   useEffect(() => {
@@ -28,32 +55,9 @@ export default function FixedNavbar() {
     }
 
     // 2. If on category page
-    if (location.pathname.startsWith('/category/punjab')) {
-      setActiveSection('punjab');
-      return;
-    }
-    if (location.pathname.startsWith('/category/religion')) {
-      setActiveSection('religion');
-      return;
-    }
-    if (location.pathname.startsWith('/category/world')) {
-      setActiveSection('world');
-      return;
-    }
-    if (location.pathname.startsWith('/category/sport')) {
-      setActiveSection('sport');
-      return;
-    }
-    if (location.pathname.startsWith('/category/health')) {
-      setActiveSection('health');
-      return;
-    }
-    if (location.pathname.startsWith('/category/travel')) {
-      setActiveSection('travel');
-      return;
-    }
-    if (location.pathname.startsWith('/category/art-entertainment')) {
-      setActiveSection('art-entertainment');
+    if (location.pathname.startsWith('/category/')) {
+      const slug = location.pathname.split('/')[2];
+      setActiveSection(slug || '');
       return;
     }
 
@@ -468,6 +472,86 @@ export default function FixedNavbar() {
                 ਮਨੋਰੰਜਨ
               </a>
             </li>
+
+            {/* 8.5 Additional Categories Dropdown (More) */}
+            {categories.filter((c) => !CORE_SLUGS.includes(c.slug)).length > 0 && (
+              <li
+                className={`dropdown more-nav-item ${categories.filter((c) => !CORE_SLUGS.includes(c.slug)).some((c) => activeSection === c.slug) ? 'active' : ''} ${moreDropdownOpen ? 'open' : ''}`}
+                onMouseEnter={() => setMoreDropdownOpen(true)}
+                onMouseLeave={() => setMoreDropdownOpen(false)}
+                style={{ position: 'relative' }}
+              >
+                <a
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setMoreDropdownOpen((prev) => !prev);
+                  }}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}
+                >
+                  <span>ਹੋਰ (More)</span>
+                  <i className={`fa fa-chevron-${moreDropdownOpen ? 'up' : 'down'}`} style={{ fontSize: '11px', marginLeft: '3px' }}></i>
+                </a>
+
+                <ul
+                  className="dropdown-menu more-dropdown-list hidden-xs hidden-sm"
+                  style={{
+                    display: moreDropdownOpen ? 'block' : 'none',
+                    position: 'absolute',
+                    top: '100%',
+                    left: 0,
+                    minWidth: '220px',
+                    backgroundColor: '#1c2d5a',
+                    background: '#1c2d5a',
+                    border: '2px solid #ebb10d',
+                    borderRadius: '0 0 8px 8px',
+                    boxShadow: '0 12px 30px rgba(0, 0, 0, 0.5)',
+                    padding: '6px 0',
+                    margin: 0,
+                    zIndex: 999999,
+                    listStyle: 'none'
+                  }}
+                >
+                  {categories
+                    .filter((c) => !CORE_SLUGS.includes(c.slug))
+                    .map((cat) => (
+                      <li key={cat.slug}>
+                        <Link
+                          to={`/category/${cat.slug}`}
+                          className="more-dropdown-link"
+                          onClick={() => {
+                            setActiveSection(cat.slug);
+                            setMoreDropdownOpen(false);
+                          }}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '10px',
+                            padding: '10px 18px',
+                            color: '#ffffff',
+                            fontSize: '13.5px',
+                            fontWeight: '700',
+                            textDecoration: 'none',
+                            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                            transition: 'all 0.15s ease'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = '#b71c1c';
+                            e.currentTarget.style.paddingLeft = '22px';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = 'transparent';
+                            e.currentTarget.style.paddingLeft = '18px';
+                          }}
+                        >
+                          <i className={`fa ${cat.icon || 'fa-tag'}`} style={{ color: '#ebb10d', fontSize: '13px', width: '16px', textAlign: 'center' }}></i>
+                          <span style={{ color: '#ffffff', fontWeight: 700, fontSize: '13.5px' }}>{cat.namePa} ({cat.nameEn})</span>
+                        </Link>
+                      </li>
+                    ))}
+                </ul>
+              </li>
+            )}
 
             {/* 9. Live TV */}
             <li className={activeSection === 'live-tv' ? 'active' : ''}>

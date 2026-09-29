@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { articleAPI } from '../services/api';
+import { articleAPI, categoryAPI } from '../services/api';
 import { getAllArticles } from '../services/articleStore';
 import { formatArticleDate } from '../services/dateUtils';
 
@@ -46,18 +46,23 @@ const CATEGORY_NAMES = {
   sport: 'ਖੇਡ ਜਗਤ (Sports)',
   health: 'ਸਿਹਤ ਸੰਭਾਲ (Health & Wellness)',
   travel: 'ਸੈਰ-ਸਪਾਟਾ ਤੇ ਵਿਰਸਾ (Travel & Heritage)',
-  'art-entertainment': 'ਮਨੋਰੰਜਨ ਤੇ ਸਿਨੇਮਾ (Entertainment)'
+  'art-entertainment': 'ਮਨੋਰੰਜਨ ਤੇ ਸਿਨੇਮਾ (Entertainment)',
+  politics: 'ਰਾਜਨੀਤੀ (Politics)',
+  business: 'ਵਪਾਰ ਤੇ ਕਾਰੋਬਾਰ (Business)'
 };
 
 export default function CategoryNewsPage() {
   const { category = 'punjab', subRegion } = useParams();
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [categoryMeta, setCategoryMeta] = useState(null);
   const [trendingArticles, setTrendingArticles] = useState([]);
 
   const currentRegionKey = subRegion ? subRegion.toLowerCase() : 'all';
   const regionInfo = REGION_INFO[currentRegionKey] || REGION_INFO.all;
-  const categoryTitle = CATEGORY_NAMES[category] || category.toUpperCase();
+  const categoryTitle = categoryMeta
+    ? `${categoryMeta.namePa} (${categoryMeta.nameEn})`
+    : (CATEGORY_NAMES[category] || category.toUpperCase());
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -66,6 +71,15 @@ export default function CategoryNewsPage() {
     async function loadCategoryData() {
       try {
         setLoading(true);
+
+        // 0. Fetch category metadata if custom
+        try {
+          const catRes = await categoryAPI.getAll();
+          if (isMounted && catRes && catRes.data) {
+            const found = catRes.data.find((c) => c.slug === category);
+            if (found) setCategoryMeta(found);
+          }
+        } catch (e) {}
 
         // 1. Fetch published articles from backend
         const queryParams = { category, limit: 30 };

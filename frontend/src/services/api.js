@@ -384,3 +384,36 @@ export const contactAPI = {
   }
 };
 
+// -------------------------------------------------------------
+// 8. CATEGORIES API
+// -------------------------------------------------------------
+export const categoryAPI = {
+  // Public - get all active categories
+  getAll: async () => {
+    return apiFetch('/categories');
+  },
+
+  // Protected (Admin) - create new category
+  create: async (categoryData) => {
+    return apiFetch('/categories', {
+      method: 'POST',
+      body: JSON.stringify(categoryData)
+    });
+  },
+
+  // Protected (Admin) - update category
+  update: async (id, categoryData) => {
+    return apiFetch(`/categories/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(categoryData)
+    });
+  },
+
+  // Protected (Admin) - delete category
+  delete: async (id) => {
+    return apiFetch(`/categories/${id}`, {
+      method: 'DELETE'
+    });
+  }
+};
+

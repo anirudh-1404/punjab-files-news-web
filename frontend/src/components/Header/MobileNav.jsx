@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import brandLogo from '../../assets/logo.png';
+import { categoryAPI } from '../../services/api';
+
+const CORE_SLUGS = ['punjab', 'religion', 'world', 'sport', 'health', 'travel', 'art-entertainment'];
 
 export default function MobileNav() {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const [categories, setCategories] = useState([]);
   const [mobileDrawerSearch, setMobileDrawerSearch] = useState('');
   const [openDropdown, setOpenDropdown] = useState('punjab'); // Expanded by default so user immediately sees Punjab sub-regions
 
@@ -18,6 +22,25 @@ export default function MobileNav() {
     return () => {
       window.removeEventListener('open_mobile_menu', handleOpen);
       window.removeEventListener('close_mobile_menu', handleClose);
+    };
+  }, []);
+
+  // Fetch dynamic categories
+  useEffect(() => {
+    let isMounted = true;
+    const loadCategories = async () => {
+      try {
+        const res = await categoryAPI.getAll();
+        if (isMounted && res && res.data && res.data.length > 0) {
+          setCategories(res.data);
+        }
+      } catch (e) {}
+    };
+    loadCategories();
+    window.addEventListener('punjab_categories_updated', loadCategories);
+    return () => {
+      isMounted = false;
+      window.removeEventListener('punjab_categories_updated', loadCategories);
     };
   }, []);
 
@@ -520,6 +543,31 @@ export default function MobileNav() {
                     <span>ਲਾਈਵ ਟੀਵੀ (Live 24x7)</span>
                   </a>
                 </li>
+
+                {/* Additional Dynamic Categories */}
+                {categories
+                  .filter((c) => !CORE_SLUGS.includes(c.slug))
+                  .map((cat) => (
+                    <li key={cat.slug} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                      <Link
+                        to={`/category/${cat.slug}`}
+                        onClick={() => setIsOpen(false)}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '12px',
+                          padding: '13px 20px',
+                          color: '#ffffff',
+                          fontSize: '15px',
+                          fontWeight: '700',
+                          textDecoration: 'none'
+                        }}
+                      >
+                        <i className={`fa ${cat.icon || 'fa-tag'}`} style={{ color: '#ebb10d', width: '18px' }}></i>
+                        <span>{cat.namePa} ({cat.nameEn})</span>
+                      </Link>
+                    </li>
+                  ))}
 
                 {/* 10. Contact */}
                 <li style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
