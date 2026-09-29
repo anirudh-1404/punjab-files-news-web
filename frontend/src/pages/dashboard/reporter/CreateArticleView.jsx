@@ -685,8 +685,8 @@ export default function CreateArticleView({ user, onArticleCreated }) {
             <div style={{ padding: '16px', backgroundColor: '#ffffff' }}>
               <p style={{ margin: '0 0 14px', fontSize: '12.5px', color: '#64748b', lineHeight: '1.6' }}>
                 <i className="fa fa-info-circle" style={{ marginRight: '5px', color: '#0369a1' }}></i>
-                Ye fields Google search mein teri khabar kaisi dikhegi usko control karti hain.
-                Khali chorr de toh article ka title aur excerpt automatically use hoga.
+                ਇਹ ਖਾਨੇ ਕੰਟਰੋਲ ਕਰਦੇ ਹਨ ਕਿ Google ਖੋਜ ਵਿੱਚ ਤੁਹਾਡੀ ਖ਼ਬਰ ਕਿਵੇਂ ਦਿਖੇਗੀ। (These fields control how your article appears in Google search.)
+                ਖਾਲੀ ਛੱਡਣ 'ਤੇ ਖ਼ਬਰ ਦਾ ਸਿਰਲੇਖ ਅਤੇ ਸੰਖੇਪ ਵੇਰਵਾ ਆਪਣੇ ਆਪ ਵਰਤਿਆ ਜਾਵੇਗਾ। (Leave empty to auto-use article title and excerpt.)
               </p>
 
               {/* SEO Title */}
@@ -716,7 +716,7 @@ export default function CreateArticleView({ user, onArticleCreated }) {
                   }}
                 />
                 <p style={{ margin: '4px 0 0', fontSize: '11.5px', color: '#64748b' }}>
-                  Google browser tab aur search result mein blue link ke roop mein dikhai deti hai. (~50-60 characters ideal)
+                  ਗੂਗਲ ਬ੍ਰਾਊਜ਼ਰ ਟੈਬ ਅਤੇ ਖੋਜ ਨਤੀਜਿਆਂ ਵਿੱਚ ਨੀਲੇ ਲਿੰਕ ਵਜੋਂ ਦਿਖਦਾ ਹੈ। (Shown as blue link in Google search results. ~50-60 characters ideal.)
                 </p>
               </div>
 
@@ -739,7 +739,7 @@ export default function CreateArticleView({ user, onArticleCreated }) {
                   value={metaDescription}
                   onChange={(e) => setMetaDescription(e.target.value)}
                   maxLength={320}
-                  placeholder="Google search result mein title ke neeche grey text mein dikhegi. ~150-160 characters ideal hain..."
+                  placeholder="ਗੂਗਲ ਖੋਜ ਨਤੀਜੇ ਵਿੱਚ ਸਿਰਲੇਖ ਦੇ ਹੇਠਾਂ ਸਲੇਟੀ ਟੈਕਸਟ ਵਿੱਚ ਦਿਖੇਗੀ। (Google result snippet below title.) ~150-160 ਅੱਖਰ ਆਦਰਸ਼ ਹਨ..."
                   style={{
                     width: '100%', padding: '9px 12px',
                     border: '1px solid #cbd5e1', borderRadius: '5px',
@@ -748,7 +748,7 @@ export default function CreateArticleView({ user, onArticleCreated }) {
                   }}
                 />
                 <p style={{ margin: '4px 0 0', fontSize: '11.5px', color: '#64748b' }}>
-                  WhatsApp, Facebook, aur Twitter share preview mein bhi yahi description dikhai deti hai.
+                  WhatsApp, Facebook ਅਤੇ Twitter ਸ਼ੇਅਰ ਪ੍ਰੀਵਿਊ ਵਿੱਚ ਵੀ ਇਹੀ ਵੇਰਵਾ ਦਿਖੇਗਾ। (Also shown in WhatsApp, Facebook & Twitter share previews.)
                 </p>
               </div>
 
@@ -762,7 +762,7 @@ export default function CreateArticleView({ user, onArticleCreated }) {
                   }}
                 >
                   <p style={{ margin: '0 0 8px', fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                    Google Search Preview:
+                    ਗੂਗਲ ਖੋਜ ਪ੍ਰੀਵਿਊ (Google Search Preview):
                   </p>
                   <div style={{ fontFamily: 'Arial, sans-serif' }}>
                     <div style={{ fontSize: '16px', color: '#1a0dab', fontWeight: '400', lineHeight: '1.3' }}>
