@@ -1398,13 +1398,13 @@ body {
   color: #000000;
 }
 
-/* Major Headings: 100% Solid Bold Black (Excluding dark boxes & contact widgets) */
-h1:not(#footer *):not(.editors-desk-contact *):not(.dark-box *),
-h2:not(#footer *):not(.editors-desk-contact *):not(.dark-box *),
-h3:not(#footer *):not(.editors-desk-contact *):not(.dark-box *),
-h4:not(#footer *):not(.editors-desk-contact *):not(.dark-box *),
-h5:not(#footer *):not(.editors-desk-contact *):not(.dark-box *),
-h6:not(#footer *):not(.editors-desk-contact *):not(.dark-box *),
+/* Major Headings: 100% Solid Bold Black (Excluding dark boxes, contact widgets & admin modals) */
+h1:not(#footer *):not(.editors-desk-contact *):not(.dark-box *):not(.admin-modal-header *):not(.admin-modal-title),
+h2:not(#footer *):not(.editors-desk-contact *):not(.dark-box *):not(.admin-modal-header *):not(.admin-modal-title),
+h3:not(#footer *):not(.editors-desk-contact *):not(.dark-box *):not(.admin-modal-header *):not(.admin-modal-title),
+h4:not(#footer *):not(.editors-desk-contact *):not(.dark-box *):not(.admin-modal-header *):not(.admin-modal-title),
+h5:not(#footer *):not(.editors-desk-contact *):not(.dark-box *):not(.admin-modal-header *):not(.admin-modal-title),
+h6:not(#footer *):not(.editors-desk-contact *):not(.dark-box *):not(.admin-modal-header *):not(.admin-modal-title),
 #main-section h1,
 #main-section h2,
 #main-section h3,
@@ -2688,6 +2688,25 @@ html.lenis, html.lenis body {
   }
 }
 
+/* ==========================================================
+   ADMIN CMS MODAL STYLES (Pinned Header/Footer & Smooth Scroll)
+   ========================================================== */
+.admin-modal-header,
+.admin-modal-header *,
+.admin-modal-title {
+  color: #ffffff !important;
+}
 
-
-
+.admin-modal-body::-webkit-scrollbar {
+  width: 8px;
+}
+.admin-modal-body::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+.admin-modal-body::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+.admin-modal-body::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

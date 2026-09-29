@@ -967,38 +967,43 @@ export default function AllNewsCategoryView({ currentUser, onNavigate }) {
       {/* ========================================================= */}
       {editingArticle && (
         <div
+          className="admin-edit-modal-overlay"
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.65)',
+            backgroundColor: 'rgba(15, 23, 42, 0.75)',
             backdropFilter: 'blur(4px)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            zIndex: 9999,
-            padding: '16px',
-            overflowY: 'auto'
+            zIndex: 99999,
+            padding: '16px'
           }}
           onClick={(e) => {
             if (e.target === e.currentTarget) closeEditModal();
           }}
         >
-          <div
+          <form
+            onSubmit={handleSaveEdit}
+            className="admin-edit-modal-card"
             style={{
               backgroundColor: '#ffffff',
               borderRadius: '10px',
-              maxWidth: '780px',
+              maxWidth: '800px',
               width: '100%',
-              maxHeight: 'calc(100vh - 40px)',
+              height: '88vh',
+              maxHeight: '850px',
               display: 'flex',
               flexDirection: 'column',
-              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.35)',
               border: '1px solid #cbd5e1',
-              overflow: 'hidden'
+              overflow: 'hidden',
+              margin: 'auto'
             }}
           >
-            {/* Modal Header (Pinned at Top with White Heading) */}
+            {/* Modal Header (Pinned at Top with Guaranteed Pure White Heading) */}
             <div
+              className="admin-modal-header"
               style={{
                 backgroundColor: '#1c2d5a',
                 padding: '14px 22px',
@@ -1012,41 +1017,50 @@ export default function AllNewsCategoryView({ currentUser, onNavigate }) {
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <i className="fa fa-pencil-square-o" style={{ fontSize: '18px', color: '#ebb10d' }}></i>
-                <h4 style={{ margin: 0, fontSize: '17px', fontWeight: '800', color: '#ffffff' }}>
+                <span
+                  className="admin-modal-title"
+                  style={{
+                    margin: 0,
+                    fontSize: '17px',
+                    fontWeight: '800',
+                    color: '#ffffff',
+                    display: 'inline-block',
+                    lineHeight: 1.3
+                  }}
+                >
                   ਖ਼ਬਰ ਸੋਧੋ (Edit News Article)
-                </h4>
+                </span>
               </div>
               <button
                 type="button"
                 onClick={closeEditModal}
-                style={{ backgroundColor: 'transparent', border: 'none', color: '#ffffff', fontSize: '18px', cursor: 'pointer', padding: '4px 8px' }}
+                style={{
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  color: '#ffffff',
+                  fontSize: '20px',
+                  cursor: 'pointer',
+                  padding: '4px 8px',
+                  lineHeight: 1
+                }}
                 title="ਬੰਦ ਕਰੋ"
               >
                 ✕
               </button>
             </div>
 
-            {/* Modal Form */}
-            <form
-              onSubmit={handleSaveEdit}
+            {/* Scrollable Form Body (Guaranteed to Scroll smoothly) */}
+            <div
+              className="admin-modal-body"
               style={{
-                display: 'flex',
-                flexDirection: 'column',
-                flex: 1,
+                flex: '1 1 auto',
+                overflowY: 'scroll',
+                padding: '20px 24px',
                 minHeight: 0,
-                overflow: 'hidden'
+                WebkitOverflowScrolling: 'touch',
+                backgroundColor: '#ffffff'
               }}
             >
-              {/* Scrollable Form Body */}
-              <div
-                style={{
-                  flex: 1,
-                  overflowY: 'auto',
-                  padding: '20px 24px',
-                  minHeight: 0,
-                  WebkitOverflowScrolling: 'touch'
-                }}
-              >
                 {/* Title */}
                 <div style={{ marginBottom: '16px' }}>
                   <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#334155', marginBottom: '6px' }}>
@@ -1348,7 +1362,7 @@ export default function AllNewsCategoryView({ currentUser, onNavigate }) {
                 </div>
               </div>
 
-              {/* Pinned Bottom Action Footer (Never scrolls off!) */}
+              {/* Pinned Bottom Action Footer (Always Visible at Bottom) */}
               <div
                 style={{
                   display: 'flex',
@@ -1375,7 +1389,7 @@ export default function AllNewsCategoryView({ currentUser, onNavigate }) {
                     cursor: 'pointer'
                   }}
                 >
-                  ਵਾਪਸ (Cancel)
+                  ਰੱਦ ਕਰੋ (Cancel)
                 </button>
                 <button
                   type="submit"
@@ -1408,8 +1422,7 @@ export default function AllNewsCategoryView({ currentUser, onNavigate }) {
                   )}
                 </button>
               </div>
-            </form>
-          </div>
+          </form>
         </div>
       )}
 
