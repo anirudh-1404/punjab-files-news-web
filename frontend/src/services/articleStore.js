@@ -4,6 +4,8 @@
  * Driven 100% by the Admin CMS and Backend Database.
  */
 
+import { generateEnglishSlug } from './slugUtils';
+
 const STORAGE_KEY = 'punjab_files_articles_clean_v2';
 const BREAKING_KEY = 'punjab_files_breaking_clean_v2';
 
@@ -128,11 +130,7 @@ export function incrementArticleViews(id) {
  */
 export function createNewArticle(data) {
   const articles = getStoredArticles();
-  const slug = (data.slug || data.title || 'news-article')
-    .toLowerCase()
-    .replace(/[^\w\s-]/g, '')
-    .trim()
-    .replace(/\s+/g, '-') + '-' + Date.now().toString(36);
+  const slug = generateEnglishSlug(data.title, data.slug);
 
   const newArticle = {
     id: 'art-' + Date.now(),
@@ -176,9 +174,16 @@ export function updateArticle(id, updatedFields) {
   const index = articles.findIndex((a) => a.id === id);
   if (index === -1) return null;
 
+  const currentArt = articles[index];
+  let newSlug = updatedFields.slug !== undefined ? updatedFields.slug : currentArt.slug;
+  if (updatedFields.slug || (updatedFields.title && (!newSlug || /[^\x00-\x7F]/.test(newSlug)))) {
+    newSlug = generateEnglishSlug(updatedFields.title || currentArt.title, updatedFields.slug);
+  }
+
   articles[index] = {
-    ...articles[index],
+    ...currentArt,
     ...updatedFields,
+    slug: newSlug,
     updatedAt: new Date().toISOString()
   };
 

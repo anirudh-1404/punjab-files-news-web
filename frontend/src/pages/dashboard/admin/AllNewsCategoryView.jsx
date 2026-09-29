@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { articleAPI } from '../../../services/api';
 import { formatArticleDate } from '../../../services/dateUtils';
+import { transliterateGurmukhiToEnglish } from '../../../services/slugUtils';
 
 const CATEGORIES = [
   { id: 'all', label: 'ਸਾਰੀਆਂ', labelEn: 'All News', icon: 'fa-th-large' },
@@ -91,6 +92,7 @@ export default function AllNewsCategoryView({ currentUser }) {
     setEditingArticle(art);
     setEditFormData({
       title: art.title || '',
+      slug: art.slug || '',
       excerpt: art.excerpt || '',
       content: art.content || '',
       category: art.category || 'punjab',
@@ -119,6 +121,7 @@ export default function AllNewsCategoryView({ currentUser }) {
       setIsSavingEdit(true);
       await articleAPI.updateArticle(editingArticle._id, {
         title: editFormData.title.trim(),
+        slug: editFormData.slug?.trim() || undefined,
         excerpt: editFormData.excerpt.trim(),
         content: editFormData.content.trim(),
         category: editFormData.category,
@@ -862,6 +865,30 @@ export default function AllNewsCategoryView({ currentUser }) {
                     fontWeight: '600'
                   }}
                 />
+              </div>
+
+              {/* English URL Slug */}
+              <div style={{ marginBottom: '16px', backgroundColor: '#f8fafc', padding: '10px 12px', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
+                <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#334155', marginBottom: '4px' }}>
+                  🔗 ਅੰਗਰੇਜ਼ੀ URL ਸਿਰਲੇਖ (English URL Slug)
+                </label>
+                <input
+                  type="text"
+                  value={editFormData.slug || ''}
+                  onChange={(e) => setEditFormData({ ...editFormData, slug: e.target.value })}
+                  placeholder="e.g. amritsar-smart-city-heritage-street-project"
+                  style={{
+                    width: '100%',
+                    padding: '8px 10px',
+                    borderRadius: '4px',
+                    border: '1px solid #cbd5e1',
+                    fontSize: '13px',
+                    fontFamily: 'monospace'
+                  }}
+                />
+                <div style={{ marginTop: '5px', fontSize: '11.5px', color: '#0369a1' }}>
+                  <strong>URL: </strong> /news/{editFormData.slug ? transliterateGurmukhiToEnglish(editFormData.slug) : transliterateGurmukhiToEnglish(editFormData.title || 'news')}
+                </div>
               </div>
 
               {/* Category, Region, Language row */}

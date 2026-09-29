@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { generateEnglishSlug } from "../utils/slugUtils.js";
 
 const articleSchema = new mongoose.Schema(
   {
@@ -134,16 +135,19 @@ const articleSchema = new mongoose.Schema(
   }
 );
 
-// Auto-generate slug and manage publishedAt before save
+// Auto-generate clean English slug and manage publishedAt before save
 articleSchema.pre("save", function () {
-  if (!this.slug) {
-    // Generate slug from title or timestamp
-    const cleanStr = this.title
+  // If slug is missing or contains any non-ASCII characters (like Gurmukhi \u0A00-\u0A7F)
+  if (!this.slug || /[^\x00-\x7F]/.test(this.slug)) {
+    this.slug = generateEnglishSlug(this.title, this.slug);
+  } else {
+    // Sanitize existing slug to ensure it only has lowercase letters, numbers, and hyphens
+    this.slug = this.slug
       .toLowerCase()
       .trim()
-      .replace(/[^\w\s\u0A00-\u0A7F-]/g, "") // support Gurmukhi + alphanumeric
-      .replace(/\s+/g, "-");
-    this.slug = `${cleanStr || "news"}-${Date.now()}`;
+      .replace(/[^a-z0-9-]/g, "")
+      .replace(/-+/g, "-")
+      .replace(/^-|-$/g, "");
   }
 
   // If status is published and publishedAt is not set, set it to now

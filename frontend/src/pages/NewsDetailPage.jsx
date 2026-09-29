@@ -30,8 +30,20 @@ export default function NewsDetailPage() {
             pubTime = formatArticleTime(rawDate);
           }
 
+          // Seamlessly update browser address bar to clean English URL if needed
+          if (apiArt.slug) {
+            try {
+              const currentPath = decodeURIComponent(window.location.pathname);
+              const expectedPath = `/news/${apiArt.slug}`;
+              if (currentPath !== expectedPath) {
+                window.history.replaceState(null, '', expectedPath);
+              }
+            } catch {}
+          }
+
           setArticle({
             id: apiArt.slug || apiArt._id,
+            slug: apiArt.slug || apiArt._id,
             _id: apiArt._id,
             title: apiArt.title,
             category: apiArt.category,
@@ -105,6 +117,15 @@ export default function NewsDetailPage() {
       // 2. Fallback to local store
       const found = getArticleById(id);
       if (isMounted && found) {
+        if (found.slug) {
+          try {
+            const currentPath = decodeURIComponent(window.location.pathname);
+            const expectedPath = `/news/${found.slug}`;
+            if (currentPath !== expectedPath) {
+              window.history.replaceState(null, '', expectedPath);
+            }
+          } catch {}
+        }
         setArticle(found);
         incrementArticleViews(found.id);
         const rel = getRelatedArticles(found.id || found.slug || id, found.category, 3, found.title, found.slug, found._id);

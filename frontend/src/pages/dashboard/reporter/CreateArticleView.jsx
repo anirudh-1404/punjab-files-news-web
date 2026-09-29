@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { articleAPI, uploadAPI } from '../../../services/api';
 import { createNewArticle } from '../../../services/articleStore';
+import { transliterateGurmukhiToEnglish } from '../../../services/slugUtils';
 
 const IMAGE_PRESETS = [
   { label: 'ਅੰਮ੍ਰਿਤਸਰ / ਦਰਬਾਰ ਸਾਹਿਬ', url: '/img/darbar-sahib-mukhwak.jpg' },
@@ -50,6 +51,7 @@ const LANG_CONFIG = {
 
 export default function CreateArticleView({ user, onArticleCreated }) {
   const [title, setTitle] = useState('');
+  const [customSlug, setCustomSlug] = useState('');
   const [content, setContent] = useState('');
   const [excerpt, setExcerpt] = useState('');
   const [category, setCategory] = useState('punjab');
@@ -125,6 +127,7 @@ export default function CreateArticleView({ user, onArticleCreated }) {
 
       const res = await articleAPI.createArticle({
         title: title.trim(),
+        slug: customSlug.trim() ? customSlug.trim() : undefined,
         content: content.trim(),
         excerpt: excerpt.trim(),
         category,
@@ -142,6 +145,7 @@ export default function CreateArticleView({ user, onArticleCreated }) {
         if (user?.canDirectPublish) {
           createNewArticle({
             title: title.trim(),
+            slug: customSlug.trim() ? customSlug.trim() : undefined,
             content: content.trim(),
             excerpt: excerpt.trim(),
             category,
@@ -162,6 +166,7 @@ export default function CreateArticleView({ user, onArticleCreated }) {
 
       // Clear fields
       setTitle('');
+      setCustomSlug('');
       setContent('');
       setExcerpt('');
       setIsBreaking(false);
@@ -324,6 +329,29 @@ export default function CreateArticleView({ user, onArticleCreated }) {
             style={{ width: '100%', padding: '10px 14px', border: '1px solid #cbd5e1', borderRadius: '5px', fontSize: '15px', fontWeight: '600', color: '#0f172a' }}
             required
           />
+        </div>
+
+        {/* English URL Slug & Live Preview */}
+        <div style={{ marginBottom: '18px', backgroundColor: '#f8fafc', padding: '12px 14px', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+            <label style={{ fontSize: '13px', fontWeight: '700', color: '#1e293b', margin: 0 }}>
+              🔗 ਅੰਗਰੇਜ਼ੀ URL ਸਿਰਲੇਖ (English URL Slug - Optional)
+            </label>
+            <span style={{ fontSize: '11px', color: '#64748b' }}>ਆਪਣੇ ਆਪ ਅੰਗਰੇਜ਼ੀ ਵਿੱਚ ਬਣੇਗਾ</span>
+          </div>
+          <input
+            type="text"
+            value={customSlug}
+            onChange={(e) => setCustomSlug(e.target.value)}
+            placeholder="ਉਦਾਹਰਣ: amritsar-smart-city-heritage-street-project"
+            style={{ width: '100%', padding: '8px 12px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '13.5px', color: '#0f172a', fontFamily: 'monospace' }}
+          />
+          <div style={{ marginTop: '6px', fontSize: '12px', color: '#0369a1', wordBreak: 'break-all' }}>
+            <strong>URL Preview: </strong>
+            <span style={{ color: '#0284c7' }}>
+              /news/{customSlug.trim() ? transliterateGurmukhiToEnglish(customSlug) : (title.trim() ? transliterateGurmukhiToEnglish(title) : 'your-news-slug')}
+            </span>
+          </div>
         </div>
 
         {/* Row: Category & Region */}

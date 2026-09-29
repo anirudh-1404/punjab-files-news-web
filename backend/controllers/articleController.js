@@ -1,4 +1,5 @@
 import Article from "../models/Article.js";
+import { generateEnglishSlug } from "../utils/slugUtils.js";
 
 // Expand bilingual search terms (English <-> Punjabi / Transliterations)
 const BILINGUAL_KEYWORDS = {
@@ -149,6 +150,13 @@ export const getArticleBySlug = async (req, res) => {
           article = await Article.findOne({ slug: decoded });
         } catch {}
       }
+      // Fallback: match by timestamp suffix if old Gurmukhi slug was requested
+      if (!article) {
+        const tsMatch = String(slug).match(/(\d{10,14})/);
+        if (tsMatch) {
+          article = await Article.findOne({ slug: { $regex: tsMatch[1] } });
+        }
+      }
     }
 
     if (!article) {
@@ -156,6 +164,11 @@ export const getArticleBySlug = async (req, res) => {
         success: false,
         message: "Article not found"
       });
+    }
+
+    // Auto-upgrade slug to clean English if it still contains non-ASCII characters
+    if (article.slug && /[^\x00-\x7F]/.test(article.slug)) {
+      article.slug = generateEnglishSlug(article.title, article.slug);
     }
 
     // Increment views asynchronously
@@ -233,7 +246,8 @@ export const createArticle = async (req, res) => {
       mediaType,
       videoUrl,
       isBreaking,
-      status
+      status,
+      slug
     } = req.body;
 
     if (!title || !content) {
@@ -263,6 +277,7 @@ export const createArticle = async (req, res) => {
 
     const article = await Article.create({
       title: title.trim(),
+      slug: generateEnglishSlug(title.trim(), slug),
       content: content.trim(),
       excerpt: cleanExcerpt,
       category: category || "punjab",
@@ -543,6 +558,7 @@ export const updateArticle = async (req, res) => {
 
     const fieldsToUpdate = [
       "title",
+      "slug",
       "content",
       "excerpt",
       "category",
@@ -558,9 +574,18 @@ export const updateArticle = async (req, res) => {
 
     fieldsToUpdate.forEach((field) => {
       if (req.body[field] !== undefined) {
-        article[field] = req.body[field];
+        if (field === "slug") {
+          article.slug = generateEnglishSlug(article.title, req.body.slug);
+        } else {
+          article[field] = req.body[field];
+        }
       }
     });
+
+    // If title was updated without explicit slug, ensure slug is also clean English
+    if (req.body.title && (!article.slug || /[^\x00-\x7F]/.test(article.slug))) {
+      article.slug = generateEnglishSlug(article.title);
+    }
 
     if (["admin", "editor"].includes(req.user.role) && req.body.status === "published" && !article.publishedAt) {
       article.publishedAt = new Date();
