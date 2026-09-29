@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 
 /**
  * RichTextEditor Component
@@ -6,7 +7,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
  * - Bold, Italic, Underline, Strikethrough
  * - Bullet List, Numbered List, Blockquote
  * - Alignments (Left, Center, Right, Justify)
- * - Hyperlinks (Insert Link Modal & Remove Link)
+ * - Hyperlinks (Insert Link Modal via React Portal & Remove Link)
  * - Horizontal Divider, Clear Formatting, Undo, Redo
  * - Word & Character Counters
  */
@@ -52,7 +53,12 @@ export default function RichTextEditor({
   };
 
   // Open link modal and save current selection
-  const openLinkModal = () => {
+  const openLinkModal = (e) => {
+    if (e) {
+      if (typeof e.preventDefault === 'function') e.preventDefault();
+      if (typeof e.stopPropagation === 'function') e.stopPropagation();
+    }
+
     const sel = window.getSelection();
     if (sel && sel.rangeCount > 0) {
       savedSelectionRef.current = sel.getRangeAt(0).cloneRange();
@@ -68,7 +74,11 @@ export default function RichTextEditor({
 
   // Apply link
   const applyLink = (e) => {
-    if (e) e.preventDefault();
+    if (e) {
+      if (typeof e.preventDefault === 'function') e.preventDefault();
+      if (typeof e.stopPropagation === 'function') e.stopPropagation();
+    }
+
     if (!linkUrl.trim()) {
       setShowLinkModal(false);
       return;
@@ -90,27 +100,40 @@ export default function RichTextEditor({
       sel.addRange(savedSelectionRef.current);
     }
 
-    if (linkText && sel && sel.toString() !== linkText) {
-      const linkHtml = `<a href="${validUrl}" target="_blank" rel="noopener noreferrer" style="color: #b71c1c; text-decoration: underline;">${linkText}</a>`;
-      document.execCommand('insertHTML', false, linkHtml);
-    } else {
-      document.execCommand('createLink', false, validUrl);
-      if (editorRef.current) {
-        const links = editorRef.current.querySelectorAll(`a[href="${validUrl}"]`);
-        links.forEach((a) => {
-          a.setAttribute('target', '_blank');
-          a.setAttribute('rel', 'noopener noreferrer');
-          a.style.color = '#b71c1c';
-          a.style.textDecoration = 'underline';
-        });
+    const displayText = linkText.trim() || validUrl;
+
+    if (sel && sel.rangeCount > 0 && sel.toString().length > 0) {
+      // User had selected text
+      if (linkText.trim() && linkText.trim() !== sel.toString()) {
+        const linkHtml = `<a href="${validUrl}" target="_blank" rel="noopener noreferrer" style="color: #b71c1c; text-decoration: underline;">${displayText}</a>`;
+        document.execCommand('insertHTML', false, linkHtml);
+      } else {
+        document.execCommand('createLink', false, validUrl);
+        if (editorRef.current) {
+          const links = editorRef.current.querySelectorAll(`a[href="${validUrl}"]`);
+          links.forEach((a) => {
+            a.setAttribute('target', '_blank');
+            a.setAttribute('rel', 'noopener noreferrer');
+            a.style.color = '#b71c1c';
+            a.style.textDecoration = 'underline';
+          });
+        }
       }
+    } else {
+      // No text was selected: insert anchor with displayText
+      const linkHtml = `<a href="${validUrl}" target="_blank" rel="noopener noreferrer" style="color: #b71c1c; text-decoration: underline;">${displayText}</a>&nbsp;`;
+      document.execCommand('insertHTML', false, linkHtml);
     }
 
     setShowLinkModal(false);
     handleInput();
   };
 
-  const removeLink = () => {
+  const removeLink = (e) => {
+    if (e) {
+      if (typeof e.preventDefault === 'function') e.preventDefault();
+      if (typeof e.stopPropagation === 'function') e.stopPropagation();
+    }
     execCmd('unlink');
   };
 
@@ -294,8 +317,8 @@ export default function RichTextEditor({
         </span>
       </div>
 
-      {/* 4. MODAL FOR INSERTING LINK */}
-      {showLinkModal && (
+      {/* 4. MODAL FOR INSERTING LINK (Rendered in React Portal to prevent nested form submissions) */}
+      {showLinkModal && typeof document !== 'undefined' && createPortal(
         <div
           style={{
             position: 'fixed',
@@ -311,7 +334,10 @@ export default function RichTextEditor({
             zIndex: 9999999,
             padding: '16px'
           }}
-          onClick={() => setShowLinkModal(false)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowLinkModal(false);
+          }}
         >
           <div
             style={{
@@ -340,15 +366,18 @@ export default function RichTextEditor({
               </h4>
               <button
                 type="button"
-                onClick={() => setShowLinkModal(false)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowLinkModal(false);
+                }}
                 style={{ background: 'none', border: 'none', color: '#94a3b8', fontSize: '16px', cursor: 'pointer' }}
               >
                 ✕
               </button>
             </div>
 
-            {/* Form */}
-            <form onSubmit={applyLink} style={{ padding: '18px 20px 20px' }}>
+            {/* Modal Body (NO nested form tag) */}
+            <div style={{ padding: '18px 20px 20px' }}>
               <div style={{ marginBottom: '14px' }}>
                 <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#334155', marginBottom: '5px' }}>
                   ਵੈੱਬ ਪਤਾ / URL (Web Address) <span style={{ color: '#b71c1c' }}>*</span>
@@ -357,6 +386,13 @@ export default function RichTextEditor({
                   type="text"
                   value={linkUrl}
                   onChange={(e) => setLinkUrl(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      applyLink(e);
+                    }
+                  }}
                   placeholder="https://example.com"
                   autoFocus
                   style={{
@@ -367,7 +403,6 @@ export default function RichTextEditor({
                     fontSize: '13px',
                     boxSizing: 'border-box'
                   }}
-                  required
                 />
               </div>
 
@@ -379,6 +414,13 @@ export default function RichTextEditor({
                   type="text"
                   value={linkText}
                   onChange={(e) => setLinkText(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      applyLink(e);
+                    }
+                  }}
                   placeholder="ਲਿੰਕ ਉੱਤੇ ਦਿਸਣ ਵਾਲਾ ਟੈਕਸਟ..."
                   style={{
                     width: '100%',
@@ -394,7 +436,11 @@ export default function RichTextEditor({
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
                 <button
                   type="button"
-                  onClick={() => setShowLinkModal(false)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setShowLinkModal(false);
+                  }}
                   style={{
                     backgroundColor: '#f1f5f9',
                     border: '1px solid #cbd5e1',
@@ -409,7 +455,8 @@ export default function RichTextEditor({
                   ਰੱਦ ਕਰੋ (Cancel)
                 </button>
                 <button
-                  type="submit"
+                  type="button"
+                  onClick={applyLink}
                   style={{
                     backgroundColor: '#b71c1c',
                     border: 'none',
@@ -425,9 +472,10 @@ export default function RichTextEditor({
                   ਲਿੰਕ ਲਗਾਓ (Apply Link)
                 </button>
               </div>
-            </form>
+            </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
@@ -438,7 +486,13 @@ function ToolbarButton({ icon, title, onClick, disabled = false }) {
   return (
     <button
       type="button"
-      onClick={onClick}
+      onClick={(e) => {
+        if (e) {
+          if (typeof e.preventDefault === 'function') e.preventDefault();
+          if (typeof e.stopPropagation === 'function') e.stopPropagation();
+        }
+        if (onClick) onClick(e);
+      }}
       disabled={disabled}
       title={title}
       style={{
