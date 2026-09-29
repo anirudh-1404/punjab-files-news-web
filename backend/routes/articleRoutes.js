@@ -21,8 +21,8 @@ router.get("/readers-choice", getReadersChoiceTop10);
 router.get("/detail/:slug", getArticleBySlug);
 router.get("/:slug", getArticleBySlug);
 
-// Protected Staff routes (Only reporters can create articles)
-router.post("/", protect, authorize("reporter"), createArticle);
+// Protected Staff routes (Reporters, editors, and admins can create articles)
+router.post("/", protect, authorize("reporter", "editor", "admin"), createArticle);
 router.get("/staff/my-articles", protect, getMyArticles);
 router.get("/staff/pending", protect, authorize("editor", "admin"), getPendingArticles);
 router.get("/staff/review-desk", protect, authorize("editor", "admin"), getReviewDeskArticles);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { articleAPI, categoryAPI } from '../../../services/api';
+import { articleAPI, categoryAPI, uploadAPI } from '../../../services/api';
 import { formatArticleDate } from '../../../services/dateUtils';
 import { transliterateGurmukhiToEnglish } from '../../../services/slugUtils';
 
@@ -48,6 +48,8 @@ export default function AllNewsCategoryView({ currentUser }) {
     isBreaking: false
   });
   const [isSavingEdit, setIsSavingEdit] = useState(false);
+  const [uploadingModalImage, setUploadingModalImage] = useState(false);
+  const [modalImageError, setModalImageError] = useState('');
 
   const [deletingArticle, setDeletingArticle] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -119,6 +121,8 @@ export default function AllNewsCategoryView({ currentUser }) {
   // Trigger Edit
   const openEditModal = (art) => {
     setEditingArticle(art);
+    setUploadingModalImage(false);
+    setModalImageError('');
     setEditFormData({
       title: art.title || '',
       slug: art.slug || '',
@@ -136,6 +140,35 @@ export default function AllNewsCategoryView({ currentUser }) {
   const closeEditModal = () => {
     setEditingArticle(null);
     setIsSavingEdit(false);
+    setUploadingModalImage(false);
+    setModalImageError('');
+  };
+
+  const handleModalImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      setModalImageError('ਕਿਰਪਾ ਕਰਕੇ ਸਿਰਫ਼ ਫ਼ੋਟੋ ਫਾਈਲ (JPG, PNG, WEBP, GIF) ਹੀ ਚੁਣੋ।');
+      return;
+    }
+    if (file.size > 15 * 1024 * 1024) {
+      setModalImageError('ਫ਼ੋਟੋ ਦਾ ਸਾਈਜ਼ 15MB ਤੋਂ ਵੱਧ ਨਹੀਂ ਹੋਣਾ ਚਾਹੀਦਾ।');
+      return;
+    }
+
+    try {
+      setUploadingModalImage(true);
+      setModalImageError('');
+      const res = await uploadAPI.uploadMedia(file);
+      if (res && res.url) {
+        setEditFormData((prev) => ({ ...prev, featuredImage: res.url }));
+      }
+    } catch (err) {
+      setModalImageError('ਫ਼ੋਟੋ ਅਪਲੋਡ ਕਰਨ ਵਿੱਚ ਖ਼ਾਮੀ ਆਈ: ' + (err.message || 'Upload error'));
+    } finally {
+      setUploadingModalImage(false);
+    }
   };
 
   const handleSaveEdit = async (e) => {
@@ -892,227 +925,396 @@ export default function AllNewsCategoryView({ currentUser }) {
             alignItems: 'center',
             justifyContent: 'center',
             zIndex: 9999,
-            padding: '20px'
+            padding: '16px',
+            overflowY: 'auto'
+          }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) closeEditModal();
           }}
         >
           <div
             style={{
               backgroundColor: '#ffffff',
               borderRadius: '10px',
-              maxWidth: '750px',
+              maxWidth: '780px',
               width: '100%',
-              maxHeight: '90vh',
-              overflowY: 'auto',
-              boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.2)',
-              border: '1px solid #cbd5e1'
+              maxHeight: 'calc(100vh - 40px)',
+              display: 'flex',
+              flexDirection: 'column',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+              border: '1px solid #cbd5e1',
+              overflow: 'hidden'
             }}
           >
-            {/* Modal Header */}
-            <div style={{ backgroundColor: '#1c2d5a', color: '#ffffff', padding: '16px 22px', borderTopLeftRadius: '10px', borderTopRightRadius: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            {/* Modal Header (Pinned at Top with White Heading) */}
+            <div
+              style={{
+                backgroundColor: '#1c2d5a',
+                padding: '14px 22px',
+                borderTopLeftRadius: '10px',
+                borderTopRightRadius: '10px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexShrink: 0
+              }}
+            >
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <i className="fa fa-pencil-square-o" style={{ fontSize: '18px', color: '#ebb10d' }}></i>
-                <h4 style={{ margin: 0, fontSize: '17px', fontWeight: '800' }}>
+                <h4 style={{ margin: 0, fontSize: '17px', fontWeight: '800', color: '#ffffff' }}>
                   ਖ਼ਬਰ ਸੋਧੋ (Edit News Article)
                 </h4>
               </div>
               <button
                 type="button"
                 onClick={closeEditModal}
-                style={{ backgroundColor: 'transparent', border: 'none', color: '#ffffff', fontSize: '18px', cursor: 'pointer' }}
+                style={{ backgroundColor: 'transparent', border: 'none', color: '#ffffff', fontSize: '18px', cursor: 'pointer', padding: '4px 8px' }}
+                title="ਬੰਦ ਕਰੋ"
               >
                 ✕
               </button>
             </div>
 
-            {/* Modal Body / Form */}
-            <form onSubmit={handleSaveEdit} style={{ padding: '22px' }}>
-              {/* Title */}
-              <div style={{ marginBottom: '16px' }}>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#334155', marginBottom: '6px' }}>
-                  ਖ਼ਬਰ ਦਾ ਸਿਰਲੇਖ (News Headline) *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={editFormData.title}
-                  onChange={(e) => setEditFormData({ ...editFormData, title: e.target.value })}
-                  style={{
-                    width: '100%',
-                    padding: '10px 12px',
-                    borderRadius: '6px',
-                    border: '1px solid #cbd5e1',
-                    fontSize: '14px',
-                    fontWeight: '600'
-                  }}
-                />
-              </div>
-
-              {/* English URL Slug */}
-              <div style={{ marginBottom: '16px', backgroundColor: '#f8fafc', padding: '10px 12px', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
-                <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#334155', marginBottom: '4px' }}>
-                  🔗 ਅੰਗਰੇਜ਼ੀ URL ਸਿਰਲੇਖ (English URL Slug)
-                </label>
-                <input
-                  type="text"
-                  value={editFormData.slug || ''}
-                  onChange={(e) => setEditFormData({ ...editFormData, slug: e.target.value })}
-                  placeholder="e.g. amritsar-smart-city-heritage-street-project"
-                  style={{
-                    width: '100%',
-                    padding: '8px 10px',
-                    borderRadius: '4px',
-                    border: '1px solid #cbd5e1',
-                    fontSize: '13px',
-                    fontFamily: 'monospace'
-                  }}
-                />
-                <div style={{ marginTop: '5px', fontSize: '11.5px', color: '#0369a1' }}>
-                  <strong>URL: </strong> /news/{editFormData.slug ? transliterateGurmukhiToEnglish(editFormData.slug) : transliterateGurmukhiToEnglish(editFormData.title || 'news')}
-                </div>
-              </div>
-
-              {/* Category, Region, Language row */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '14px', marginBottom: '16px' }}>
-                {/* Category */}
-                <div>
-                  <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#334155', marginBottom: '6px' }}>
-                    ਕੈਟੇਗਰੀ (Category)
+            {/* Modal Form */}
+            <form
+              onSubmit={handleSaveEdit}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                flex: 1,
+                minHeight: 0,
+                overflow: 'hidden'
+              }}
+            >
+              {/* Scrollable Form Body */}
+              <div
+                style={{
+                  flex: 1,
+                  overflowY: 'auto',
+                  padding: '20px 24px',
+                  minHeight: 0,
+                  WebkitOverflowScrolling: 'touch'
+                }}
+              >
+                {/* Title */}
+                <div style={{ marginBottom: '16px' }}>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#334155', marginBottom: '6px' }}>
+                    ਖ਼ਬਰ ਦਾ ਸਿਰਲੇਖ (News Headline) *
                   </label>
-                  <select
-                    value={editFormData.category}
-                    onChange={(e) => setEditFormData({ ...editFormData, category: e.target.value })}
-                    style={{ width: '100%', padding: '9px 10px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '13px', fontWeight: '600' }}
-                  >
-                    {categoriesList.filter((c) => c.id !== 'all').map((c) => (
-                      <option key={c.id} value={c.id}>{c.label} ({c.labelEn})</option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Punjab Region (if category === 'punjab') */}
-                {editFormData.category === 'punjab' && (
-                  <div>
-                    <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#b71c1c', marginBottom: '6px' }}>
-                      ਪੰਜਾਬ ਜ਼ੋਨ (Punjab Region)
-                    </label>
-                    <select
-                      value={editFormData.punjabRegion}
-                      onChange={(e) => setEditFormData({ ...editFormData, punjabRegion: e.target.value })}
-                      style={{ width: '100%', padding: '9px 10px', borderRadius: '6px', border: '1px solid #fca5a5', fontSize: '13px', fontWeight: '600', backgroundColor: '#fff1f2' }}
-                    >
-                      <option value="majha">ਮਾਝਾ (Majha)</option>
-                      <option value="malwa">ਮਾਲਵਾ (Malwa)</option>
-                      <option value="doaba">ਦੋਆਬਾ (Doaba)</option>
-                    </select>
-                  </div>
-                )}
-
-                {/* Language */}
-                <div>
-                  <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#334155', marginBottom: '6px' }}>
-                    ਭਾਸ਼ਾ (Language)
-                  </label>
-                  <select
-                    value={editFormData.language}
-                    onChange={(e) => setEditFormData({ ...editFormData, language: e.target.value })}
-                    style={{ width: '100%', padding: '9px 10px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '13px', fontWeight: '600' }}
-                  >
-                    <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
-                    <option value="hi">हिंदी (Hindi)</option>
-                    <option value="en">English</option>
-                  </select>
-                </div>
-
-                {/* Status */}
-                <div>
-                  <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#334155', marginBottom: '6px' }}>
-                    ਸਟੇਟਸ (Publication Status)
-                  </label>
-                  <select
-                    value={editFormData.status}
-                    onChange={(e) => setEditFormData({ ...editFormData, status: e.target.value })}
-                    style={{ width: '100%', padding: '9px 10px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '13px', fontWeight: '700' }}
-                  >
-                    <option value="published">ਲਾਈਵ ਪ੍ਰਕਾਸ਼ਿਤ (Published Live)</option>
-                    <option value="pending_admin">ਐਡਮਿਨ ਪ੍ਰਵਾਨਗੀ ਬਕਾਇਆ (Pending Admin)</option>
-                    <option value="pending_editor">ਸੰਪਾਦਕ ਸਮੀਖਿਆ ਬਕਾਇਆ (Pending Editor)</option>
-                    <option value="rejected">ਰੱਦ ਕਰੋ (Rejected)</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Featured Image URL */}
-              <div style={{ marginBottom: '16px' }}>
-                <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#334155', marginBottom: '6px' }}>
-                  ਮੁੱਖ ਤਸਵੀਰ ਲਿੰਕ (Featured Image URL)
-                </label>
-                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                   <input
                     type="text"
-                    value={editFormData.featuredImage}
-                    onChange={(e) => setEditFormData({ ...editFormData, featuredImage: e.target.value })}
-                    placeholder="/img/index_800x400-image01.jpg ਜਾਂ ਕੋਈ ਵੀ ਚਿੱਤਰ URL"
-                    style={{ flex: 1, padding: '9px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '13px' }}
+                    required
+                    value={editFormData.title}
+                    onChange={(e) => setEditFormData({ ...editFormData, title: e.target.value })}
+                    style={{
+                      width: '100%',
+                      padding: '10px 12px',
+                      borderRadius: '6px',
+                      border: '1px solid #cbd5e1',
+                      fontSize: '14px',
+                      fontWeight: '600',
+                      boxSizing: 'border-box'
+                    }}
                   />
-                  {editFormData.featuredImage && (
-                    <img
-                      src={editFormData.featuredImage}
-                      alt="Preview"
-                      onError={(e) => { e.target.src = '/img/index_800x400-image01.jpg'; }}
-                      style={{ width: '48px', height: '36px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #cbd5e1' }}
-                    />
+                </div>
+
+                {/* English URL Slug */}
+                <div style={{ marginBottom: '16px', backgroundColor: '#f8fafc', padding: '10px 12px', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
+                  <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#334155', marginBottom: '4px' }}>
+                    🔗 ਅੰਗਰੇਜ਼ੀ URL ਸਿਰਲੇਖ (English URL Slug)
+                  </label>
+                  <input
+                    type="text"
+                    value={editFormData.slug || ''}
+                    onChange={(e) => setEditFormData({ ...editFormData, slug: e.target.value })}
+                    placeholder="e.g. amritsar-smart-city-heritage-street-project"
+                    style={{
+                      width: '100%',
+                      padding: '8px 10px',
+                      borderRadius: '4px',
+                      border: '1px solid #cbd5e1',
+                      fontSize: '13px',
+                      fontFamily: 'monospace',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                  <div style={{ marginTop: '5px', fontSize: '11.5px', color: '#0369a1' }}>
+                    <strong>URL: </strong> /news/{editFormData.slug ? transliterateGurmukhiToEnglish(editFormData.slug) : transliterateGurmukhiToEnglish(editFormData.title || 'news')}
+                  </div>
+                </div>
+
+                {/* Category, Region, Language row */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '14px', marginBottom: '16px' }}>
+                  {/* Category */}
+                  <div>
+                    <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#334155', marginBottom: '6px' }}>
+                      ਕੈਟੇਗਰੀ (Category)
+                    </label>
+                    <select
+                      value={editFormData.category}
+                      onChange={(e) => setEditFormData({ ...editFormData, category: e.target.value })}
+                      style={{ width: '100%', padding: '9px 10px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '13px', fontWeight: '600' }}
+                    >
+                      {categoriesList.filter((c) => c.id !== 'all').map((c) => (
+                        <option key={c.id} value={c.id}>{c.label} ({c.labelEn})</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Punjab Region (if category === 'punjab') */}
+                  {editFormData.category === 'punjab' && (
+                    <div>
+                      <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#b71c1c', marginBottom: '6px' }}>
+                        ਪੰਜਾਬ ਜ਼ੋਨ (Punjab Region)
+                      </label>
+                      <select
+                        value={editFormData.punjabRegion}
+                        onChange={(e) => setEditFormData({ ...editFormData, punjabRegion: e.target.value })}
+                        style={{ width: '100%', padding: '9px 10px', borderRadius: '6px', border: '1px solid #fca5a5', fontSize: '13px', fontWeight: '600', backgroundColor: '#fff1f2' }}
+                      >
+                        <option value="majha">ਮਾਝਾ (Majha)</option>
+                        <option value="malwa">ਮਾਲਵਾ (Malwa)</option>
+                        <option value="doaba">ਦੋਆਬਾ (Doaba)</option>
+                      </select>
+                    </div>
                   )}
+
+                  {/* Language */}
+                  <div>
+                    <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#334155', marginBottom: '6px' }}>
+                      ਭਾਸ਼ਾ (Language)
+                    </label>
+                    <select
+                      value={editFormData.language}
+                      onChange={(e) => setEditFormData({ ...editFormData, language: e.target.value })}
+                      style={{ width: '100%', padding: '9px 10px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '13px', fontWeight: '600' }}
+                    >
+                      <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
+                      <option value="hi">हिंदी (Hindi)</option>
+                      <option value="en">English</option>
+                    </select>
+                  </div>
+
+                  {/* Status */}
+                  <div>
+                    <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#334155', marginBottom: '6px' }}>
+                      ਸਟੇਟਸ (Publication Status)
+                    </label>
+                    <select
+                      value={editFormData.status}
+                      onChange={(e) => setEditFormData({ ...editFormData, status: e.target.value })}
+                      style={{ width: '100%', padding: '9px 10px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '13px', fontWeight: '700' }}
+                    >
+                      <option value="published">ਲਾਈਵ ਪ੍ਰਕਾਸ਼ਿਤ (Published Live)</option>
+                      <option value="pending_admin">ਐਡਮਿਨ ਪ੍ਰਵਾਨਗੀ ਬਕਾਇਆ (Pending Admin)</option>
+                      <option value="pending_editor">ਸੰਪਾਦਕ ਸਮੀਖਿਆ ਬਕਾਇਆ (Pending Editor)</option>
+                      <option value="rejected">ਰੱਦ ਕਰੋ (Rejected)</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Featured Image Upload & Visual Card (No Raw URL textbox) */}
+                <div style={{ marginBottom: '18px' }}>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#334155', marginBottom: '8px' }}>
+                    <i className="fa fa-picture-o" style={{ color: '#b71c1c', marginRight: '6px' }}></i>
+                    ਮੁੱਖ ਤਸਵੀਰ (Featured Image)
+                  </label>
+
+                  {modalImageError && (
+                    <div style={{ padding: '8px 12px', backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '6px', color: '#b91c1c', fontSize: '12px', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <i className="fa fa-exclamation-circle"></i>
+                      <span>{modalImageError}</span>
+                    </div>
+                  )}
+
+                  <div
+                    style={{
+                      backgroundColor: '#f8fafc',
+                      border: '1px solid #e2e8f0',
+                      borderRadius: '8px',
+                      padding: '12px 16px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      gap: '16px',
+                      flexWrap: 'wrap'
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: 0, flex: 1 }}>
+                      {editFormData.featuredImage ? (
+                        <img
+                          src={editFormData.featuredImage}
+                          alt="Featured Preview"
+                          onError={(e) => { e.target.src = '/img/index_800x400-image01.jpg'; }}
+                          style={{ width: '104px', height: '70px', objectFit: 'cover', borderRadius: '6px', border: '1px solid #cbd5e1', boxShadow: '0 2px 5px rgba(0,0,0,0.06)', flexShrink: 0 }}
+                        />
+                      ) : (
+                        <div style={{ width: '104px', height: '70px', borderRadius: '6px', border: '1px dashed #cbd5e1', backgroundColor: '#f1f5f9', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: '11px', flexShrink: 0 }}>
+                          <i className="fa fa-image" style={{ fontSize: '22px', marginBottom: '3px' }}></i>
+                          <span>ਕੋਈ ਫ਼ੋਟੋ ਨਹੀਂ</span>
+                        </div>
+                      )}
+
+                      <div style={{ minWidth: 0 }}>
+                        <div style={{ fontSize: '13.5px', fontWeight: '700', color: '#0f172a', marginBottom: '3px' }}>
+                          {editFormData.featuredImage ? 'ਖ਼ਬਰ ਲਈ ਮੁੱਖ ਫ਼ੋਟੋ ਅਟੈਚ ਹੈ' : 'ਕੋਈ ਫ਼ੋਟੋ ਅਪਲੋਡ ਨਹੀਂ ਹੈ'}
+                        </div>
+                        <p style={{ margin: 0, fontSize: '12px', color: '#64748b' }}>
+                          ਕੰਪਿਊਟਰ ਜਾਂ ਫ਼ੋਨ ਵਿੱਚੋਂ ਨਵੀਂ ਫ਼ੋਟੋ ਚੁਣੋ (JPG, PNG, WEBP - Max 15MB)
+                        </p>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexShrink: 0 }}>
+                      <label
+                        style={{
+                          backgroundColor: '#1c2d5a',
+                          color: '#ffffff',
+                          padding: '8px 14px',
+                          borderRadius: '6px',
+                          fontSize: '12.5px',
+                          fontWeight: '700',
+                          cursor: uploadingModalImage ? 'not-allowed' : 'pointer',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+                        }}
+                      >
+                        <i className={`fa ${uploadingModalImage ? 'fa-spinner fa-spin' : 'fa-upload'}`}></i>
+                        <span>{uploadingModalImage ? 'ਅਪਲੋਡ ਹੋ ਰਹੀ ਹੈ...' : 'ਫ਼ੋਟੋ ਬਦਲੋ / ਅਪਲੋਡ ਕਰੋ (Change Photo)'}</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          disabled={uploadingModalImage}
+                          onChange={handleModalImageUpload}
+                          style={{ display: 'none' }}
+                        />
+                      </label>
+
+                      {editFormData.featuredImage && (
+                        <button
+                          type="button"
+                          onClick={() => setEditFormData({ ...editFormData, featuredImage: '' })}
+                          title="ਫ਼ੋਟੋ ਹਟਾਓ"
+                          style={{
+                            backgroundColor: '#fee2e2',
+                            border: '1px solid #fca5a5',
+                            color: '#b91c1c',
+                            padding: '8px 12px',
+                            borderRadius: '6px',
+                            fontSize: '12.5px',
+                            fontWeight: '700',
+                            cursor: 'pointer',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px'
+                          }}
+                        >
+                          <i className="fa fa-trash"></i>
+                          <span>ਹਟਾਓ</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Excerpt */}
+                <div style={{ marginBottom: '16px' }}>
+                  <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#334155', marginBottom: '6px' }}>
+                    ਸੰਖੇਪ ਵੇਰਵਾ (Short Excerpt)
+                  </label>
+                  <textarea
+                    rows="2"
+                    value={editFormData.excerpt}
+                    onChange={(e) => setEditFormData({ ...editFormData, excerpt: e.target.value })}
+                    style={{ width: '100%', padding: '8px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '13px', resize: 'vertical', boxSizing: 'border-box' }}
+                  />
+                </div>
+
+                {/* Full Content */}
+                <div style={{ marginBottom: '18px' }}>
+                  <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#334155', marginBottom: '6px' }}>
+                    ਪੂਰੀ ਖ਼ਬਰ ਦਾ ਵੇਰਵਾ (Full Article Content)
+                  </label>
+                  <textarea
+                    rows="6"
+                    value={editFormData.content}
+                    onChange={(e) => setEditFormData({ ...editFormData, content: e.target.value })}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '13px', lineHeight: 1.5, resize: 'vertical', boxSizing: 'border-box' }}
+                  />
+                </div>
+
+                {/* Breaking News Toggle Card (Symmetrical & Clean) */}
+                <div
+                  style={{
+                    backgroundColor: editFormData.isBreaking ? '#fff1f2' : '#f8fafc',
+                    border: editFormData.isBreaking ? '1.5px solid #fecdd3' : '1px solid #e2e8f0',
+                    borderRadius: '8px',
+                    padding: '12px 16px',
+                    marginBottom: '10px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease'
+                  }}
+                  onClick={() => setEditFormData((prev) => ({ ...prev, isBreaking: !prev.isBreaking }))}
+                >
+                  <input
+                    type="checkbox"
+                    id="modalIsBreaking"
+                    checked={editFormData.isBreaking}
+                    onChange={(e) => setEditFormData({ ...editFormData, isBreaking: e.target.checked })}
+                    style={{
+                      width: '18px',
+                      height: '18px',
+                      cursor: 'pointer',
+                      accentColor: '#b71c1c',
+                      margin: 0,
+                      flexShrink: 0
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                  <label
+                    htmlFor="modalIsBreaking"
+                    style={{
+                      margin: 0,
+                      fontSize: '13.5px',
+                      fontWeight: '700',
+                      color: editFormData.isBreaking ? '#9f1239' : '#334155',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      lineHeight: 1.3
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <i className="fa fa-bolt" style={{ color: '#b71c1c', fontSize: '15px' }}></i>
+                    <span>ਇਸ ਖ਼ਬਰ ਨੂੰ 'ਬਰੇਕਿੰਗ ਨਿਊਜ਼ ਟਿੱਕਰ' ਵਿੱਚ ਸ਼ਾਮਲ ਕਰੋ (Mark as Breaking News)</span>
+                  </label>
                 </div>
               </div>
 
-              {/* Excerpt */}
-              <div style={{ marginBottom: '16px' }}>
-                <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#334155', marginBottom: '6px' }}>
-                  ਸੰਖੇਪ ਵੇਰਵਾ (Short Excerpt)
-                </label>
-                <textarea
-                  rows="2"
-                  value={editFormData.excerpt}
-                  onChange={(e) => setEditFormData({ ...editFormData, excerpt: e.target.value })}
-                  style={{ width: '100%', padding: '8px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '13px', resize: 'vertical' }}
-                />
-              </div>
-
-              {/* Full Content */}
-              <div style={{ marginBottom: '18px' }}>
-                <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#334155', marginBottom: '6px' }}>
-                  ਪੂਰੀ ਖ਼ਬਰ ਦਾ ਵੇਰਵਾ (Full Article Content)
-                </label>
-                <textarea
-                  rows="6"
-                  value={editFormData.content}
-                  onChange={(e) => setEditFormData({ ...editFormData, content: e.target.value })}
-                  style={{ width: '100%', padding: '10px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '13px', lineHeight: 1.5, resize: 'vertical' }}
-                />
-              </div>
-
-              {/* Breaking News Checkbox */}
-              <div style={{ marginBottom: '22px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <input
-                  type="checkbox"
-                  id="modalIsBreaking"
-                  checked={editFormData.isBreaking}
-                  onChange={(e) => setEditFormData({ ...editFormData, isBreaking: e.target.checked })}
-                  style={{ width: '16px', height: '16px', accentColor: '#b71c1c' }}
-                />
-                <label htmlFor="modalIsBreaking" style={{ fontSize: '13px', fontWeight: '700', color: '#b71c1c', cursor: 'pointer' }}>
-                  <i className="fa fa-bolt"></i> ਇਸ ਖ਼ਬਰ ਨੂੰ 'ਬਰੇਕਿੰਗ ਨਿਊਜ਼ ਟਿੱਕਰ' ਵਿੱਚ ਸ਼ਾਮਲ ਕਰੋ (Mark as Breaking News)
-                </label>
-              </div>
-
-              {/* Footer Buttons */}
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', borderTop: '1px solid #e2e8f0', paddingTop: '16px' }}>
+              {/* Pinned Bottom Action Footer (Never scrolls off!) */}
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  gap: '10px',
+                  borderTop: '1px solid #e2e8f0',
+                  padding: '12px 24px',
+                  backgroundColor: '#f8fafc',
+                  flexShrink: 0
+                }}
+              >
                 <button
                   type="button"
                   onClick={closeEditModal}
                   disabled={isSavingEdit}
                   style={{
-                    backgroundColor: '#f1f5f9',
+                    backgroundColor: '#ffffff',
                     color: '#475569',
                     border: '1px solid #cbd5e1',
                     padding: '9px 18px',
@@ -1138,7 +1340,8 @@ export default function AllNewsCategoryView({ currentUser }) {
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '6px'
+                    gap: '6px',
+                    boxShadow: '0 2px 6px rgba(28, 45, 90, 0.3)'
                   }}
                 >
                   {isSavingEdit ? (

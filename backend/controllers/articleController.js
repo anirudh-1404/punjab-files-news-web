@@ -261,9 +261,9 @@ export const createArticle = async (req, res) => {
     let articleStatus = "pending_editor";
     if (status === "draft") {
       articleStatus = "draft";
-    } else if (req.user.canDirectPublish) {
-      // Reporter has direct publish permission enabled by Admin
-      articleStatus = status === "published" ? "published" : "pending_editor";
+    } else if (req.user.role === "admin" || req.user.role === "editor" || req.user.canDirectPublish) {
+      // Admin, Editor, or privileged Reporter publishes live directly
+      articleStatus = status === "published" || !status ? "published" : status;
     } else {
       // Regular reporter submits for editorial review
       articleStatus = "pending_editor";

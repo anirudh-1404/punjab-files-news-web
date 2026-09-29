@@ -39,6 +39,7 @@ export default function DashboardLayout({ user, onLogout }) {
     if (role === 'editor') {
       return [
         { id: 'review', label: 'ਸੰਪਾਦਕੀ ਸਮੀਖਿਆ (Review Desk)', icon: 'fa-check-square-o', sub: 'Review Desk' },
+        { id: 'create', label: 'ਨਵੀਂ ਖ਼ਬਰ ਲਿਖੋ (Write News)', icon: 'fa-pencil-square-o', sub: 'Write News' },
         { id: 'breaking', label: 'ਬਰੇਕਿੰਗ ਨਿਊਜ਼ (Breaking News)', icon: 'fa-bolt', sub: 'Breaking Ticker' },
         { id: 'contact_queries', label: 'ਸੰਪਰਕ ਸੁਨੇਹੇ (Contact Messages)', icon: 'fa-envelope-o', sub: 'Inquiries' },
         { id: 'mukhwak', label: 'ਮੁੱਖ ਵਾਕ (Daily Mukhwak)', icon: 'fa-book', sub: 'Daily Mukhwak' }
@@ -48,6 +49,7 @@ export default function DashboardLayout({ user, onLogout }) {
     // Admin
     return [
       { id: 'overview', label: 'ਓਵਰਵਿਊ (Overview)', icon: 'fa-dashboard', sub: 'Overview' },
+      { id: 'create', label: 'ਨਵੀਂ ਖ਼ਬਰ ਲਿਖੋ (Write News)', icon: 'fa-pencil-square-o', sub: 'Write & Publish News' },
       { id: 'all_news', label: 'ਸਾਰੀਆਂ ਖ਼ਬਰਾਂ (All News)', icon: 'fa-newspaper-o', sub: 'All News & Categories' },
       { id: 'categories', label: 'ਕੈਟੇਗਰੀ ਮੈਨੇਜਰ (Category Manager)', icon: 'fa-tags', sub: 'Categories' },
       { id: 'review', label: 'ਅੰਤਿਮ ਪ੍ਰਵਾਨਗੀ ਡੈਸਕ (Final Approval Desk)', icon: 'fa-check-square-o', sub: 'Final Approval Desk' },
@@ -304,8 +306,15 @@ export default function DashboardLayout({ user, onLogout }) {
             <CategoryManagerView />
           )}
 
-          {activeTab === 'create' && user?.role === 'reporter' && (
-            <CreateArticleView user={user} onArticleCreated={() => setActiveTab('my_articles')} />
+          {activeTab === 'create' && ['admin', 'editor', 'reporter'].includes(user?.role) && (
+            <CreateArticleView
+              user={user}
+              onArticleCreated={() => {
+                if (user?.role === 'admin') setActiveTab('all_news');
+                else if (user?.role === 'editor') setActiveTab('review');
+                else setActiveTab('my_articles');
+              }}
+            />
           )}
 
           {activeTab === 'my_articles' && user?.role === 'reporter' && (

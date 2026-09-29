@@ -157,12 +157,12 @@ export default function CreateArticleView({ user, onArticleCreated }) {
         mediaType,
         videoUrl: mediaType === 'video' ? videoUrl : null,
         isBreaking,
-        status: user?.canDirectPublish ? 'published' : 'pending_editor'
+        status: (user?.role === 'admin' || user?.role === 'editor' || user?.canDirectPublish) ? 'published' : 'pending_editor'
       });
 
       // Sync to local store if direct published
       try {
-        if (user?.canDirectPublish) {
+        if (user?.role === 'admin' || user?.role === 'editor' || user?.canDirectPublish) {
           createNewArticle({
             title: title.trim(),
             slug: customSlug.trim() ? customSlug.trim() : undefined,
@@ -204,7 +204,7 @@ export default function CreateArticleView({ user, onArticleCreated }) {
     }
   };
 
-  const canDirectPublish = Boolean(user?.canDirectPublish);
+  const canDirectPublish = Boolean(user?.role === 'admin' || user?.role === 'editor' || user?.canDirectPublish);
 
   return (
     <div className="admin-cms-card" style={{ backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e2e8f0', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
