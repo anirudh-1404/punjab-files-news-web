@@ -3,6 +3,7 @@ import { articleAPI, categoryAPI, uploadAPI } from '../../../services/api';
 import { formatArticleDate } from '../../../services/dateUtils';
 import { transliterateGurmukhiToEnglish } from '../../../services/slugUtils';
 import ActionModal from '../../../components/Common/ActionModal';
+import RichTextEditor from '../../../components/Common/RichTextEditor';
 
 const CATEGORIES = [
   { id: 'all', label: 'ਸਾਰੀਆਂ', labelEn: 'All News', icon: 'fa-th-large' },
@@ -1326,11 +1327,11 @@ export default function AllNewsCategoryView({ currentUser, onNavigate }) {
                   <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#334155', marginBottom: '6px' }}>
                     ਪੂਰੀ ਖ਼ਬਰ ਦਾ ਵੇਰਵਾ (Full Article Content)
                   </label>
-                  <textarea
-                    rows="6"
-                    value={editFormData.content}
-                    onChange={(e) => setEditFormData({ ...editFormData, content: e.target.value })}
-                    style={{ width: '100%', padding: '10px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '13px', lineHeight: 1.5, resize: 'vertical', boxSizing: 'border-box' }}
+                  <RichTextEditor
+                    value={editFormData.content || ''}
+                    onChange={(val) => setEditFormData({ ...editFormData, content: val })}
+                    placeholder="ਇੱਥੇ ਖ਼ਬਰ ਦਾ ਪੂਰਾ ਵੇਰਵਾ ਲਿਖੋ..."
+                    minHeight="220px"
                   />
                 </div>
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { articleAPI, uploadAPI, categoryAPI } from '../../../services/api';
 import { createNewArticle } from '../../../services/articleStore';
 import { transliterateGurmukhiToEnglish } from '../../../services/slugUtils';
+import RichTextEditor from '../../../components/Common/RichTextEditor';
 
 const LANG_OPTIONS = [
   { key: 'pa', label: 'ਪੰਜਾਬੀ (Punjabi)', desc: 'ਗੁਰਮੁਖੀ ਲਿੱਪੀ ਵਿੱਚ ਖ਼ਬਰ ਲਿਖੋ', flag: '🇮🇳' },
@@ -128,7 +129,8 @@ export default function CreateArticleView({ user, onArticleCreated }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!title.trim() || !content.trim()) {
+    const hasTextContent = content && content.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim().length > 0;
+    if (!title.trim() || !hasTextContent) {
       setFeedback({
         type: 'error',
         message: 'ਕਿਰਪਾ ਕਰਕੇ ਸਿਰਲੇਖ ਅਤੇ ਖ਼ਬਰ ਦਾ ਵੇਰਵਾ ਲਾਜ਼ਮੀ ਦਰਜ ਕਰੋ (Title and Content are required).'
@@ -639,18 +641,16 @@ export default function CreateArticleView({ user, onArticleCreated }) {
           />
         </div>
 
-        {/* Content Body */}
+        {/* Content Body — Full Rich Text Editor */}
         <div style={{ marginBottom: '20px' }}>
           <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#1e293b', marginBottom: '6px' }}>
             {currentLang.contentLabel} <span style={{ color: '#b71c1c' }}>*</span>
           </label>
-          <textarea
-            rows={8}
+          <RichTextEditor
             value={content}
-            onChange={(e) => setContent(e.target.value)}
+            onChange={(val) => setContent(val)}
             placeholder={currentLang.contentPlaceholder}
-            style={{ width: '100%', padding: '12px 14px', border: '1px solid #cbd5e1', borderRadius: '5px', fontSize: '14px', lineHeight: '1.6', fontFamily: 'inherit' }}
-            required
+            minHeight="280px"
           />
         </div>
 

@@ -399,7 +399,7 @@ export default function NewsDetailPage() {
 
               {/* Full Article Content */}
               <div
-                className="article-body-text"
+                className="article-body-text article-rich-content"
                 style={{
                   fontSize: '16.5px',
                   lineHeight: '1.8',
@@ -408,11 +408,15 @@ export default function NewsDetailPage() {
                   fontFamily: "'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif"
                 }}
               >
-                {article.content.split('\n\n').map((paragraph, pIdx) => (
-                  <p key={pIdx} style={{ marginBottom: '18px', textAlign: 'justify' }}>
-                    {paragraph}
-                  </p>
-                ))}
+                {article.content && /<[a-z][\s\S]*>/i.test(article.content) ? (
+                  <div dangerouslySetInnerHTML={{ __html: article.content }} />
+                ) : (
+                  (article.content || '').split('\n\n').map((paragraph, pIdx) => (
+                    <p key={pIdx} style={{ marginBottom: '18px', textAlign: 'justify' }}>
+                      {paragraph}
+                    </p>
+                  ))
+                )}
               </div>
 
               {/* ========================================================

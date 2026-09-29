@@ -2727,3 +2727,105 @@ html.lenis, html.lenis body {
 .admin-modal-body::-webkit-scrollbar-thumb:hover {
   background: #64748b !important;
 }
+
+/* ====================================================
+   PUNJAB FILES RICH TEXT EDITOR & CONTENT STYLING
+==================================================== */
+
+.punjab-rich-editor:focus-within {
+  border-color: #b71c1c !important;
+  box-shadow: 0 0 0 3px rgba(183, 28, 28, 0.12) !important;
+}
+
+.punjab-rich-editor [contenteditable]:empty:before {
+  content: attr(data-placeholder);
+  color: #94a3b8;
+  pointer-events: none;
+  display: block;
+}
+
+/* Rendered Article Rich Content Styling (on NewsDetailPage) */
+.article-rich-content {
+  font-size: 17px;
+  line-height: 1.85;
+  color: #1a1a1a;
+  word-break: break-word;
+}
+
+.article-rich-content p {
+  margin-bottom: 20px;
+  text-align: justify;
+}
+
+.article-rich-content h2 {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 28px 0 14px;
+  line-height: 1.4;
+  border-left: 4px solid #b71c1c;
+  padding-left: 12px;
+}
+
+.article-rich-content h3 {
+  font-size: 20px;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 24px 0 12px;
+  line-height: 1.4;
+}
+
+.article-rich-content ul,
+.article-rich-content ol {
+  margin: 16px 0 20px 24px;
+  padding-left: 10px;
+}
+
+.article-rich-content ul {
+  list-style-type: disc !important;
+}
+
+.article-rich-content ol {
+  list-style-type: decimal !important;
+}
+
+.article-rich-content li {
+  margin-bottom: 8px;
+  line-height: 1.7;
+}
+
+.article-rich-content blockquote {
+  margin: 24px 0;
+  padding: 16px 22px;
+  background-color: #fef2f2;
+  border-left: 5px solid #b71c1c;
+  border-radius: 0 8px 8px 0;
+  font-style: italic;
+  color: #7f1d1d;
+  font-size: 17.5px;
+  line-height: 1.7;
+}
+
+.article-rich-content a {
+  color: #b71c1c !important;
+  text-decoration: underline !important;
+  font-weight: 600;
+  transition: color 0.15s ease;
+}
+
+.article-rich-content a:hover {
+  color: #8e1515 !important;
+}
+
+.article-rich-content strong,
+.article-rich-content b {
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.article-rich-content hr {
+  margin: 28px 0;
+  border: 0;
+  border-top: 1.5px solid #e2e8f0;
+}
+
