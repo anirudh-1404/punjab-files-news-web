@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import blackLogo from '../../assets/punjab-files-black-logo.jpeg';
+import brandLogo from '../../assets/logo.png';
 import { articleAPI } from '../../services/api';
 import { getAllArticles } from '../../services/articleStore';
 
@@ -52,9 +52,9 @@ export default function Footer() {
   ];
 
   return (
-    <footer id="footer" style={{ backgroundColor: '#000000', background: '#000000' }}>
-      <div id="parallax-section2" style={{ backgroundColor: '#000000', background: '#000000', backgroundImage: 'none' }}>
-        <div className="bg overlay" style={{ backgroundColor: '#000000', background: '#000000', backgroundImage: 'none' }}>
+    <footer id="footer" style={{ backgroundColor: 'var(--brand-navy-dark)', background: 'var(--brand-navy-dark)' }}>
+      <div id="parallax-section2" style={{ backgroundColor: 'transparent', background: 'transparent', backgroundImage: 'none' }}>
+        <div className="bg overlay" style={{ backgroundColor: 'transparent', background: 'transparent', backgroundImage: 'none' }}>
           <div className="container" style={{ paddingTop: '50px', paddingBottom: '40px' }}>
             <div className="row no-gutter">
               {/* Column 1: About Us with Punjab Files Black Logo */}
@@ -64,9 +64,9 @@ export default function Footer() {
                   ਪੰਜਾਬ ਫਾਈਲਜ਼ 24 ਘੰਟੇ ਨਿਰਪੱਖ, ਸੱਚੀਆਂ ਅਤੇ ਭਰੋਸੇਯੋਗ ਖ਼ਬਰਾਂ ਪਹੁੰਚਾਉਣ ਲਈ ਵਚਨਬੱਧ ਹੈ। ਅਸੀਂ ਤੁਹਾਨੂੰ ਜ਼ਮੀਨੀ ਹਕੀਕਤਾਂ, ਤਾਜ਼ਾ ਸਮਾਚਾਰ ਅਤੇ ਸਾਰਥਕ ਵਿਸ਼ਲੇਸ਼ਣ ਮੁਹੱਈਆ ਕਰਵਾਉਂਦੇ ਹਾਂ।
                 </p>
                 <div className="site-logo" style={{ marginTop: '18px' }}>
-                  <Link to="/" style={{ textDecoration: 'none', display: 'inline-flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <Link to="/" style={{ textDecoration: 'none', display: 'inline-block' }}>
                     <img
-                      src={blackLogo}
+                      src={brandLogo}
                       alt="Punjab Files Logo"
                       style={{
                         height: '110px',
@@ -74,34 +74,13 @@ export default function Footer() {
                         maxWidth: '280px',
                         width: 'auto',
                         objectFit: 'contain',
-                        borderRadius: '6px',
+                        borderRadius: '8px',
                         display: 'block',
-                        marginBottom: '6px'
+                        backgroundColor: '#ffffff',
+                        padding: '6px 10px',
+                        boxShadow: '0 4px 14px rgba(0, 0, 0, 0.4)'
                       }}
                     />
-                    <div
-                      className="footer-brand-punchline"
-                      style={{
-                        marginTop: '4px',
-                        fontSize: '13.5px',
-                        fontWeight: '800',
-                        color: '#ebb10d',
-                        letterSpacing: '0.8px',
-                        fontFamily: "'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif",
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        width: '100%',
-                        maxWidth: '280px',
-                        gap: '8px',
-                        lineHeight: 1.2,
-                        userSelect: 'none'
-                      }}
-                    >
-                      <span style={{ display: 'inline-block', width: '18px', height: '1.5px', backgroundColor: '#ebb10d', opacity: 0.7 }}></span>
-                      <span>ਪੰਜਾਬ ਦੀ ਗੱਲ, ਪੰਜਾਬ ਦੇ ਨਾਲ</span>
-                      <span style={{ display: 'inline-block', width: '18px', height: '1.5px', backgroundColor: '#ebb10d', opacity: 0.7 }}></span>
-                    </div>
                   </Link>
                 </div>
               </div>

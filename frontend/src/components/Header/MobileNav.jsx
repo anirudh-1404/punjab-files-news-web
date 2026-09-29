@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
-import whiteLogo from '../../assets/punjab-files-logo-white.jpeg';
+import brandLogo from '../../assets/logo.png';
 
 export default function MobileNav() {
   const navigate = useNavigate();
@@ -146,24 +146,12 @@ export default function MobileNav() {
                 backgroundColor: '#1a1d24'
               }}
             >
-              <a href="/" onClick={() => setIsOpen(false)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textDecoration: 'none' }}>
+              <a href="/" onClick={() => setIsOpen(false)} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
                 <img
-                  src={whiteLogo}
+                  src={brandLogo}
                   alt="Punjab Files Logo"
-                  style={{ height: '38px', width: 'auto', objectFit: 'contain' }}
+                  style={{ height: '48px', width: 'auto', objectFit: 'contain', backgroundColor: '#ffffff', borderRadius: '4px', padding: '2px 6px' }}
                 />
-                <span
-                  style={{
-                    fontSize: '11px',
-                    fontWeight: '800',
-                    color: '#ebb10d',
-                    fontFamily: "'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif",
-                    marginTop: '3px',
-                    letterSpacing: '0.4px'
-                  }}
-                >
-                  ਪੰਜਾਬ ਦੀ ਗੱਲ, ਪੰਜਾਬ ਦੇ ਨਾਲ
-                </span>
               </a>
               <button
                 type="button"

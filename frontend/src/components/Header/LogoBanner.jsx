@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import whiteLogo from '../../assets/punjab-files-logo-white.jpeg';
+import brandLogo from '../../assets/logo.png';
 
 export default function LogoBanner() {
   const [timeStr, setTimeStr] = useState('');
@@ -68,11 +68,11 @@ export default function LogoBanner() {
         flex: 1
       }}
     >
-      {/* Left: Prominent Brand Logo & Integrated Punchline */}
+      {/* Left: Prominent Brand Logo */}
       <div className="header-brand-block">
-        <a href="/" style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', textDecoration: 'none' }}>
+        <a href="/" style={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}>
           <img
-            src={whiteLogo}
+            src={brandLogo}
             alt="Punjab Files"
             className="brand-logo-img"
             style={{
@@ -84,27 +84,6 @@ export default function LogoBanner() {
               display: 'block'
             }}
           />
-          <div
-            className="header-brand-punchline"
-            style={{
-              marginTop: '4px',
-              fontSize: '14px',
-              fontWeight: '800',
-              color: '#b71c1c',
-              letterSpacing: '0.8px',
-              fontFamily: "'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif",
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '10px',
-              width: '100%',
-              userSelect: 'none'
-            }}
-          >
-            <span style={{ display: 'inline-block', width: '24px', height: '1.5px', backgroundColor: '#b71c1c', opacity: 0.6 }}></span>
-            <span>ਪੰਜਾਬ ਦੀ ਗੱਲ, ਪੰਜਾਬ ਦੇ ਨਾਲ</span>
-            <span style={{ display: 'inline-block', width: '24px', height: '1.5px', backgroundColor: '#b71c1c', opacity: 0.6 }}></span>
-          </div>
         </a>
       </div>
 

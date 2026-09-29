@@ -717,8 +717,8 @@ header,
    4. BRAND FOOTER STYLING & HIGH-CONTRAST VISIBILITY
 ==================================================== */
 #footer {
-  background-color: #000000 !important;
-  background: #000000 !important;
+  background-color: var(--brand-navy-dark) !important;
+  background: var(--brand-navy-dark) !important;
   border-top: 3px solid var(--brand-crimson) !important;
   color: #e2e8f0 !important;
   position: relative !important;
@@ -727,25 +727,25 @@ header,
 
 #footer #parallax-section2,
 #parallax-section2 {
-  background: #000000 !important;
-  background-color: #000000 !important;
+  background: transparent !important;
+  background-color: transparent !important;
   background-image: none !important;
 }
 
 #footer .parallax2 {
-  background: #000000 !important;
-  background-color: #000000 !important;
+  background: transparent !important;
+  background-color: transparent !important;
   background-image: none !important;
 }
 
 #footer .bg,
 #footer .overlay,
 #footer .img-overlay2 {
-  background: #000000 !important;
+  background: transparent !important;
   background-image: none !important;
 }
 
-/* Semi-transparent dark overlay disabled in favor of rich solid black */
+/* Semi-transparent dark overlay disabled in favor of rich brand navy */
 #footer .img-overlay2:after,
 #footer .overlay:after {
   display: none !important;
@@ -812,19 +812,20 @@ header,
 
 /* Footer Brand Logo - Big, Prominent, Crisp */
 #footer .site-logo img {
-  height: 115px !important;
-  max-height: 125px !important;
+  height: 110px !important;
+  max-height: 120px !important;
   width: auto !important;
   max-width: 280px !important;
   object-fit: contain !important;
-  border-radius: 6px !important;
+  border-radius: 8px !important;
   margin-top: 10px !important;
   margin-bottom: 15px !important;
   float: none !important;
   display: block !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
-  background-color: #000000 !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  background-color: #ffffff !important;
+  padding: 6px 10px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
 }
 
 /* Footer Recent Posts List */
@@ -892,9 +893,9 @@ header,
 }
 
 #copyrights {
-  background-color: #000000 !important;
-  background: #000000 !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  background-color: var(--brand-navy-dark) !important;
+  background: var(--brand-navy-dark) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 /* Back to top button */

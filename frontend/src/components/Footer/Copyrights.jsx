@@ -4,7 +4,7 @@ export default function Copyrights() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <div id="copyrights" style={{ backgroundColor: '#000000', background: '#000000', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+    <div id="copyrights" style={{ backgroundColor: 'var(--brand-navy-dark)', background: 'var(--brand-navy-dark)', borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
       <div className="container">
         <div className="copyright">
           © {currentYear}, ਕਾਪੀਰਾਈਟ ਪੰਜਾਬ ਫਾਈਲਜ਼ (Punjab Files) | ਸਾਰੇ ਹੱਕ ਰਾਖਵੇਂ ਹਨ।
