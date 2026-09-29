@@ -671,7 +671,7 @@ export default function CreateArticleView({ user, onArticleCreated }) {
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <i className="fa fa-search" style={{ color: '#0369a1', fontSize: '14px' }}></i>
               <span style={{ fontSize: '13.5px', fontWeight: '800', color: '#0f172a' }}>
-                🔍 SEO Settings (Google Search Optimization)
+                SEO Settings (Google Search Optimization)
               </span>
               <span style={{ fontSize: '11px', backgroundColor: '#dbeafe', color: '#1d4ed8', padding: '2px 7px', borderRadius: '4px', fontWeight: '700' }}>
                 Optional
@@ -782,15 +782,15 @@ export default function CreateArticleView({ user, onArticleCreated }) {
         </div>
 
         {/* Breaking News Checkbox */}
-        <div style={{ marginBottom: '22px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div style={{ marginBottom: '22px', display: 'flex', alignItems: 'center', gap: '10px' }}>
           <input
             type="checkbox"
             id="breaking-check"
             checked={isBreaking}
             onChange={(e) => setIsBreaking(e.target.checked)}
-            style={{ width: '17px', height: '17px', cursor: 'pointer', accentColor: '#b71c1c' }}
+            style={{ width: '17px', height: '17px', cursor: 'pointer', accentColor: '#b71c1c', flexShrink: 0, marginTop: '1px' }}
           />
-          <label htmlFor="breaking-check" style={{ fontSize: '13.5px', fontWeight: '700', color: '#b71c1c', cursor: 'pointer', margin: 0 }}>
+          <label htmlFor="breaking-check" style={{ fontSize: '13.5px', fontWeight: '700', color: '#b71c1c', cursor: 'pointer', margin: 0, lineHeight: '1.4' }}>
             ਇਸ ਖ਼ਬਰ ਨੂੰ 'ਬਰੇਕਿੰਗ ਨਿਊਜ਼' (Breaking News Alert) ਵਜੋਂ ਨਿਸ਼ਾਨਬੱਧ ਕਰੋ
           </label>
         </div>
