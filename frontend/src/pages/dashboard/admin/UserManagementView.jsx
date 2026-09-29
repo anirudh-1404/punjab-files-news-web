@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { userAPI } from '../../../services/api';
+import ActionModal from '../../../components/Common/ActionModal';
 
 export default function UserManagementView({ currentUser }) {
   const [users, setUsers] = useState([]);
@@ -13,6 +14,7 @@ export default function UserManagementView({ currentUser }) {
   const [canDirectPublish, setCanDirectPublish] = useState(false);
   const [creating, setCreating] = useState(false);
   const [msg, setMsg] = useState({ type: '', text: '' });
+  const [popup, setPopup] = useState(null);
 
   const fetchUsers = useCallback(async () => {
     try {
@@ -75,7 +77,11 @@ export default function UserManagementView({ currentUser }) {
       });
       setTimeout(() => setMsg({ type: '', text: '' }), 3500);
     } catch (err) {
-      alert('Error updating direct publish: ' + err.message);
+      setPopup({
+        type: 'error',
+        title: 'ਸਮੱਸਿਆ ਆਈ (Error)',
+        message: 'ਸਿੱਧਾ ਲਾਈਵ ਅੱਪਡੇਟ ਕਰਨ ਵਿੱਚ ਗਲਤੀ: ' + err.message
+      });
     }
   };
 
@@ -85,8 +91,17 @@ export default function UserManagementView({ currentUser }) {
       setUsers((prev) =>
         prev.map((u) => (u._id === userId ? { ...u, role: newRole } : u))
       );
+      setMsg({
+        type: 'success',
+        text: `ਯੂਜ਼ਰ ਦਾ ਅਹੁਦਾ ਬਦਲ ਕੇ "${newRole}" ਕਰ ਦਿੱਤਾ ਗਿਆ ਹੈ।`
+      });
+      setTimeout(() => setMsg({ type: '', text: '' }), 3000);
     } catch (err) {
-      alert('Error updating role: ' + err.message);
+      setPopup({
+        type: 'error',
+        title: 'ਸਮੱਸਿਆ ਆਈ (Error)',
+        message: 'ਅਹੁਦਾ ਬਦਲਣ ਵਿੱਚ ਗਲਤੀ: ' + err.message
+      });
     }
   };
 
@@ -97,24 +112,43 @@ export default function UserManagementView({ currentUser }) {
       setUsers((prev) =>
         prev.map((u) => (u._id === userId ? { ...u, isActive: nextStatus } : u))
       );
+      setMsg({
+        type: 'success',
+        text: `ਖਾਤਾ ਸਥਿਤੀ: ${nextStatus ? 'ਐਕਟਿਵ (Active)' : 'ਬੰਦ (Deactivated)'}`
+      });
+      setTimeout(() => setMsg({ type: '', text: '' }), 3000);
     } catch (err) {
-      alert('Error updating status: ' + err.message);
+      setPopup({
+        type: 'error',
+        title: 'ਸਮੱਸਿਆ ਆਈ (Error)',
+        message: 'ਖਾਤਾ ਸਥਿਤੀ ਬਦਲਣ ਵਿੱਚ ਗਲਤੀ: ' + err.message
+      });
     }
   };
 
-  const handleDeleteUser = async (userId, userName) => {
-    if (!window.confirm(`ਕੀ ਤੁਸੀਂ ਵਾਕਈ "${userName}" ਦਾ ਖਾਤਾ ਮਿਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ?`)) {
-      return;
-    }
-
-    try {
-      await userAPI.deleteUser(userId);
-      setUsers((prev) => prev.filter((u) => u._id !== userId));
-      setMsg({ type: 'success', text: `ਯੂਜ਼ਰ "${userName}" ਹਟਾ ਦਿੱਤਾ ਗਿਆ ਹੈ।` });
-      setTimeout(() => setMsg({ type: '', text: '' }), 3000);
-    } catch (err) {
-      alert('Error: ' + err.message);
-    }
+  const handleDeleteUser = (userId, userName) => {
+    setPopup({
+      type: 'confirm',
+      title: 'ਯੂਜ਼ਰ ਖਾਤਾ ਮਿਟਾਓ (Delete User)',
+      message: `ਕੀ ਤੁਸੀਂ ਵਾਕਈ "${userName}" ਦਾ ਖਾਤਾ ਮਿਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ?\n\n(Are you sure you want to delete the account for "${userName}"?)\n\nਇਹ ਕਿਰਿਆ ਵਾਪਸ ਨਹੀਂ ਹੋ ਸਕਦੀ।`,
+      confirmLabel: 'ਹਾਂ, ਮਿਟਾਓ (Yes, Delete)',
+      confirmColor: '#b71c1c',
+      onConfirm: async () => {
+        setPopup(null);
+        try {
+          await userAPI.deleteUser(userId);
+          setUsers((prev) => prev.filter((u) => u._id !== userId));
+          setMsg({ type: 'success', text: `ਯੂਜ਼ਰ "${userName}" ਹਟਾ ਦਿੱਤਾ ਗਿਆ ਹੈ।` });
+          setTimeout(() => setMsg({ type: '', text: '' }), 3000);
+        } catch (err) {
+          setPopup({
+            type: 'error',
+            title: 'ਸਮੱਸਿਆ ਆਈ (Error)',
+            message: 'ਯੂਜ਼ਰ ਮਿਟਾਉਣ ਵਿੱਚ ਗਲਤੀ: ' + err.message
+          });
+        }
+      }
+    });
   };
 
   const getRoleBadge = (r) => {
@@ -499,6 +533,18 @@ export default function UserManagementView({ currentUser }) {
           </>
         )}
       </div>
+
+      {/* Custom Action Modal */}
+      <ActionModal
+        isOpen={Boolean(popup)}
+        type={popup?.type || 'alert'}
+        title={popup?.title}
+        message={popup?.message}
+        confirmLabel={popup?.confirmLabel}
+        confirmColor={popup?.confirmColor}
+        onConfirm={popup?.onConfirm}
+        onClose={() => setPopup(null)}
+      />
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Category, { DEFAULT_CATEGORIES } from "../models/Category.js";
 
 // Helper to slugify English text
@@ -11,13 +12,20 @@ function slugify(text) {
     .replace(/\-\-+/g, "-");
 }
 
-// Seed default categories if none exist
+// Seed default categories if none exist and ensure core categories have isDefault: true
 export const ensureDefaultCategories = async () => {
   try {
     const count = await Category.countDocuments();
     if (count === 0) {
       await Category.insertMany(DEFAULT_CATEGORIES);
       console.log("Successfully seeded default categories into MongoDB.");
+    } else {
+      // Ensure all 9 core default categories have isDefault: true
+      const coreSlugs = DEFAULT_CATEGORIES.map((c) => c.slug);
+      await Category.updateMany(
+        { slug: { $in: coreSlugs } },
+        { $set: { isDefault: true } }
+      );
     }
   } catch (error) {
     console.error("Error auto-seeding categories:", error.message);
@@ -122,6 +130,13 @@ export const updateCategory = async (req, res) => {
     const { id } = req.params;
     const { namePa, nameEn, icon, order, isActive, slug } = req.body;
 
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "ਗਲਤ ਕੈਟੇਗਰੀ ਆਈ.ਡੀ (Invalid category ID)"
+      });
+    }
+
     const category = await Category.findById(id);
     if (!category) {
       return res.status(404).json({
@@ -175,6 +190,13 @@ export const deleteCategory = async (req, res) => {
   try {
     const { id } = req.params;
 
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "ਗਲਤ ਕੈਟੇਗਰੀ ਆਈ.ਡੀ (Invalid category ID)"
+      });
+    }
+
     const category = await Category.findById(id);
     if (!category) {
       return res.status(404).json({
@@ -183,7 +205,8 @@ export const deleteCategory = async (req, res) => {
       });
     }
 
-    if (category.isDefault) {
+    const isCoreCategory = category.isDefault || DEFAULT_CATEGORIES.some((c) => c.slug === category.slug);
+    if (isCoreCategory) {
       return res.status(400).json({
         success: false,
         message: "ਸਿਸਟਮ ਦੀਆਂ ਮੁੱਖ ਡਿਫੌਲਟ ਕੈਟੇਗਰੀਆਂ ਨੂੰ ਡਿਲੀਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ (Default core categories cannot be deleted)"

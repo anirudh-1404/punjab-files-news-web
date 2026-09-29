@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { articleAPI } from '../../../services/api';
 import { formatArticleDate } from '../../../services/dateUtils';
+import ActionModal from '../../../components/Common/ActionModal';
 
 export default function MyArticlesView() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all'); // 'all', 'published', 'pending_review', 'rejected'
   const [actionMsg, setActionMsg] = useState('');
+  const [popup, setPopup] = useState(null);
 
   const fetchMyArticles = useCallback(async () => {
     try {
@@ -24,19 +26,29 @@ export default function MyArticlesView() {
     fetchMyArticles();
   }, [fetchMyArticles]);
 
-  const handleDelete = async (id, title) => {
-    if (!window.confirm(`ਕੀ ਤੁਸੀਂ ਇਸ ਖ਼ਬਰ ਨੂੰ ਹਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ?\n"${title}"`)) {
-      return;
-    }
-
-    try {
-      await articleAPI.deleteArticle(id);
-      setActionMsg('ਖ਼ਬਰ ਸਫ਼ਲਤਾਪੂਰਵਕ ਹਟਾ ਦਿੱਤੀ ਗਈ ਹੈ!');
-      setArticles((prev) => prev.filter((a) => a._id !== id));
-      setTimeout(() => setActionMsg(''), 3000);
-    } catch (err) {
-      alert('Error: ' + err.message);
-    }
+  const handleDelete = (id, title) => {
+    setPopup({
+      type: 'confirm',
+      title: 'ਖ਼ਬਰ ਹਟਾਓ (Delete Article)',
+      message: `ਕੀ ਤੁਸੀਂ ਇਸ ਖ਼ਬਰ ਨੂੰ ਹਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ?\n\n"${title}"`,
+      confirmLabel: 'ਹਾਂ, ਹਟਾਓ (Yes, Delete)',
+      confirmColor: '#b71c1c',
+      onConfirm: async () => {
+        setPopup(null);
+        try {
+          await articleAPI.deleteArticle(id);
+          setActionMsg('ਖ਼ਬਰ ਸਫ਼ਲਤਾਪੂਰਵਕ ਹਟਾ ਦਿੱਤੀ ਗਈ ਹੈ!');
+          setArticles((prev) => prev.filter((a) => a._id !== id));
+          setTimeout(() => setActionMsg(''), 3000);
+        } catch (err) {
+          setPopup({
+            type: 'error',
+            title: 'ਸਮੱਸਿਆ ਆਈ (Error)',
+            message: 'ਖ਼ਬਰ ਹਟਾਉਣ ਵਿੱਚ ਗਲਤੀ: ' + err.message
+          });
+        }
+      }
+    });
   };
 
   const filtered = articles.filter((a) => {
@@ -384,6 +396,18 @@ export default function MyArticlesView() {
           </div>
         </>
       )}
+
+      {/* Custom Action Modal */}
+      <ActionModal
+        isOpen={Boolean(popup)}
+        type={popup?.type || 'alert'}
+        title={popup?.title}
+        message={popup?.message}
+        confirmLabel={popup?.confirmLabel}
+        confirmColor={popup?.confirmColor}
+        onConfirm={popup?.onConfirm}
+        onClose={() => setPopup(null)}
+      />
     </div>
   );
 }

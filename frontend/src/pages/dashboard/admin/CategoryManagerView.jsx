@@ -1,5 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { categoryAPI } from '../../../services/api';
+import ActionModal from '../../../components/Common/ActionModal';
+
+const CORE_SLUGS = ['punjab', 'religion', 'world', 'sport', 'health', 'travel', 'art-entertainment', 'politics', 'business'];
+const isDefaultCategory = (cat) => Boolean(cat?.isDefault || CORE_SLUGS.includes(cat?.slug));
 
 const POPULAR_ICONS = [
   { icon: 'fa-newspaper-o', label: 'ਖ਼ਬਰਾਂ (General)' },
@@ -33,6 +37,10 @@ export default function CategoryManagerView() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
   const [isFallbackMode, setIsFallbackMode] = useState(false);
+
+  // Custom Popup State (replaces all alert/confirm browser dialogs)
+  const [popup, setPopup] = useState(null);
+  // popup = { type: 'alert'|'confirm', title, message, onConfirm?, confirmLabel?, confirmColor? }
 
   const fetchCategories = useCallback(async () => {
     try {
@@ -80,11 +88,14 @@ export default function CategoryManagerView() {
     setShowModal(true);
   };
 
-  // Handle Form Submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.namePa.trim() || !formData.nameEn.trim()) {
-      alert('ਪੰਜਾਬੀ ਅਤੇ ਅੰਗਰੇਜ਼ੀ ਨਾਮ ਦੋਵੇਂ ਦਰਜ ਕਰਨੇ ਲਾਜ਼ਮੀ ਹਨ।');
+      setPopup({
+        type: 'alert',
+        title: 'ਖਾਨੇ ਖਾਲੀ ਹਨ (Required Fields)',
+        message: 'ਪੰਜਾਬੀ ਅਤੇ ਅੰਗਰੇਜ਼ੀ ਨਾਮ ਦੋਵੇਂ ਦਰਜ ਕਰਨੇ ਲਾਜ਼ਮੀ ਹਨ। (Both Punjabi and English names are required.)'
+      });
       return;
     }
 
@@ -103,38 +114,68 @@ export default function CategoryManagerView() {
       window.dispatchEvent(new Event('punjab_categories_updated'));
     } catch (err) {
       console.error('Save category error:', err);
-      alert(err.message || 'ਕੈਟੇਗਰੀ ਸੇਵ ਕਰਨ ਵਿੱਚ ਸਮੱਸਿਆ ਆਈ।');
+      setPopup({
+        type: 'alert',
+        title: 'ਸਮੱਸਿਆ ਆਈ (Error)',
+        message: err.message || 'ਕੈਟੇਗਰੀ ਸੇਵ ਕਰਨ ਵਿੱਚ ਸਮੱਸਿਆ ਆਈ।'
+      });
     } finally {
       setIsSubmitting(false);
     }
   };
 
   // Handle Delete
-  const handleDelete = async (cat) => {
-    if (cat.isDefault) {
-      alert('ਮੁੱਖ ਡਿਫੌਲਟ ਕੈਟੇਗਰੀਆਂ ਨੂੰ ਸਿਸਟਮ ਵਿੱਚੋਂ ਡਿਲੀਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ।');
-      return;
-    }
-    if (!window.confirm(`ਕੀ ਤੁਸੀਂ ਵਾਕਈ ਕੈਟੇਗਰੀ "${cat.namePa} (${cat.nameEn})" ਨੂੰ ਡਿਲੀਟ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?`)) {
+  const handleDelete = (cat) => {
+    if (isDefaultCategory(cat)) {
+      setPopup({
+        type: 'alert',
+        title: 'ਡਿਲੀਟ ਨਹੀਂ ਹੋ ਸਕਦੀ (Cannot Delete)',
+        message: 'ਸਿਸਟਮ ਦੀਆਂ ਮੁੱਖ ਡਿਫੌਲਟ ਕੈਟੇਗਰੀਆਂ ਨੂੰ ਡਿਲੀਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ। (Default system categories cannot be deleted.)\n\nਤੁਸੀਂ ਸਿਰਫ਼ ਇਨ੍ਹਾਂ ਨੂੰ ਸੋਧ ਸਕਦੇ ਹੋ। (You can only edit them.)'
+      });
       return;
     }
 
-    try {
-      setDeletingId(cat._id);
-      await categoryAPI.delete(cat._id);
-      setNotification(`ਕੈਟੇਗਰੀ "${cat.namePa}" ਸਫ਼ਲਤਾਪੂਰਵਕ ਹਟਾ ਦਿੱਤੀ ਗਈ।`);
-      fetchCategories();
-      window.dispatchEvent(new Event('punjab_categories_updated'));
-    } catch (err) {
-      console.error('Delete category error:', err);
-      alert(err.message || 'ਕੈਟੇਗਰੀ ਡਿਲੀਟ ਕਰਨ ਵਿੱਚ ਸਮੱਸਿਆ ਆਈ।');
-    } finally {
-      setDeletingId(null);
+    // Check if this is a fallback/non-DB category (no valid MongoDB _id)
+    const isValidMongoId = cat._id && /^[a-f\d]{24}$/i.test(cat._id);
+    if (!isValidMongoId) {
+      setPopup({
+        type: 'alert',
+        title: 'ਡਿਲੀਟ ਨਹੀਂ ਹੋ ਸਕਦੀ (Cannot Delete)',
+        message: 'ਇਹ ਕੈਟੇਗਰੀ ਅਜੇ ਡੇਟਾਬੇਸ ਵਿੱਚ ਸੇਵ ਨਹੀਂ ਹੋਈ। (This category has not been saved to the database yet.)\n\nਕਿਰਪਾ ਕਰਕੇ ਪੰਨੇ ਨੂੰ ਰੀਲੋਡ ਕਰਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।'
+      });
+      return;
     }
+
+    setPopup({
+      type: 'confirm',
+      title: 'ਕੈਟੇਗਰੀ ਡਿਲੀਟ ਕਰੋ (Delete Category)',
+      message: `ਕੀ ਤੁਸੀਂ ਵਾਕਈ ਕੈਟੇਗਰੀ "${cat.namePa} (${cat.nameEn})" ਨੂੰ ਡਿਲੀਟ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?\n\n(Are you sure you want to delete "${cat.nameEn}"?)\n\nਇਹ ਕਿਰਿਆ ਵਾਪਸ ਨਹੀਂ ਹੋ ਸਕਦੀ। (This action cannot be undone.)`,
+      confirmLabel: 'ਹਾਂ, ਡਿਲੀਟ ਕਰੋ (Yes, Delete)',
+      confirmColor: '#b71c1c',
+      onConfirm: async () => {
+        setPopup(null);
+        try {
+          setDeletingId(cat._id);
+          await categoryAPI.delete(cat._id);
+          setNotification(`ਕੈਟੇਗਰੀ "${cat.namePa}" ਸਫ਼ਲਤਾਪੂਰਵਕ ਹਟਾ ਦਿੱਤੀ ਗਈ।`);
+          fetchCategories();
+          window.dispatchEvent(new Event('punjab_categories_updated'));
+        } catch (err) {
+          console.error('Delete category error:', err);
+          setPopup({
+            type: 'error',
+            title: 'ਡਿਲੀਟ ਵਿੱਚ ਸਮੱਸਿਆ (Delete Failed)',
+            message: err.message || 'ਕੈਟੇਗਰੀ ਡਿਲੀਟ ਕਰਨ ਵਿੱਚ ਸਮੱਸਿਆ ਆਈ।'
+          });
+        } finally {
+          setDeletingId(null);
+        }
+      }
+    });
   };
 
-  const defaultCount = categories.filter((c) => c.isDefault).length;
-  const customCount = categories.filter((c) => !c.isDefault).length;
+  const defaultCount = categories.filter(isDefaultCategory).length;
+  const customCount = categories.filter((c) => !isDefaultCategory(c)).length;
 
   return (
     <div className="category-manager-container" style={{ padding: '4px' }}>
@@ -352,7 +393,7 @@ export default function CategoryManagerView() {
                       </a>
                     </td>
                     <td style={{ padding: '12px 16px' }}>
-                      {cat.isDefault ? (
+                      {isDefaultCategory(cat) ? (
                         <span
                           style={{
                             fontSize: '11px',
@@ -399,7 +440,7 @@ export default function CategoryManagerView() {
                         <i className="fa fa-pencil" style={{ marginRight: '4px' }}></i> ਸੋਧੋ (Edit)
                       </button>
 
-                      {!cat.isDefault && (
+                      {!isDefaultCategory(cat) && (
                         <button
                           type="button"
                           disabled={deletingId === cat._id}
@@ -635,6 +676,17 @@ export default function CategoryManagerView() {
           </div>
         </div>
       )}
+      {/* Custom Popup Modal (replaces browser alert/confirm) */}
+      <ActionModal
+        isOpen={Boolean(popup)}
+        type={popup?.type || 'alert'}
+        title={popup?.title}
+        message={popup?.message}
+        confirmLabel={popup?.confirmLabel}
+        confirmColor={popup?.confirmColor}
+        onConfirm={popup?.onConfirm}
+        onClose={() => setPopup(null)}
+      />
     </div>
   );
 }

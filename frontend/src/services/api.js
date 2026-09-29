@@ -400,8 +400,8 @@ export const DEFAULT_CATEGORIES = [
   { _id: 'cat_health', namePa: 'ਸਿਹਤ', nameEn: 'Health', slug: 'health', icon: 'fa-heartbeat', order: 5, isDefault: true, isActive: true },
   { _id: 'cat_travel', namePa: 'ਸੈਰ-ਸਪਾਟਾ', nameEn: 'Travel', slug: 'travel', icon: 'fa-plane', order: 6, isDefault: true, isActive: true },
   { _id: 'cat_art_entertainment', namePa: 'ਮਨੋਰੰਜਨ', nameEn: 'Entertainment', slug: 'art-entertainment', icon: 'fa-film', order: 7, isDefault: true, isActive: true },
-  { _id: 'cat_politics', namePa: 'ਰਾਜਨੀਤੀ', nameEn: 'Politics', slug: 'politics', icon: 'fa-university', order: 8, isDefault: false, isActive: true },
-  { _id: 'cat_business', namePa: 'ਵਪਾਰ', nameEn: 'Business', slug: 'business', icon: 'fa-line-chart', order: 9, isDefault: false, isActive: true }
+  { _id: 'cat_politics', namePa: 'ਰਾਜਨੀਤੀ', nameEn: 'Politics', slug: 'politics', icon: 'fa-university', order: 8, isDefault: true, isActive: true },
+  { _id: 'cat_business', namePa: 'ਵਪਾਰ', nameEn: 'Business', slug: 'business', icon: 'fa-line-chart', order: 9, isDefault: true, isActive: true }
 ];
 
 export const categoryAPI = {

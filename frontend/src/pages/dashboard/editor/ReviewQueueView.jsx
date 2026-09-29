@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { articleAPI } from '../../../services/api';
+import ActionModal from '../../../components/Common/ActionModal';
 
 export default function ReviewQueueView({ currentUser, onStatusChanged }) {
   const isAdmin = currentUser?.role === 'admin';
@@ -20,6 +21,7 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
   const [activePreview, setActivePreview] = useState(null);
   const [actionLoading, setActionLoading] = useState(null);
   const [notification, setNotification] = useState('');
+  const [popup, setPopup] = useState(null);
 
   // Rejection modal state
   const [rejectModalArticle, setRejectModalArticle] = useState(null);
@@ -73,7 +75,11 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
       if (onStatusChanged) onStatusChanged();
       setTimeout(() => setNotification(''), 4500);
     } catch (err) {
-      alert('Error updating article status: ' + err.message);
+      setPopup({
+        type: 'error',
+        title: 'ਸਮੱਸਿਆ ਆਈ (Error)',
+        message: 'ਖ਼ਬਰ ਸਥਿਤੀ ਅੱਪਡੇਟ ਕਰਨ ਵਿੱਚ ਗਲਤੀ: ' + err.message
+      });
     } finally {
       setActionLoading(null);
     }
@@ -986,6 +992,18 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
           </div>
         </div>
       )}
+
+      {/* Custom Action Modal */}
+      <ActionModal
+        isOpen={Boolean(popup)}
+        type={popup?.type || 'alert'}
+        title={popup?.title}
+        message={popup?.message}
+        confirmLabel={popup?.confirmLabel}
+        confirmColor={popup?.confirmColor}
+        onConfirm={popup?.onConfirm}
+        onClose={() => setPopup(null)}
+      />
     </div>
   );
 }

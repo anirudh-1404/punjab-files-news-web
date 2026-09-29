@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { contactAPI } from '../../../services/api';
+import ActionModal from '../../../components/Common/ActionModal';
 
 export default function ContactMessagesView({ onUnreadCountChange }) {
   const [messages, setMessages] = useState([]);
@@ -8,6 +9,7 @@ export default function ContactMessagesView({ onUnreadCountChange }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [actionLoading, setActionLoading] = useState(null);
   const [notification, setNotification] = useState('');
+  const [popup, setPopup] = useState(null);
 
   const fetchMessages = useCallback(async () => {
     try {
@@ -43,28 +45,42 @@ export default function ContactMessagesView({ onUnreadCountChange }) {
       setNotification(`ਸੁਨੇਹਾ '${newStatus === 'read' ? 'ਪੜ੍ਹ ਲਿਆ' : 'ਅਣਪੜ੍ਹਿਆ'}' ਮਾਰਕ ਕੀਤਾ ਗਿਆ।`);
       setTimeout(() => setNotification(''), 3000);
     } catch (err) {
-      alert('Error updating message status: ' + err.message);
+      setPopup({
+        type: 'error',
+        title: 'ਸਮੱਸਿਆ ਆਈ (Error)',
+        message: 'ਸੁਨੇਹੇ ਦੀ ਸਥਿਤੀ ਬਦਲਣ ਵਿੱਚ ਗਲਤੀ: ' + err.message
+      });
     } finally {
       setActionLoading(null);
     }
   };
 
-  const handleDelete = async (id, senderName) => {
-    if (!window.confirm(`ਕੀ ਤੁਸੀਂ "${senderName}" ਵੱਲੋਂ ਭੇਜਿਆ ਇਹ ਸੁਨੇਹਾ ਮਿਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ?`)) {
-      return;
-    }
-
-    try {
-      setActionLoading(id);
-      await contactAPI.deleteMessage(id);
-      setMessages((prev) => prev.filter((m) => m._id !== id));
-      setNotification('ਸੁਨੇਹਾ ਸਫ਼ਲਤਾਪੂਰਵਕ ਹਟਾ ਦਿੱਤਾ ਗਿਆ ਹੈ!');
-      setTimeout(() => setNotification(''), 3000);
-    } catch (err) {
-      alert('Error deleting message: ' + err.message);
-    } finally {
-      setActionLoading(null);
-    }
+  const handleDelete = (id, senderName) => {
+    setPopup({
+      type: 'confirm',
+      title: 'ਸੁਨੇਹਾ ਮਿਟਾਓ (Delete Message)',
+      message: `ਕੀ ਤੁਸੀਂ "${senderName}" ਵੱਲੋਂ ਭੇਜਿਆ ਇਹ ਸੁਨੇਹਾ ਮਿਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ?\n\n(Are you sure you want to delete this message?)`,
+      confirmLabel: 'ਹਾਂ, ਮਿਟਾਓ (Yes, Delete)',
+      confirmColor: '#b71c1c',
+      onConfirm: async () => {
+        setPopup(null);
+        try {
+          setActionLoading(id);
+          await contactAPI.deleteMessage(id);
+          setMessages((prev) => prev.filter((m) => m._id !== id));
+          setNotification('ਸੁਨੇਹਾ ਸਫ਼ਲਤਾਪੂਰਵਕ ਹਟਾ ਦਿੱਤਾ ਗਿਆ ਹੈ!');
+          setTimeout(() => setNotification(''), 3000);
+        } catch (err) {
+          setPopup({
+            type: 'error',
+            title: 'ਸਮੱਸਿਆ ਆਈ (Error)',
+            message: 'ਸੁਨੇਹਾ ਮਿਟਾਉਣ ਵਿੱਚ ਗਲਤੀ: ' + err.message
+          });
+        } finally {
+          setActionLoading(null);
+        }
+      }
+    });
   };
 
   // Filtered messages
@@ -364,6 +380,18 @@ export default function ContactMessagesView({ onUnreadCountChange }) {
           })}
         </div>
       )}
+
+      {/* Custom Action Modal */}
+      <ActionModal
+        isOpen={Boolean(popup)}
+        type={popup?.type || 'alert'}
+        title={popup?.title}
+        message={popup?.message}
+        confirmLabel={popup?.confirmLabel}
+        confirmColor={popup?.confirmColor}
+        onConfirm={popup?.onConfirm}
+        onClose={() => setPopup(null)}
+      />
     </div>
   );
 }

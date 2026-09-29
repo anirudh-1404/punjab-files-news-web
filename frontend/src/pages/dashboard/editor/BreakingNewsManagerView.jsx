@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { breakingAPI } from '../../../services/api';
+import ActionModal from '../../../components/Common/ActionModal';
 
 const DEFAULT_TAGS = [
   { value: 'ਪੰਜਾਬ', label: 'ਪੰਜਾਬ (Punjab)' },
@@ -20,6 +21,7 @@ export default function BreakingNewsManagerView() {
   const [priority, setPriority] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [msg, setMsg] = useState('');
+  const [popup, setPopup] = useState(null);
 
   const fetchBreaking = useCallback(async () => {
     try {
@@ -54,25 +56,39 @@ export default function BreakingNewsManagerView() {
       setMsg('ਬਰੇਕਿੰਗ ਨਿਊਜ਼ ਸਫ਼ਲਤਾਪੂਰਵਕ ਸ਼ਾਮਲ ਹੋ ਗਈ ਹੈ! (Breaking news added successfully)');
       setTimeout(() => setMsg(''), 3000);
     } catch (err) {
-      alert('Error: ' + err.message);
+      setPopup({
+        type: 'error',
+        title: 'ਸਮੱਸਿਆ ਆਈ (Error)',
+        message: 'ਬਰੇਕਿੰਗ ਨਿਊਜ਼ ਸ਼ਾਮਲ ਕਰਨ ਵਿੱਚ ਗਲਤੀ: ' + err.message
+      });
     } finally {
       setSubmitting(false);
     }
   };
 
-  const handleDelete = async (id, headline) => {
-    if (!window.confirm(`ਕੀ ਤੁਸੀਂ ਇਹ ਬਰੇਕਿੰਗ ਅਲਰਟ ਹਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ? (Delete this alert?)\n"${headline}"`)) {
-      return;
-    }
-
-    try {
-      await breakingAPI.deleteBreaking(id);
-      setItems((prev) => prev.filter((i) => i._id !== id));
-      setMsg('ਬਰੇਕਿੰਗ ਨਿਊਜ਼ ਹਟਾ ਦਿੱਤੀ ਗਈ ਹੈ! (Breaking news removed)');
-      setTimeout(() => setMsg(''), 3000);
-    } catch (err) {
-      alert('Error: ' + err.message);
-    }
+  const handleDelete = (id, headline) => {
+    setPopup({
+      type: 'confirm',
+      title: 'ਬਰੇਕਿੰਗ ਅਲਰਟ ਹਟਾਓ (Delete Breaking Alert)',
+      message: `ਕੀ ਤੁਸੀਂ ਇਹ ਬਰੇਕਿੰਗ ਅਲਰਟ ਹਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ?\n\n"${headline}"`,
+      confirmLabel: 'ਹਾਂ, ਹਟਾਓ (Yes, Delete)',
+      confirmColor: '#b71c1c',
+      onConfirm: async () => {
+        setPopup(null);
+        try {
+          await breakingAPI.deleteBreaking(id);
+          setItems((prev) => prev.filter((i) => i._id !== id));
+          setMsg('ਬਰੇਕਿੰਗ ਨਿਊਜ਼ ਹਟਾ ਦਿੱਤੀ ਗਈ ਹੈ! (Breaking news removed)');
+          setTimeout(() => setMsg(''), 3000);
+        } catch (err) {
+          setPopup({
+            type: 'error',
+            title: 'ਸਮੱਸਿਆ ਆਈ (Error)',
+            message: 'ਬਰੇਕਿੰਗ ਨਿਊਜ਼ ਹਟਾਉਣ ਵਿੱਚ ਗਲਤੀ: ' + err.message
+          });
+        }
+      }
+    });
   };
 
   return (
@@ -231,6 +247,18 @@ export default function BreakingNewsManagerView() {
           </div>
         )}
       </div>
+
+      {/* Custom Action Modal */}
+      <ActionModal
+        isOpen={Boolean(popup)}
+        type={popup?.type || 'alert'}
+        title={popup?.title}
+        message={popup?.message}
+        confirmLabel={popup?.confirmLabel}
+        confirmColor={popup?.confirmColor}
+        onConfirm={popup?.onConfirm}
+        onClose={() => setPopup(null)}
+      />
     </div>
   );
 }

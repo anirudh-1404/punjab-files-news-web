@@ -53,8 +53,8 @@ export const DEFAULT_CATEGORIES = [
   { namePa: "ਸਿਹਤ", nameEn: "Health", slug: "health", icon: "fa-heartbeat", order: 5, isDefault: true },
   { namePa: "ਸੈਰ-ਸਪਾਟਾ", nameEn: "Travel", slug: "travel", icon: "fa-plane", order: 6, isDefault: true },
   { namePa: "ਮਨੋਰੰਜਨ", nameEn: "Entertainment", slug: "art-entertainment", icon: "fa-film", order: 7, isDefault: true },
-  { namePa: "ਰਾਜਨੀਤੀ", nameEn: "Politics", slug: "politics", icon: "fa-university", order: 8, isDefault: false },
-  { namePa: "ਵਪਾਰ", nameEn: "Business", slug: "business", icon: "fa-line-chart", order: 9, isDefault: false }
+  { namePa: "ਰਾਜਨੀਤੀ", nameEn: "Politics", slug: "politics", icon: "fa-university", order: 8, isDefault: true },
+  { namePa: "ਵਪਾਰ", nameEn: "Business", slug: "business", icon: "fa-line-chart", order: 9, isDefault: true }
 ];
 
 const Category = mongoose.model("Category", categorySchema);

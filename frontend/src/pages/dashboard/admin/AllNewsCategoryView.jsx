@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { articleAPI, categoryAPI, uploadAPI } from '../../../services/api';
 import { formatArticleDate } from '../../../services/dateUtils';
 import { transliterateGurmukhiToEnglish } from '../../../services/slugUtils';
+import ActionModal from '../../../components/Common/ActionModal';
 
 const CATEGORIES = [
   { id: 'all', label: 'ਸਾਰੀਆਂ', labelEn: 'All News', icon: 'fa-th-large' },
@@ -33,6 +34,7 @@ export default function AllNewsCategoryView({ currentUser, onNavigate }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('newest'); // 'newest', 'views', 'oldest'
   const [notification, setNotification] = useState('');
+  const [popup, setPopup] = useState(null);
 
   // Modals state
   const [editingArticle, setEditingArticle] = useState(null);
@@ -175,7 +177,11 @@ export default function AllNewsCategoryView({ currentUser, onNavigate }) {
     e.preventDefault();
     if (!editingArticle) return;
     if (!editFormData.title.trim()) {
-      alert('ਕਿਰਪਾ ਕਰਕੇ ਸਿਰਲੇਖ ਦਰਜ ਕਰੋ (Title is required)');
+      setPopup({
+        type: 'alert',
+        title: 'ਖਾਨੇ ਖਾਲੀ ਹਨ (Required Field)',
+        message: 'ਕਿਰਪਾ ਕਰਕੇ ਸਿਰਲੇਖ ਦਰਜ ਕਰੋ (Title is required).'
+      });
       return;
     }
 
@@ -199,7 +205,11 @@ export default function AllNewsCategoryView({ currentUser, onNavigate }) {
       await fetchArticles();
       setTimeout(() => setNotification(''), 4500);
     } catch (err) {
-      alert('Error updating article: ' + err.message);
+      setPopup({
+        type: 'error',
+        title: 'ਸਮੱਸਿਆ ਆਈ (Error)',
+        message: 'ਖ਼ਬਰ ਅੱਪਡੇਟ ਕਰਨ ਵਿੱਚ ਗਲਤੀ: ' + err.message
+      });
     } finally {
       setIsSavingEdit(false);
     }
@@ -225,7 +235,11 @@ export default function AllNewsCategoryView({ currentUser, onNavigate }) {
       await fetchArticles();
       setTimeout(() => setNotification(''), 4500);
     } catch (err) {
-      alert('Error deleting article: ' + err.message);
+      setPopup({
+        type: 'error',
+        title: 'ਸਮੱਸਿਆ ਆਈ (Error)',
+        message: 'ਖ਼ਬਰ ਹਟਾਉਣ ਵਿੱਚ ਗਲਤੀ: ' + err.message
+      });
     } finally {
       setIsDeleting(false);
     }
@@ -1566,6 +1580,18 @@ export default function AllNewsCategoryView({ currentUser, onNavigate }) {
           </div>
         </div>
       )}
+
+      {/* Custom Action Modal */}
+      <ActionModal
+        isOpen={Boolean(popup)}
+        type={popup?.type || 'alert'}
+        title={popup?.title}
+        message={popup?.message}
+        confirmLabel={popup?.confirmLabel}
+        confirmColor={popup?.confirmColor}
+        onConfirm={popup?.onConfirm}
+        onClose={() => setPopup(null)}
+      />
     </div>
   );
 }
