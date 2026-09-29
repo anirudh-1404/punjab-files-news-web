@@ -430,25 +430,31 @@ export default function PunjabiChatbot() {
             transform: scale(1);
           }
         }
+        .punjabi-chat-dialog {
+          overscroll-behavior: contain !important;
+        }
         .punjabi-chat-messages {
           scrollbar-width: thin;
-          scrollbar-color: #cbd5e1 transparent;
+          scrollbar-color: #94a3b8 #f1f5f9;
           overflow-y: auto !important;
           overflow-x: hidden !important;
+          overscroll-behavior: contain !important;
+          -webkit-overflow-scrolling: touch !important;
+          touch-action: pan-y !important;
         }
         .punjabi-chat-messages::-webkit-scrollbar {
-          width: 5px;
-          height: 0px;
+          width: 6px;
         }
         .punjabi-chat-messages::-webkit-scrollbar-track {
-          background: transparent;
+          background: #f1f5f9;
+          border-radius: 999px;
         }
         .punjabi-chat-messages::-webkit-scrollbar-thumb {
-          background: #cbd5e1;
+          background: #94a3b8;
           border-radius: 999px;
         }
         .punjabi-chat-messages::-webkit-scrollbar-thumb:hover {
-          background: #94a3b8;
+          background: #64748b;
         }
       `}</style>
 
@@ -624,6 +630,9 @@ export default function PunjabiChatbot() {
       {isOpen && (
         <div
           className="punjabi-chat-dialog"
+          data-lenis-prevent="true"
+          onWheel={(e) => e.stopPropagation()}
+          onTouchMove={(e) => e.stopPropagation()}
           style={{
             width: '360px',
             maxWidth: 'calc(100vw - 24px)',
@@ -636,6 +645,7 @@ export default function PunjabiChatbot() {
             display: 'flex',
             flexDirection: 'column',
             overflow: 'hidden',
+            overscrollBehavior: 'contain',
             fontFamily: "'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif"
           }}
         >
@@ -734,13 +744,24 @@ export default function PunjabiChatbot() {
           {/* Messages Container */}
           <div
             className="punjabi-chat-messages"
+            data-lenis-prevent="true"
+            onWheel={(e) => e.stopPropagation()}
+            onTouchMove={(e) => e.stopPropagation()}
             style={{
-              flex: 1,
+              flex: '1 1 0%',
+              minHeight: 0,
+              height: 0,
+              maxHeight: '100%',
+              overflowY: 'auto',
+              overflowX: 'hidden',
               padding: '14px',
               backgroundColor: '#f8fafc',
               display: 'flex',
               flexDirection: 'column',
-              gap: '11px'
+              gap: '11px',
+              overscrollBehavior: 'contain',
+              WebkitOverflowScrolling: 'touch',
+              touchAction: 'pan-y'
             }}
           >
             {messages.map((m, idx) => (
@@ -847,7 +868,10 @@ export default function PunjabiChatbot() {
                                 color: '#0f172a',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap'
+                                display: '-webkit-box',
+                                WebkitLineClamp: 2,
+                                WebkitBoxOrient: 'vertical',
+                                lineHeight: '1.35'
                               }}
                             >
                               {art.title}

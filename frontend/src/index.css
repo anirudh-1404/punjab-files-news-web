@@ -2844,4 +2844,22 @@ img {
   transform: translateZ(0);
 }
 
+/* ====================================================
+   PUNJAB FILES CHATBOT NATURAL SCROLLING
+==================================================== */
+.punjabi-chat-dialog {
+  overscroll-behavior: contain !important;
+}
+
+.punjabi-chat-messages {
+  flex: 1 1 0% !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+}
+
+
 

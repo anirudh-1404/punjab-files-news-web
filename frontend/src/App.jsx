@@ -98,6 +98,15 @@ export default function App() {
       wheelMultiplier: 1.0,
       touchMultiplier: 1.5,
       infinite: false,
+      prevent: (node) => {
+        return (
+          node.classList?.contains('punjabi-chat-dialog') ||
+          node.classList?.contains('punjabi-chat-messages') ||
+          Boolean(node.closest?.('.punjabi-chat-dialog')) ||
+          Boolean(node.closest?.('.punjabi-chat-messages')) ||
+          Boolean(node.closest?.('[data-lenis-prevent]'))
+        );
+      },
     });
 
     // Seamless in-page smooth anchor scrolling
