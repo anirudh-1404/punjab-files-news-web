@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { articleAPI } from '../services/api';
 import { getAllArticles } from '../services/articleStore';
+import { getCardImageUrl } from '../services/imageUtils';
 
 const emptyRegionalNews = {
   majha: [],
@@ -247,9 +248,17 @@ export default function DarbarSahibAndPunjabModule() {
                     <div style={{ position: 'relative', width: '100%', height: '165px', overflow: 'hidden', backgroundColor: '#edf2f7' }}>
                       <Link to={`/news/${item.id}`} style={{ display: 'block', width: '100%', height: '100%' }}>
                         <img
-                          src={item.img}
+                          src={getCardImageUrl(item.img, 380)}
                           alt={item.title}
-                          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.3s' }}
+                          loading="lazy"
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            display: 'block',
+                            transition: 'transform 0.3s',
+                            imageRendering: '-webkit-optimize-contrast'
+                          }}
                           onError={(e) => {
                             e.target.onerror = null;
                             e.target.src = '/img/index_370x185-image01.jpg';

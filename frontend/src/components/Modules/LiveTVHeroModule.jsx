@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getLivePunjabiNews } from '../../services/newsService';
+import { getCardImageUrl } from '../../services/imageUtils';
 
 const defaultFourItems = [
   {
@@ -263,9 +264,10 @@ export default function LiveTVHeroModule() {
                     >
                       <a href={item.link} target="_blank" rel="noreferrer" style={{ display: 'block', width: '100%', height: '100%' }}>
                         <img
-                          src={item.img}
+                          src={getCardImageUrl(item.img, 200)}
                           alt={item.title}
-                          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                          loading="lazy"
+                          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', imageRendering: '-webkit-optimize-contrast' }}
                           onError={(e) => {
                             e.target.onerror = null;
                             e.target.src = '/img/index_370x185-image01.jpg';
@@ -308,9 +310,10 @@ export default function LiveTVHeroModule() {
                     <div style={{ position: 'relative', width: '100%', height: '140px', overflow: 'hidden', backgroundColor: '#111' }}>
                       <a href={item.link} target="_blank" rel="noreferrer" style={{ display: 'block', width: '100%', height: '100%' }}>
                         <img
-                          src={item.img}
+                          src={getCardImageUrl(item.img, 360)}
                           alt={item.title}
-                          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                          loading="lazy"
+                          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', imageRendering: '-webkit-optimize-contrast' }}
                           onError={(e) => {
                             e.target.onerror = null;
                             e.target.src = '/img/index_800x400-image01.jpg';

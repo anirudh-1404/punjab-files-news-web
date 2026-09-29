@@ -2829,3 +2829,19 @@ html.lenis, html.lenis body {
   border-top: 1.5px solid #e2e8f0;
 }
 
+/* ====================================================
+   HIGH-PIXEL & SHARP IMAGE RENDERING
+==================================================== */
+img {
+  image-rendering: -webkit-optimize-contrast;
+}
+
+.news-featured-image,
+.article-featured-img {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+

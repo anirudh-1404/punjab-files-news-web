@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { articleAPI, categoryAPI } from '../services/api';
 import { getAllArticles } from '../services/articleStore';
 import { formatArticleDate } from '../services/dateUtils';
+import { getHighResImageUrl, getCardImageUrl } from '../services/imageUtils';
 
 const REGION_INFO = {
   majha: {
@@ -353,13 +354,15 @@ export default function CategoryNewsPage() {
                     >
                       <div style={{ height: '340px', overflow: 'hidden', position: 'relative', backgroundColor: '#0f172a' }}>
                         <img
-                          src={leadArticle.featuredImage || '/img/index_800x400-image01.jpg'}
+                          src={getHighResImageUrl(leadArticle.featuredImage || '/img/index_800x400-image01.jpg')}
                           alt={leadArticle.title}
+                          loading="eager"
                           style={{
                             width: '100%',
                             height: '100%',
                             objectFit: 'cover',
-                            transition: 'transform 0.3s ease'
+                            transition: 'transform 0.3s ease',
+                            imageRendering: '-webkit-optimize-contrast'
                           }}
                         />
                         <div
@@ -453,13 +456,15 @@ export default function CategoryNewsPage() {
                           style={{ textDecoration: 'none', display: 'block', height: '180px', overflow: 'hidden' }}
                         >
                           <img
-                            src={art.featuredImage || '/img/index_800x400-image02.jpg'}
+                            src={getCardImageUrl(art.featuredImage || '/img/index_800x400-image02.jpg', 420)}
                             alt={art.title}
+                            loading="lazy"
                             style={{
                               width: '100%',
                               height: '100%',
                               objectFit: 'cover',
-                              transition: 'transform 0.3s ease'
+                              transition: 'transform 0.3s ease',
+                              imageRendering: '-webkit-optimize-contrast'
                             }}
                           />
                         </Link>

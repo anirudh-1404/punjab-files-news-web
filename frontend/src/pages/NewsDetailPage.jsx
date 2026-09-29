@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { articleAPI } from '../services/api';
 import { getArticleById, incrementArticleViews, getRelatedArticles } from '../services/articleStore';
 import { formatArticleDate, formatArticleTime } from '../services/dateUtils';
+import { getHighResImageUrl } from '../services/imageUtils';
 
 export default function NewsDetailPage() {
   const { id } = useParams();
@@ -386,9 +387,21 @@ export default function NewsDetailPage() {
                   </video>
                 ) : (
                   <img
-                    src={article.featuredImage}
+                    src={getHighResImageUrl(article.featuredImage)}
                     alt={article.title}
-                    style={{ width: '100%', maxHeight: '440px', objectFit: 'cover', display: 'block' }}
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="async"
+                    style={{
+                      width: '100%',
+                      height: 'auto',
+                      maxHeight: '620px',
+                      objectFit: 'contain',
+                      display: 'block',
+                      margin: '0 auto',
+                      imageRendering: '-webkit-optimize-contrast',
+                      backgroundColor: '#0a0f1d'
+                    }}
                     onError={(e) => {
                       e.target.onerror = null;
                       e.target.src = '/img/index_800x400-image01.jpg';

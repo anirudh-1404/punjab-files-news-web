@@ -19,11 +19,8 @@ export const uploadImage = async (req, res) => {
       resource_type: isVideo ? "video" : "image"
     };
 
-    if (!isVideo) {
-      uploadOptions.transformation = [
-        { quality: "auto", fetch_format: "auto" } // automatic compression & optimal web format
-      ];
-    }
+    // Do not apply lossy incoming transformations at upload time.
+    // Preserves 100% original full-resolution, high-pixel quality uploaded by the user.
 
     // Pipe the multer buffer directly to Cloudinary upload stream
     const uploadStream = cloudinary.uploader.upload_stream(
