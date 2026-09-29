@@ -35,22 +35,22 @@ export default function TopMenu() {
         {/* Left Social & Contact Links */}
         <ul className="left-top-menu">
           <li>
-            <a href="https://www.facebook.com" target="_blank" rel="noreferrer" className="facebook">
+            <a href="#" onClick={(e) => e.preventDefault()} className="facebook" title="Facebook">
               <i className="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a href="https://twitter.com" target="_blank" rel="noreferrer" className="twitter">
+            <a href="#" onClick={(e) => e.preventDefault()} className="twitter" title="Twitter / X">
               <i className="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a href="https://www.youtube.com" target="_blank" rel="noreferrer" className="youtube">
+            <a href="#" onClick={(e) => e.preventDefault()} className="youtube" title="YouTube">
               <i className="fa fa-youtube"></i>
             </a>
           </li>
           <li>
-            <a href="https://www.instagram.com" target="_blank" rel="noreferrer" className="instagram">
+            <a href="#" onClick={(e) => e.preventDefault()} className="instagram" title="Instagram">
               <i className="fa fa-instagram"></i>
             </a>
           </li>

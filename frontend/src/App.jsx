@@ -24,7 +24,6 @@ import TravelModule from './components/Modules/TravelModule';
 import EntertainmentModule from './components/Modules/EntertainmentModule';
 import ReadersChoiceModule from './components/Modules/ReadersChoiceModule';
 import YouTubeChannelModule from './components/Modules/YouTubeChannelModule';
-import HomeGalleryModule from './components/Modules/HomeGalleryModule';
 
 // Inner Pages
 import NewsDetailPage from './pages/NewsDetailPage';
@@ -75,8 +74,6 @@ function HomePage() {
       {/* 10. ਯੂਟਿਊਬ ਚੈਨਲ: Dedicated YouTube Video Grid */}
       <YouTubeChannelModule />
 
-      {/* 11. ਫ਼ੋਟੋ ਗੈਲਰੀ: Multi-slide Photo & Video Gallery */}
-      <HomeGalleryModule />
     </section>
   );
 }

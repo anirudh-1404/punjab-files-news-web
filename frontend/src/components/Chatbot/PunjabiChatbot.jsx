@@ -145,7 +145,7 @@ export default function PunjabiChatbot() {
       lower.includes('ਨੰਬਰ')
     ) {
       return {
-        text: '🏢 **ਦਫ਼ਤਰ ਸੰਪਰਕ ਜਾਣਕਾਰੀ (Head Bureau):**\n\n• **ਮੁੱਖ ਦਫ਼ਤਰ:** ਪੰਜਾਬ ਫਾਈਲਜ਼ ਮੀਡੀਆ ਨੈੱਟਵਰਕ, ਸ਼੍ਰੀ ਅੰਮ੍ਰਿਤਸਰ ਸਾਹਿਬ ਅਤੇ ਚੰਡੀਗੜ੍ਹ ਬਿਊਰੋ, ਪੰਜਾਬ\n• **ਈਮੇਲ:** info@punjabfiles.com\n• **24x7 ਹੈਲਪਲਾਈਨ:** +91 183 250XXXX / +91 98765 XXXXX\n\nਤੁਸੀਂ ਸਾਡੇ ਸੰਪਰਕ ਪੰਨੇ ਤੋਂ ਵੀ ਸਿੱਧਾ ਸੁਨੇਹਾ ਜਾਂ ਖ਼ਬਰ ਭੇਜ ਸਕਦੇ ਹੋ।',
+        text: '🏢 **ਦਫ਼ਤਰ ਸੰਪਰਕ ਜਾਣਕਾਰੀ (Head Bureau):**\n\n• **ਮੁੱਖ ਦਫ਼ਤਰ:** SCO 106, 3rd Floor, District Shopping Center, Ranjit Avenue, Amritsar-143001 (Punjab)\n• **ਈਮੇਲ:** info@punjabfiles.com\n• **24x7 ਹੈਲਪਲਾਈਨ:** +91 89093 96233\n\nਤੁਸੀਂ ਸਾਡੇ ਸੰਪਰਕ ਪੰਨੇ ਤੋਂ ਵੀ ਸਿੱਧਾ ਸੁਨੇਹਾ ਜਾਂ ਖ਼ਬਰ ਭੇਜ ਸਕਦੇ ਹੋ।',
         action: { label: 'ਸੰਪਰਕ ਪੰਨੇ ’ਤੇ ਜਾਓ (Contact Us)', link: '/contact' },
         chips: ['✍️ ਖ਼ਬਰ ਕਿਵੇਂ ਭੇਜੀਏ?', '📰 ਤਾਜ਼ਾ ਖ਼ਬਰਾਂ']
       };

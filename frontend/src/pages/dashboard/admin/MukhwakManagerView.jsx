@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { mukhwakAPI, uploadAPI } from '../../../services/api';
 
 const DEFAULT_IMAGE_PRESETS = [
-  { label: 'ਦਰਬਾਰ ਸਾਹਿਬ ਅੰਮ੍ਰਿਤ ਵੇਲਾ (Default)', url: '/img/darbar-sahib-mukhwak.jpg' },
-  { label: 'ਸ੍ਰੀ ਹਰਿਮੰਦਰ ਸਾਹਿਬ ਰੌਸ਼ਨੀਆਂ', url: '/img/index_800x400-image04.jpg' },
-  { label: 'ਸ੍ਰੀ ਅਕਾਲ ਤਖ਼ਤ ਸਾਹਿਬ', url: '/img/index_800x400-image01.jpg' }
+  { label: 'ਦਰਬਾਰ ਸਾਹਿਬ ਅੰਮ੍ਰਿਤ ਵੇਲਾ (Default)', url: '/img/darbar-sahib-mukhwak.jpg' }
 ];
 
 export default function MukhwakManagerView({ currentUser }) {

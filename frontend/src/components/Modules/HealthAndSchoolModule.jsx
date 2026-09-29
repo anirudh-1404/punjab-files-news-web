@@ -386,14 +386,10 @@ export default function HealthAndSchoolModule() {
                 </h3>
               </div>
               <ul>
-                <li><a href="https://facebook.com" target="_blank" rel="noreferrer" className="facebook"><i className="fa fa-facebook"></i></a></li>
-                <li><a href="https://youtube.com" target="_blank" rel="noreferrer" className="youtube"><i className="fa fa-youtube"></i></a></li>
-                <li><a href="https://twitter.com" target="_blank" rel="noreferrer" className="twitter"><i className="fa fa-twitter"></i></a></li>
-                <li><a href="https://linkedin.com" target="_blank" rel="noreferrer" className="linkedin"><i className="fa fa-linkedin"></i></a></li>
-                <li><a href="https://pinterest.com" target="_blank" rel="noreferrer" className="pinterest"><i className="fa fa-pinterest"></i></a></li>
-                <li><a href="https://plus.google.com" target="_blank" rel="noreferrer" className="google-plus"><i className="fa fa-google-plus"></i></a></li>
-                <li><a href="#rss" className="rss"><i className="fa fa-rss"></i></a></li>
-                <li><a href="https://tumblr.com" target="_blank" rel="noreferrer" className="tumblr"><i className="fa fa-tumblr"></i></a></li>
+                <li><a href="#" onClick={(e) => e.preventDefault()} className="facebook" title="Facebook"><i className="fa fa-facebook"></i></a></li>
+                <li><a href="#" onClick={(e) => e.preventDefault()} className="youtube" title="YouTube"><i className="fa fa-youtube"></i></a></li>
+                <li><a href="#" onClick={(e) => e.preventDefault()} className="twitter" title="Twitter / X"><i className="fa fa-twitter"></i></a></li>
+                <li><a href="#" onClick={(e) => e.preventDefault()} className="instagram" title="Instagram"><i className="fa fa-instagram"></i></a></li>
               </ul>
             </div>
           </div>

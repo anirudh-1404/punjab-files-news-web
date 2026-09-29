@@ -286,9 +286,10 @@ export default function ContactPage() {
                   <i className="fa fa-map-marker" style={{ fontSize: '16px' }}></i>
                 </div>
                 <div>
-                  <strong style={{ fontSize: '13.5px', color: '#000000', display: 'block' }}>ਮੁੱਖ ਦਫ਼ਤਰ</strong>
-                  <span style={{ fontSize: '13px', color: '#111111', lineHeight: '1.5', fontWeight: '500' }}>
-                    ਪੰਜਾਬ ਫਾਈਲਜ਼ ਮੀਡੀਆ ਨੈੱਟਵਰਕ, ਸ੍ਰੀ ਅੰਮ੍ਰਿਤਸਰ ਸਾਹਿਬ ਅਤੇ ਚੰਡੀਗੜ੍ਹ ਬਿਊਰੋ, ਪੰਜਾਬ (ਭਾਰਤ)
+                  <strong style={{ fontSize: '13.5px', color: '#000000', display: 'block' }}>ਮੁੱਖ ਦਫ਼ਤਰ (Head Office)</strong>
+                  <span style={{ fontSize: '13px', color: '#111111', lineHeight: '1.5', fontWeight: '600' }}>
+                    SCO 106, 3rd FLOOR, DISTRICT SHOPPING CENTER,<br />
+                    RANJIT AVENUE, AMRITSAR-143001 (PUNJAB)
                   </span>
                 </div>
               </div>
@@ -298,7 +299,7 @@ export default function ContactPage() {
                   <i className="fa fa-envelope-o" style={{ fontSize: '15px' }}></i>
                 </div>
                 <div>
-                  <strong style={{ fontSize: '13.5px', color: '#000000', display: 'block' }}>ਈਮੇਲ ਸੰਪਰਕ</strong>
+                  <strong style={{ fontSize: '13.5px', color: '#000000', display: 'block' }}>ਈਮੇਲ ਸੰਪਰਕ (Email)</strong>
                   <a href="mailto:info@punjabfiles.com" style={{ fontSize: '13px', color: '#1c2d5a', fontWeight: '700', textDecoration: 'none' }}>
                     info@punjabfiles.com
                   </a>
@@ -310,10 +311,10 @@ export default function ContactPage() {
                   <i className="fa fa-phone" style={{ fontSize: '15px' }}></i>
                 </div>
                 <div>
-                  <strong style={{ fontSize: '13.5px', color: '#000000', display: 'block' }}>24x7 ਨਿਊਜ਼ ਹੈਲਪਲਾਈਨ</strong>
-                  <span style={{ fontSize: '13px', color: '#111111', fontWeight: '600' }}>
-                    +91 183 250XXXX / +91 98765 XXXXX
-                  </span>
+                  <strong style={{ fontSize: '13.5px', color: '#000000', display: 'block' }}>24x7 ਨਿਊਜ਼ ਹੈਲਪਲਾਈਨ (Phone)</strong>
+                  <a href="tel:+918909396233" style={{ fontSize: '14px', color: '#b71c1c', fontWeight: '800', textDecoration: 'none' }}>
+                    +91 89093 96233
+                  </a>
                 </div>
               </div>
 

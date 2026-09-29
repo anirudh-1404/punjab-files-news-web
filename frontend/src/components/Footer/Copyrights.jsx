@@ -12,23 +12,23 @@ export default function Copyrights() {
         <div className="footer-social-icons">
           <ul>
             <li>
-              <a href="https://plus.google.com" target="_blank" rel="noreferrer" className="google-plus">
-                <i className="fa fa-google-plus"></i>
-              </a>
-            </li>
-            <li>
-              <a href="https://facebook.com" target="_blank" rel="noreferrer" className="facebook">
+              <a href="#" onClick={(e) => e.preventDefault()} className="facebook" title="Facebook">
                 <i className="fa fa-facebook"></i>
               </a>
             </li>
             <li>
-              <a href="https://twitter.com" target="_blank" rel="noreferrer" className="twitter">
+              <a href="#" onClick={(e) => e.preventDefault()} className="twitter" title="Twitter / X">
                 <i className="fa fa-twitter"></i>
               </a>
             </li>
             <li>
-              <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="linkedin">
-                <i className="fa fa-linkedin"></i>
+              <a href="#" onClick={(e) => e.preventDefault()} className="youtube" title="YouTube">
+                <i className="fa fa-youtube"></i>
+              </a>
+            </li>
+            <li>
+              <a href="#" onClick={(e) => e.preventDefault()} className="instagram" title="Instagram">
+                <i className="fa fa-instagram"></i>
               </a>
             </li>
           </ul>
