@@ -32,17 +32,19 @@ export default function CategoryManagerView() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
+  const [isFallbackMode, setIsFallbackMode] = useState(false);
 
   const fetchCategories = useCallback(async () => {
     try {
       setLoading(true);
       const res = await categoryAPI.getAll();
-      if (res && res.data) {
+      if (res && res.data && res.data.length > 0) {
         setCategories(res.data);
+        setIsFallbackMode(Boolean(res.isFallback));
       }
     } catch (err) {
       console.error('Error fetching categories:', err);
-      setNotification('ਕੈਟੇਗਰੀਆਂ ਲੋਡ ਕਰਨ ਵਿੱਚ ਸਮੱਸਿਆ ਆਈ।');
+      setNotification({ type: 'error', text: 'ਕੈਟੇਗਰੀਆਂ ਲੋਡ ਕਰਨ ਵਿੱਚ ਸਮੱਸਿਆ ਆਈ।' });
     } finally {
       setLoading(false);
     }
@@ -190,9 +192,9 @@ export default function CategoryManagerView() {
       {notification && (
         <div
           style={{
-            backgroundColor: '#f0fdf4',
-            border: '1px solid #bbf7d0',
-            color: '#166534',
+            backgroundColor: typeof notification === 'object' && notification.type === 'error' ? '#fef2f2' : '#f0fdf4',
+            border: typeof notification === 'object' && notification.type === 'error' ? '1px solid #fecaca' : '1px solid #bbf7d0',
+            color: typeof notification === 'object' && notification.type === 'error' ? '#991b1b' : '#166534',
             padding: '10px 16px',
             borderRadius: '6px',
             marginBottom: '16px',
@@ -203,14 +205,38 @@ export default function CategoryManagerView() {
             justifyContent: 'space-between'
           }}
         >
-          <span>✓ {notification}</span>
+          <span>{typeof notification === 'object' ? (notification.type === 'error' ? '⚠ ' : '✓ ') + notification.text : '✓ ' + notification}</span>
           <button
             type="button"
             onClick={() => setNotification('')}
-            style={{ background: 'none', border: 'none', color: '#166534', cursor: 'pointer', fontWeight: 'bold' }}
+            style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', fontWeight: 'bold' }}
           >
             ✕
           </button>
+        </div>
+      )}
+
+      {/* Fallback Notice Banner */}
+      {isFallbackMode && !notification && (
+        <div
+          style={{
+            backgroundColor: '#eff6ff',
+            border: '1px solid #bfdbfe',
+            color: '#1e40af',
+            padding: '11px 16px',
+            borderRadius: '6px',
+            marginBottom: '16px',
+            fontSize: '13px',
+            fontWeight: '600',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px'
+          }}
+        >
+          <i className="fa fa-info-circle" style={{ color: '#2563eb', fontSize: '16px' }}></i>
+          <span>
+            <strong>ਸੂਚਨਾ (Notice):</strong> ਰੈਂਡਰ ਬੈਕਐਂਡ ਨਵੀਆਂ ਰੂਟਸ ਨਾਲ ਡਿਪਲਾਏ ਹੋ ਰਿਹਾ ਹੈ। ਸਿਸਟਮ ਦੀਆਂ ਸਾਰੀਆਂ 9 ਮੂਲ ਕੈਟੇਗਰੀਆਂ (Core Categories) ਲਾਈਵ ਲੋਡ ਕੀਤੀਆਂ ਗਈਆਂ ਹਨ।
+          </span>
         </div>
       )}
 

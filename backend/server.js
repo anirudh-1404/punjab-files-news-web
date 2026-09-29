@@ -66,7 +66,18 @@ app.use("/api/categories", categoryRoutes);
 app.get("/api/health", (req, res) => {
   res.status(200).json({
     status: "ok",
+    version: "1.1.0",
     message: "Punjab Files News API is running smoothly",
+    routes: [
+      "/api/auth",
+      "/api/users",
+      "/api/articles",
+      "/api/breaking",
+      "/api/upload",
+      "/api/mukhwak",
+      "/api/contact",
+      "/api/categories"
+    ],
     timestamp: new Date().toISOString()
   });
 });

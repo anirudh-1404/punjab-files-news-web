@@ -390,12 +390,38 @@ export const contactAPI = {
 };
 
 // -------------------------------------------------------------
-// 8. CATEGORIES API
+// 8. CATEGORIES API (WITH RESILIENT FALLBACK)
 // -------------------------------------------------------------
+export const DEFAULT_CATEGORIES = [
+  { _id: 'cat_punjab', namePa: 'ਪੰਜਾਬ', nameEn: 'Punjab', slug: 'punjab', icon: 'fa-map-marker', order: 1, isDefault: true, isActive: true },
+  { _id: 'cat_religion', namePa: 'ਧਰਮ ਤੇ ਵਿਰਾਸਤ', nameEn: 'Religion', slug: 'religion', icon: 'fa-sun-o', order: 2, isDefault: true, isActive: true },
+  { _id: 'cat_world', namePa: 'ਦੇਸ਼-ਵਿਦੇਸ਼', nameEn: 'National & World', slug: 'world', icon: 'fa-globe', order: 3, isDefault: true, isActive: true },
+  { _id: 'cat_sport', namePa: 'ਖੇਡਾਂ', nameEn: 'Sports', slug: 'sport', icon: 'fa-trophy', order: 4, isDefault: true, isActive: true },
+  { _id: 'cat_health', namePa: 'ਸਿਹਤ', nameEn: 'Health', slug: 'health', icon: 'fa-heartbeat', order: 5, isDefault: true, isActive: true },
+  { _id: 'cat_travel', namePa: 'ਸੈਰ-ਸਪਾਟਾ', nameEn: 'Travel', slug: 'travel', icon: 'fa-plane', order: 6, isDefault: true, isActive: true },
+  { _id: 'cat_art_entertainment', namePa: 'ਮਨੋਰੰਜਨ', nameEn: 'Entertainment', slug: 'art-entertainment', icon: 'fa-film', order: 7, isDefault: true, isActive: true },
+  { _id: 'cat_politics', namePa: 'ਰਾਜਨੀਤੀ', nameEn: 'Politics', slug: 'politics', icon: 'fa-university', order: 8, isDefault: false, isActive: true },
+  { _id: 'cat_business', namePa: 'ਵਪਾਰ', nameEn: 'Business', slug: 'business', icon: 'fa-line-chart', order: 9, isDefault: false, isActive: true }
+];
+
 export const categoryAPI = {
-  // Public - get all active categories
+  // Public - get all active categories with automatic fallback to core categories
   getAll: async () => {
-    return apiFetch('/categories');
+    try {
+      const res = await apiFetch('/categories');
+      if (res && res.data && Array.isArray(res.data) && res.data.length > 0) {
+        return res;
+      }
+      return { success: true, count: DEFAULT_CATEGORIES.length, data: DEFAULT_CATEGORIES };
+    } catch (err) {
+      console.warn('Backend /api/categories endpoint not ready, loading system default categories:', err.message);
+      return {
+        success: true,
+        count: DEFAULT_CATEGORIES.length,
+        data: DEFAULT_CATEGORIES,
+        isFallback: true
+      };
+    }
   },
 
   // Protected (Admin) - create new category
