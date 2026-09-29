@@ -216,8 +216,8 @@ export default function CreateArticleView({ user, onArticleCreated }) {
           </h3>
           <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#64748b' }}>
             {canDirectPublish
-              ? 'ਤੁਹਾਡੇ ਕੋਲ ਸਿੱਧਾ ਪ੍ਰਕਾਸ਼ਨ ਅਧਿਕਾਰ ਹੈ। ਤੁਹਾਡੇ ਵੱਲੋਂ ਦਰਜ ਕੀਤੀ ਖ਼ਬਰ ਤੁਰੰਤ ਵੈੱਬਸਾਈਟ ’ਤੇ ਲਾਈਵ ਹੋ ਜਾਵੇਗੀ।'
-              : 'ਤੁਹਾਡੀ ਖ਼ਬਰ ਸੰਪਾਦਕ (Editor) ਵੱਲੋਂ ਸਮੀਖਿਆ ਅਤੇ ਐਡਮਿਨ ਪ੍ਰਵਾਨਗੀ ਤੋਂ ਬਾਅਦ ਵੈੱਬਸਾਈਟ ’ਤੇ ਲਾਈਵ ਹੋਵੇਗੀ।'}
+              ? 'ਤੁਹਾਡੇ ਕੋਲ ਸਿੱਧਾ ਪ੍ਰਕਾਸ਼ਨ ਅਧਿਕਾਰ ਹੈ। ਤੁਹਾਡੇ ਵੱਲੋਂ ਦਰਜ ਕੀਤੀ ਖ਼ਬਰ ਤੁਰੰਤ ਵੈੱਬਸਾਈਟ ’ਤੇ ਲਾਈਵ ਹੋ ਜਾਵੇਗੀ (You have direct publishing privileges. Your article will go live immediately).'
+              : 'ਤੁਹਾਡੀ ਖ਼ਬਰ ਸੰਪਾਦਕ (Editor) ਵੱਲੋਂ ਸਮੀਖਿਆ ਅਤੇ ਐਡਮਿਨ ਪ੍ਰਵਾਨਗੀ ਤੋਂ ਬਾਅਦ ਵੈੱਬਸਾਈਟ ’ਤੇ ਲਾਈਵ ਹੋਵੇਗੀ (Your article will go live after review by Editor and approval by Admin).'}
           </p>
         </div>
         <span
@@ -230,7 +230,7 @@ export default function CreateArticleView({ user, onArticleCreated }) {
             borderRadius: '4px'
           }}
         >
-          {canDirectPublish ? 'ਸਿੱਧਾ ਲਾਈਵ ਪ੍ਰਕਾਸ਼ਨ ਮੋਡ' : 'ਸਮੀਖਿਆ ਅਧੀਨ ਮੋਡ'}
+          {canDirectPublish ? 'ਸਿੱਧਾ ਲਾਈਵ ਪ੍ਰਕਾਸ਼ਨ ਮੋਡ (Direct Publish Mode)' : 'ਸਮੀਖਿਆ ਅਧੀਨ ਮੋਡ (Review Mode)'}
         </span>
       </div>
 
@@ -357,7 +357,7 @@ export default function CreateArticleView({ user, onArticleCreated }) {
             <label style={{ fontSize: '13px', fontWeight: '700', color: '#1e293b', margin: 0 }}>
               🔗 ਅੰਗਰੇਜ਼ੀ URL ਸਿਰਲੇਖ (English URL Slug - Optional)
             </label>
-            <span style={{ fontSize: '11px', color: '#64748b' }}>ਆਪਣੇ ਆਪ ਅੰਗਰੇਜ਼ੀ ਵਿੱਚ ਬਣੇਗਾ</span>
+            <span style={{ fontSize: '11px', color: '#64748b' }}>ਆਪਣੇ ਆਪ ਅੰਗਰੇਜ਼ੀ ਵਿੱਚ ਬਣੇਗਾ (Auto-generated in English)</span>
           </div>
           <input
             type="text"
@@ -543,7 +543,7 @@ export default function CreateArticleView({ user, onArticleCreated }) {
                 <span style={{ fontSize: '11px', fontWeight: '800', backgroundColor: videoUrl.includes('cloudinary') ? '#047857' : '#1c2d5a', color: '#ffffff', padding: '2px 8px', borderRadius: '3px' }}>
                   {videoUrl.includes('cloudinary') ? '✓ Cloudinary Video Hosted' : 'ਵੀਡੀਓ ਲਿੰਕ (Custom URL)'}
                 </span>
-                <span style={{ fontSize: '12px', color: '#64748b' }}>ਵੀਡੀਓ ਪ੍ਰੀਵਿਊ:</span>
+                <span style={{ fontSize: '12px', color: '#64748b' }}>ਵੀਡੀਓ ਪ੍ਰੀਵਿਊ (Video Preview):</span>
               </div>
               <video
                 controls
@@ -554,7 +554,7 @@ export default function CreateArticleView({ user, onArticleCreated }) {
                 type="text"
                 value={videoUrl}
                 onChange={(e) => setVideoUrl(e.target.value)}
-                placeholder="ਜਾਂ ਵੀਡੀਓ ਦਾ ਸਿੱਧਾ URL ਦਰਜ ਕਰੋ..."
+                placeholder="ਜਾਂ ਵੀਡੀਓ ਦਾ ਸਿੱਧਾ URL ਦਰਜ ਕਰੋ (Or enter direct video URL)..."
                 style={{ width: '100%', marginTop: '8px', padding: '7px 10px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '12px' }}
               />
             </div>
@@ -599,7 +599,7 @@ export default function CreateArticleView({ user, onArticleCreated }) {
             ) : (
               <div style={{ padding: '14px 16px', backgroundColor: '#f8fafc', border: '1px dashed #cbd5e1', borderRadius: '6px', textAlign: 'center', color: '#64748b', fontSize: '12.5px', marginBottom: '10px' }}>
                 <i className="fa fa-image" style={{ fontSize: '20px', color: '#94a3b8', display: 'block', marginBottom: '4px' }}></i>
-                ਕੋਈ ਫ਼ੋਟੋ ਨਹੀਂ ਚੁਣੀ ਗਈ। ਉੱਪਰ ਦਿੱਤੇ ਬਟਨ <strong>'ਫ਼ੋਟੋ ਅਪਲੋਡ ਕਰੋ'</strong> 'ਤੇ ਕਲਿੱਕ ਕਰਕੇ ਆਪਣੇ ਸਿਸਟਮ ਵਿੱਚੋਂ ਫ਼ੋਟੋ ਚੁਣੋ।
+                ਕੋਈ ਫ਼ੋਟੋ ਨਹੀਂ ਚੁਣੀ ਗਈ (No photo selected). ਉੱਪਰ ਦਿੱਤੇ ਬਟਨ <strong>'ਫ਼ੋਟੋ ਚੁਣੋ (Choose Image File)'</strong> 'ਤੇ ਕਲਿੱਕ ਕਰਕੇ ਆਪਣੇ ਸਿਸਟਮ ਵਿੱਚੋਂ ਫ਼ੋਟੋ ਚੁਣੋ।
               </div>
             )
           )}
@@ -684,7 +684,7 @@ export default function CreateArticleView({ user, onArticleCreated }) {
         >
           {loading ? (
             <>
-              <i className="fa fa-spinner fa-spin"></i> ਸਬਮਿਟ ਹੋ ਰਿਹਾ ਹੈ...
+              <i className="fa fa-spinner fa-spin"></i> ਸਬਮਿਟ ਹੋ ਰਿਹਾ ਹੈ... (Submitting...)
             </>
           ) : canDirectPublish ? (
             <>

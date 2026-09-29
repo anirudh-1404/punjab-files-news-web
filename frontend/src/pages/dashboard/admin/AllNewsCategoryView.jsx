@@ -215,14 +215,14 @@ export default function AllNewsCategoryView({ currentUser }) {
     if (st === 'pending_admin') {
       return (
         <span style={{ backgroundColor: '#dbeafe', color: '#1d4ed8', padding: '3px 8px', borderRadius: '12px', fontSize: '11px', fontWeight: '800', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-          <i className="fa fa-hourglass-half"></i> ਐਡਮਿਨ ਪ੍ਰਵਾਨਗੀ
+          <i className="fa fa-hourglass-half"></i> ਐਡਮਿਨ ਪ੍ਰਵਾਨਗੀ (Pending Admin)
         </span>
       );
     }
     if (st === 'pending_editor' || st === 'pending_review') {
       return (
         <span style={{ backgroundColor: '#fef3c7', color: '#b45309', padding: '3px 8px', borderRadius: '12px', fontSize: '11px', fontWeight: '800', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-          <i className="fa fa-clock-o"></i> ਸਮੀਖਿਆ ਬਕਾਇਆ
+          <i className="fa fa-clock-o"></i> ਸੰਪਾਦਕ ਸਮੀਖਿਆ (Pending Editor)
         </span>
       );
     }
@@ -242,12 +242,12 @@ export default function AllNewsCategoryView({ currentUser }) {
 
   const getLangBadge = (lang) => {
     if (lang === 'hi') {
-      return <span style={{ backgroundColor: '#ffedd5', color: '#c2410c', padding: '2px 7px', borderRadius: '4px', fontSize: '10.5px', fontWeight: '800' }}>हिंदी</span>;
+      return <span style={{ backgroundColor: '#ffedd5', color: '#c2410c', padding: '2px 7px', borderRadius: '4px', fontSize: '10.5px', fontWeight: '800' }}>हिंदी (Hindi)</span>;
     }
     if (lang === 'en') {
       return <span style={{ backgroundColor: '#e0e7ff', color: '#4338ca', padding: '2px 7px', borderRadius: '4px', fontSize: '10.5px', fontWeight: '800' }}>English</span>;
     }
-    return <span style={{ backgroundColor: '#fee2e2', color: '#b71c1c', padding: '2px 7px', borderRadius: '4px', fontSize: '10.5px', fontWeight: '800' }}>ਪੰਜਾਬੀ</span>;
+    return <span style={{ backgroundColor: '#fee2e2', color: '#b71c1c', padding: '2px 7px', borderRadius: '4px', fontSize: '10.5px', fontWeight: '800' }}>ਪੰਜਾਬੀ (Punjabi)</span>;
   };
 
   return (
@@ -260,11 +260,11 @@ export default function AllNewsCategoryView({ currentUser }) {
               ਸਾਰੀਆਂ ਖ਼ਬਰਾਂ (All News & Category Manager)
             </h3>
             <span style={{ backgroundColor: '#1c2d5a', color: '#ffffff', fontSize: '12px', fontWeight: '800', padding: '3px 10px', borderRadius: '12px' }}>
-              {articles.length} ਖ਼ਬਰਾਂ ਮਿਲੀਆਂ
+              {articles.length} ਖ਼ਬਰਾਂ (Articles Found)
             </span>
           </div>
           <p style={{ margin: '5px 0 0', fontSize: '13px', color: '#64748b' }}>
-            ਸਾਰੀਆਂ ਖ਼ਬਰਾਂ ਨੂੰ ਕੈਟੇਗਰੀ ਅਨੁਸਾਰ ਦੇਖੋ, ਕਿਸੇ ਵੀ ਖ਼ਬਰ ਨੂੰ ਸੋਧੋ (Edit) ਜਾਂ ਹਟਾਓ (Delete)।
+            ਸਾਰੀਆਂ ਖ਼ਬਰਾਂ ਨੂੰ ਕੈਟੇਗਰੀ ਅਨੁਸਾਰ ਦੇਖੋ, ਕਿਸੇ ਵੀ ਖ਼ਬਰ ਨੂੰ ਸੋਧੋ (Edit) ਜਾਂ ਹਟਾਓ (Delete) (View all news by category, edit, or delete any article).
           </p>
         </div>
 
@@ -328,7 +328,7 @@ export default function AllNewsCategoryView({ currentUser }) {
                 }}
               >
                 <i className={`fa ${cat.icon}`} style={{ color: isActive ? '#ebb10d' : '#64748b' }}></i>
-                <span>{cat.label}</span>
+                <span>{cat.label} {cat.labelEn ? `(${cat.labelEn})` : ''}</span>
                 {categoryCounts[cat.id] !== undefined && (
                   <span
                     style={{
@@ -387,7 +387,7 @@ export default function AllNewsCategoryView({ currentUser }) {
           <i className="fa fa-search" style={{ position: 'absolute', left: '12px', top: '11px', color: '#94a3b8' }}></i>
           <input
             type="text"
-            placeholder="ਸਿਰਲੇਖ ਜਾਂ ਪੱਤਰਕਾਰ ਦੇ ਨਾਮ ਨਾਲ ਖ਼ਬਰ ਲੱਭੋ..."
+            placeholder="ਸਿਰਲੇਖ ਜਾਂ ਪੱਤਰਕਾਰ ਦੇ ਨਾਮ ਨਾਲ ਖ਼ਬਰ ਲੱਭੋ... (Search by title or reporter...)"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             style={{
@@ -421,8 +421,8 @@ export default function AllNewsCategoryView({ currentUser }) {
           >
             <option value="all">ਸਾਰੇ ਸਟੇਟਸ (All Status)</option>
             <option value="published">ਲਾਈਵ ਪ੍ਰਕਾਸ਼ਿਤ (Live)</option>
-            <option value="pending_admin">ਐਡਮਿਨ ਪ੍ਰਵਾਨਗੀ ਬਕਾਇਆ</option>
-            <option value="pending_editor">ਸੰਪਾਦਕ ਸਮੀਖਿਆ ਬਕਾਇਆ</option>
+            <option value="pending_admin">ਐਡਮਿਨ ਪ੍ਰਵਾਨਗੀ ਬਕਾਇਆ (Pending Admin)</option>
+            <option value="pending_editor">ਸੰਪਾਦਕ ਸਮੀਖਿਆ ਬਕਾਇਆ (Pending Editor)</option>
             <option value="rejected">ਰੱਦ ਕੀਤੀਆਂ (Rejected)</option>
           </select>
 
@@ -463,7 +463,7 @@ export default function AllNewsCategoryView({ currentUser }) {
             }}
           >
             <option value="newest">ਤਾਜ਼ਾ ਪਹਿਲਾਂ (Newest)</option>
-            <option value="views">ਸਭ ਤੋਂ ਵੱਧ ਪੜ੍ਹੀਆਂ (Views / ਪਾਠਕਾਂ ਦੀ ਪਸੰਦ)</option>
+            <option value="views">ਸਭ ਤੋਂ ਵੱਧ ਪੜ੍ਹੀਆਂ (Views / Popular)</option>
             <option value="oldest">ਪੁਰਾਣੀਆਂ ਪਹਿਲਾਂ (Oldest)</option>
           </select>
         </div>
@@ -473,14 +473,14 @@ export default function AllNewsCategoryView({ currentUser }) {
       {loading ? (
         <div style={{ textAlign: 'center', padding: '50px 20px', color: '#64748b' }}>
           <i className="fa fa-spinner fa-spin" style={{ fontSize: '28px', color: '#b71c1c' }}></i>
-          <p style={{ marginTop: '10px', fontSize: '14px', fontWeight: '600' }}>ਖ਼ਬਰਾਂ ਲੋਡ ਕੀਤੀਆਂ ਜਾ ਰਹੀਆਂ ਹਨ...</p>
+          <p style={{ marginTop: '10px', fontSize: '14px', fontWeight: '600' }}>ਖ਼ਬਰਾਂ ਲੋਡ ਕੀਤੀਆਂ ਜਾ ਰਹੀਆਂ ਹਨ... (Loading articles...)</p>
         </div>
       ) : articles.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '50px 20px', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px dashed #cbd5e1' }}>
           <i className="fa fa-newspaper-o" style={{ fontSize: '36px', color: '#94a3b8', marginBottom: '10px' }}></i>
-          <h4 style={{ margin: '0 0 6px', color: '#334155', fontSize: '16px' }}>ਕੋਈ ਖ਼ਬਰ ਨਹੀਂ ਮਿਲੀ</h4>
+          <h4 style={{ margin: '0 0 6px', color: '#334155', fontSize: '16px' }}>ਕੋਈ ਖ਼ਬਰ ਨਹੀਂ ਮਿਲੀ (No Articles Found)</h4>
           <p style={{ margin: 0, color: '#64748b', fontSize: '13px' }}>
-            ਇਸ ਕੈਟੇਗਰੀ ਜਾਂ ਫਿਲਟਰ ਤਹਿਤ ਕੋਈ ਖ਼ਬਰ ਮੌਜੂਦ ਨਹੀਂ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਫਿਲਟਰ ਬਦਲੋ।
+            ਇਸ ਕੈਟੇਗਰੀ ਜਾਂ ਫਿਲਟਰ ਤਹਿਤ ਕੋਈ ਖ਼ਬਰ ਮੌਜੂਦ ਨਹੀਂ ਹੈ (No articles found under this filter).
           </p>
         </div>
       ) : (
@@ -490,13 +490,13 @@ export default function AllNewsCategoryView({ currentUser }) {
             <table style={{ width: '100%', minWidth: '780px', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
               <thead>
                 <tr style={{ backgroundColor: '#f1f5f9', borderBottom: '2px solid #cbd5e1', color: '#334155' }}>
-                  <th style={{ padding: '12px 10px', width: '50px', fontWeight: '800', textAlign: 'center' }}>ਨੰ:</th>
-                  <th style={{ padding: '12px 14px', fontWeight: '800' }}>ਖ਼ਬਰ (News)</th>
-                  <th style={{ padding: '12px 10px', fontWeight: '800' }}>ਕੈਟੇਗਰੀ</th>
-                  <th style={{ padding: '12px 10px', fontWeight: '800' }}>ਭਾਸ਼ਾ</th>
-                  <th style={{ padding: '12px 10px', fontWeight: '800' }}>ਪੱਤਰਕਾਰ / ਮਿਤੀ</th>
+                  <th style={{ padding: '12px 10px', width: '50px', fontWeight: '800', textAlign: 'center' }}>ਨੰ: (No.)</th>
+                  <th style={{ padding: '12px 14px', fontWeight: '800' }}>ਖ਼ਬਰ (News Title)</th>
+                  <th style={{ padding: '12px 10px', fontWeight: '800' }}>ਕੈਟੇਗਰੀ (Category)</th>
+                  <th style={{ padding: '12px 10px', fontWeight: '800' }}>ਭਾਸ਼ਾ (Language)</th>
+                  <th style={{ padding: '12px 10px', fontWeight: '800' }}>ਪੱਤਰਕਾਰ / ਮਿਤੀ (Author / Date)</th>
                   <th style={{ padding: '12px 10px', fontWeight: '800' }}>ਵਿਊਜ਼ (Views)</th>
-                  <th style={{ padding: '12px 10px', fontWeight: '800' }}>ਸਟੇਟਸ</th>
+                  <th style={{ padding: '12px 10px', fontWeight: '800' }}>ਸਟੇਟਸ (Status)</th>
                   <th style={{ padding: '12px 14px', fontWeight: '800', textAlign: 'right' }}>ਕਾਰਵਾਈਆਂ (Actions)</th>
                 </tr>
               </thead>
@@ -555,7 +555,7 @@ export default function AllNewsCategoryView({ currentUser }) {
                           </a>
                           {art.isBreaking && (
                             <span style={{ backgroundColor: '#b71c1c', color: '#ffffff', fontSize: '10px', fontWeight: '800', padding: '1px 5px', borderRadius: '3px', marginRight: '6px' }}>
-                              <i className="fa fa-bolt"></i> ਬਰੇਕਿੰਗ
+                              <i className="fa fa-bolt"></i> ਬਰੇਕਿੰਗ (Breaking)
                             </span>
                           )}
                           <span style={{ color: '#64748b', fontSize: '11.5px' }}>
@@ -572,7 +572,7 @@ export default function AllNewsCategoryView({ currentUser }) {
                       </span>
                       {art.category === 'punjab' && art.punjabRegion && (
                         <div style={{ fontSize: '10.5px', color: '#b71c1c', fontWeight: '700', marginTop: '3px' }}>
-                          {art.punjabRegion === 'majha' ? 'ਮਾਝਾ' : art.punjabRegion === 'malwa' ? 'ਮਾਲਵਾ' : art.punjabRegion === 'doaba' ? 'ਦੋਆਬਾ' : art.punjabRegion}
+                          {art.punjabRegion === 'majha' ? 'ਮਾਝਾ (Majha)' : art.punjabRegion === 'malwa' ? 'ਮਾਲਵਾ (Malwa)' : art.punjabRegion === 'doaba' ? 'ਦੋਆਬਾ (Doaba)' : art.punjabRegion}
                         </div>
                       )}
                     </td>
@@ -585,7 +585,7 @@ export default function AllNewsCategoryView({ currentUser }) {
                     {/* Author & Date */}
                     <td style={{ padding: '12px 10px', whiteSpace: 'nowrap' }}>
                       <div style={{ fontWeight: '700', color: '#1e293b' }}>
-                        {art.authorName || art.author?.name || 'ਪੱਤਰਕਾਰ'}
+                        {art.authorName || art.author?.name || 'ਪੱਤਰਕਾਰ (Reporter)'}
                       </div>
                       <div style={{ fontSize: '11.5px', color: '#64748b' }}>
                         {art.publishedAt || art.createdAt ? formatArticleDate(art.publishedAt || art.createdAt, art.language) : '—'}
@@ -651,7 +651,7 @@ export default function AllNewsCategoryView({ currentUser }) {
                           }}
                         >
                           <i className="fa fa-pencil"></i>
-                          <span>ਸੋਧੋ</span>
+                          <span>ਸੋਧੋ (Edit)</span>
                         </button>
 
                         {/* Delete button */}
@@ -740,11 +740,11 @@ export default function AllNewsCategoryView({ currentUser }) {
                     </a>
                     {art.isBreaking && (
                       <span style={{ backgroundColor: '#b71c1c', color: '#ffffff', fontSize: '10px', fontWeight: '800', padding: '1px 5px', borderRadius: '3px', display: 'inline-block', marginBottom: '2px' }}>
-                        <i className="fa fa-bolt"></i> ਬਰੇਕਿੰਗ
+                        <i className="fa fa-bolt"></i> ਬਰੇਕਿੰਗ (Breaking)
                       </span>
                     )}
                     <div style={{ fontSize: '11.5px', color: '#64748b', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', marginTop: '2px' }}>
-                      <span><i className="fa fa-user" style={{ marginRight: '3px' }}></i>{art.authorName || art.author?.name || 'ਪੱਤਰਕਾਰ'}</span>
+                      <span><i className="fa fa-user" style={{ marginRight: '3px' }}></i>{art.authorName || art.author?.name || 'ਪੱਤਰਕਾਰ (Reporter)'}</span>
                       <span>•</span>
                       <span>{art.publishedAt || art.createdAt ? formatArticleDate(art.publishedAt || art.createdAt, art.language) : '—'}</span>
                     </div>
@@ -755,7 +755,7 @@ export default function AllNewsCategoryView({ currentUser }) {
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid #f1f5f9', paddingTop: '8px', marginTop: '2px', flexWrap: 'wrap', gap: '8px' }}>
                   <span style={{ fontWeight: '800', color: (art.views || 0) > 100 ? '#b71c1c' : '#334155', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                     <i className={`fa ${(art.views || 0) > 100 ? 'fa-fire' : 'fa-eye'}`} style={{ color: (art.views || 0) > 100 ? '#e11d48' : '#94a3b8' }}></i>
-                    {(art.views || 0).toLocaleString('en-IN')} ਵਿਊਜ਼
+                    {(art.views || 0).toLocaleString('en-IN')} ਵਿਊਜ਼ (Views)
                   </span>
 
                   <div style={{ display: 'inline-flex', gap: '6px' }}>
@@ -777,7 +777,7 @@ export default function AllNewsCategoryView({ currentUser }) {
                         gap: '4px'
                       }}
                     >
-                      <i className="fa fa-external-link"></i> ਵੇਖੋ
+                      <i className="fa fa-external-link"></i> ਵੇਖੋ (View)
                     </a>
 
                     <button
@@ -797,7 +797,7 @@ export default function AllNewsCategoryView({ currentUser }) {
                         gap: '4px'
                       }}
                     >
-                      <i className="fa fa-pencil"></i> ਸੋਧੋ
+                      <i className="fa fa-pencil"></i> ਸੋਧੋ (Edit)
                     </button>
 
                     <button
@@ -817,7 +817,7 @@ export default function AllNewsCategoryView({ currentUser }) {
                         gap: '4px'
                       }}
                     >
-                      <i className="fa fa-trash"></i> ਮਿਟਾਓ
+                      <i className="fa fa-trash"></i> ਮਿਟਾਓ (Delete)
                     </button>
                   </div>
                 </div>
@@ -1071,7 +1071,7 @@ export default function AllNewsCategoryView({ currentUser }) {
                     cursor: 'pointer'
                   }}
                 >
-                  ਰੱਦ ਕਰੋ (Cancel)
+                  ਵਾਪਸ (Cancel)
                 </button>
                 <button
                   type="submit"
@@ -1093,7 +1093,7 @@ export default function AllNewsCategoryView({ currentUser }) {
                   {isSavingEdit ? (
                     <>
                       <i className="fa fa-spinner fa-spin"></i>
-                      <span>ਸੇਵ ਹੋ ਰਿਹਾ ਹੈ...</span>
+                      <span>ਸੇਵ ਹੋ ਰਿਹਾ ਹੈ... (Saving...)</span>
                     </>
                   ) : (
                     <>
@@ -1159,7 +1159,7 @@ export default function AllNewsCategoryView({ currentUser }) {
             </h4>
 
             <p style={{ margin: '0 0 16px', fontSize: '13px', color: '#475569', lineHeight: 1.4 }}>
-              ਕੀ ਤੁਸੀਂ ਯਕੀਨੀ ਤੌਰ 'ਤੇ ਇਹ ਖ਼ਬਰ ਸਿਸਟਮ ਵਿੱਚੋਂ ਪੱਕੇ ਤੌਰ 'ਤੇ ਹਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ? ਇਹ ਕਾਰਵਾਈ ਵਾਪਸ ਨਹੀਂ ਲਈ ਜਾ ਸਕਦੀ।
+              ਕੀ ਤੁਸੀਂ ਯਕੀਨੀ ਤੌਰ 'ਤੇ ਇਹ ਖ਼ਬਰ ਸਿਸਟਮ ਵਿੱਚੋਂ ਪੱਕੇ ਤੌਰ 'ਤੇ ਹਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ? ਇਹ ਕਾਰਵਾਈ ਵਾਪਸ ਨਹੀਂ ਲਈ ਜਾ ਸਕਦੀ (Are you sure you want to permanently delete this article? This action cannot be undone).
             </p>
 
             <div
@@ -1195,7 +1195,7 @@ export default function AllNewsCategoryView({ currentUser }) {
                   cursor: 'pointer'
                 }}
               >
-                ਰੱਦ ਕਰੋ (Cancel)
+                ਵਾਪਸ (Cancel)
               </button>
 
               <button
@@ -1219,7 +1219,7 @@ export default function AllNewsCategoryView({ currentUser }) {
                 {isDeleting ? (
                   <>
                     <i className="fa fa-spinner fa-spin"></i>
-                    <span>ਹਟਾਇਆ ਜਾ ਰਿਹਾ ਹੈ...</span>
+                    <span>ਹਟਾਇਆ ਜਾ ਰਿਹਾ ਹੈ... (Deleting...)</span>
                   </>
                 ) : (
                   <>

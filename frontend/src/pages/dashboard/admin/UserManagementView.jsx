@@ -119,10 +119,10 @@ export default function UserManagementView({ currentUser }) {
 
   const getRoleBadge = (r) => {
     if (r === 'admin') {
-      return <span style={{ backgroundColor: '#1e293b', color: '#fff', fontSize: '11px', fontWeight: '800', padding: '2px 8px', borderRadius: '3px' }}>ਮੁੱਖ ਐਡਮਿਨ</span>;
+      return <span style={{ backgroundColor: '#1e293b', color: '#fff', fontSize: '11px', fontWeight: '800', padding: '2px 8px', borderRadius: '3px' }}>ਮੁੱਖ ਐਡਮਿਨ (Admin)</span>;
     }
     if (r === 'editor') {
-      return <span style={{ backgroundColor: '#b71c1c', color: '#fff', fontSize: '11px', fontWeight: '800', padding: '2px 8px', borderRadius: '3px' }}>ਮੁੱਖ ਸੰਪਾਦਕ</span>;
+      return <span style={{ backgroundColor: '#b71c1c', color: '#fff', fontSize: '11px', fontWeight: '800', padding: '2px 8px', borderRadius: '3px' }}>ਮੁੱਖ ਸੰਪਾਦਕ (Editor)</span>;
     }
     return <span style={{ backgroundColor: '#047857', color: '#fff', fontSize: '11px', fontWeight: '800', padding: '2px 8px', borderRadius: '3px' }}>ਪੱਤਰਕਾਰ (Reporter)</span>;
   };
@@ -136,11 +136,11 @@ export default function UserManagementView({ currentUser }) {
             ਸਟਾਫ਼ ਅਤੇ ਯੂਜ਼ਰ ਪ੍ਰਬੰਧਨ (Staff & User Management)
           </h3>
           <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#64748b' }}>
-            ਨਵੇਂ ਪੱਤਰਕਾਰ ਅਤੇ ਸੰਪਾਦਕ ਸ਼ਾਮਲ ਕਰੋ, ਉਹਨਾਂ ਦੀ ਭੂਮਿਕਾ (Role) ਬਦਲੋ ਜਾਂ ਖਾਤਾ ਸਰਗਰਮ/ਬੰਦ ਕਰੋ।
+            ਨਵੇਂ ਪੱਤਰਕਾਰ ਅਤੇ ਸੰਪਾਦਕ ਸ਼ਾਮਲ ਕਰੋ, ਉਹਨਾਂ ਦੀ ਭੂਮਿਕਾ (Role) ਬਦਲੋ ਜਾਂ ਖਾਤਾ ਸਰਗਰਮ/ਬੰਦ ਕਰੋ (Add reporters & editors, manage roles, or toggle active status).
           </p>
         </div>
         <span style={{ backgroundColor: '#1e293b', color: '#ffffff', fontSize: '11px', fontWeight: '800', padding: '4px 10px', borderRadius: '4px' }}>
-          ਕੇਵਲ ਐਡਮਿਨ ਲਈ
+          ਕੇਵਲ ਐਡਮਿਨ ਲਈ (Admin Only)
         </span>
       </div>
 
@@ -204,7 +204,7 @@ export default function UserManagementView({ currentUser }) {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="ਘੱਟੋ-ਘੱਟ 6 ਅੱਖਰ"
+              placeholder="ਘੱਟੋ-ਘੱਟ 6 ਅੱਖਰ (Min 6 characters)"
               required
               style={{ width: '100%', padding: '8px 10px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '13px' }}
             />
@@ -258,7 +258,7 @@ export default function UserManagementView({ currentUser }) {
                 whiteSpace: 'nowrap'
               }}
             >
-              {creating ? '...' : '+ ਸ਼ਾਮਲ ਕਰੋ'}
+              {creating ? '...' : '+ ਸ਼ਾਮਲ ਕਰੋ (Add)'}
             </button>
           </div>
         </form>
@@ -267,7 +267,7 @@ export default function UserManagementView({ currentUser }) {
       {/* Staff Table */}
       <div>
         <h4 style={{ margin: '0 0 14px', fontSize: '16px', fontWeight: '800', color: '#1e293b' }}>
-          ਸਟਾਫ਼ ਮੈਂਬਰਾਂ ਦੀ ਸੂਚੀ ({users.length})
+          ਸਟਾਫ਼ ਮੈਂਬਰਾਂ ਦੀ ਸੂਚੀ (Staff Member List) ({users.length})
         </h4>
 
         {loading ? (
@@ -281,11 +281,11 @@ export default function UserManagementView({ currentUser }) {
               <table style={{ width: '100%', minWidth: '620px', borderCollapse: 'collapse', fontSize: '13px' }}>
                 <thead>
                   <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0', textAlign: 'left', color: '#475569', fontWeight: '700' }}>
-                    <th style={{ padding: '10px 12px' }}>ਨਾਮ</th>
-                    <th style={{ padding: '10px 12px' }}>ਈਮੇਲ</th>
-                    <th style={{ padding: '10px 12px' }}>ਮੌਜੂਦਾ ਭੂਮਿਕਾ</th>
+                    <th style={{ padding: '10px 12px' }}>ਨਾਮ (Name)</th>
+                    <th style={{ padding: '10px 12px' }}>ਈਮੇਲ (Email)</th>
+                    <th style={{ padding: '10px 12px' }}>ਮੌਜੂਦਾ ਭੂਮਿਕਾ (Role)</th>
                     <th style={{ padding: '10px 12px' }}>ਸਿੱਧਾ ਲਾਈਵ (Direct Publish)</th>
-                    <th style={{ padding: '10px 12px' }}>ਸਟੇਟਸ</th>
+                    <th style={{ padding: '10px 12px' }}>ਸਟੇਟਸ (Status)</th>
                     <th style={{ padding: '10px 12px', textAlign: 'right' }}>ਕਾਰਵਾਈ (Actions)</th>
                   </tr>
                 </thead>
@@ -295,7 +295,7 @@ export default function UserManagementView({ currentUser }) {
                     return (
                       <tr key={u._id} style={{ borderBottom: '1px solid #f1f5f9' }}>
                         <td style={{ padding: '10px 12px', fontWeight: '700', color: '#0f172a' }}>
-                          {u.name} {isSelf && <span style={{ fontSize: '11px', color: '#b71c1c' }}>(ਤੁਸੀਂ)</span>}
+                          {u.name} {isSelf && <span style={{ fontSize: '11px', color: '#b71c1c' }}>(ਤੁਸੀਂ - You)</span>}
                         </td>
                         <td style={{ padding: '10px 12px', color: '#475569' }}>{u.email}</td>
                         <td style={{ padding: '10px 12px' }}>
@@ -307,9 +307,9 @@ export default function UserManagementView({ currentUser }) {
                               onChange={(e) => handleRoleChange(u._id, e.target.value)}
                               style={{ padding: '4px 8px', fontSize: '12px', borderRadius: '4px', border: '1px solid #cbd5e1' }}
                             >
-                              <option value="reporter">ਪੱਤਰਕਾਰ</option>
-                              <option value="editor">ਸੰਪਾਦਕ</option>
-                              <option value="admin">ਐਡਮਿਨ</option>
+                              <option value="reporter">ਪੱਤਰਕਾਰ (Reporter)</option>
+                              <option value="editor">ਸੰਪਾਦਕ (Editor)</option>
+                              <option value="admin">ਐਡਮਿਨ (Admin)</option>
                             </select>
                           )}
                         </td>
@@ -405,7 +405,7 @@ export default function UserManagementView({ currentUser }) {
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
                       <div>
                         <div style={{ fontWeight: '800', color: '#0f172a', fontSize: '14px' }}>
-                          {u.name} {isSelf && <span style={{ fontSize: '11px', color: '#b71c1c' }}>(ਤੁਸੀਂ)</span>}
+                          {u.name} {isSelf && <span style={{ fontSize: '11px', color: '#b71c1c' }}>(ਤੁਸੀਂ - You)</span>}
                         </div>
                         <div style={{ fontSize: '12px', color: '#64748b' }}>{u.email}</div>
                       </div>
@@ -418,9 +418,9 @@ export default function UserManagementView({ currentUser }) {
                             onChange={(e) => handleRoleChange(u._id, e.target.value)}
                             style={{ padding: '4px 8px', fontSize: '12px', borderRadius: '4px', border: '1px solid #cbd5e1', fontWeight: '700' }}
                           >
-                            <option value="reporter">ਪੱਤਰਕਾਰ</option>
-                            <option value="editor">ਸੰਪਾਦਕ</option>
-                            <option value="admin">ਐਡਮਿਨ</option>
+                            <option value="reporter">ਪੱਤਰਕਾਰ (Reporter)</option>
+                            <option value="editor">ਸੰਪਾਦਕ (Editor)</option>
+                            <option value="admin">ਐਡਮਿਨ (Admin)</option>
                           </select>
                         )}
                       </div>
@@ -443,7 +443,7 @@ export default function UserManagementView({ currentUser }) {
                             cursor: isSelf ? 'default' : 'pointer'
                           }}
                         >
-                          {u.isActive ? '● ਸਰਗਰਮ' : '● ਬੰਦ'}
+                          {u.isActive ? '● ਸਰਗਰਮ (Active)' : '● ਬੰਦ (Inactive)'}
                         </button>
 
                         {u.role === 'reporter' && (
@@ -488,7 +488,7 @@ export default function UserManagementView({ currentUser }) {
                             gap: '4px'
                           }}
                         >
-                          <i className="fa fa-trash"></i> ਹਟਾਓ
+                          <i className="fa fa-trash"></i> ਹਟਾਓ (Delete)
                         </button>
                       )}
                     </div>

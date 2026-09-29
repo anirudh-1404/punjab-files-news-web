@@ -1,7 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { breakingAPI } from '../../../services/api';
 
-const DEFAULT_TAGS = ['ਪੰਜਾਬ', 'ਮਾਝਾ', 'ਮਾਲਵਾ', 'ਦੋਆਬਾ', 'ਧਰਮ', 'ਖੇਡਾਂ', 'ਦੇਸ਼-ਵਿਦੇਸ਼', 'ਸਿਹਤ'];
+const DEFAULT_TAGS = [
+  { value: 'ਪੰਜਾਬ', label: 'ਪੰਜਾਬ (Punjab)' },
+  { value: 'ਮਾਝਾ', label: 'ਮਾਝਾ (Majha)' },
+  { value: 'ਮਾਲਵਾ', label: 'ਮਾਲਵਾ (Malwa)' },
+  { value: 'ਦੋਆਬਾ', label: 'ਦੋਆਬਾ (Doaba)' },
+  { value: 'ਧਰਮ', label: 'ਧਰਮ (Religion)' },
+  { value: 'ਖੇਡਾਂ', label: 'ਖੇਡਾਂ (Sports)' },
+  { value: 'ਦੇਸ਼-ਵਿਦੇਸ਼', label: 'ਦੇਸ਼-ਵਿਦੇਸ਼ (National & World)' },
+  { value: 'ਸਿਹਤ', label: 'ਸਿਹਤ (Health)' }
+];
 
 export default function BreakingNewsManagerView() {
   const [items, setItems] = useState([]);
@@ -42,7 +51,7 @@ export default function BreakingNewsManagerView() {
 
       setItems((prev) => [res.item, ...prev]);
       setText('');
-      setMsg('ਬਰੇਕਿੰਗ ਨਿਊਜ਼ ਸਫ਼ਲਤਾਪੂਰਵਕ ਸ਼ਾਮਲ ਹੋ ਗਈ ਹੈ!');
+      setMsg('ਬਰੇਕਿੰਗ ਨਿਊਜ਼ ਸਫ਼ਲਤਾਪੂਰਵਕ ਸ਼ਾਮਲ ਹੋ ਗਈ ਹੈ! (Breaking news added successfully)');
       setTimeout(() => setMsg(''), 3000);
     } catch (err) {
       alert('Error: ' + err.message);
@@ -52,14 +61,14 @@ export default function BreakingNewsManagerView() {
   };
 
   const handleDelete = async (id, headline) => {
-    if (!window.confirm(`ਕੀ ਤੁਸੀਂ ਇਹ ਬਰੇਕਿੰਗ ਅਲਰਟ ਹਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ?\n"${headline}"`)) {
+    if (!window.confirm(`ਕੀ ਤੁਸੀਂ ਇਹ ਬਰੇਕਿੰਗ ਅਲਰਟ ਹਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ? (Delete this alert?)\n"${headline}"`)) {
       return;
     }
 
     try {
       await breakingAPI.deleteBreaking(id);
       setItems((prev) => prev.filter((i) => i._id !== id));
-      setMsg('ਬਰੇਕਿੰਗ ਨਿਊਜ਼ ਹਟਾ ਦਿੱਤੀ ਗਈ ਹੈ!');
+      setMsg('ਬਰੇਕਿੰਗ ਨਿਊਜ਼ ਹਟਾ ਦਿੱਤੀ ਗਈ ਹੈ! (Breaking news removed)');
       setTimeout(() => setMsg(''), 3000);
     } catch (err) {
       alert('Error: ' + err.message);
@@ -74,7 +83,7 @@ export default function BreakingNewsManagerView() {
           ਬਰੇਕਿੰਗ ਨਿਊਜ਼ ਮੈਨੇਜਰ (Live Breaking News Ticker)
         </h3>
         <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#64748b' }}>
-          ਇੱਥੋਂ ਦਰਜ ਕੀਤੀਆਂ ਗਈਆਂ ਸੁਰਖੀਆਂ ਵੈੱਬਸਾਈਟ ਦੇ ਸਭ ਤੋਂ ਉੱਪਰ ਲਾਲ ਮਾਰਕੀ ਪੱਟੀ (Marquee Ticker) ਵਿੱਚ ਲਾਈਵ ਸਕ੍ਰੋਲ ਹੋਣਗੀਆਂ।
+          ਇੱਥੋਂ ਦਰਜ ਕੀਤੀਆਂ ਗਈਆਂ ਸੁਰਖੀਆਂ ਵੈੱਬਸਾਈਟ ਦੇ ਸਭ ਤੋਂ ਉੱਪਰ ਲਾਲ ਮਾਰਕੀ ਪੱਟੀ (Marquee Ticker) ਵਿੱਚ ਲਾਈਵ ਸਕ੍ਰੋਲ ਹੋਣਗੀਆਂ (Headlines added here will scroll live in the top red marquee ticker on the website).
         </p>
       </div>
 
@@ -90,17 +99,17 @@ export default function BreakingNewsManagerView() {
           <i className="fa fa-bolt" style={{ marginRight: '6px' }}></i> ਨਵਾਂ ਬਰੇਕਿੰਗ ਅਲਰਟ ਸ਼ਾਮਲ ਕਰੋ (Add New Alert)
         </h4>
 
-        <form onSubmit={handleAdd} className="breaking-form-grid" style={{ display: 'grid', gridTemplateColumns: '140px 1fr 110px auto', gap: '10px', alignItems: 'center' }}>
+        <form onSubmit={handleAdd} className="breaking-form-grid" style={{ display: 'grid', gridTemplateColumns: '170px 1fr 140px auto', gap: '10px', alignItems: 'center' }}>
           {/* Tag Select */}
           <div className="breaking-tag-col">
             <select
               value={tag}
               onChange={(e) => setTag(e.target.value)}
-              style={{ width: '100%', padding: '9px 10px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '13px', fontWeight: '700' }}
+              style={{ width: '100%', padding: '9px 10px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '12.5px', fontWeight: '700' }}
             >
               {DEFAULT_TAGS.map((t) => (
-                <option key={t} value={t}>
-                  {t}
+                <option key={t.value} value={t.value}>
+                  {t.label}
                 </option>
               ))}
             </select>
@@ -112,7 +121,7 @@ export default function BreakingNewsManagerView() {
               type="text"
               value={text}
               onChange={(e) => setText(e.target.value)}
-              placeholder="ਬਰੇਕਿੰਗ ਨਿਊਜ਼ ਹੈੱਡਲਾਈਨ ਲਿਖੋ..."
+              placeholder="ਬਰੇਕਿੰਗ ਨਿਊਜ਼ ਹੈੱਡਲਾਈਨ ਲਿਖੋ (Enter breaking headline)..."
               required
               style={{ width: '100%', padding: '9px 12px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '13.5px' }}
             />
@@ -123,12 +132,12 @@ export default function BreakingNewsManagerView() {
             <select
               value={priority}
               onChange={(e) => setPriority(e.target.value)}
-              style={{ width: '100%', padding: '9px 8px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '12.5px' }}
+              style={{ width: '100%', padding: '9px 8px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '12px' }}
             >
-              <option value="5">ਤਰਜੀਹ 5 (High)</option>
-              <option value="4">ਤਰਜੀਹ 4</option>
-              <option value="3">ਤਰਜੀਹ 3</option>
-              <option value="2">ਤਰਜੀਹ 2</option>
+              <option value="5">ਤਰਜੀਹ 5 (High Priority)</option>
+              <option value="4">ਤਰਜੀਹ 4 (Priority 4)</option>
+              <option value="3">ਤਰਜੀਹ 3 (Priority 3)</option>
+              <option value="2">ਤਰਜੀਹ 2 (Priority 2)</option>
               <option value="1">ਤਰਜੀਹ 1 (Normal)</option>
             </select>
           </div>
@@ -150,7 +159,7 @@ export default function BreakingNewsManagerView() {
                 whiteSpace: 'nowrap'
               }}
             >
-              {submitting ? '...' : '+ ਸ਼ਾਮਲ ਕਰੋ'}
+              {submitting ? '...' : '+ ਸ਼ਾਮਲ ਕਰੋ (Add)'}
             </button>
           </div>
         </form>
@@ -159,7 +168,7 @@ export default function BreakingNewsManagerView() {
       {/* Active Tickers List */}
       <div>
         <h4 style={{ margin: '0 0 14px', fontSize: '16px', fontWeight: '800', color: '#1e293b' }}>
-          ਸਰਗਰਮ ਬਰੇਕਿੰਗ ਨਿਊਜ਼ ({items.length})
+          ਸਰਗਰਮ ਬਰੇਕਿੰਗ ਨਿਊਜ਼ (Active Breaking News) ({items.length})
         </h4>
 
         {loading ? (
@@ -168,7 +177,7 @@ export default function BreakingNewsManagerView() {
           </div>
         ) : items.length === 0 ? (
           <p style={{ fontSize: '13px', color: '#64748b', fontStyle: 'italic' }}>
-            ਇਸ ਸਮੇਂ ਕੋਈ ਵੀ ਬਰੇਕਿੰਗ ਅਲਰਟ ਐਕਟਿਵ ਨਹੀਂ ਹੈ।
+            ਇਸ ਸਮੇਂ ਕੋਈ ਵੀ ਬਰੇਕਿੰਗ ਅਲਰਟ ਐਕਟਿਵ ਨਹੀਂ ਹੈ (No active breaking news alerts currently).
           </p>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>

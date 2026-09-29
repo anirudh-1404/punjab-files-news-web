@@ -105,12 +105,12 @@ export default function ContactMessagesView({ onUnreadCountChange }) {
               </span>
             ) : (
               <span style={{ backgroundColor: '#f1f5f9', color: '#475569', fontSize: '11.5px', fontWeight: '800', padding: '3px 10px', borderRadius: '12px' }}>
-                ਸਾਰੇ ਸੁਨੇਹੇ ਪੜ੍ਹ ਲਏ ਗਏ
+                ਸਾਰੇ ਸੁਨੇਹੇ ਪੜ੍ਹ ਲਏ ਗਏ (All Read)
               </span>
             )}
           </div>
           <p style={{ margin: '5px 0 0', fontSize: '13px', color: '#64748b' }}>
-            ਵੈੱਬਸਾਈਟ ਦੇ ਸੰਪਰਕ (Contact Us) ਫ਼ਾਰਮ ਰਾਹੀਂ ਪਾਠਕਾਂ ਵੱਲੋਂ ਭੇਜੇ ਗਏ ਸੁਨੇਹੇ, ਫੀਡਬੈਕ ਅਤੇ ਖ਼ਬਰਾਂ ਇੱਥੇ ਦਰਜ ਹੁੰਦੀਆਂ ਹਨ।
+            ਵੈੱਬਸਾਈਟ ਦੇ ਸੰਪਰਕ (Contact Us) ਫ਼ਾਰਮ ਰਾਹੀਂ ਪਾਠਕਾਂ ਵੱਲੋਂ ਭੇਜੇ ਗਏ ਸੁਨੇਹੇ, ਫੀਡਬੈਕ ਅਤੇ ਖ਼ਬਰਾਂ ਇੱਥੇ ਦਰਜ ਹੁੰਦੀਆਂ ਹਨ (Messages, feedback, and tips submitted via Contact Us form appear here).
           </p>
         </div>
 
@@ -149,9 +149,9 @@ export default function ContactMessagesView({ onUnreadCountChange }) {
         {/* Status Filter Buttons */}
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
           {[
-            { key: 'all', label: `ਸਾਰੇ (${messages.length})` },
-            { key: 'unread', label: `ਨਵੇਂ / ਅਣਪੜ੍ਹੇ (${unreadCount})` },
-            { key: 'read', label: `ਪੜ੍ਹੇ ਹੋਏ (${messages.length - unreadCount})` }
+            { key: 'all', label: `ਸਾਰੇ (All) (${messages.length})` },
+            { key: 'unread', label: `ਨਵੇਂ / ਅਣਪੜ੍ਹੇ (Unread) (${unreadCount})` },
+            { key: 'read', label: `ਪੜ੍ਹੇ ਹੋਏ (Read) (${messages.length - unreadCount})` }
           ].map((tab) => (
             <button
               key={tab.key}
@@ -179,7 +179,7 @@ export default function ContactMessagesView({ onUnreadCountChange }) {
           <i className="fa fa-search" style={{ position: 'absolute', left: '10px', top: '10px', color: '#94a3b8', fontSize: '13px' }}></i>
           <input
             type="text"
-            placeholder="ਨਾਮ, ਈਮੇਲ ਜਾਂ ਫ਼ੋਨ ਨੰਬਰ ਖੋਜੋ..."
+            placeholder="ਨਾਮ, ਈਮੇਲ ਜਾਂ ਫ਼ੋਨ ਖੋਜੋ (Search name, email, phone)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             style={{
@@ -199,14 +199,14 @@ export default function ContactMessagesView({ onUnreadCountChange }) {
       {loading ? (
         <div style={{ textAlign: 'center', padding: '50px 20px', color: '#64748b' }}>
           <i className="fa fa-spinner fa-spin" style={{ fontSize: '28px', color: '#b71c1c' }}></i>
-          <p style={{ marginTop: '10px', fontSize: '14px', fontWeight: '600' }}>ਸੁਨੇਹੇ ਲੋਡ ਹੋ ਰਹੇ ਹਨ...</p>
+          <p style={{ marginTop: '10px', fontSize: '14px', fontWeight: '600' }}>ਸੁਨੇਹੇ ਲੋਡ ਹੋ ਰਹੇ ਹਨ... (Loading messages...)</p>
         </div>
       ) : filteredMessages.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '50px 20px', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px dashed #cbd5e1' }}>
           <i className="fa fa-envelope-open-o" style={{ fontSize: '36px', color: '#94a3b8', marginBottom: '10px' }}></i>
-          <h4 style={{ margin: '0 0 6px', color: '#334155', fontSize: '16px' }}>ਕੋਈ ਸੁਨੇਹਾ ਨਹੀਂ ਮਿਲਿਆ</h4>
+          <h4 style={{ margin: '0 0 6px', color: '#334155', fontSize: '16px' }}>ਕੋਈ ਸੁਨੇਹਾ ਨਹੀਂ ਮਿਲਿਆ (No Messages Found)</h4>
           <p style={{ margin: 0, color: '#64748b', fontSize: '13px' }}>
-            ਇਸ ਫਿਲਟਰ ਤਹਿਤ ਕੋਈ ਸੰਪਰਕ ਸੁਨੇਹਾ ਮੌਜੂਦ ਨਹੀਂ ਹੈ।
+            ਇਸ ਫਿਲਟਰ ਤਹਿਤ ਕੋਈ ਸੰਪਰਕ ਸੁਨੇਹਾ ਮੌਜੂਦ ਨਹੀਂ ਹੈ (No messages under this filter).
           </p>
         </div>
       ) : (
@@ -256,7 +256,7 @@ export default function ContactMessagesView({ onUnreadCountChange }) {
                 {/* Contact Info Row: Email & Phone */}
                 <div style={{ display: 'flex', gap: '18px', flexWrap: 'wrap', fontSize: '13px', marginBottom: '12px', color: '#475569' }}>
                   <span>
-                    <strong style={{ color: '#1e293b' }}>ਈਮੇਲ: </strong>
+                    <strong style={{ color: '#1e293b' }}>ਈਮੇਲ (Email): </strong>
                     <a
                       href={`mailto:${m.email}`}
                       style={{ color: '#1d4ed8', textDecoration: 'none', fontWeight: '600' }}
@@ -266,7 +266,7 @@ export default function ContactMessagesView({ onUnreadCountChange }) {
                   </span>
 
                   <span>
-                    <strong style={{ color: '#1e293b' }}>ਫ਼ੋਨ ਨੰਬਰ: </strong>
+                    <strong style={{ color: '#1e293b' }}>ਫ਼ੋਨ ਨੰਬਰ (Phone): </strong>
                     <a
                       href={`tel:${m.phone}`}
                       style={{ color: '#047857', textDecoration: 'none', fontWeight: '600' }}
@@ -314,7 +314,7 @@ export default function ContactMessagesView({ onUnreadCountChange }) {
                     }}
                   >
                     <i className={isUnread ? 'fa fa-check' : 'fa fa-envelope-o'}></i>
-                    <span>{isUnread ? 'ਪੜ੍ਹ ਲਿਆ ਮਾਰਕ ਕਰੋ' : 'ਅਣਪੜ੍ਹਿਆ ਬਣਾਓ'}</span>
+                    <span>{isUnread ? 'ਪੜ੍ਹ ਲਿਆ ਮਾਰਕ ਕਰੋ (Mark Read)' : 'ਅਣਪੜ੍ਹਿਆ ਬਣਾਓ (Mark Unread)'}</span>
                   </button>
 
                   <a
@@ -356,7 +356,7 @@ export default function ContactMessagesView({ onUnreadCountChange }) {
                     }}
                   >
                     <i className="fa fa-trash"></i>
-                    <span>ਮਿਟਾਓ</span>
+                    <span>ਮਿਟਾਓ (Delete)</span>
                   </button>
                 </div>
               </div>

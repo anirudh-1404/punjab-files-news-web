@@ -260,7 +260,7 @@ export default function MukhwakManagerView({ currentUser }) {
               gap: '6px'
             }}
           >
-            <i className={`fa fa-refresh ${loading ? 'fa-spin' : ''}`}></i> ਤਾਜ਼ਾ ਕਰੋ
+            <i className={`fa fa-refresh ${loading ? 'fa-spin' : ''}`}></i> ਤਾਜ਼ਾ ਕਰੋ (Refresh)
           </button>
 
           <button
@@ -419,7 +419,7 @@ export default function MukhwakManagerView({ currentUser }) {
                     color: '#0f172a'
                   }}
                 >
-                  ਅੰਗ: {activeMukhwak.ang}
+                  ਅੰਗ (Ang): {activeMukhwak.ang}
                 </span>
               </div>
 
@@ -443,7 +443,7 @@ export default function MukhwakManagerView({ currentUser }) {
 
               {/* Viakhya preview */}
               <div style={{ fontSize: '13px', color: '#475569', lineHeight: '1.6' }}>
-                <strong style={{ color: '#0f172a' }}>ਅਰਥ / ਵਿਆਖਿਆ: </strong>
+                <strong style={{ color: '#0f172a' }}>ਅਰਥ / ਵਿਆਖਿਆ (Meaning / Explanation): </strong>
                 {activeMukhwak.viakhya}
               </div>
             </div>
@@ -475,21 +475,21 @@ export default function MukhwakManagerView({ currentUser }) {
             ਮੁੱਖ ਵਾਕ ਰਿਕਾਰਡ ਸੂਚੀ (All Mukhwak Records) ({mukhwaks.length})
           </h3>
           <span style={{ fontSize: '12px', color: '#64748b' }}>
-            ਕਿਸੇ ਵੀ ਪੁਰਾਣੇ ਮੁੱਖ ਵਾਕ ਨੂੰ ਦੁਬਾਰਾ ਲਾਈਵ ਜਾਂ ਸੋਧਿਆ ਜਾ ਸਕਦਾ ਹੈ।
+            ਕਿਸੇ ਵੀ ਪੁਰਾਣੇ ਮੁੱਖ ਵਾਕ ਨੂੰ ਦੁਬਾਰਾ ਲਾਈਵ ਜਾਂ ਸੋਧਿਆ ਜਾ ਸਕਦਾ ਹੈ (Any past Mukhwak can be re-activated or edited)।
           </span>
         </div>
 
         {loading ? (
           <div style={{ padding: '40px', textAlign: 'center', color: '#64748b' }}>
             <i className="fa fa-spinner fa-spin" style={{ fontSize: '24px', marginBottom: '10px' }}></i>
-            <div>ਡੇਟਾ ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ...</div>
+            <div>ਡੇਟਾ ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ... (Loading data...)</div>
           </div>
         ) : mukhwaks.length === 0 ? (
           <div style={{ padding: '50px 20px', textAlign: 'center', color: '#64748b' }}>
             <i className="fa fa-book" style={{ fontSize: '36px', color: '#cbd5e1', marginBottom: '12px' }}></i>
-            <h4 style={{ margin: '0 0 6px', color: '#334155' }}>ਕੋਈ ਮੁੱਖ ਵਾਕ ਦਰਜ ਨਹੀਂ ਹੈ</h4>
+            <h4 style={{ margin: '0 0 6px', color: '#334155' }}>ਕੋਈ ਮੁੱਖ ਵਾਕ ਦਰਜ ਨਹੀਂ ਹੈ (No Mukhwak recorded)</h4>
             <p style={{ margin: '0 0 16px', fontSize: '13px' }}>
-              ਉੱਪਰ ਦਿੱਤੇ ਬਟਨ 'ਤੇ ਕਲਿੱਕ ਕਰਕੇ ਨਵਾਂ ਮੁੱਖ ਵਾਕ ਸ਼ਾਮਲ ਕਰੋ।
+              ਉੱਪਰ ਦਿੱਤੇ ਬਟਨ 'ਤੇ ਕਲਿੱਕ ਕਰਕੇ ਨਵਾਂ ਮੁੱਖ ਵਾਕ ਸ਼ਾਮਲ ਕਰੋ (Click button above to add new)।
             </p>
             <button
               type="button"
@@ -505,7 +505,7 @@ export default function MukhwakManagerView({ currentUser }) {
                 cursor: 'pointer'
               }}
             >
-              + ਨਵਾਂ ਮੁੱਖ ਵਾਕ ਸ਼ਾਮਲ ਕਰੋ
+              + ਨਵਾਂ ਮੁੱਖ ਵਾਕ ਸ਼ਾਮਲ ਕਰੋ (Add New)
             </button>
           </div>
         ) : (
@@ -573,7 +573,7 @@ export default function MukhwakManagerView({ currentUser }) {
 
                         <td style={{ padding: '14px 16px' }}>
                           <div style={{ fontWeight: '700', color: '#b71c1c' }}>{item.raag}</div>
-                          <div style={{ fontSize: '11.5px', color: '#64748b' }}>ਅੰਗ: {item.ang}</div>
+                          <div style={{ fontSize: '11.5px', color: '#64748b' }}>ਅੰਗ (Ang): {item.ang}</div>
                         </td>
 
                         <td style={{ padding: '14px 16px', maxWidth: '350px' }}>
@@ -619,7 +619,7 @@ export default function MukhwakManagerView({ currentUser }) {
                                   cursor: 'pointer'
                                 }}
                               >
-                                <i className="fa fa-check"></i> ਲਾਈਵ ਕਰੋ
+                                <i className="fa fa-check"></i> ਲਾਈਵ ਕਰੋ (Make Live)
                               </button>
                             )}
 
@@ -638,7 +638,7 @@ export default function MukhwakManagerView({ currentUser }) {
                                 cursor: 'pointer'
                               }}
                             >
-                              <i className="fa fa-pencil"></i> ਸੋਧੋ
+                              <i className="fa fa-pencil"></i> ਸੋਧੋ (Edit)
                             </button>
 
                             <button
@@ -696,14 +696,14 @@ export default function MukhwakManagerView({ currentUser }) {
                           </span>
                         ) : (
                           <span style={{ backgroundColor: '#f1f5f9', color: '#64748b', padding: '2px 8px', borderRadius: '12px', fontSize: '11px', fontWeight: '700' }}>
-                            ਪੁਰਾਲੇਖ
+                            ਪੁਰਾਲੇਖ (Archived)
                           </span>
                         )}
                         <span style={{ fontWeight: '800', color: '#0f172a', fontSize: '13px' }}>{item.date}</span>
                       </div>
 
                       <span style={{ fontSize: '11.5px', fontWeight: '800', color: '#b71c1c' }}>
-                        {item.raag} (ਅੰਗ: {item.ang})
+                        {item.raag} (ਅੰਗ / Ang: {item.ang})
                       </span>
                     </div>
 
@@ -727,7 +727,7 @@ export default function MukhwakManagerView({ currentUser }) {
                             cursor: 'pointer'
                           }}
                         >
-                          <i className="fa fa-check"></i> ਲਾਈਵ ਕਰੋ
+                          <i className="fa fa-check"></i> ਲਾਈਵ ਕਰੋ (Make Live)
                         </button>
                       )}
 
@@ -745,7 +745,7 @@ export default function MukhwakManagerView({ currentUser }) {
                           cursor: 'pointer'
                         }}
                       >
-                        <i className="fa fa-pencil"></i> ਸੋਧੋ
+                        <i className="fa fa-pencil"></i> ਸੋਧੋ (Edit)
                       </button>
 
                       <button
@@ -765,7 +765,7 @@ export default function MukhwakManagerView({ currentUser }) {
                           cursor: 'pointer'
                         }}
                       >
-                        <i className="fa fa-trash"></i> ਹਟਾਓ
+                        <i className="fa fa-trash"></i> ਹਟਾਓ (Delete)
                       </button>
                     </div>
                   </div>
@@ -1008,7 +1008,7 @@ export default function MukhwakManagerView({ currentUser }) {
                     }}
                   >
                     <i className={`fa ${uploadingImage ? 'fa-spinner fa-spin' : 'fa-upload'}`}></i>
-                    {uploadingImage ? 'ਅਪਲੋਡ ਹੋ ਰਹੀ ਹੈ...' : 'ਨਵੀਂ ਫ਼ੋਟੋ ਅਪਲੋਡ ਕਰੋ'}
+                    {uploadingImage ? 'ਅਪਲੋਡ ਹੋ ਰਹੀ ਹੈ... (Uploading...)' : 'ਨਵੀਂ ਫ਼ੋਟੋ ਅਪਲੋਡ ਕਰੋ (Upload Image)'}
                     <input
                       type="file"
                       accept="image/*"
@@ -1064,7 +1064,7 @@ export default function MukhwakManagerView({ currentUser }) {
                   style={{ width: '18px', height: '18px', cursor: 'pointer' }}
                 />
                 <label htmlFor="isActiveToggle" style={{ fontSize: '13.5px', fontWeight: '700', color: '#166534', cursor: 'pointer' }}>
-                  ਇਸ ਮੁੱਖ ਵਾਕ ਨੂੰ ਤੁਰੰਤ ਹੋਮਪੇਜ ਉੱਤੇ ਲਾਈਵ (Live) ਕਰੋ
+                  ਇਸ ਮੁੱਖ ਵਾਕ ਨੂੰ ਤੁਰੰਤ ਹੋਮਪੇਜ ਉੱਤੇ ਲਾਈਵ ਕਰੋ (Make Active Live on Homepage)
                 </label>
               </div>
 
@@ -1085,7 +1085,7 @@ export default function MukhwakManagerView({ currentUser }) {
                     cursor: 'pointer'
                   }}
                 >
-                  ਰੱਦ ਕਰੋ (Cancel)
+                  ਵਾਪਸ (Cancel)
                 </button>
 
                 <button
@@ -1107,11 +1107,11 @@ export default function MukhwakManagerView({ currentUser }) {
                 >
                   {submitting ? (
                     <>
-                      <i className="fa fa-spinner fa-spin"></i> ਸੇਵ ਹੋ ਰਿਹਾ ਹੈ...
+                      <i className="fa fa-spinner fa-spin"></i> ਸੇਵ ਹੋ ਰਿਹਾ ਹੈ... (Saving...)
                     </>
                   ) : (
                     <>
-                      <i className="fa fa-check"></i> {editingItem ? 'ਅੱਪਡੇਟ ਕਰੋ (Save Changes)' : 'ਦਰਜ ਕਰੋ (Submit)'}
+                      <i className="fa fa-check"></i> {editingItem ? 'ਅੱਪਡੇਟ ਕਰੋ (Update)' : 'ਦਰਜ ਕਰੋ (Submit)'}
                     </>
                   )}
                 </button>
@@ -1191,7 +1191,7 @@ export default function MukhwakManagerView({ currentUser }) {
                   cursor: 'pointer'
                 }}
               >
-                ਰੱਦ ਕਰੋ (Cancel)
+                ਵਾਪਸ (Cancel)
               </button>
 
               <button
@@ -1209,7 +1209,7 @@ export default function MukhwakManagerView({ currentUser }) {
                   cursor: 'pointer'
                 }}
               >
-                {deleting ? 'ਹਟਾਇਆ ਜਾ ਰਿਹਾ ਹੈ...' : 'ਹਾਂ, ਹਟਾਓ (Confirm)'}
+                {deleting ? 'ਹਟਾਇਆ ਜਾ ਰਿਹਾ ਹੈ... (Deleting...)' : 'ਹਾਂ, ਹਟਾਓ (Confirm Delete)'}
               </button>
             </div>
           </div>

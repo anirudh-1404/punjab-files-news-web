@@ -124,19 +124,19 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
             {/* Notification badge */}
             {isAdmin && counts.pendingAdmin > 0 && (
               <span style={{ backgroundColor: '#1e40af', color: '#ffffff', fontSize: '12px', fontWeight: '800', padding: '3px 10px', borderRadius: '12px' }}>
-                {counts.pendingAdmin} ਅੰਤਿਮ ਪ੍ਰਵਾਨਗੀ ਲਈ ਉਡੀਕ ਰਹੇ ਹਨ
+                {counts.pendingAdmin} ਅੰਤਿਮ ਪ੍ਰਵਾਨਗੀ ਉਡੀਕ (Pending Approval)
               </span>
             )}
             {!isAdmin && counts.pendingEditor > 0 && (
               <span style={{ backgroundColor: '#b71c1c', color: '#ffffff', fontSize: '12px', fontWeight: '800', padding: '3px 10px', borderRadius: '12px' }}>
-                {counts.pendingEditor} ਨਵੀਆਂ ਖ਼ਬਰਾਂ ਸਮੀਖਿਆ ਬਕਾਇਆ
+                {counts.pendingEditor} ਸਮੀਖਿਆ ਬਕਾਇਆ (Pending Review)
               </span>
             )}
           </div>
           <p style={{ margin: '6px 0 0', fontSize: '13px', color: '#64748b' }}>
             {isAdmin
-              ? 'ਸੰਪਾਦਕ ਵੱਲੋਂ ਸਮੀਖਿਆ ਕੀਤੀਆਂ ਖ਼ਬਰਾਂ ਦੀ ਅੰਤਿਮ ਪੜਚੋਲ ਕਰੋ ਅਤੇ ਇੱਕ ਕਲਿੱਕ ਨਾਲ ਵੈੱਬਸਾਈਟ ’ਤੇ ਲਾਈਵ ਕਰੋ।'
-              : 'ਰਿਪੋਰਟਰਾਂ ਵੱਲੋਂ ਭੇਜੀਆਂ ਗਈਆਂ ਖ਼ਬਰਾਂ ਦੀ ਸਮੀਖਿਆ ਕਰੋ, ਸੁਧਾਰ ਕਰੋ, ਅਤੇ ਐਡਮਿਨ ਦੀ ਅੰਤਿਮ ਪ੍ਰਵਾਨਗੀ ਲਈ ਅੱਗੇ ਭੇਜੋ।'}
+              ? 'ਸੰਪਾਦਕ ਵੱਲੋਂ ਸਮੀਖਿਆ ਕੀਤੀਆਂ ਖ਼ਬਰਾਂ ਦੀ ਅੰਤਿਮ ਪੜਚੋਲ ਕਰੋ ਅਤੇ ਇੱਕ ਕਲਿੱਕ ਨਾਲ ਵੈੱਬਸਾਈਟ ’ਤੇ ਲਾਈਵ ਕਰੋ (Review editor-verified news and publish live with one click).'
+              : 'ਰਿਪੋਰਟਰਾਂ ਵੱਲੋਂ ਭੇਜੀਆਂ ਗਈਆਂ ਖ਼ਬਰਾਂ ਦੀ ਸਮੀਖਿਆ ਕਰੋ, ਸੁਧਾਰ ਕਰੋ, ਅਤੇ ਐਡਮਿਨ ਦੀ ਅੰਤਿਮ ਪ੍ਰਵਾਨਗੀ ਲਈ ਅੱਗੇ ਭੇਜੋ (Review reporter submissions, make edits, and forward to Admin for final approval).'}
           </p>
         </div>
 
@@ -362,7 +362,7 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
           <i className="fa fa-search" style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', fontSize: '13px' }}></i>
           <input
             type="text"
-            placeholder="ਸਿਰਲੇਖ ਜਾਂ ਰਿਪੋਰਟਰ ਖੋਜੋ..."
+            placeholder="ਸਿਰਲੇਖ ਜਾਂ ਰਿਪੋਰਟਰ ਖੋਜੋ (Search title or reporter)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             style={{
@@ -382,16 +382,16 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
       {loading ? (
         <div style={{ textAlign: 'center', padding: '60px', color: '#64748b' }}>
           <i className="fa fa-spinner fa-spin" style={{ fontSize: '32px', marginBottom: '12px', color: '#b71c1c' }}></i>
-          <p style={{ margin: 0, fontSize: '14px', fontWeight: '600' }}>ਖ਼ਬਰਾਂ ਲੋਡ ਹੋ ਰਹੀਆਂ ਹਨ...</p>
+          <p style={{ margin: 0, fontSize: '14px', fontWeight: '600' }}>ਖ਼ਬਰਾਂ ਲੋਡ ਹੋ ਰਹੀਆਂ ਹਨ... (Loading articles...)</p>
         </div>
       ) : filteredArticles.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '60px 20px', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px dashed #cbd5e1' }}>
           <i className="fa fa-folder-open-o" style={{ fontSize: '40px', color: '#94a3b8', marginBottom: '12px' }}></i>
           <h4 style={{ margin: '0 0 6px', fontSize: '17px', fontWeight: '800', color: '#1e293b' }}>
-            ਇਸ ਸੈਕਸ਼ਨ ਵਿੱਚ ਕੋਈ ਖ਼ਬਰ ਨਹੀਂ ਹੈ।
+            ਇਸ ਸੈਕਸ਼ਨ ਵਿੱਚ ਕੋਈ ਖ਼ਬਰ ਨਹੀਂ ਹੈ (No articles in this section).
           </h4>
           <p style={{ margin: 0, fontSize: '13px', color: '#64748b' }}>
-            ਤੁਸੀਂ ਦੂਸਰੇ ਟੈਬ ਚੈੱਕ ਕਰ ਸਕਦੇ ਹੋ ਜਾਂ ਤਾਜ਼ਾ ਰੀਫ੍ਰੈਸ਼ ਕਰ ਸਕਦੇ ਹੋ।
+            ਤੁਸੀਂ ਦੂਸਰੇ ਟੈਬ ਚੈੱਕ ਕਰ ਸਕਦੇ ਹੋ ਜਾਂ ਤਾਜ਼ਾ ਰੀਫ੍ਰੈਸ਼ ਕਰ ਸਕਦੇ ਹੋ (Check other tabs or click refresh).
           </p>
         </div>
       ) : (
@@ -455,7 +455,7 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
                         gap: '3px'
                       }}
                     >
-                      <i className="fa fa-video-camera"></i> ਵੀਡੀਓ
+                      <i className="fa fa-video-camera"></i> ਵੀਡੀਓ (Video)
                     </span>
                   )}
                 </div>
@@ -504,19 +504,19 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
                         borderRadius: '4px'
                       }}
                     >
-                      {art.language === 'hi' ? 'हिंदी' : art.language === 'en' ? 'English' : 'ਪੰਜਾਬੀ'}
+                      {art.language === 'hi' ? 'हिंदी (Hindi)' : art.language === 'en' ? 'English' : 'ਪੰਜਾਬੀ (Punjabi)'}
                     </span>
 
                     {art.isBreaking && (
                       <span style={{ backgroundColor: '#b71c1c', color: '#fff', fontSize: '10.5px', fontWeight: '800', padding: '2px 7px', borderRadius: '4px' }}>
-                        ਬਰੇਕਿੰਗ ਨਿਊਜ਼
+                        ਬਰੇਕਿੰਗ ਨਿਊਜ਼ (Breaking)
                       </span>
                     )}
 
                     {/* Author Info */}
                     <span style={{ fontSize: '12px', color: '#475569', fontWeight: '600' }}>
                       <i className="fa fa-user" style={{ marginRight: '4px', color: '#64748b' }}></i>
-                      {art.authorName || (art.author ? art.author.name : 'ਰਿਪੋਰਟਰ')}
+                      {art.authorName || (art.author ? art.author.name : 'ਰਿਪੋਰਟਰ (Reporter)')}
                       {art.author?.canDirectPublish && (
                         <span style={{ marginLeft: '4px', backgroundColor: '#e0f2fe', color: '#0369a1', fontSize: '10px', padding: '1px 5px', borderRadius: '3px', fontWeight: '800' }}>
                           ⚡ Auto-Publish
@@ -528,7 +528,7 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
                     <span style={{ fontSize: '11.5px', color: '#94a3b8' }}>
                       <i className="fa fa-calendar" style={{ marginRight: '4px' }}></i>
                       {isApproved && art.publishedAt
-                        ? `ਪ੍ਰਕਾਸ਼ਿਤ: ${new Date(art.publishedAt).toLocaleString('pa-IN')}`
+                        ? `ਪ੍ਰਕਾਸ਼ਿਤ (Published): ${new Date(art.publishedAt).toLocaleString('pa-IN')}`
                         : new Date(art.createdAt).toLocaleString('pa-IN')}
                     </span>
 
@@ -536,7 +536,7 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
                     {isApproved && (
                       <span style={{ fontSize: '11.5px', color: '#0369a1', fontWeight: '700', backgroundColor: '#e0f2fe', padding: '2px 7px', borderRadius: '4px' }}>
                         <i className="fa fa-eye" style={{ marginRight: '4px' }}></i>
-                        {art.views || 0} ਵਿਊਜ਼
+                        {art.views || 0} ਵਿਊਜ਼ (Views)
                       </span>
                     )}
                   </div>
@@ -556,13 +556,13 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
                     {art.editorReviewedBy && (
                       <span style={{ color: '#1e40af' }}>
                         <i className="fa fa-check-square-o" style={{ marginRight: '4px' }}></i>
-                        ਸੰਪਾਦਕ ਜਾਂਚ: <strong>{art.editorReviewedBy.name || 'ਮੁੱਖ ਸੰਪਾਦਕ'}</strong>
+                        ਸੰਪਾਦਕ ਜਾਂਚ (Editor Verified): <strong>{art.editorReviewedBy.name || 'ਮੁੱਖ ਸੰਪਾਦਕ (Chief Editor)'}</strong>
                       </span>
                     )}
                     {art.adminApprovedBy && (
                       <span style={{ color: '#15803d' }}>
                         <i className="fa fa-check-circle" style={{ marginRight: '4px' }}></i>
-                        ਐਡਮਿਨ ਪ੍ਰਵਾਨਗੀ: <strong>{art.adminApprovedBy.name || 'ਮੁੱਖ ਪ੍ਰਬੰਧਕ'}</strong>
+                        ਐਡਮਿਨ ਪ੍ਰਵਾਨਗੀ (Admin Approved): <strong>{art.adminApprovedBy.name || 'ਮੁੱਖ ਪ੍ਰਬੰਧਕ (Admin)'}</strong>
                       </span>
                     )}
                   </div>
@@ -570,10 +570,10 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
                   {/* Rejection reason if rejected */}
                   {isRejected && (
                     <div style={{ backgroundColor: '#fef2f2', borderLeft: '3px solid #dc2626', padding: '8px 12px', borderRadius: '0 4px 4px 0', marginTop: '8px', fontSize: '12.5px', color: '#991b1b' }}>
-                      <strong>ਰੱਦ ਕਰਨ ਦਾ ਕਾਰਨ (Reason):</strong> {art.rejectionReason || 'ਕੋਈ ਵਿਸ਼ੇਸ਼ ਕਾਰਨ ਦਰਜ ਨਹੀਂ'}
+                      <strong>ਰੱਦ ਕਰਨ ਦਾ ਕਾਰਨ (Rejection Reason):</strong> {art.rejectionReason || 'ਕੋਈ ਵਿਸ਼ੇਸ਼ ਕਾਰਨ ਦਰਜ ਨਹੀਂ (No reason given)'}
                       {art.rejectedBy && (
                         <span style={{ display: 'block', marginTop: '2px', fontSize: '11px', color: '#b91c1c' }}>
-                          ਰੱਦ ਕਰਤਾ: {art.rejectedBy.name || 'ਸਟਾਫ਼'}
+                          ਰੱਦ ਕਰਤਾ (Rejected By): {art.rejectedBy.name || 'ਸਟਾਫ਼ (Staff)'}
                         </span>
                       )}
                     </div>
@@ -638,7 +638,7 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
                       {/* If Forwarded to Admin */}
                       {isPendingAdmin && (
                         <div style={{ textAlign: 'center', padding: '6px 8px', backgroundColor: '#eff6ff', borderRadius: '4px', border: '1px solid #bfdbfe', fontSize: '11.5px', color: '#1e40af', fontWeight: '700' }}>
-                          <i className="fa fa-hourglass-half"></i> ਐਡਮਿਨ ਪ੍ਰਵਾਨਗੀ ਦੀ ਉਡੀਕ
+                          <i className="fa fa-hourglass-half"></i> ਐਡਮਿਨ ਪ੍ਰਵਾਨਗੀ ਦੀ ਉਡੀਕ (Awaiting Admin)
                         </div>
                       )}
                     </>
@@ -719,7 +719,7 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
                               gap: '5px'
                             }}
                           >
-                            <i className="fa fa-bolt"></i> ਸਿੱਧਾ ਲਾਈਵ ਕਰੋ (Publish)
+                            <i className="fa fa-bolt"></i> ਸਿੱਧਾ ਲਾਈਵ ਕਰੋ (Publish Live)
                           </button>
 
                           <button
@@ -771,7 +771,7 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
                         }}
                       >
                         <i className="fa fa-external-link" style={{ color: '#16a34a' }}></i>
-                        <span>ਲਾਈਵ ਖ਼ਬਰ ਦੇਖੋ</span>
+                        <span>ਲਾਈਵ ਖ਼ਬਰ ਦੇਖੋ (View Live)</span>
                       </Link>
 
                       <button
@@ -793,7 +793,7 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
                           gap: '4px'
                         }}
                       >
-                        <i className="fa fa-ban"></i> ਹਟਾਓ / ਰੱਦ ਕਰੋ
+                        <i className="fa fa-ban"></i> ਹਟਾਓ / ਰੱਦ ਕਰੋ (Unpublish / Reject)
                       </button>
                     </>
                   )}
@@ -827,7 +827,7 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
                       }}
                     >
                       <i className="fa fa-undo"></i>{' '}
-                      {isAdmin ? 'ਮੁੜ ਲਾਈਵ ਕਰੋ (Approve)' : 'ਐਡਮਿਨ ਨੂੰ ਭੇਜੋ'}
+                      {isAdmin ? 'ਮੁੜ ਲਾਈਵ ਕਰੋ (Re-approve Live)' : 'ਐਡਮਿਨ ਨੂੰ ਭੇਜੋ (Forward to Admin)'}
                     </button>
                   )}
 
@@ -854,7 +854,7 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
                 {activePreview?._id === art._id && (
                   <div style={{ width: '100%', marginTop: '12px', padding: '16px', backgroundColor: '#f8fafc', borderRadius: '6px', borderTop: '1px solid #e2e8f0' }}>
                     <h5 style={{ margin: '0 0 8px', fontSize: '14px', fontWeight: '800', color: '#1e293b' }}>
-                      ਪੂਰਾ ਆਰਟੀਕਲ ਪ੍ਰੀਵਿਊ:
+                      ਪੂਰਾ ਆਰਟੀਕਲ ਪ੍ਰੀਵਿਊ (Full Article Preview):
                     </h5>
                     <div style={{ fontSize: '13.5px', lineHeight: '1.7', color: '#334155', whiteSpace: 'pre-line' }}>
                       {art.content}
@@ -911,7 +911,7 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
             </div>
 
             <p style={{ margin: '0 0 10px', fontSize: '13.5px', color: '#334155' }}>
-              ਕੀ ਤੁਸੀਂ ਵਾਕਈ ਇਸ ਖ਼ਬਰ ਨੂੰ ਰੱਦ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?
+              ਕੀ ਤੁਸੀਂ ਵਾਕਈ ਇਸ ਖ਼ਬਰ ਨੂੰ ਰੱਦ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ? (Are you sure you want to reject this article?)
             </p>
 
             <div style={{ backgroundColor: '#f8fafc', padding: '10px 12px', borderRadius: '6px', border: '1px solid #e2e8f0', marginBottom: '14px', fontSize: '13px', fontWeight: '700', color: '#0f172a' }}>
@@ -953,7 +953,7 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
                   cursor: 'pointer'
                 }}
               >
-                ਰੱਦ ਕਰੋ (Cancel)
+                ਵਾਪਸ (Cancel)
               </button>
               <button
                 type="button"
@@ -973,7 +973,7 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
                   gap: '6px'
                 }}
               >
-                <i className="fa fa-times"></i> ਰੱਦ ਕਰਨ ਦੀ ਪੁਸ਼ਟੀ ਕਰੋ
+                <i className="fa fa-times"></i> ਰੱਦ ਕਰਨ ਦੀ ਪੁਸ਼ਟੀ ਕਰੋ (Confirm Reject)
               </button>
             </div>
           </div>

@@ -55,7 +55,7 @@ export default function OverviewStatsView({ user, onNavigate }) {
 
   const cards = [
     {
-      title: 'ਲਾਈਵ ਪ੍ਰਕਾਸ਼ਿਤ ਖ਼ਬਰਾਂ',
+      title: 'ਲਾਈਵ ਪ੍ਰਕਾਸ਼ਿਤ ਖ਼ਬਰਾਂ (Live Published)',
       sub: 'Live Published Articles',
       value: stats.publishedCount,
       icon: 'fa-newspaper-o',
@@ -63,7 +63,7 @@ export default function OverviewStatsView({ user, onNavigate }) {
       color: '#b71c1c'
     },
     {
-      title: 'ਸਮੀਖਿਆ ਅਧੀਨ ਖ਼ਬਰਾਂ',
+      title: 'ਸਮੀਖਿਆ ਅਧੀਨ ਖ਼ਬਰਾਂ (Pending Review)',
       sub: 'Pending Editorial Reviews',
       value: stats.pendingCount,
       icon: 'fa-clock-o',
@@ -71,7 +71,7 @@ export default function OverviewStatsView({ user, onNavigate }) {
       color: stats.pendingCount > 0 ? '#d97706' : '#64748b'
     },
     {
-      title: 'ਸਰਗਰਮ ਬਰੇਕਿੰਗ ਅਲਰਟ',
+      title: 'ਸਰਗਰਮ ਬਰੇਕਿੰਗ ਅਲਰਟ (Breaking News)',
       sub: 'Active Breaking Tickers',
       value: stats.breakingCount,
       icon: 'fa-bolt',
@@ -79,7 +79,7 @@ export default function OverviewStatsView({ user, onNavigate }) {
       color: '#b71c1c'
     },
     {
-      title: 'ਕੁੱਲ ਪਾਠਕ ਵਿਊਜ਼',
+      title: 'ਕੁੱਲ ਪਾਠਕ ਵਿਊਜ਼ (Total Views)',
       sub: 'Total Article Views',
       value: stats.totalViews.toLocaleString('en-IN'),
       icon: 'fa-eye',
@@ -90,7 +90,7 @@ export default function OverviewStatsView({ user, onNavigate }) {
 
   if (user?.role === 'admin') {
     cards.push({
-      title: 'ਕੁੱਲ ਸਟਾਫ਼ ਮੈਂਬਰ',
+      title: 'ਕੁੱਲ ਸਟਾਫ਼ ਮੈਂਬਰ (Staff Members)',
       sub: 'Registered Staff (Reporters & Editors)',
       value: stats.usersCount,
       icon: 'fa-users',
@@ -107,7 +107,7 @@ export default function OverviewStatsView({ user, onNavigate }) {
           ਨਿਊਜ਼ਰੂਮ ਓਵਰਵਿਊ (Newsroom Overview & Performance)
         </h3>
         <p style={{ margin: '4px 0 0', fontSize: '12.5px', color: '#64748b' }}>
-          ਪੰਜਾਬ ਫਾਈਲਜ਼ ਪੋਰਟਲ ਦਾ ਰੀਅਲ-ਟਾਈਮ ਡਾਟਾ ਅਤੇ ਕਾਰਗੁਜ਼ਾਰੀ ਸੰਖੇਪ।
+          ਪੰਜਾਬ ਫਾਈਲਜ਼ ਪੋਰਟਲ ਦਾ ਰੀਅਲ-ਟਾਈਮ ਡਾਟਾ ਅਤੇ ਕਾਰਗੁਜ਼ਾਰੀ ਸੰਖੇਪ (Real-time portal data and performance summary).
         </p>
       </div>
 
@@ -179,7 +179,7 @@ export default function OverviewStatsView({ user, onNavigate }) {
                 className="quick-action-btn"
                 style={{ backgroundColor: '#d97706', color: '#ffffff' }}
               >
-                <i className="fa fa-clock-o"></i> <span>{user?.role === 'admin' ? 'ਅੰਤਿਮ ਪ੍ਰਵਾਨਗੀ' : 'ਸੰਪਾਦਕੀ ਸਮੀਖਿਆ'} {stats.pendingCount > 0 ? `(${stats.pendingCount})` : ''}</span>
+                <i className="fa fa-clock-o"></i> <span>{user?.role === 'admin' ? 'ਅੰਤਿਮ ਪ੍ਰਵਾਨਗੀ (Approval Desk)' : 'ਸੰਪਾਦਕੀ ਸਮੀਖਿਆ (Review Desk)'} {stats.pendingCount > 0 ? `(${stats.pendingCount})` : ''}</span>
               </button>
             )}
 
@@ -217,7 +217,7 @@ export default function OverviewStatsView({ user, onNavigate }) {
                 textDecoration: 'none'
               }}
             >
-              <i className="fa fa-external-link"></i> <span>ਲਾਈਵ ਸਾਈਟ ਦੇਖੋ</span>
+              <i className="fa fa-external-link"></i> <span>ਲਾਈਵ ਸਾਈਟ ਦੇਖੋ (View Live Site)</span>
             </a>
           </div>
 
@@ -259,7 +259,7 @@ export default function OverviewStatsView({ user, onNavigate }) {
                     gap: '6px'
                   }}
                 >
-                  <span>ਸਾਰੀਆਂ ਖ਼ਬਰਾਂ ਦੇਖੋ</span>
+                  <span>ਸਾਰੀਆਂ ਖ਼ਬਰਾਂ ਦੇਖੋ (View All News)</span>
                   <i className="fa fa-arrow-right"></i>
                 </button>
               )}
@@ -268,7 +268,7 @@ export default function OverviewStatsView({ user, onNavigate }) {
             {/* Leaderboard Body */}
             {readersChoice.length === 0 ? (
               <div style={{ padding: '30px', textAlign: 'center', color: '#94a3b8', fontSize: '13px' }}>
-                ਅਜੇ ਤੱਕ ਕੋਈ ਲਾਈਵ ਖ਼ਬਰਾਂ ਦਾ ਵਿਊਜ਼ ਡਾਟਾ ਉਪਲਬਧ ਨਹੀਂ ਹੈ।
+                ਅਜੇ ਤੱਕ ਕੋਈ ਲਾਈਵ ਖ਼ਬਰਾਂ ਦਾ ਵਿਊਜ਼ ਡਾਟਾ ਉਪਲਬਧ ਨਹੀਂ ਹੈ (No live article views data available yet).
               </div>
             ) : (
               <>
@@ -277,13 +277,13 @@ export default function OverviewStatsView({ user, onNavigate }) {
                   <table style={{ width: '100%', minWidth: '640px', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
                     <thead>
                       <tr style={{ backgroundColor: '#f1f5f9', borderBottom: '1px solid #cbd5e1', color: '#475569' }}>
-                        <th style={{ padding: '10px 14px', width: '60px', fontWeight: '800', textAlign: 'center' }}>ਰੈਂਕ</th>
-                        <th style={{ padding: '10px 14px', fontWeight: '800' }}>ਖ਼ਬਰ ਦਾ ਸਿਰਲੇਖ</th>
-                        <th style={{ padding: '10px 12px', fontWeight: '800' }}>ਕੈਟੇਗਰੀ</th>
-                        <th style={{ padding: '10px 12px', fontWeight: '800' }}>ਭਾਸ਼ਾ</th>
-                        <th style={{ padding: '10px 12px', fontWeight: '800' }}>ਪੱਤਰਕਾਰ</th>
-                        <th style={{ padding: '10px 14px', fontWeight: '800', textAlign: 'center' }}>ਪਾਠਕ ਵਿਊਜ਼</th>
-                        <th style={{ padding: '10px 14px', fontWeight: '800', textAlign: 'right' }}>ਵੇਖੋ</th>
+                        <th style={{ padding: '10px 14px', width: '60px', fontWeight: '800', textAlign: 'center' }}>ਰੈਂਕ (Rank)</th>
+                        <th style={{ padding: '10px 14px', fontWeight: '800' }}>ਖ਼ਬਰ ਦਾ ਸਿਰਲੇਖ (Title)</th>
+                        <th style={{ padding: '10px 12px', fontWeight: '800' }}>ਕੈਟੇਗਰੀ (Category)</th>
+                        <th style={{ padding: '10px 12px', fontWeight: '800' }}>ਭਾਸ਼ਾ (Language)</th>
+                        <th style={{ padding: '10px 12px', fontWeight: '800' }}>ਪੱਤਰਕਾਰ (Reporter)</th>
+                        <th style={{ padding: '10px 14px', fontWeight: '800', textAlign: 'center' }}>ਪਾਠਕ ਵਿਊਜ਼ (Views)</th>
+                        <th style={{ padding: '10px 14px', fontWeight: '800', textAlign: 'right' }}>ਵੇਖੋ (View)</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -410,7 +410,7 @@ export default function OverviewStatsView({ user, onNavigate }) {
                                   gap: '4px'
                                 }}
                               >
-                                <span>ਵੇਖੋ</span>
+                                <span>ਵੇਖੋ (View)</span>
                                 <i className="fa fa-external-link"></i>
                               </a>
                             </td>
@@ -505,7 +505,7 @@ export default function OverviewStatsView({ user, onNavigate }) {
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '2px' }}>
                           <span style={{ color: '#64748b', fontSize: '11px' }}>
                             <i className="fa fa-user-circle" style={{ marginRight: '4px' }}></i>
-                            {art.authorName || art.author?.name || 'ਪੱਤਰਕਾਰ'}
+                            {art.authorName || art.author?.name || 'ਪੱਤਰਕਾਰ (Reporter)'}
                           </span>
                           <a
                             href={`/news/${art.slug || art._id}`}
@@ -521,7 +521,7 @@ export default function OverviewStatsView({ user, onNavigate }) {
                               gap: '4px'
                             }}
                           >
-                            <span>ਖ਼ਬਰ ਵੇਖੋ</span>
+                            <span>ਖ਼ਬਰ ਵੇਖੋ (View)</span>
                             <i className="fa fa-external-link"></i>
                           </a>
                         </div>

@@ -58,14 +58,14 @@ export default function MyArticlesView() {
       case 'pending_admin':
         return (
           <span style={{ backgroundColor: '#dbeafe', color: '#1e40af', padding: '3px 9px', borderRadius: '4px', fontSize: '11.5px', fontWeight: '700', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-            <i className="fa fa-hourglass-half"></i> ਐਡਮਿਨ ਪ੍ਰਵਾਨਗੀ ਲਈ ਭੇਜਿਆ
+            <i className="fa fa-hourglass-half"></i> ਐਡਮਿਨ ਪ੍ਰਵਾਨਗੀ ਲਈ ਭੇਜਿਆ (Pending Admin)
           </span>
         );
       case 'pending_editor':
       case 'pending_review':
         return (
           <span style={{ backgroundColor: '#fef9c3', color: '#854d0e', padding: '3px 9px', borderRadius: '4px', fontSize: '11.5px', fontWeight: '700', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-            <i className="fa fa-clock-o"></i> ਸੰਪਾਦਕੀ ਸਮੀਖਿਆ ਅਧੀਨ
+            <i className="fa fa-clock-o"></i> ਸੰਪਾਦਕੀ ਸਮੀਖਿਆ ਅਧੀਨ (Under Review)
           </span>
         );
       case 'rejected':
@@ -77,7 +77,7 @@ export default function MyArticlesView() {
       default:
         return (
           <span style={{ backgroundColor: '#f1f5f9', color: '#475569', padding: '3px 9px', borderRadius: '4px', fontSize: '11.5px', fontWeight: '700' }}>
-            ਡਰਾਫ਼ਟ
+            ਡਰਾਫ਼ਟ (Draft)
           </span>
         );
     }
@@ -92,7 +92,7 @@ export default function MyArticlesView() {
             ਮੇਰੀਆਂ ਸਬਮਿਟ ਕੀਤੀਆਂ ਖ਼ਬਰਾਂ (My Submitted Articles)
           </h3>
           <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#64748b' }}>
-            ਤੁਹਾਡੇ ਵੱਲੋਂ ਲਿਖੀਆਂ ਸਾਰੀਆਂ ਖ਼ਬਰਾਂ ਅਤੇ ਉਹਨਾਂ ਦਾ ਲਾਈਵ ਸਟੇਟਸ ਇੱਥੇ ਨਜ਼ਰ ਆਵੇਗਾ।
+            ਤੁਹਾਡੇ ਵੱਲੋਂ ਲਿਖੀਆਂ ਸਾਰੀਆਂ ਖ਼ਬਰਾਂ ਅਤੇ ਉਹਨਾਂ ਦਾ ਲਾਈਵ ਸਟੇਟਸ ਇੱਥੇ ਨਜ਼ਰ ਆਵੇਗਾ (Track all your submitted articles and their live status here).
           </p>
         </div>
 
@@ -136,14 +136,14 @@ export default function MyArticlesView() {
       {loading ? (
         <div style={{ textAlign: 'center', padding: '40px', color: '#64748b' }}>
           <i className="fa fa-spinner fa-spin" style={{ fontSize: '24px', marginBottom: '8px' }}></i>
-          <p style={{ margin: 0, fontSize: '13.5px' }}>ਖ਼ਬਰਾਂ ਲੋਡ ਹੋ ਰਹੀਆਂ ਹਨ...</p>
+          <p style={{ margin: 0, fontSize: '13.5px' }}>ਖ਼ਬਰਾਂ ਲੋਡ ਹੋ ਰਹੀਆਂ ਹਨ... (Loading articles...)</p>
         </div>
       ) : filtered.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '50px 20px', backgroundColor: '#f8fafc', borderRadius: '6px', border: '1px dashed #cbd5e1' }}>
           <i className="fa fa-newspaper-o" style={{ fontSize: '32px', color: '#94a3b8', marginBottom: '10px' }}></i>
-          <h4 style={{ margin: '0 0 6px', fontSize: '16px', fontWeight: '700', color: '#334155' }}>ਕੋਈ ਖ਼ਬਰ ਨਹੀਂ ਮਿਲੀ</h4>
+          <h4 style={{ margin: '0 0 6px', fontSize: '16px', fontWeight: '700', color: '#334155' }}>ਕੋਈ ਖ਼ਬਰ ਨਹੀਂ ਮਿਲੀ (No Articles Found)</h4>
           <p style={{ margin: 0, fontSize: '13px', color: '#64748b' }}>
-            ਤੁਸੀਂ ਅਜੇ ਤੱਕ ਕੋਈ ਖ਼ਬਰ ਇਸ ਕੈਟੇਗਰੀ ਵਿੱਚ ਦਰਜ ਨਹੀਂ ਕੀਤੀ।
+            ਤੁਸੀਂ ਅਜੇ ਤੱਕ ਕੋਈ ਖ਼ਬਰ ਇਸ ਕੈਟੇਗਰੀ ਵਿੱਚ ਦਰਜ ਨਹੀਂ ਕੀਤੀ (You haven't submitted any articles in this filter).
           </p>
         </div>
       ) : (
@@ -153,12 +153,12 @@ export default function MyArticlesView() {
             <table style={{ width: '100%', minWidth: '720px', borderCollapse: 'collapse', fontSize: '13.5px' }}>
               <thead>
                 <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0', textAlign: 'left', color: '#475569', fontWeight: '700' }}>
-                  <th style={{ padding: '10px 12px' }}>ਤਸਵੀਰ</th>
+                  <th style={{ padding: '10px 12px' }}>ਤਸਵੀਰ (Image)</th>
                   <th style={{ padding: '10px 12px' }}>ਸਿਰਲੇਖ (Title)</th>
                   <th style={{ padding: '10px 12px' }}>ਭਾਸ਼ਾ (Language)</th>
-                  <th style={{ padding: '10px 12px' }}>ਕੈਟੇਗਰੀ</th>
+                  <th style={{ padding: '10px 12px' }}>ਕੈਟੇਗਰੀ (Category)</th>
                   <th style={{ padding: '10px 12px' }}>ਸਟੇਟਸ (Status)</th>
-                  <th style={{ padding: '10px 12px' }}>ਮਿਤੀ</th>
+                  <th style={{ padding: '10px 12px' }}>ਮਿਤੀ (Date)</th>
                   <th style={{ padding: '10px 12px', textAlign: 'right' }}>ਕਾਰਵਾਈ (Actions)</th>
                 </tr>
               </thead>
@@ -191,12 +191,12 @@ export default function MyArticlesView() {
                       )}
                       {art.isBreaking && (
                         <span style={{ backgroundColor: '#b71c1c', color: '#fff', fontSize: '10px', fontWeight: '800', padding: '1px 5px', borderRadius: '2px', marginTop: '3px', display: 'inline-block' }}>
-                          ਬਰੇਕਿੰਗ
+                          ਬਰੇਕਿੰਗ (Breaking)
                         </span>
                       )}
                       {art.status === 'rejected' && art.rejectionReason && (
                         <div style={{ marginTop: '4px', fontSize: '11px', color: '#b91c1c', backgroundColor: '#fef2f2', padding: '3px 6px', borderRadius: '3px', borderLeft: '2px solid #b91c1c' }}>
-                          <strong>ਕਾਰਨ:</strong> {art.rejectionReason}
+                          <strong>ਕਾਰਨ (Reason):</strong> {art.rejectionReason}
                         </div>
                       )}
                     </td>
@@ -301,7 +301,7 @@ export default function MyArticlesView() {
 
                     {art.isBreaking && (
                       <span style={{ backgroundColor: '#b71c1c', color: '#fff', fontSize: '10px', fontWeight: '800', padding: '1px 5px', borderRadius: '2px', marginTop: '2px', display: 'inline-block' }}>
-                        ਬਰੇਕਿੰਗ
+                        ਬਰੇਕਿੰਗ (Breaking)
                       </span>
                     )}
 
@@ -314,7 +314,7 @@ export default function MyArticlesView() {
                 {/* Rejection notice if applicable */}
                 {art.status === 'rejected' && art.rejectionReason && (
                   <div style={{ fontSize: '11.5px', color: '#b91c1c', backgroundColor: '#fef2f2', padding: '6px 8px', borderRadius: '4px', borderLeft: '3px solid #b91c1c' }}>
-                    <strong>ਕਾਰਨ:</strong> {art.rejectionReason}
+                    <strong>ਕਾਰਨ (Reason):</strong> {art.rejectionReason}
                   </div>
                 )}
 
@@ -339,7 +339,7 @@ export default function MyArticlesView() {
                         gap: '4px'
                       }}
                     >
-                      <i className="fa fa-external-link"></i> ਲਾਈਵ ਵੇਖੋ
+                      <i className="fa fa-external-link"></i> ਲਾਈਵ ਵੇਖੋ (View Live)
                     </a>
                   )}
 
@@ -360,7 +360,7 @@ export default function MyArticlesView() {
                       gap: '4px'
                     }}
                   >
-                    <i className="fa fa-trash"></i> ਹਟਾਓ
+                    <i className="fa fa-trash"></i> ਹਟਾਓ (Delete)
                   </button>
                 </div>
               </div>

@@ -31,30 +31,30 @@ export default function DashboardLayout({ user, onLogout }) {
 
     if (role === 'reporter') {
       return [
-        { id: 'create', label: 'ਨਵੀਂ ਖ਼ਬਰ ਲਿਖੋ', icon: 'fa-pencil-square-o', sub: 'Write News' },
-        { id: 'my_articles', label: 'ਮੇਰੀਆਂ ਖ਼ਬਰਾਂ', icon: 'fa-list-alt', sub: 'My Articles' }
+        { id: 'create', label: 'ਨਵੀਂ ਖ਼ਬਰ ਲਿਖੋ (Write News)', icon: 'fa-pencil-square-o', sub: 'Write News' },
+        { id: 'my_articles', label: 'ਮੇਰੀਆਂ ਖ਼ਬਰਾਂ (My Articles)', icon: 'fa-list-alt', sub: 'My Articles' }
       ];
     }
 
     if (role === 'editor') {
       return [
-        { id: 'review', label: 'ਸੰਪਾਦਕੀ ਸਮੀਖਿਆ', icon: 'fa-check-square-o', sub: 'Review Desk' },
-        { id: 'breaking', label: 'ਬਰੇਕਿੰਗ ਨਿਊਜ਼', icon: 'fa-bolt', sub: 'Breaking Ticker' },
-        { id: 'contact_queries', label: 'ਸੰਪਰਕ ਸੁਨੇਹੇ', icon: 'fa-envelope-o', sub: 'Inquiries' },
-        { id: 'mukhwak', label: 'ਮੁੱਖ ਵਾਕ (ਹੁਕਮਨਾਮਾ)', icon: 'fa-book', sub: 'Daily Mukhwak' }
+        { id: 'review', label: 'ਸੰਪਾਦਕੀ ਸਮੀਖਿਆ (Review Desk)', icon: 'fa-check-square-o', sub: 'Review Desk' },
+        { id: 'breaking', label: 'ਬਰੇਕਿੰਗ ਨਿਊਜ਼ (Breaking News)', icon: 'fa-bolt', sub: 'Breaking Ticker' },
+        { id: 'contact_queries', label: 'ਸੰਪਰਕ ਸੁਨੇਹੇ (Contact Messages)', icon: 'fa-envelope-o', sub: 'Inquiries' },
+        { id: 'mukhwak', label: 'ਮੁੱਖ ਵਾਕ (Daily Mukhwak)', icon: 'fa-book', sub: 'Daily Mukhwak' }
       ];
     }
 
     // Admin
     return [
-      { id: 'overview', label: 'ਓਵਰਵਿਊ', icon: 'fa-dashboard', sub: 'Overview' },
-      { id: 'all_news', label: 'ਸਾਰੀਆਂ ਖ਼ਬਰਾਂ (ਕੈਟੇਗਰੀ ਵਾਈਜ਼)', icon: 'fa-newspaper-o', sub: 'All News & Categories' },
-      { id: 'categories', label: 'ਕੈਟੇਗਰੀ ਮੈਨੇਜਰ', icon: 'fa-tags', sub: 'Categories' },
-      { id: 'review', label: 'ਅੰਤਿਮ ਪ੍ਰਵਾਨਗੀ ਡੈਸਕ', icon: 'fa-check-square-o', sub: 'Final Approval Desk' },
-      { id: 'contact_queries', label: 'ਸੰਪਰਕ ਸੁਨੇਹੇ', icon: 'fa-envelope-o', sub: 'Inquiries' },
-      { id: 'users', label: 'ਸਟਾਫ਼ ਪ੍ਰਬੰਧਨ', icon: 'fa-users', sub: 'Staff Management' },
-      { id: 'breaking', label: 'ਬਰੇਕਿੰਗ ਨਿਊਜ਼', icon: 'fa-bolt', sub: 'Breaking News' },
-      { id: 'mukhwak', label: 'ਮੁੱਖ ਵਾਕ (ਹੁਕਮਨਾਮਾ)', icon: 'fa-book', sub: 'Daily Mukhwak' }
+      { id: 'overview', label: 'ਓਵਰਵਿਊ (Overview)', icon: 'fa-dashboard', sub: 'Overview' },
+      { id: 'all_news', label: 'ਸਾਰੀਆਂ ਖ਼ਬਰਾਂ (All News)', icon: 'fa-newspaper-o', sub: 'All News & Categories' },
+      { id: 'categories', label: 'ਕੈਟੇਗਰੀ ਮੈਨੇਜਰ (Category Manager)', icon: 'fa-tags', sub: 'Categories' },
+      { id: 'review', label: 'ਅੰਤਿਮ ਪ੍ਰਵਾਨਗੀ ਡੈਸਕ (Final Approval Desk)', icon: 'fa-check-square-o', sub: 'Final Approval Desk' },
+      { id: 'contact_queries', label: 'ਸੰਪਰਕ ਸੁਨੇਹੇ (Contact Messages)', icon: 'fa-envelope-o', sub: 'Inquiries' },
+      { id: 'users', label: 'ਸਟਾਫ਼ ਪ੍ਰਬੰਧਨ (Staff Management)', icon: 'fa-users', sub: 'Staff Management' },
+      { id: 'breaking', label: 'ਬਰੇਕਿੰਗ ਨਿਊਜ਼ (Breaking News)', icon: 'fa-bolt', sub: 'Breaking News' },
+      { id: 'mukhwak', label: 'ਮੁੱਖ ਵਾਕ (Daily Mukhwak)', icon: 'fa-book', sub: 'Daily Mukhwak' }
     ];
   };
 
@@ -195,7 +195,7 @@ export default function DashboardLayout({ user, onLogout }) {
                 }}
               >
                 <i className="fa fa-globe" style={{ color: '#ebb10d' }}></i>
-                <span className="btn-label-desktop">ਵੈੱਬਸਾਈਟ ਦੇਖੋ</span>
+                <span className="btn-label-desktop">ਵੈੱਬਸਾਈਟ ਦੇਖੋ (View Website)</span>
               </Link>
 
               {/* Logout Button */}
@@ -221,7 +221,7 @@ export default function DashboardLayout({ user, onLogout }) {
                 }}
               >
                 <i className="fa fa-sign-out"></i>
-                <span>ਲੌਗਆਊਟ</span>
+                <span>ਲੌਗਆਊਟ (Logout)</span>
               </button>
             </div>
           </div>

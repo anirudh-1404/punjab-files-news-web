@@ -158,7 +158,7 @@ export default function CategoryManagerView() {
             ਕੈਟੇਗਰੀ ਮੈਨੇਜਮੈਂਟ (Category Manager)
           </h2>
           <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#64748b' }}>
-            ਖ਼ਬਰਾਂ ਦੀਆਂ ਕੈਟੇਗਰੀਆਂ ਨਿਯੰਤਰਿਤ ਕਰੋ, ਨਵੀਂ ਕੈਟੇਗਰੀ ਸ਼ਾਮਲ ਕਰੋ ਜਾਂ ਸੋਧੋ।
+            ਖ਼ਬਰਾਂ ਦੀਆਂ ਕੈਟੇਗਰੀਆਂ ਨਿਯੰਤਰਿਤ ਕਰੋ, ਨਵੀਂ ਕੈਟੇਗਰੀ ਸ਼ਾਮਲ ਕਰੋ ਜਾਂ ਸੋਧੋ (Manage news categories, add new, or edit).
           </p>
         </div>
 
@@ -249,11 +249,11 @@ export default function CategoryManagerView() {
         {loading ? (
           <div style={{ padding: '36px', textAlign: 'center', color: '#64748b' }}>
             <i className="fa fa-spinner fa-spin" style={{ fontSize: '24px', color: '#b71c1c', marginBottom: '8px' }}></i>
-            <div>ਕੈਟੇਗਰੀਆਂ ਲੋਡ ਹੋ ਰਹੀਆਂ ਹਨ...</div>
+            <div>ਕੈਟੇਗਰੀਆਂ ਲੋਡ ਹੋ ਰਹੀਆਂ ਹਨ... (Loading categories...)</div>
           </div>
         ) : categories.length === 0 ? (
           <div style={{ padding: '36px', textAlign: 'center', color: '#64748b' }}>
-            ਕੋਈ ਕੈਟੇਗਰੀ ਨਹੀਂ ਮਿਲੀ।
+            ਕੋਈ ਕੈਟੇਗਰੀ ਨਹੀਂ ਮਿਲੀ (No categories found).
           </div>
         ) : (
           <div style={{ overflowX: 'auto' }}>
@@ -261,7 +261,7 @@ export default function CategoryManagerView() {
               <thead>
                 <tr style={{ backgroundColor: '#f8fafc', color: '#475569', textAlign: 'left', borderBottom: '1px solid #e2e8f0' }}>
                   <th style={{ padding: '10px 16px', fontWeight: '700' }}>ਕ੍ਰਮ (Order)</th>
-                  <th style={{ padding: '10px 16px', fontWeight: '700' }}>ਆਈਕਨ</th>
+                  <th style={{ padding: '10px 16px', fontWeight: '700' }}>ਆਈਕਨ (Icon)</th>
                   <th style={{ padding: '10px 16px', fontWeight: '700' }}>ਪੰਜਾਬੀ ਨਾਮ (Punjabi)</th>
                   <th style={{ padding: '10px 16px', fontWeight: '700' }}>ਅੰਗਰੇਜ਼ੀ ਨਾਮ (English)</th>
                   <th style={{ padding: '10px 16px', fontWeight: '700' }}>URL ਸਲੱਗ (Slug)</th>
@@ -337,7 +337,7 @@ export default function CategoryManagerView() {
                             borderRadius: '4px'
                           }}
                         >
-                          ਸਿਸਟਮ ਡਿਫੌਲਟ
+                          ਸਿਸਟਮ ਡਿਫੌਲਟ (Default)
                         </span>
                       ) : (
                         <span
@@ -350,7 +350,7 @@ export default function CategoryManagerView() {
                             borderRadius: '4px'
                           }}
                         >
-                          ਕਸਟਮ ਸ਼ਾਮਲ
+                          ਕਸਟਮ ਸ਼ਾਮਲ (Custom)
                         </span>
                       )}
                     </td>
@@ -602,7 +602,7 @@ export default function CategoryManagerView() {
                     boxShadow: '0 2px 6px rgba(183, 28, 28, 0.3)'
                   }}
                 >
-                  {isSubmitting ? 'ਸੇਵ ਹੋ ਰਿਹਾ...' : editingCategory ? 'ਅੱਪਡੇਟ ਕਰੋ (Update)' : 'ਸ਼ਾਮਲ ਕਰੋ (Save Category)'}
+                  {isSubmitting ? 'ਸੇਵ ਹੋ ਰਿਹਾ... (Saving...)' : editingCategory ? 'ਅੱਪਡੇਟ ਕਰੋ (Update)' : 'ਸ਼ਾਮਲ ਕਰੋ (Save Category)'}
                 </button>
               </div>
             </form>
