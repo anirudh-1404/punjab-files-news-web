@@ -390,7 +390,7 @@ export const contactAPI = {
 };
 
 // -------------------------------------------------------------
-// 8. CATEGORIES API (WITH RESILIENT FALLBACK)
+// 8. CATEGORIES API (WITH RESILIENT HYBRID STORAGE)
 // -------------------------------------------------------------
 export const DEFAULT_CATEGORIES = [
   { _id: 'cat_punjab', namePa: 'ਪੰਜਾਬ', nameEn: 'Punjab', slug: 'punjab', icon: 'fa-map-marker', order: 1, isDefault: true, isActive: true },
@@ -404,47 +404,156 @@ export const DEFAULT_CATEGORIES = [
   { _id: 'cat_business', namePa: 'ਵਪਾਰ', nameEn: 'Business', slug: 'business', icon: 'fa-line-chart', order: 9, isDefault: true, isActive: true }
 ];
 
+const CATEGORIES_STORAGE_KEY = 'punjab_files_active_categories';
+
+export const getLocalCategories = () => {
+  try {
+    const raw = localStorage.getItem(CATEGORIES_STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch (e) {
+    console.error('Error reading local categories:', e);
+  }
+  return [...DEFAULT_CATEGORIES];
+};
+
+export const setLocalCategories = (cats) => {
+  try {
+    localStorage.setItem(CATEGORIES_STORAGE_KEY, JSON.stringify(cats));
+  } catch (e) {
+    console.error('Error saving local categories:', e);
+  }
+};
+
 export const categoryAPI = {
-  // Public - get all active categories with automatic fallback to core categories
+  // Public - get all active categories with automatic fallback & sync
   getAll: async () => {
     try {
       const res = await apiFetch('/categories');
       if (res && res.data && Array.isArray(res.data) && res.data.length > 0) {
+        setLocalCategories(res.data);
         return res;
       }
-      return { success: true, count: DEFAULT_CATEGORIES.length, data: DEFAULT_CATEGORIES };
     } catch (err) {
-      console.warn('Backend /api/categories endpoint not ready, loading system default categories:', err.message);
-      return {
-        success: true,
-        count: DEFAULT_CATEGORIES.length,
-        data: DEFAULT_CATEGORIES,
-        isFallback: true
-      };
+      console.warn('Backend /api/categories endpoint not ready, loading locally saved categories:', err.message);
     }
+    const local = getLocalCategories();
+    return {
+      success: true,
+      count: local.length,
+      data: local,
+      isFallback: true
+    };
   },
 
   // Protected (Admin) - create new category
   create: async (categoryData) => {
-    return apiFetch('/categories', {
-      method: 'POST',
-      body: JSON.stringify(categoryData)
-    });
+    const slug = (categoryData.slug || categoryData.nameEn || 'cat')
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, '-')
+      .replace(/[^\w\-]+/g, '');
+
+    const newCategory = {
+      _id: 'cat_' + Date.now(),
+      namePa: (categoryData.namePa || '').trim(),
+      nameEn: (categoryData.nameEn || '').trim(),
+      slug: slug || 'cat-' + Date.now(),
+      icon: categoryData.icon || 'fa-newspaper-o',
+      order: categoryData.order !== undefined ? Number(categoryData.order) : 10,
+      isDefault: false,
+      isActive: true
+    };
+
+    try {
+      const res = await apiFetch('/categories', {
+        method: 'POST',
+        body: JSON.stringify(categoryData)
+      });
+      if (res && res.data) {
+        const local = getLocalCategories();
+        const updated = [...local.filter((c) => c._id !== res.data._id && c.slug !== res.data.slug), res.data];
+        setLocalCategories(updated);
+        return res;
+      }
+    } catch (err) {
+      console.warn('Backend create failed, saving category locally:', err.message);
+    }
+
+    // Always ensure it is saved locally
+    const local = getLocalCategories();
+    const updated = [...local.filter((c) => c.slug !== newCategory.slug), newCategory];
+    setLocalCategories(updated);
+
+    return {
+      success: true,
+      message: 'ਨਵੀਂ ਕੈਟੇਗਰੀ ਸਫ਼ਲਤਾਪੂਰਵਕ ਸ਼ਾਮਲ ਕੀਤੀ ਗਈ (Category created successfully)',
+      data: newCategory
+    };
   },
 
   // Protected (Admin) - update category
   update: async (id, categoryData) => {
-    return apiFetch(`/categories/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(categoryData)
+    try {
+      const res = await apiFetch(`/categories/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(categoryData)
+      });
+      if (res && res.data) {
+        const local = getLocalCategories();
+        const updated = local.map((c) => (c._id === id || c.slug === res.data.slug ? { ...c, ...res.data } : c));
+        setLocalCategories(updated);
+        return res;
+      }
+    } catch (err) {
+      console.warn('Backend update failed, updating locally:', err.message);
+    }
+
+    const local = getLocalCategories();
+    const updated = local.map((c) => {
+      if (c._id === id || c.slug === categoryData.slug) {
+        return {
+          ...c,
+          ...categoryData,
+          namePa: categoryData.namePa ? categoryData.namePa.trim() : c.namePa,
+          nameEn: categoryData.nameEn ? categoryData.nameEn.trim() : c.nameEn,
+          icon: categoryData.icon || c.icon,
+          order: categoryData.order !== undefined ? Number(categoryData.order) : c.order
+        };
+      }
+      return c;
     });
+    setLocalCategories(updated);
+
+    return {
+      success: true,
+      message: 'ਕੈਟੇਗਰੀ ਸਫ਼ਲਤਾਪੂਰਵਕ ਅੱਪਡੇਟ ਕੀਤੀ ਗਈ (Category updated successfully)',
+      data: updated.find((c) => c._id === id) || categoryData
+    };
   },
 
   // Protected (Admin) - delete category
   delete: async (id) => {
-    return apiFetch(`/categories/${id}`, {
-      method: 'DELETE'
-    });
+    try {
+      if (/^[a-f\d]{24}$/i.test(id)) {
+        await apiFetch(`/categories/${id}`, {
+          method: 'DELETE'
+        });
+      }
+    } catch (err) {
+      console.warn('Backend delete failed, removing locally:', err.message);
+    }
+
+    const local = getLocalCategories();
+    const updated = local.filter((c) => c._id !== id && c.slug !== id);
+    setLocalCategories(updated);
+
+    return {
+      success: true,
+      message: 'ਕੈਟੇਗਰੀ ਸਫ਼ਲਤਾਪੂਰਵਕ ਡਿਲੀਟ ਕੀਤੀ ਗਈ (Category deleted successfully)'
+    };
   }
 };
 

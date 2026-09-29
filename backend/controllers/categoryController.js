@@ -205,14 +205,6 @@ export const deleteCategory = async (req, res) => {
       });
     }
 
-    const isCoreCategory = category.isDefault || DEFAULT_CATEGORIES.some((c) => c.slug === category.slug);
-    if (isCoreCategory) {
-      return res.status(400).json({
-        success: false,
-        message: "ਸਿਸਟਮ ਦੀਆਂ ਮੁੱਖ ਡਿਫੌਲਟ ਕੈਟੇਗਰੀਆਂ ਨੂੰ ਡਿਲੀਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ (Default core categories cannot be deleted)"
-      });
-    }
-
     await Category.findByIdAndDelete(id);
 
     res.status(200).json({

@@ -124,32 +124,12 @@ export default function CategoryManagerView() {
     }
   };
 
-  // Handle Delete
+  // Handle Delete - allows deleting ANY category
   const handleDelete = (cat) => {
-    if (isDefaultCategory(cat)) {
-      setPopup({
-        type: 'alert',
-        title: 'ਡਿਲੀਟ ਨਹੀਂ ਹੋ ਸਕਦੀ (Cannot Delete)',
-        message: 'ਸਿਸਟਮ ਦੀਆਂ ਮੁੱਖ ਡਿਫੌਲਟ ਕੈਟੇਗਰੀਆਂ ਨੂੰ ਡਿਲੀਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ। (Default system categories cannot be deleted.)\n\nਤੁਸੀਂ ਸਿਰਫ਼ ਇਨ੍ਹਾਂ ਨੂੰ ਸੋਧ ਸਕਦੇ ਹੋ। (You can only edit them.)'
-      });
-      return;
-    }
-
-    // Check if this is a fallback/non-DB category (no valid MongoDB _id)
-    const isValidMongoId = cat._id && /^[a-f\d]{24}$/i.test(cat._id);
-    if (!isValidMongoId) {
-      setPopup({
-        type: 'alert',
-        title: 'ਡਿਲੀਟ ਨਹੀਂ ਹੋ ਸਕਦੀ (Cannot Delete)',
-        message: 'ਇਹ ਕੈਟੇਗਰੀ ਅਜੇ ਡੇਟਾਬੇਸ ਵਿੱਚ ਸੇਵ ਨਹੀਂ ਹੋਈ। (This category has not been saved to the database yet.)\n\nਕਿਰਪਾ ਕਰਕੇ ਪੰਨੇ ਨੂੰ ਰੀਲੋਡ ਕਰਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।'
-      });
-      return;
-    }
-
     setPopup({
       type: 'confirm',
       title: 'ਕੈਟੇਗਰੀ ਡਿਲੀਟ ਕਰੋ (Delete Category)',
-      message: `ਕੀ ਤੁਸੀਂ ਵਾਕਈ ਕੈਟੇਗਰੀ "${cat.namePa} (${cat.nameEn})" ਨੂੰ ਡਿਲੀਟ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?\n\n(Are you sure you want to delete "${cat.nameEn}"?)\n\nਇਹ ਕਿਰਿਆ ਵਾਪਸ ਨਹੀਂ ਹੋ ਸਕਦੀ। (This action cannot be undone.)`,
+      message: `ਕੀ ਤੁਸੀਂ ਵਾਕਈ ਕੈਟੇਗਰੀ "${cat.namePa} (${cat.nameEn})" ਨੂੰ ਡਿਲੀਟ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?\n\n(Are you sure you want to delete "${cat.nameEn}"?)\n\nਇਹ ਕਿਰਿਆ ਵਾਪਸ ਨਹੀਂ ਹੋ ਸਕਦੀ।`,
       confirmLabel: 'ਹਾਂ, ਡਿਲੀਟ ਕਰੋ (Yes, Delete)',
       confirmColor: '#b71c1c',
       onConfirm: async () => {
@@ -440,31 +420,29 @@ export default function CategoryManagerView() {
                         <i className="fa fa-pencil" style={{ marginRight: '4px' }}></i> ਸੋਧੋ (Edit)
                       </button>
 
-                      {!isDefaultCategory(cat) && (
-                        <button
-                          type="button"
-                          disabled={deletingId === cat._id}
-                          onClick={() => handleDelete(cat)}
-                          style={{
-                            backgroundColor: '#fee2e2',
-                            border: '1px solid #fca5a5',
-                            borderRadius: '4px',
-                            padding: '4px 10px',
-                            fontSize: '12px',
-                            fontWeight: '600',
-                            color: '#b71c1c',
-                            cursor: 'pointer'
-                          }}
-                        >
-                          {deletingId === cat._id ? (
-                            <i className="fa fa-spinner fa-spin"></i>
-                          ) : (
-                            <>
-                              <i className="fa fa-trash" style={{ marginRight: '4px' }}></i> ਹਟਾਓ (Delete)
-                            </>
-                          )}
-                        </button>
-                      )}
+                      <button
+                        type="button"
+                        disabled={deletingId === cat._id}
+                        onClick={() => handleDelete(cat)}
+                        style={{
+                          backgroundColor: '#fee2e2',
+                          border: '1px solid #fca5a5',
+                          borderRadius: '4px',
+                          padding: '4px 10px',
+                          fontSize: '12px',
+                          fontWeight: '600',
+                          color: '#b71c1c',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        {deletingId === cat._id ? (
+                          <i className="fa fa-spinner fa-spin"></i>
+                        ) : (
+                          <>
+                            <i className="fa fa-trash" style={{ marginRight: '4px' }}></i> ਹਟਾਓ (Delete)
+                          </>
+                        )}
+                      </button>
                     </td>
                   </tr>
                 ))}
