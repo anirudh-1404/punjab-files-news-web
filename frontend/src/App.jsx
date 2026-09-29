@@ -83,6 +83,12 @@ export default function App() {
   const isAdmin = location.pathname.startsWith('/admin');
 
   useEffect(() => {
+    // Disable Lenis on Admin routes to ensure 100% natural, unhindered trackpad/mousepad scrolling in modals & tables
+    if (isAdmin) {
+      document.documentElement.classList.remove('lenis', 'lenis-smooth');
+      return;
+    }
+
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -121,8 +127,9 @@ export default function App() {
       cancelAnimationFrame(rafId);
       document.removeEventListener('click', handleAnchorClick);
       lenis.destroy();
+      document.documentElement.classList.remove('lenis', 'lenis-smooth');
     };
-  }, []);
+  }, [isAdmin]);
 
   return (
     <div id="wrapper" data-color="red">

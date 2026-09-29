@@ -968,6 +968,7 @@ export default function AllNewsCategoryView({ currentUser, onNavigate }) {
       {editingArticle && (
         <div
           className="admin-edit-modal-overlay"
+          data-lenis-prevent="true"
           style={{
             position: 'fixed',
             inset: 0,
@@ -985,6 +986,7 @@ export default function AllNewsCategoryView({ currentUser, onNavigate }) {
         >
           <div
             className="admin-edit-modal-card"
+            data-lenis-prevent="true"
             style={{
               backgroundColor: '#ffffff',
               borderRadius: '10px',
@@ -1052,6 +1054,8 @@ export default function AllNewsCategoryView({ currentUser, onNavigate }) {
             <div
               id="adminEditModalBody"
               className="admin-modal-body"
+              data-lenis-prevent="true"
+              onWheel={(e) => e.stopPropagation()}
               style={{
                 flex: '1 1 auto',
                 height: 'calc(86vh - 120px)',
@@ -1061,7 +1065,9 @@ export default function AllNewsCategoryView({ currentUser, onNavigate }) {
                 padding: '20px 24px',
                 WebkitOverflowScrolling: 'touch',
                 backgroundColor: '#ffffff',
-                boxSizing: 'border-box'
+                boxSizing: 'border-box',
+                overscrollBehavior: 'contain',
+                touchAction: 'pan-y'
               }}
             >
               <form id="editArticleForm" onSubmit={handleSaveEdit}>
