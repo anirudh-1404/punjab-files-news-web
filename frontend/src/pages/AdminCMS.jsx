@@ -9,8 +9,8 @@ export default function AdminCMS() {
   const roleParam = searchParams.get('role'); // 'admin' | 'editor' | 'reporter'
 
   const [currentUser, setCurrentUser] = useState(() => getSavedUser());
-  const [email, setEmail] = useState('admin@punjabfiles.com');
-  const [password, setPassword] = useState('AdminPassword123!');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -23,8 +23,6 @@ export default function AdminCMS() {
       badgeColor: '#0f172a',
       title: 'ਮੁੱਖ ਪ੍ਰਬੰਧਕ ਲੌਗਇਨ (Super Admin)',
       subtitle: 'ਸੰਪੂਰਨ ਸਿਸਟਮ, ਸਟਾਫ਼ ਅਤੇ ਓਵਰਵਿਊ ਪ੍ਰਬੰਧਨ ਲਈ ਦਾਖ਼ਲ ਹੋਵੋ',
-      defaultEmail: 'admin@punjabfiles.com',
-      defaultPass: 'AdminPassword123!',
       icon: 'fa-shield'
     },
     editor: {
@@ -34,8 +32,6 @@ export default function AdminCMS() {
       badgeColor: '#ffffff',
       title: 'ਮੁੱਖ ਸੰਪਾਦਕ ਲੌਗਇਨ (Chief Editor)',
       subtitle: 'ਖ਼ਬਰਾਂ ਦੀ ਸਮੀਖਿਆ, ਮਨਜ਼ੂਰੀ ਅਤੇ ਬਰੇਕਿੰਗ ਨਿਊਜ਼ ਪ੍ਰਬੰਧਨ ਲਈ ਦਾਖ਼ਲ ਹੋਵੋ',
-      defaultEmail: 'editor@punjabfiles.com',
-      defaultPass: 'EditorPassword123!',
       icon: 'fa-pencil-square-o'
     },
     reporter: {
@@ -45,19 +41,14 @@ export default function AdminCMS() {
       badgeColor: '#ffffff',
       title: 'ਪੱਤਰਕਾਰ ਲੌਗਇਨ (Field Reporter)',
       subtitle: 'ਨਵੀਂ ਖ਼ਬਰ ਸਬਮਿਟ ਕਰਨ ਅਤੇ ਆਪਣੀਆਂ ਖ਼ਬਰਾਂ ਦੇਖਣ ਲਈ ਦਾਖ਼ਲ ਹੋਵੋ',
-      defaultEmail: 'reporter@punjabfiles.com',
-      defaultPass: 'ReporterPassword123!',
       icon: 'fa-newspaper-o'
     }
   };
 
   const currentRoleConfig = ROLE_CONFIGS[roleParam] || ROLE_CONFIGS.admin;
 
-  // Sync email and pass when URL role param changes
+  // Clear errors when URL role param changes
   useEffect(() => {
-    const config = ROLE_CONFIGS[roleParam] || ROLE_CONFIGS.admin;
-    setEmail(config.defaultEmail);
-    setPassword(config.defaultPass);
     setErrorMsg('');
   }, [roleParam]);
 
@@ -107,9 +98,6 @@ export default function AdminCMS() {
 
   const selectRole = (roleKey) => {
     setSearchParams({ role: roleKey });
-    const config = ROLE_CONFIGS[roleKey];
-    setEmail(config.defaultEmail);
-    setPassword(config.defaultPass);
     setErrorMsg('');
   };
 
@@ -273,7 +261,8 @@ export default function AdminCMS() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="e.g. admin@punjabfiles.com"
+              placeholder="ਆਪਣਾ ਈਮੇਲ ਪਤਾ ਦਰਜ ਕਰੋ (Enter your email)"
+              autoComplete="username"
               required
               style={{
                 width: '100%',
@@ -294,7 +283,8 @@ export default function AdminCMS() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="ਪਾਸਵਰਡ ਦਰਜ ਕਰੋ"
+              placeholder="ਪਾਸਵਰਡ ਦਰਜ ਕਰੋ (Enter password)"
+              autoComplete="current-password"
               required
               style={{
                 width: '100%',
