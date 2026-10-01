@@ -44,29 +44,29 @@ function ScrollToTopOnNavigate() {
 function HomePage() {
   return (
     <section id="main-section">
-      {/* 1. ਮੁੱਖ ਪੰਨਾ / ਲਾਈਵ ਟੀਵੀ: Sri Darbar Sahib (Left) + Live TV (Right) Top Hero Section */}
+      {/* 1. ਮੁੱਖ ਪੰਨਾ: Sri Darbar Sahib Hukamnama + Main Headline + Web TV & Podcasts Top Hero Section */}
       <ParallaxHero />
 
       {/* 2. ਪੰਜਾਬ: Dedicated Punjab Tri-Region Hub (#punjab - Majha, Malwa, Doaba) */}
       <DarbarSahibAndPunjabModule />
 
-      {/* 3. ਧਰਮ: Dedicated Religion Section (#religion) */}
-      <ReligionModule />
-
-      {/* 4. ਦੇਸ਼-ਵਿਦੇਸ਼: World & National News Module (#world) */}
+      {/* 3. ਦੇਸ਼-ਵਿਦੇਸ਼: World & National News Module (#world) */}
       <WorldNewsModule />
 
-      {/* 5. ਖੇਡਾਂ: Dedicated Sports Module (#sport) */}
+      {/* 4. ਖੇਡਾਂ: Dedicated Sports Module (#sport) */}
       <SportsModule />
 
-      {/* 6. ਸਿਹਤ: Dedicated Health & Wellness Module (#health) */}
+      {/* 5. ਸਿਹਤ: Dedicated Health & Wellness Module (#health) */}
       <HealthModule />
 
-      {/* 7. ਸੈਰ-ਸਪਾਟਾ: Dedicated Travel & Heritage Module (#travel) */}
+      {/* 6. ਸੈਰ-ਸਪਾਟਾ: Dedicated Travel & Heritage Module (#travel) */}
       <TravelModule />
 
-      {/* 8. ਮਨੋਰੰਜਨ: Dedicated Entertainment & Cinema Module (#art-entertainment) */}
+      {/* 7. ਮਨੋਰੰਜਨ: Dedicated Entertainment & Cinema Module (#art-entertainment) */}
       <EntertainmentModule />
+
+      {/* 8. ਧਰਮ ਤੇ ਵਿਰਾਸਤ: Dedicated Religion & Heritage Module (#religion) - Moved after ਮਨੋਰੰਜਨ */}
+      <ReligionModule />
 
       {/* 9. ਪਾਠਕਾਂ ਦੀ ਪਸੰਦ: Dedicated Readers' Choice Top 10 News */}
       <ReadersChoiceModule />

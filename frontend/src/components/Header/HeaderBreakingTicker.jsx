@@ -51,7 +51,7 @@ export default function HeaderBreakingTicker() {
 
   return (
     <div className="header-top-breaking-wrapper">
-      <div className="container" style={{ display: 'flex', alignItems: 'center', height: '36px', overflow: 'hidden' }}>
+      <div className="container" style={{ display: 'flex', alignItems: 'center', height: '42px', overflow: 'hidden' }}>
         {/* Left Badge */}
         <div className="breaking-ticker-badge">
           <span className="live-dot-pulse"></span>

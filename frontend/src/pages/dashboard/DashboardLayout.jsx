@@ -12,6 +12,7 @@ import BreakingNewsManagerView from './editor/BreakingNewsManagerView';
 import CreateArticleView from './reporter/CreateArticleView';
 import MyArticlesView from './reporter/MyArticlesView';
 import ContactMessagesView from './admin/ContactMessagesView';
+import PodcastManagerView from './PodcastManagerView';
 import { contactAPI } from '../../services/api';
 
 export default function DashboardLayout({ user, onLogout }) {
@@ -32,13 +33,15 @@ export default function DashboardLayout({ user, onLogout }) {
     if (role === 'reporter') {
       return [
         { id: 'create', label: 'ਨਵੀਂ ਖ਼ਬਰ ਲਿਖੋ (Write News)', icon: 'fa-pencil-square-o', sub: 'Write News' },
-        { id: 'my_articles', label: 'ਮੇਰੀਆਂ ਖ਼ਬਰਾਂ (My Articles)', icon: 'fa-list-alt', sub: 'My Articles' }
+        { id: 'my_articles', label: 'ਮੇਰੀਆਂ ਖ਼ਬਰਾਂ (My Articles)', icon: 'fa-list-alt', sub: 'My Articles' },
+        { id: 'podcasts', label: 'ਪੋਡਕਾਸਟ (Podcasts)', icon: 'fa-podcast', sub: 'Add Podcasts' }
       ];
     }
 
     if (role === 'editor') {
       return [
         { id: 'review', label: 'ਸੰਪਾਦਕੀ ਸਮੀਖਿਆ (Review Desk)', icon: 'fa-check-square-o', sub: 'Review Desk' },
+        { id: 'podcasts', label: 'ਪੋਡਕਾਸਟ ਸਮੀਖਿਆ (Podcasts Desk)', icon: 'fa-podcast', sub: 'Review Podcasts' },
         { id: 'create', label: 'ਨਵੀਂ ਖ਼ਬਰ ਲਿਖੋ (Write News)', icon: 'fa-pencil-square-o', sub: 'Write News' },
         { id: 'breaking', label: 'ਬਰੇਕਿੰਗ ਨਿਊਜ਼ (Breaking News)', icon: 'fa-bolt', sub: 'Breaking Ticker' },
         { id: 'contact_queries', label: 'ਸੰਪਰਕ ਸੁਨੇਹੇ (Contact Messages)', icon: 'fa-envelope-o', sub: 'Inquiries' },
@@ -51,6 +54,7 @@ export default function DashboardLayout({ user, onLogout }) {
       { id: 'overview', label: 'ਓਵਰਵਿਊ (Overview)', icon: 'fa-dashboard', sub: 'Overview' },
       { id: 'create', label: 'ਨਵੀਂ ਖ਼ਬਰ ਲਿਖੋ (Write News)', icon: 'fa-pencil-square-o', sub: 'Write & Publish News' },
       { id: 'all_news', label: 'ਸਾਰੀਆਂ ਖ਼ਬਰਾਂ (All News)', icon: 'fa-newspaper-o', sub: 'All News & Categories' },
+      { id: 'podcasts', label: 'ਪੋਡਕਾਸਟ ਪ੍ਰਬੰਧਨ (Podcasts)', icon: 'fa-podcast', sub: 'Podcast Management' },
       { id: 'categories', label: 'ਕੈਟੇਗਰੀ ਮੈਨੇਜਰ (Category Manager)', icon: 'fa-tags', sub: 'Categories' },
       { id: 'review', label: 'ਅੰਤਿਮ ਪ੍ਰਵਾਨਗੀ ਡੈਸਕ (Final Approval Desk)', icon: 'fa-check-square-o', sub: 'Final Approval Desk' },
       { id: 'contact_queries', label: 'ਸੰਪਰਕ ਸੁਨੇਹੇ (Contact Messages)', icon: 'fa-envelope-o', sub: 'Inquiries' },
@@ -339,6 +343,10 @@ export default function DashboardLayout({ user, onLogout }) {
 
           {activeTab === 'mukhwak' && ['admin', 'editor'].includes(user?.role) && (
             <MukhwakManagerView currentUser={user} />
+          )}
+
+          {activeTab === 'podcasts' && (
+            <PodcastManagerView currentUser={user} />
           )}
         </div>
       </main>

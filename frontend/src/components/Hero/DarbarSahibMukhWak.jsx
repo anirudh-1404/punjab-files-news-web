@@ -16,6 +16,33 @@ const DEFAULT_FALLBACK = {
 export default function DarbarSahibMukhWak() {
   const [showViakhya, setShowViakhya] = useState(false);
   const [data, setData] = useState(DEFAULT_FALLBACK);
+  const [liveTime, setLiveTime] = useState('');
+  const [liveDate, setLiveDate] = useState('');
+
+  // Live real-time Punjabi clock & date
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      const weekdayNames = ['ਐਤਵਾਰ', 'ਸੋਮਵਾਰ', 'ਮੰਗਲਵਾਰ', 'ਬੁੱਧਵਾਰ', 'ਵੀਰਵਾਰ', 'ਸ਼ੁੱਕਰਵਾਰ', 'ਸ਼ਨਿੱਚਰਵਾਰ'];
+      const monthNames = ['ਜਨਵਰੀ', 'ਫ਼ਰਵਰੀ', 'ਮਾਰਚ', 'ਅਪ੍ਰੈਲ', 'ਮਈ', 'ਜੂਨ', 'ਜੁਲਾਈ', 'ਅਗਸਤ', 'ਸਤੰਬਰ', 'ਅਕਤੂਬਰ', 'ਨਵੰਬਰ', 'ਦਸੰਬਰ'];
+
+      let hours = now.getHours();
+      const minutes = now.getMinutes();
+      const seconds = now.getSeconds();
+      const ampm = hours >= 12 ? 'ਸ਼ਾਮ' : 'ਸਵੇਰੇ';
+      hours = hours % 12 || 12;
+      const hStr = hours < 10 ? '0' + hours : hours;
+      const mStr = minutes < 10 ? '0' + minutes : minutes;
+      const sStr = seconds < 10 ? '0' + seconds : seconds;
+
+      setLiveTime(`${hStr}:${mStr}:${sStr} ${ampm}`);
+      setLiveDate(`${weekdayNames[now.getDay()]}, ${now.getDate()} ${monthNames[now.getMonth()]} ${now.getFullYear()}`);
+    };
+
+    updateTime();
+    const timer = setInterval(updateTime, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -41,29 +68,58 @@ export default function DarbarSahibMukhWak() {
     .filter(Boolean);
 
   return (
-    <div className="darbar-sahib-mukhwak-card">
-      {/* Sacred Top Header */}
-      <div className="mukhwak-card-topbar" style={{ padding: '8px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div className="mukhwak-title-group" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span className="ik-onkar" style={{ fontSize: '20px' }}>ੴ</span>
-          <span style={{ fontSize: '13.5px', fontWeight: '800', color: '#000000' }}>
-            {data.location || 'ਸੱਚਖੰਡ ਸ੍ਰੀ ਹਰਿਮੰਦਰ ਸਾਹਿਬ'}
-          </span>
-          <span style={{ fontSize: '11px', color: '#b71c1c', fontWeight: '700', marginLeft: '4px' }}>
-            • ਰੋਜ਼ਾਨਾ ਹੁਕਮਨਾਮਾ
+    <div className="darbar-sahib-mukhwak-card mukhwak-portrait-card">
+      {/* Sacred Top Header with Live Real-time Clock and Date */}
+      <div className="mukhwak-card-topbar" style={{ padding: '8px 12px', display: 'flex', flexDirection: 'column', gap: '5px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+          <div className="mukhwak-title-group" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span className="ik-onkar" style={{ fontSize: '20px', color: '#b71c1c' }}>ੴ</span>
+            <span style={{ fontSize: '13px', fontWeight: '800', color: '#000000' }}>
+              {data.location || 'ਸੱਚਖੰਡ ਸ੍ਰੀ ਹਰਿਮੰਦਰ ਸਾਹਿਬ'}
+            </span>
+          </div>
+          <span style={{ fontSize: '10.5px', color: '#b71c1c', fontWeight: '800', backgroundColor: '#fee2e2', padding: '2px 6px', borderRadius: '3px' }}>
+            ਰੋਜ਼ਾਨਾ ਹੁਕਮਨਾਮਾ
           </span>
         </div>
-        <div className="mukhwak-date-badge" style={{ fontSize: '11px', padding: '2px 8px' }}>
-          <span>{data.date}</span>
+
+        {/* Current Time and Date Display with Hukamnama (Clean 2-row layout with clear spacing) */}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '5px',
+            backgroundColor: '#f8fafc',
+            border: '1px solid #e2e8f0',
+            borderRadius: '6px',
+            padding: '6px 10px',
+            marginTop: '2px'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '12px', fontWeight: '700' }}>
+            <div style={{ color: '#b71c1c', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <i className="fa fa-clock-o" style={{ fontSize: '13px' }}></i>
+              <span style={{ fontSize: '11px', color: '#64748b', fontWeight: '600' }}>ਲਾਈਵ ਸਮਾਂ:</span>
+              <span style={{ fontWeight: '800', letterSpacing: '0.3px' }}>{liveTime || 'ਲਾਈਵ ਸਮਾਂ'}</span>
+            </div>
+            <span style={{ width: '6px', height: '6px', backgroundColor: '#22c55e', borderRadius: '50%', display: 'inline-block' }}></span>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: '700', color: '#1c2d5a', borderTop: '1px dashed #e2e8f0', paddingTop: '4px' }}>
+            <i className="fa fa-calendar" style={{ color: '#ebb10d', fontSize: '12px' }}></i>
+            <span style={{ fontSize: '11px', color: '#64748b', fontWeight: '600' }}>ਤਾਰੀਖ਼:</span>
+            <span>{liveDate || data.date}</span>
+          </div>
         </div>
       </div>
 
-      {/* Visual Image of Sri Darbar Sahib */}
-      <div className="mukhwak-image-container">
+      {/* Visual Portrait Image of Sri Darbar Sahib */}
+      <div className="mukhwak-image-container" style={{ position: 'relative', height: '170px', overflow: 'hidden' }}>
         <img
           src={data.image || '/img/darbar-sahib-mukhwak.jpg'}
           alt={data.location || 'ਸੱਚਖੰਡ ਸ੍ਰੀ ਹਰਿਮੰਦਰ ਸਾਹਿਬ, ਸ੍ਰੀ ਅੰਮ੍ਰਿਤਸਰ'}
           className="mukhwak-golden-temple-img"
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
         />
         <div className="mukhwak-image-overlay">
           <span className="sacred-location-tag">

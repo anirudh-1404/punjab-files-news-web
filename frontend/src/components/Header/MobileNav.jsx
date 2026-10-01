@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate, Link } from 'react-router-dom';
-import brandLogo from '../../assets/logo.png';
+import brandLogo from '../../assets/logo-updated.png';
 import { categoryAPI } from '../../services/api';
 
 const PUNJAB_SLUG = 'punjab';
@@ -341,11 +341,11 @@ export default function MobileNav() {
                   </li>
                 ))}
 
-                {/* Live TV */}
+                {/* Web TV */}
                 <li style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                  <a href="#live-tv" onClick={() => handleLinkClick('#live-tv')} style={drawerLinkStyle}>
+                  <a href="#web-tv" onClick={() => handleLinkClick('#web-tv')} style={drawerLinkStyle}>
                     <i className="fa fa-television" style={{ color: '#ef4444', width: '18px' }}></i>
-                    <span>ਲਾਈਵ ਟੀਵੀ (Live 24x7)</span>
+                    <span>ਵੈੱਬ ਟੀਵੀ (WEB TV 24x7)</span>
                   </a>
                 </li>
 

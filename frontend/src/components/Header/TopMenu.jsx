@@ -35,28 +35,38 @@ export default function TopMenu() {
         {/* Left Social & Contact Links */}
         <ul className="left-top-menu">
           <li>
-            <a href="#" onClick={(e) => e.preventDefault()} className="facebook" title="Facebook">
+            <a href="https://www.facebook.com/people/Punjab-Files-HD/61591956357953/" target="_blank" rel="noreferrer" className="facebook" title="Facebook">
               <i className="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a href="#" onClick={(e) => e.preventDefault()} className="twitter" title="Twitter / X">
+            <a href="https://x.com/punjabfileshd" target="_blank" rel="noreferrer" className="twitter" title="Twitter / X">
               <i className="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a href="#" onClick={(e) => e.preventDefault()} className="youtube" title="YouTube">
+            <a href="https://www.youtube.com/@punjabfileshd" target="_blank" rel="noreferrer" className="youtube" title="YouTube">
               <i className="fa fa-youtube"></i>
             </a>
           </li>
           <li>
-            <a href="#" onClick={(e) => e.preventDefault()} className="instagram" title="Instagram">
+            <a href="https://www.instagram.com/punjabfileshd?stkn=MW02ZmNwcmNxZ2ky" target="_blank" rel="noreferrer" className="instagram" title="Instagram">
               <i className="fa fa-instagram"></i>
             </a>
           </li>
-          <li className="address">
+          <li className="address hidden-xs">
             <a href="mailto:info@punjabfiles.com">
               <i className="fa fa-envelope-o"></i> info@punjabfiles.com
+            </a>
+          </li>
+          <li className="address hidden-xs" style={{ marginLeft: '12px' }}>
+            <a href="mailto:advt@punjabfiles.com" style={{ color: '#ebb10d' }}>
+              <i className="fa fa-bullhorn"></i> advt@punjabfiles.com
+            </a>
+          </li>
+          <li className="address hidden-xs hidden-sm" style={{ marginLeft: '12px' }}>
+            <a href="tel:+918909396233">
+              <i className="fa fa-phone"></i> +91 89093 96233
             </a>
           </li>
         </ul>

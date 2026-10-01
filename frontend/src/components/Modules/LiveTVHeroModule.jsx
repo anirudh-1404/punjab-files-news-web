@@ -145,7 +145,7 @@ export default function LiveTVHeroModule() {
                       letterSpacing: '0.5px'
                     }}
                   >
-                    LIVE TV
+                    WEB TV
                   </h3>
                 </div>
 

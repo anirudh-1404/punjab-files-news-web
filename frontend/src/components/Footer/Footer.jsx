@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import brandLogo from '../../assets/logo.png';
+import brandLogo from '../../assets/logo-updated.png';
 import { articleAPI } from '../../services/api';
 import { getAllArticles } from '../../services/articleStore';
 
@@ -38,13 +38,13 @@ export default function Footer() {
   const tags = [
     { name: 'ਮੁੱਖ ਪੰਨਾ', href: '/' },
     { name: 'ਪੰਜਾਬ', href: '#punjab' },
-    { name: 'ਧਰਮ', href: '#religion' },
     { name: 'ਦੇਸ਼-ਵਿਦੇਸ਼', href: '#world' },
     { name: 'ਖੇਡਾਂ', href: '#sport' },
     { name: 'ਸਿਹਤ', href: '#health' },
     { name: 'ਸੈਰ-ਸਪਾਟਾ', href: '#travel' },
     { name: 'ਮਨੋਰੰਜਨ', href: '#art-entertainment' },
-    { name: 'ਲਾਈਵ ਟੀਵੀ', href: '#live-tv' },
+    { name: 'ਧਰਮ ਤੇ ਵਿਰਾਸਤ', href: '#religion' },
+    { name: 'ਵੈੱਬ ਟੀਵੀ', href: '#web-tv' },
     { name: 'ਸੰਪਰਕ', href: '/contact' },
     { name: 'ਮਾਝਾ', href: '#punjab' },
     { name: 'ਮਾਲਵਾ', href: '#punjab' },
@@ -57,31 +57,57 @@ export default function Footer() {
         <div className="bg overlay" style={{ backgroundColor: 'transparent', background: 'transparent', backgroundImage: 'none' }}>
           <div className="container" style={{ paddingTop: '50px', paddingBottom: '40px' }}>
             <div className="row no-gutter">
-              {/* Column 1: About Us with Punjab Files Black Logo */}
+              {/* Column 1: About Us with Seamless Brand Logo */}
               <div className="col-sm-6 col-md-3">
                 <h3 className="title-left title-style03 underline03">ਸਾਡੇ ਬਾਰੇ</h3>
                 <p className="about-us">
                   ਪੰਜਾਬ ਫਾਈਲਜ਼ 24 ਘੰਟੇ ਨਿਰਪੱਖ, ਸੱਚੀਆਂ ਅਤੇ ਭਰੋਸੇਯੋਗ ਖ਼ਬਰਾਂ ਪਹੁੰਚਾਉਣ ਲਈ ਵਚਨਬੱਧ ਹੈ। ਅਸੀਂ ਤੁਹਾਨੂੰ ਜ਼ਮੀਨੀ ਹਕੀਕਤਾਂ, ਤਾਜ਼ਾ ਸਮਾਚਾਰ ਅਤੇ ਸਾਰਥਕ ਵਿਸ਼ਲੇਸ਼ਣ ਮੁਹੱਈਆ ਕਰਵਾਉਂਦੇ ਹਾਂ।
                 </p>
-                <div className="site-logo" style={{ marginTop: '18px' }}>
+                <div className="site-logo" style={{ marginTop: '16px' }}>
                   <Link to="/" style={{ textDecoration: 'none', display: 'inline-block' }}>
-                    <img
-                      src={brandLogo}
-                      alt="Punjab Files Logo"
+                    <div
                       style={{
-                        height: '110px',
-                        maxHeight: '120px',
-                        maxWidth: '280px',
-                        width: 'auto',
-                        objectFit: 'contain',
-                        borderRadius: '8px',
-                        display: 'block',
                         backgroundColor: '#ffffff',
-                        padding: '6px 10px',
-                        boxShadow: '0 4px 14px rgba(0, 0, 0, 0.4)'
+                        borderRadius: '8px',
+                        padding: '10px 16px',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.3)',
+                        border: '1px solid rgba(255, 255, 255, 0.2)'
                       }}
-                    />
+                    >
+                      <img
+                        src={brandLogo}
+                        alt="Punjab Files Logo"
+                        style={{
+                          height: '92px',
+                          maxHeight: '100px',
+                          maxWidth: '240px',
+                          width: 'auto',
+                          objectFit: 'contain',
+                          display: 'block'
+                        }}
+                      />
+                    </div>
                   </Link>
+                </div>
+
+                {/* Advertisement Queries Call Box */}
+                <div style={{ marginTop: '16px', backgroundColor: 'rgba(255, 255, 255, 0.06)', borderRadius: '6px', padding: '10px 12px', border: '1px solid rgba(255, 255, 255, 0.12)' }}>
+                  <div style={{ fontSize: '11px', fontWeight: '800', color: '#ebb10d', textTransform: 'uppercase', marginBottom: '4px', letterSpacing: '0.4px' }}>
+                    <i className="fa fa-bullhorn" style={{ marginRight: '5px' }}></i> Call for Advertisement queries:
+                  </div>
+                  <div style={{ fontSize: '12px', color: '#e2e8f0', marginBottom: '3px' }}>
+                    <span style={{ color: '#94a3b8' }}>Mobile: </span>
+                    <a href="tel:+918909396233" style={{ color: '#f87171', fontWeight: '700', textDecoration: 'none' }}>+91 89093 96233</a>
+                  </div>
+                  <div style={{ fontSize: '11px', color: '#cbd5e1' }}>
+                    <span style={{ color: '#94a3b8' }}>Email: </span>
+                    <a href="mailto:advt@punjabfiles.com" style={{ color: '#ebb10d', textDecoration: 'none', fontWeight: '700' }}>advt@punjabfiles.com</a>
+                    <span style={{ margin: '0 4px', color: '#64748b' }}>|</span>
+                    <a href="mailto:info@punjabfiles.com" style={{ color: '#e2e8f0', textDecoration: 'none' }}>info@punjabfiles.com</a>
+                  </div>
                 </div>
               </div>
 
@@ -127,8 +153,8 @@ export default function Footer() {
                       <div className="item">
                         <div className="item-content" style={{ marginLeft: 0 }}>
                           <p style={{ margin: '0 0 6px' }}>
-                            <a href="#live-tv" style={{ color: '#ffffff', fontWeight: '700' }}>
-                              <span style={{ color: '#ef4444', marginRight: '6px' }}>●</span> 24x7 ਲਾਈਵ ਟੀਵੀ ਪ੍ਰਸਾਰਣ
+                            <a href="#web-tv" style={{ color: '#ffffff', fontWeight: '700' }}>
+                              <span style={{ color: '#ef4444', marginRight: '6px' }}>●</span> 24x7 ਵੈੱਬ ਟੀਵੀ (WEB TV)
                             </a>
                           </p>
                           <span style={{ color: '#94a3b8', fontSize: '12px' }}>ਪੰਜਾਬ ਫਾਈਲਜ਼ ਲਾਈਵ ਸਟੂਡੀਓ</span>

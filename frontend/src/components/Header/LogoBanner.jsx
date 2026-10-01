@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import brandLogo from '../../assets/logo.png';
+import brandLogo from '../../assets/logo-updated.png';
 
 export default function LogoBanner() {
   const [timeStr, setTimeStr] = useState('');
@@ -64,21 +64,23 @@ export default function LogoBanner() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '8px 0',
+        padding: '10px 0',
+        gap: '20px',
+        flexWrap: 'wrap',
         flex: 1
       }}
     >
-      {/* Left: Prominent Brand Logo */}
-      <div className="header-brand-block">
+      {/* Left: Prominent & Enlarged Brand Logo */}
+      <div className="header-brand-block" style={{ flexShrink: 0 }}>
         <a href="/" style={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}>
           <img
             src={brandLogo}
             alt="Punjab Files"
             className="brand-logo-img"
             style={{
-              height: '110px',
-              maxHeight: '120px',
-              maxWidth: '440px',
+              height: '135px',
+              maxHeight: '145px',
+              maxWidth: '480px',
               width: 'auto',
               objectFit: 'contain',
               display: 'block'
@@ -87,48 +89,97 @@ export default function LogoBanner() {
         </a>
       </div>
 
-      {/* Right: Live Punjabi Time & Date Clock */}
-      <div
-        className="header-live-clock hidden-xs"
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '12px',
-          fontFamily: "'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif"
-        }}
-      >
+      {/* Right / Center: Advertisement Provision Next to Logo (728x90 Leaderboard Slot) */}
+      <div className="header-ad-provision-wrapper hidden-xs hidden-sm" style={{ flex: 1, maxWidth: '640px', marginLeft: 'auto' }}>
         <div
+          className="header-top-ad-slot"
           style={{
-            backgroundColor: '#b71c1c',
-            color: '#ffffff',
-            padding: '7px 16px',
-            borderRadius: '4px',
-            fontSize: '15px',
-            fontWeight: '800',
-            letterSpacing: '0.5px',
-            boxShadow: '0 2px 8px rgba(183, 28, 28, 0.3)',
+            background: 'linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%)',
+            border: '1.5px dashed #cbd5e1',
+            borderRadius: '6px',
+            padding: '10px 16px',
+            position: 'relative',
             display: 'flex',
             alignItems: 'center',
-            gap: '8px'
+            justifyContent: 'space-between',
+            gap: '14px',
+            minHeight: '85px',
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
           }}
         >
-          <i className="fa fa-clock-o"></i>
-          <span>{timeStr}</span>
-        </div>
-        <div
-          style={{
-            color: '#1c2d5a',
-            fontSize: '14.5px',
-            fontWeight: '700',
-            borderLeft: '2px solid #e2e8f0',
-            paddingLeft: '12px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px'
-          }}
-        >
-          <i className="fa fa-calendar" style={{ color: '#b71c1c' }}></i>
-          <span>{dateStr}</span>
+          {/* Ad Tag */}
+          <span
+            style={{
+              position: 'absolute',
+              top: '-9px',
+              right: '14px',
+              backgroundColor: '#94a3b8',
+              color: '#ffffff',
+              fontSize: '9.5px',
+              fontWeight: '800',
+              padding: '1px 7px',
+              borderRadius: '3px',
+              letterSpacing: '0.4px',
+              textTransform: 'uppercase'
+            }}
+          >
+            ਇਸ਼ਤਿਹਾਰ / Advertisement Slot
+          </span>
+
+          {/* Ad Content / Inquiries Banner */}
+          <div style={{ flex: 1 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+              <span style={{ backgroundColor: '#b71c1c', color: '#fff', fontSize: '11px', fontWeight: '800', padding: '2px 7px', borderRadius: '3px' }}>
+                <i className="fa fa-bullhorn" style={{ marginRight: '4px' }}></i> ਬੁਕਿੰਗ ਖੁੱਲ੍ਹੀ ਹੈ
+              </span>
+              <strong style={{ fontSize: '13px', color: '#1c2d5a', fontWeight: '800' }}>
+                Call for Advertisement queries
+              </strong>
+            </div>
+
+            <div style={{ fontSize: '12px', color: '#334155', lineHeight: '1.4' }}>
+              <div>
+                <span style={{ fontWeight: '700', color: '#0f172a' }}>Mobile: </span>
+                <a href="tel:+918909396233" style={{ color: '#b71c1c', fontWeight: '800', textDecoration: 'none' }}>
+                  +91 89093 96233
+                </a>
+              </div>
+              <div style={{ marginTop: '2px' }}>
+                <span style={{ fontWeight: '700', color: '#0f172a' }}>Email: </span>
+                <a href="mailto:advt@punjabfiles.com" style={{ color: '#1c2d5a', fontWeight: '700', textDecoration: 'none' }}>
+                  advt@punjabfiles.com
+                </a>
+                <span style={{ margin: '0 5px', color: '#94a3b8' }}>|</span>
+                <a href="mailto:info@punjabfiles.com" style={{ color: '#1c2d5a', fontWeight: '700', textDecoration: 'none' }}>
+                  info@punjabfiles.com
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* CTA Book Ad Button */}
+          <div style={{ flexShrink: 0 }}>
+            <a
+              href="/contact"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                backgroundColor: '#1c2d5a',
+                color: '#ebb10d',
+                padding: '8px 14px',
+                borderRadius: '4px',
+                fontSize: '12.5px',
+                fontWeight: '800',
+                textDecoration: 'none',
+                boxShadow: '0 2px 6px rgba(28, 45, 90, 0.25)',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              <span>ਇਸ਼ਤਿਹਾਰ ਦਿਓ</span>
+              <i className="fa fa-arrow-right"></i>
+            </a>
+          </div>
         </div>
       </div>
     </div>

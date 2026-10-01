@@ -394,12 +394,12 @@ export const contactAPI = {
 // -------------------------------------------------------------
 export const DEFAULT_CATEGORIES = [
   { _id: 'cat_punjab', namePa: 'ਪੰਜਾਬ', nameEn: 'Punjab', slug: 'punjab', icon: 'fa-map-marker', order: 1, isDefault: true, isActive: true },
-  { _id: 'cat_religion', namePa: 'ਧਰਮ ਤੇ ਵਿਰਾਸਤ', nameEn: 'Religion', slug: 'religion', icon: 'fa-sun-o', order: 2, isDefault: true, isActive: true },
-  { _id: 'cat_world', namePa: 'ਦੇਸ਼-ਵਿਦੇਸ਼', nameEn: 'National & World', slug: 'world', icon: 'fa-globe', order: 3, isDefault: true, isActive: true },
-  { _id: 'cat_sport', namePa: 'ਖੇਡਾਂ', nameEn: 'Sports', slug: 'sport', icon: 'fa-trophy', order: 4, isDefault: true, isActive: true },
-  { _id: 'cat_health', namePa: 'ਸਿਹਤ', nameEn: 'Health', slug: 'health', icon: 'fa-heartbeat', order: 5, isDefault: true, isActive: true },
-  { _id: 'cat_travel', namePa: 'ਸੈਰ-ਸਪਾਟਾ', nameEn: 'Travel', slug: 'travel', icon: 'fa-plane', order: 6, isDefault: true, isActive: true },
-  { _id: 'cat_art_entertainment', namePa: 'ਮਨੋਰੰਜਨ', nameEn: 'Entertainment', slug: 'art-entertainment', icon: 'fa-film', order: 7, isDefault: true, isActive: true },
+  { _id: 'cat_world', namePa: 'ਦੇਸ਼-ਵਿਦੇਸ਼', nameEn: 'National & World', slug: 'world', icon: 'fa-globe', order: 2, isDefault: true, isActive: true },
+  { _id: 'cat_sport', namePa: 'ਖੇਡਾਂ', nameEn: 'Sports', slug: 'sport', icon: 'fa-trophy', order: 3, isDefault: true, isActive: true },
+  { _id: 'cat_health', namePa: 'ਸਿਹਤ', nameEn: 'Health', slug: 'health', icon: 'fa-heartbeat', order: 4, isDefault: true, isActive: true },
+  { _id: 'cat_travel', namePa: 'ਸੈਰ-ਸਪਾਟਾ', nameEn: 'Travel', slug: 'travel', icon: 'fa-plane', order: 5, isDefault: true, isActive: true },
+  { _id: 'cat_art_entertainment', namePa: 'ਮਨੋਰੰਜਨ', nameEn: 'Entertainment', slug: 'art-entertainment', icon: 'fa-film', order: 6, isDefault: true, isActive: true },
+  { _id: 'cat_religion', namePa: 'ਧਰਮ ਤੇ ਵਿਰਾਸਤ', nameEn: 'Religion', slug: 'religion', icon: 'fa-sun-o', order: 7, isDefault: true, isActive: true },
   { _id: 'cat_politics', namePa: 'ਰਾਜਨੀਤੀ', nameEn: 'Politics', slug: 'politics', icon: 'fa-university', order: 8, isDefault: true, isActive: true },
   { _id: 'cat_business', namePa: 'ਵਪਾਰ', nameEn: 'Business', slug: 'business', icon: 'fa-line-chart', order: 9, isDefault: true, isActive: true }
 ];
@@ -556,4 +556,66 @@ export const categoryAPI = {
     };
   }
 };
+
+// -------------------------------------------------------------
+// 10. PODCASTS APIS (Reporter -> Editor -> Admin workflow)
+// -------------------------------------------------------------
+export const podcastAPI = {
+  // Public - Get published podcasts for homepage & users
+  getPublished: async (params = {}) => {
+    try {
+      const query = new URLSearchParams();
+      if (params.page) query.append('page', params.page);
+      if (params.limit) query.append('limit', params.limit);
+      const res = await apiFetch(`/podcasts?${query.toString()}`);
+      if (res && res.data) {
+        localStorage.setItem('punjab_published_podcasts', JSON.stringify(res.data));
+      }
+      return res;
+    } catch (err) {
+      console.warn('API getPublished podcasts error, using cached:', err.message);
+      const cached = JSON.parse(localStorage.getItem('punjab_published_podcasts') || '[]');
+      return { success: true, data: cached, podcasts: cached };
+    }
+  },
+
+  // Protected - Staff gets their relevant podcasts
+  getStaffAll: async () => {
+    try {
+      const res = await apiFetch('/podcasts/staff/all');
+      return res;
+    } catch (err) {
+      console.warn('API getStaffAll podcasts error:', err.message);
+      const cached = JSON.parse(localStorage.getItem('punjab_staff_podcasts') || '[]');
+      return { success: true, data: cached, podcasts: cached };
+    }
+  },
+
+  // Protected - Reporter, Editor, Admin create
+  create: async (podcastData) => {
+    const res = await apiFetch('/podcasts', {
+      method: 'POST',
+      body: JSON.stringify(podcastData)
+    });
+    return res;
+  },
+
+  // Protected - Editor / Admin update status
+  updateStatus: async (id, status) => {
+    const res = await apiFetch(`/podcasts/${id}/status`, {
+      method: 'PUT',
+      body: JSON.stringify({ status })
+    });
+    return res;
+  },
+
+  // Protected - Delete podcast
+  delete: async (id) => {
+    const res = await apiFetch(`/podcasts/${id}`, {
+      method: 'DELETE'
+    });
+    return res;
+  }
+};
+
 

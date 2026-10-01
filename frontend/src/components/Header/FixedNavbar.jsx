@@ -70,7 +70,7 @@ export default function FixedNavbar() {
     }
 
     // On homepage (/), scroll spy using dynamic category slugs
-    const sectionIds = [...categories.map((c) => c.slug), 'live-tv'];
+    const sectionIds = [...categories.map((c) => c.slug), 'web-tv', 'live-tv'];
 
     const handleScroll = () => {
       if (window.scrollY < 260) {
@@ -365,10 +365,10 @@ export default function FixedNavbar() {
                 </li>
               )}
 
-              {/* Live TV */}
-              <li className={activeSection === 'live-tv' ? 'active' : ''}>
-                <a href="#live-tv" onClick={(e) => handleNavClick(e, 'live-tv')}>
-                  ਲਾਈਵ ਟੀਵੀ
+              {/* Web TV */}
+              <li className={activeSection === 'web-tv' || activeSection === 'live-tv' ? 'active' : ''}>
+                <a href="#web-tv" onClick={(e) => handleNavClick(e, 'web-tv')}>
+                  ਵੈੱਬ ਟੀਵੀ
                 </a>
               </li>
 
