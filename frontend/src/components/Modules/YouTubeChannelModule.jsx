@@ -21,7 +21,7 @@ export default function YouTubeChannelModule() {
               views: `${a.views || 1} views`,
               time: a.publishedAt ? new Date(a.publishedAt).toLocaleTimeString('pa-IN', { hour: '2-digit', minute: '2-digit' }) : 'ਤਾਜ਼ਾ',
               thumbnail: a.featuredImage || '/img/index_800x400-image07.jpg',
-              youtubeId: a.youtubeId || 'KMWcefrAKLg'
+              youtubeId: a.youtubeId || '6OW56yMNB1g'
             })));
             return;
           }

@@ -716,7 +716,7 @@ export default function NewsDetailPage() {
               </div>
               <div style={{ position: 'relative', width: '100%', paddingBottom: '56.25%', height: 0, overflow: 'hidden', borderRadius: '4px', backgroundColor: '#000' }}>
                 <iframe
-                  src="https://www.youtube-nocookie.com/embed/KMWcefrAKLg?autoplay=0"
+                  src="https://www.youtube-nocookie.com/embed/6OW56yMNB1g?autoplay=0"
                   title="Live TV Stream"
                   style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
                 ></iframe>

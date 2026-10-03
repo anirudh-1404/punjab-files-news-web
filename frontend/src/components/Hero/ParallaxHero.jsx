@@ -343,7 +343,7 @@ export default function ParallaxHero() {
                 }}
               >
                 <iframe
-                  src="https://www.youtube-nocookie.com/embed/KMWcefrAKLg?autoplay=1&mute=1&playsinline=1&enablejsapi=1&rel=0"
+                  src="https://www.youtube-nocookie.com/embed/6OW56yMNB1g?autoplay=1&mute=1&playsinline=1&enablejsapi=1&rel=0"
                   title="Punjab Files WEB TV"
                   loading="lazy"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
