@@ -2443,6 +2443,14 @@ html.lenis, html.lenis body {
   filter: brightness(0.92);
 }
 
+/* Staff Form Symmetrical 3-Column Grid */
+.staff-form-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
 /* Desktop Table vs Mobile Cards Across CMS */
 .desktop-leaderboard-table-wrap,
 .desktop-table-view {
@@ -2600,6 +2608,11 @@ html.lenis, html.lenis body {
   .mobile-mukhwak-card-list {
     display: flex !important;
     flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .staff-form-grid-3 {
+    grid-template-columns: 1fr !important;
     gap: 12px !important;
   }
 

@@ -248,10 +248,14 @@ export const userAPI = {
     });
   },
 
-  updateRole: (id, role) => {
+  updateRole: (id, roleOrData) => {
+    const body =
+      typeof roleOrData === 'object' && roleOrData !== null
+        ? roleOrData
+        : { role: roleOrData, roles: [roleOrData] };
     return apiFetch(`/users/${id}/role`, {
       method: 'PUT',
-      body: JSON.stringify({ role })
+      body: JSON.stringify(body)
     });
   },
 

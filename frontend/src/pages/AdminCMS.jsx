@@ -55,7 +55,7 @@ export default function AdminCMS() {
   useEffect(() => {
     async function verifySession() {
       const token = getToken();
-      if (token && !currentUser) {
+      if (token) {
         try {
           const res = await authAPI.getMe();
           if (res.user) {
@@ -68,7 +68,7 @@ export default function AdminCMS() {
       }
     }
     verifySession();
-  }, [currentUser]);
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -81,6 +81,27 @@ export default function AdminCMS() {
       setLoading(true);
       setErrorMsg('');
       const data = await authAPI.login(email.trim(), password);
+
+      const userRoles = Array.isArray(data.user?.roles) && data.user.roles.length > 0
+        ? data.user.roles
+        : [data.user?.role || 'reporter'];
+
+      const requestedRole = roleParam || 'admin';
+
+      if (!userRoles.includes(requestedRole)) {
+        authAPI.logout();
+        setCurrentUser(null);
+        const roleLabels = {
+          admin: 'ਮੁੱਖ ਐਡਮਿਨ (Super Admin)',
+          editor: 'ਮੁੱਖ ਸੰਪਾਦਕ (Chief Editor)',
+          reporter: 'ਪੱਤਰਕਾਰ (Field Reporter)'
+        };
+        setErrorMsg(
+          `ਤੁਹਾਡੇ ਖਾਤੇ ਕੋਲ '${roleLabels[requestedRole] || requestedRole}' ਦੇ ਅਧਿਕਾਰ ਨਹੀਂ ਹਨ। (Your account does not have '${requestedRole}' role assigned.)`
+        );
+        return;
+      }
+
       setCurrentUser(data.user);
       window.dispatchEvent(new Event('punjab_files_auth_changed'));
     } catch (err) {
@@ -103,7 +124,14 @@ export default function AdminCMS() {
 
   // If Authenticated, Render Full Role-Based Dashboard
   if (currentUser) {
-    return <DashboardLayout user={currentUser} onLogout={handleLogout} />;
+    return (
+      <DashboardLayout
+        user={currentUser}
+        activeRoleParam={roleParam}
+        onRoleChange={(newRole) => setSearchParams({ role: newRole })}
+        onLogout={handleLogout}
+      />
+    );
   }
 
   // Login Screen (Matching Punjab Files Theme: Black, Crimson Red, Gold, Clean White)

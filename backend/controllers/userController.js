@@ -5,7 +5,14 @@ import User from "../models/User.js";
 // @access  Private (Admin only)
 export const getUsers = async (req, res) => {
   try {
-    const users = await User.find().sort({ createdAt: -1 });
+    const rawUsers = await User.find().sort({ createdAt: -1 });
+    const users = rawUsers.map((u) => {
+      const doc = u.toObject();
+      if (!Array.isArray(doc.roles) || doc.roles.length === 0) {
+        doc.roles = [doc.role || "reporter"];
+      }
+      return doc;
+    });
     res.status(200).json({
       success: true,
       count: users.length,
@@ -25,17 +32,31 @@ export const getUsers = async (req, res) => {
 // @access  Private (Admin only)
 export const updateUserRole = async (req, res) => {
   try {
-    const { role } = req.body;
-    if (!["admin", "editor", "reporter"].includes(role)) {
+    let { role, roles } = req.body;
+    const validRoles = ["admin", "editor", "reporter"];
+
+    let finalRoles = [];
+    if (Array.isArray(roles) && roles.length > 0) {
+      finalRoles = roles.filter((r) => validRoles.includes(r));
+    }
+    if (finalRoles.length === 0 && role && validRoles.includes(role)) {
+      finalRoles = [role];
+    }
+    if (finalRoles.length === 0) {
       return res.status(400).json({
         success: false,
-        message: "Invalid role specified. Must be 'admin', 'editor', or 'reporter'."
+        message: "Invalid role specified. At least one of 'admin', 'editor', or 'reporter' must be selected."
       });
     }
 
+    let primaryRole = "reporter";
+    if (finalRoles.includes("admin")) primaryRole = "admin";
+    else if (finalRoles.includes("editor")) primaryRole = "editor";
+    else primaryRole = "reporter";
+
     const user = await User.findByIdAndUpdate(
       req.params.id,
-      { role },
+      { role: primaryRole, roles: finalRoles },
       { new: true, runValidators: true }
     );
 
@@ -48,7 +69,7 @@ export const updateUserRole = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: `Role updated to ${role} for ${user.name}`,
+      message: `Roles updated for ${user.name}: ${finalRoles.join(", ")}`,
       user
     });
   } catch (error) {

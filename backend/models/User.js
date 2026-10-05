@@ -35,6 +35,13 @@ const userSchema = new mongoose.Schema(
       },
       default: "reporter"
     },
+    roles: {
+      type: [String],
+      enum: {
+        values: ["admin", "editor", "reporter"],
+        message: "{VALUE} is not a valid role"
+      }
+    },
     avatar: {
       type: String,
       default: ""
@@ -53,8 +60,24 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-// Encrypt password using bcrypt before save
+// Encrypt password and sync role/roles before save
 userSchema.pre("save", async function () {
+  // Synchronize role and roles
+  if (Array.isArray(this.roles) && this.roles.length > 0) {
+    if (this.roles.includes("admin")) {
+      this.role = "admin";
+    } else if (this.roles.includes("editor")) {
+      this.role = "editor";
+    } else {
+      this.role = "reporter";
+    }
+  } else if (this.role) {
+    this.roles = [this.role];
+  } else {
+    this.role = "reporter";
+    this.roles = ["reporter"];
+  }
+
   if (!this.isModified("password")) {
     return;
   }
@@ -69,8 +92,9 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 
 // Sign JWT and return
 userSchema.methods.getSignedJwtToken = function () {
+  const effectiveRoles = (this.roles && this.roles.length > 0) ? this.roles : [this.role || "reporter"];
   return jwt.sign(
-    { id: this._id, role: this.role, email: this.email, name: this.name },
+    { id: this._id, role: this.role, roles: effectiveRoles, email: this.email, name: this.name },
     process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_EXPIRE || "30d" }
   );

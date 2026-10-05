@@ -39,6 +39,10 @@ export const protect = async (req, res, next) => {
       });
     }
 
+    if (!Array.isArray(user.roles) || user.roles.length === 0) {
+      user.roles = [user.role || "reporter"];
+    }
+
     req.user = user;
     next();
   } catch (error) {
@@ -50,13 +54,27 @@ export const protect = async (req, res, next) => {
   }
 };
 
-// Grant access to specific roles
+// Grant access to specific roles (checks against user's roles array and primary role)
 export const authorize = (...roles) => {
   return (req, res, next) => {
-    if (!req.user || !roles.includes(req.user.role)) {
+    if (!req.user) {
       return res.status(403).json({
         success: false,
-        message: `User role '${req.user ? req.user.role : "guest"}' is not authorized to access this action`
+        message: "User role 'guest' is not authorized to access this action"
+      });
+    }
+
+    const userRoles =
+      Array.isArray(req.user.roles) && req.user.roles.length > 0
+        ? req.user.roles
+        : [req.user.role || "reporter"];
+
+    const isAuthorized = roles.some((r) => userRoles.includes(r));
+
+    if (!isAuthorized) {
+      return res.status(403).json({
+        success: false,
+        message: `User roles '${userRoles.join(", ")}' are not authorized to access this action`
       });
     }
     next();

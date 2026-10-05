@@ -10,7 +10,7 @@ export default function UserManagementView({ currentUser }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('reporter');
+  const [selectedRoles, setSelectedRoles] = useState(['reporter']);
   const [canDirectPublish, setCanDirectPublish] = useState(false);
   const [creating, setCreating] = useState(false);
   const [msg, setMsg] = useState({ type: '', text: '' });
@@ -32,6 +32,23 @@ export default function UserManagementView({ currentUser }) {
     fetchUsers();
   }, [fetchUsers]);
 
+  const handleToggleRole = (roleKey) => {
+    setSelectedRoles((prev) => {
+      if (prev.includes(roleKey)) {
+        if (prev.length === 1) return prev; // Keep at least one role selected
+        return prev.filter((r) => r !== roleKey);
+      } else {
+        return [...prev, roleKey];
+      }
+    });
+  };
+
+  const getUserRoles = (u) => {
+    if (Array.isArray(u.roles) && u.roles.length > 0) return u.roles;
+    if (u.role) return [u.role];
+    return ['reporter'];
+  };
+
   const handleCreateUser = async (e) => {
     e.preventDefault();
     if (!name.trim() || !email.trim() || !password.trim()) {
@@ -39,21 +56,37 @@ export default function UserManagementView({ currentUser }) {
       return;
     }
 
+    if (selectedRoles.length === 0) {
+      setMsg({ type: 'error', text: 'ਘੱਟੋ-ਘੱਟ ਇੱਕ ਭੂਮਿਕਾ (Role) ਚੁਣੋ।' });
+      return;
+    }
+
     try {
       setCreating(true);
       setMsg({ type: '', text: '' });
+
+      let primaryRole = 'reporter';
+      if (selectedRoles.includes('admin')) primaryRole = 'admin';
+      else if (selectedRoles.includes('editor')) primaryRole = 'editor';
+      else primaryRole = 'reporter';
+
       await userAPI.registerStaff({
         name: name.trim(),
         email: email.trim(),
         password,
-        role,
-        canDirectPublish: role === 'reporter' ? canDirectPublish : false
+        role: primaryRole,
+        roles: selectedRoles,
+        canDirectPublish: selectedRoles.includes('reporter') ? canDirectPublish : true
       });
 
-      setMsg({ type: 'success', text: `ਸਟਾਫ਼ ਮੈਂਬਰ "${name}" ਸਫ਼ਲਤਾਪੂਰਵਕ ਸ਼ਾਮਲ ਹੋ ਗਿਆ ਹੈ!` });
+      setMsg({
+        type: 'success',
+        text: `ਸਟਾਫ਼ ਮੈਂਬਰ "${name}" ਸਫ਼ਲਤਾਪੂਰਵਕ ਸ਼ਾਮਲ ਹੋ ਗਿਆ ਹੈ! (Roles: ${selectedRoles.join(', ')})`
+      });
       setName('');
       setEmail('');
       setPassword('');
+      setSelectedRoles(['reporter']);
       setCanDirectPublish(false);
       fetchUsers();
       setTimeout(() => setMsg({ type: '', text: '' }), 4000);
@@ -85,22 +118,47 @@ export default function UserManagementView({ currentUser }) {
     }
   };
 
-  const handleRoleChange = async (userId, newRole) => {
+  const handleToggleExistingUserRole = async (userId, roleKey) => {
+    const targetUser = users.find((u) => u._id === userId);
+    if (!targetUser) return;
+    const currentRoles = getUserRoles(targetUser);
+    let updatedRoles = [];
+    if (currentRoles.includes(roleKey)) {
+      if (currentRoles.length === 1) {
+        setPopup({
+          type: 'error',
+          title: 'ਭੂਮਿਕਾ ਲੋੜੀਂਦੀ ਹੈ (Role Required)',
+          message: 'ਘੱਟੋ-ਘੱਟ ਇੱਕ ਭੂਮਿਕਾ ਹੋਣੀ ਜ਼ਰੂਰੀ ਹੈ (At least one role is required).'
+        });
+        return;
+      }
+      updatedRoles = currentRoles.filter((r) => r !== roleKey);
+    } else {
+      updatedRoles = [...currentRoles, roleKey];
+    }
+
+    let primaryRole = 'reporter';
+    if (updatedRoles.includes('admin')) primaryRole = 'admin';
+    else if (updatedRoles.includes('editor')) primaryRole = 'editor';
+    else primaryRole = 'reporter';
+
     try {
-      await userAPI.updateRole(userId, newRole);
+      await userAPI.updateRole(userId, { role: primaryRole, roles: updatedRoles });
       setUsers((prev) =>
-        prev.map((u) => (u._id === userId ? { ...u, role: newRole } : u))
+        prev.map((u) =>
+          u._id === userId ? { ...u, role: primaryRole, roles: updatedRoles } : u
+        )
       );
       setMsg({
         type: 'success',
-        text: `ਯੂਜ਼ਰ ਦਾ ਅਹੁਦਾ ਬਦਲ ਕੇ "${newRole}" ਕਰ ਦਿੱਤਾ ਗਿਆ ਹੈ।`
+        text: `ਯੂਜ਼ਰ "${targetUser.name}" ਦੀਆਂ ਭੂਮਿਕਾਵਾਂ ਅੱਪਡੇਟ ਹੋ ਗਈਆਂ: ${updatedRoles.join(', ')}`
       });
       setTimeout(() => setMsg({ type: '', text: '' }), 3000);
     } catch (err) {
       setPopup({
         type: 'error',
         title: 'ਸਮੱਸਿਆ ਆਈ (Error)',
-        message: 'ਅਹੁਦਾ ਬਦਲਣ ਵਿੱਚ ਗਲਤੀ: ' + err.message
+        message: 'ਭੂਮਿਕਾ ਬਦਲਣ ਵਿੱਚ ਗਲਤੀ: ' + err.message
       });
     }
   };
@@ -153,12 +211,72 @@ export default function UserManagementView({ currentUser }) {
 
   const getRoleBadge = (r) => {
     if (r === 'admin') {
-      return <span style={{ backgroundColor: '#1e293b', color: '#fff', fontSize: '11px', fontWeight: '800', padding: '2px 8px', borderRadius: '3px' }}>ਮੁੱਖ ਐਡਮਿਨ (Admin)</span>;
+      return (
+        <span
+          key={r}
+          style={{
+            backgroundColor: '#1e293b',
+            color: '#fff',
+            fontSize: '11px',
+            fontWeight: '800',
+            padding: '3px 6px',
+            height: '26px',
+            borderRadius: '4px',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '4px',
+            boxSizing: 'border-box'
+          }}
+        >
+          👑 ਐਡਮਿਨ
+        </span>
+      );
     }
     if (r === 'editor') {
-      return <span style={{ backgroundColor: '#b71c1c', color: '#fff', fontSize: '11px', fontWeight: '800', padding: '2px 8px', borderRadius: '3px' }}>ਮੁੱਖ ਸੰਪਾਦਕ (Editor)</span>;
+      return (
+        <span
+          key={r}
+          style={{
+            backgroundColor: '#b71c1c',
+            color: '#fff',
+            fontSize: '11px',
+            fontWeight: '800',
+            padding: '3px 6px',
+            height: '26px',
+            borderRadius: '4px',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '4px',
+            boxSizing: 'border-box'
+          }}
+        >
+          ✍️ ਸੰਪਾਦਕ
+        </span>
+      );
     }
-    return <span style={{ backgroundColor: '#047857', color: '#fff', fontSize: '11px', fontWeight: '800', padding: '2px 8px', borderRadius: '3px' }}>ਪੱਤਰਕਾਰ (Reporter)</span>;
+    return (
+      <span
+        key={r}
+        style={{
+          backgroundColor: '#047857',
+          color: '#fff',
+          fontSize: '11px',
+          fontWeight: '800',
+          padding: '3px 6px',
+          height: '26px',
+          borderRadius: '4px',
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '4px',
+          boxSizing: 'border-box'
+        }}
+      >
+        📰 ਪੱਤਰਕਾਰ
+      </span>
+    );
   };
 
   return (
@@ -170,7 +288,7 @@ export default function UserManagementView({ currentUser }) {
             ਸਟਾਫ਼ ਅਤੇ ਯੂਜ਼ਰ ਪ੍ਰਬੰਧਨ (Staff & User Management)
           </h3>
           <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#64748b' }}>
-            ਨਵੇਂ ਪੱਤਰਕਾਰ ਅਤੇ ਸੰਪਾਦਕ ਸ਼ਾਮਲ ਕਰੋ, ਉਹਨਾਂ ਦੀ ਭੂਮਿਕਾ (Role) ਬਦਲੋ ਜਾਂ ਖਾਤਾ ਸਰਗਰਮ/ਬੰਦ ਕਰੋ (Add reporters & editors, manage roles, or toggle active status).
+            ਨਵੇਂ ਸਟਾਫ਼ ਮੈਂਬਰ ਸ਼ਾਮਲ ਕਰੋ, ਉਹਨਾਂ ਨੂੰ ਇੱਕੋ ਸਮੇਂ ਐਡਮਿਨ, ਸੰਪਾਦਕ ਜਾਂ ਪੱਤਰਕਾਰ ਬਣਾਓ (Assign multiple roles via checkboxes).
           </p>
         </div>
         <span style={{ backgroundColor: '#1e293b', color: '#ffffff', fontSize: '11px', fontWeight: '800', padding: '4px 10px', borderRadius: '4px' }}>
@@ -196,87 +314,311 @@ export default function UserManagementView({ currentUser }) {
       )}
 
       {/* Add Staff Member Form */}
-      <div style={{ backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '6px', padding: '18px', marginBottom: '25px' }}>
-        <h4 style={{ margin: '0 0 14px', fontSize: '15px', fontWeight: '800', color: '#1e293b' }}>
-          <i className="fa fa-user-plus" style={{ marginRight: '6px', color: '#b71c1c' }}></i> ਨਵਾਂ ਸਟਾਫ਼ ਮੈਂਬਰ ਸ਼ਾਮਲ ਕਰੋ (Add Staff Member)
-        </h4>
+      <div
+        style={{
+          backgroundColor: '#f8fafc',
+          border: '1px solid #e2e8f0',
+          borderRadius: '8px',
+          padding: '20px',
+          marginBottom: '28px',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.02)'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+          <h4 style={{ margin: 0, fontSize: '15.5px', fontWeight: '800', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ backgroundColor: '#fee2e2', color: '#b71c1c', width: '28px', height: '28px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px' }}>
+              <i className="fa fa-user-plus"></i>
+            </span>
+            <span>ਨਵਾਂ ਸਟਾਫ਼ ਮੈਂਬਰ ਸ਼ਾਮਲ ਕਰੋ (Add Staff Member)</span>
+          </h4>
+          <span style={{ fontSize: '11.5px', fontWeight: '700', color: '#64748b' }}>
+            ਸਾਰੇ ਖੇਤਰ ਲਾਜ਼ਮੀ ਹਨ (* Required)
+          </span>
+        </div>
 
-        <form onSubmit={handleCreateUser} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr)) auto', gap: '12px', alignItems: 'flex-end' }}>
-          <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', color: '#334155', marginBottom: '4px' }}>
-              ਪੂਰਾ ਨਾਮ (Full Name)
-            </label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. ਜਸਪ੍ਰੀਤ ਸਿੰਘ"
-              required
-              style={{ width: '100%', padding: '8px 10px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '13px' }}
-            />
+        <form onSubmit={handleCreateUser}>
+          {/* Row 1: Symmetrical 3-Column Grid for Credentials */}
+          <div className="staff-form-grid-3" style={{ marginBottom: '16px' }}>
+            <div>
+              <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#334155', marginBottom: '6px' }}>
+                ਪੂਰਾ ਨਾਮ (Full Name) *
+              </label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="e.g. ਜਸਪ੍ਰੀਤ ਸਿੰਘ"
+                required
+                style={{
+                  width: '100%',
+                  height: '42px',
+                  padding: '9px 12px',
+                  border: '1px solid #cbd5e1',
+                  borderRadius: '6px',
+                  fontSize: '13px',
+                  backgroundColor: '#ffffff',
+                  boxSizing: 'border-box'
+                }}
+              />
+            </div>
+
+            <div>
+              <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#334155', marginBottom: '6px' }}>
+                ਈਮੇਲ (Email) *
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="staff@punjabfiles.com"
+                required
+                style={{
+                  width: '100%',
+                  height: '42px',
+                  padding: '9px 12px',
+                  border: '1px solid #cbd5e1',
+                  borderRadius: '6px',
+                  fontSize: '13px',
+                  backgroundColor: '#ffffff',
+                  boxSizing: 'border-box'
+                }}
+              />
+            </div>
+
+            <div>
+              <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#334155', marginBottom: '6px' }}>
+                ਪਾਸਵਰਡ (Password) *
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="ਘੱਟੋ-ਘੱਟ 6 ਅੱਖਰ (Min 6 characters)"
+                required
+                style={{
+                  width: '100%',
+                  height: '42px',
+                  padding: '9px 12px',
+                  border: '1px solid #cbd5e1',
+                  borderRadius: '6px',
+                  fontSize: '13px',
+                  backgroundColor: '#ffffff',
+                  boxSizing: 'border-box'
+                }}
+              />
+            </div>
           </div>
 
-          <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', color: '#334155', marginBottom: '4px' }}>
-              ਈਮੇਲ (Email)
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="reporter@punjabfiles.com"
-              required
-              style={{ width: '100%', padding: '8px 10px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '13px' }}
-            />
+          {/* Row 2: Symmetrical 3-Column Grid for Role Checkboxes */}
+          <div style={{ marginBottom: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <label style={{ fontSize: '12.5px', fontWeight: '800', color: '#1e293b', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <i className="fa fa-shield" style={{ color: '#b71c1c' }}></i>
+                <span>ਭੂਮਿਕਾਵਾਂ ਨਿਰਧਾਰਿਤ ਕਰੋ (Assign Roles - Checkboxes): *</span>
+              </label>
+              <span style={{ fontSize: '11px', color: '#64748b', fontWeight: '600' }}>
+                ਘੱਟੋ-ਘੱਟ 1 ਭੂਮਿਕਾ ਚੁਣੋ (Min 1 role)
+              </span>
+            </div>
+
+            <div className="staff-form-grid-3">
+              {/* Admin Card */}
+              <label
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  padding: '10px 14px',
+                  minHeight: '58px',
+                  borderRadius: '7px',
+                  border: `2px solid ${selectedRoles.includes('admin') ? '#1e293b' : '#cbd5e1'}`,
+                  backgroundColor: selectedRoles.includes('admin') ? '#f8fafc' : '#ffffff',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                  boxShadow: selectedRoles.includes('admin') ? '0 2px 8px rgba(30, 41, 59, 0.08)' : 'none',
+                  userSelect: 'none',
+                  boxSizing: 'border-box'
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={selectedRoles.includes('admin')}
+                  onChange={() => handleToggleRole('admin')}
+                  style={{
+                    width: '18px',
+                    height: '18px',
+                    cursor: 'pointer',
+                    accentColor: '#1e293b',
+                    margin: 0,
+                    flexShrink: 0
+                  }}
+                />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', minWidth: 0, flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: '800', color: selectedRoles.includes('admin') ? '#0f172a' : '#475569' }}>
+                    <span>👑</span>
+                    <span style={{ whiteSpace: 'nowrap' }}>ਮੁੱਖ ਐਡਮਿਨ (Admin)</span>
+                  </div>
+                  <span style={{ fontSize: '11px', fontWeight: '600', color: selectedRoles.includes('admin') ? '#1e293b' : '#94a3b8' }}>
+                    ਪੂਰਾ ਕੰਟਰੋਲ (Full Access)
+                  </span>
+                </div>
+              </label>
+
+              {/* Editor Card */}
+              <label
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  padding: '10px 14px',
+                  minHeight: '58px',
+                  borderRadius: '7px',
+                  border: `2px solid ${selectedRoles.includes('editor') ? '#b71c1c' : '#cbd5e1'}`,
+                  backgroundColor: selectedRoles.includes('editor') ? '#fff5f5' : '#ffffff',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                  boxShadow: selectedRoles.includes('editor') ? '0 2px 8px rgba(183, 28, 28, 0.08)' : 'none',
+                  userSelect: 'none',
+                  boxSizing: 'border-box'
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={selectedRoles.includes('editor')}
+                  onChange={() => handleToggleRole('editor')}
+                  style={{
+                    width: '18px',
+                    height: '18px',
+                    cursor: 'pointer',
+                    accentColor: '#b71c1c',
+                    margin: 0,
+                    flexShrink: 0
+                  }}
+                />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', minWidth: 0, flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: '800', color: selectedRoles.includes('editor') ? '#b71c1c' : '#475569' }}>
+                    <span>✍️</span>
+                    <span style={{ whiteSpace: 'nowrap' }}>ਮੁੱਖ ਸੰਪਾਦਕ (Editor)</span>
+                  </div>
+                  <span style={{ fontSize: '11px', fontWeight: '600', color: selectedRoles.includes('editor') ? '#b71c1c' : '#94a3b8' }}>
+                    ਸੰਪਾਦਕੀ ਕੰਟਰੋਲ (Editorial)
+                  </span>
+                </div>
+              </label>
+
+              {/* Reporter Card */}
+              <label
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  padding: '10px 14px',
+                  minHeight: '58px',
+                  borderRadius: '7px',
+                  border: `2px solid ${selectedRoles.includes('reporter') ? '#047857' : '#cbd5e1'}`,
+                  backgroundColor: selectedRoles.includes('reporter') ? '#f0fdf4' : '#ffffff',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                  boxShadow: selectedRoles.includes('reporter') ? '0 2px 8px rgba(4, 120, 87, 0.08)' : 'none',
+                  userSelect: 'none',
+                  boxSizing: 'border-box'
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={selectedRoles.includes('reporter')}
+                  onChange={() => handleToggleRole('reporter')}
+                  style={{
+                    width: '18px',
+                    height: '18px',
+                    cursor: 'pointer',
+                    accentColor: '#047857',
+                    margin: 0,
+                    flexShrink: 0
+                  }}
+                />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', minWidth: 0, flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: '800', color: selectedRoles.includes('reporter') ? '#047857' : '#475569' }}>
+                    <span>📰</span>
+                    <span style={{ whiteSpace: 'nowrap' }}>ਪੱਤਰਕਾਰ (Reporter)</span>
+                  </div>
+                  <span style={{ fontSize: '11px', fontWeight: '600', color: selectedRoles.includes('reporter') ? '#047857' : '#94a3b8' }}>
+                    ਖ਼ਬਰਾਂ ਰਿਪੋਰਟਿੰਗ (Reporting)
+                  </span>
+                </div>
+              </label>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '8px', fontSize: '12px', color: '#64748b' }}>
+              <i className="fa fa-info-circle" style={{ color: '#3b82f6' }}></i>
+              <span>ਤੁਸੀਂ ਇੱਕ ਯੂਜ਼ਰ ਨੂੰ ਇੱਕੋ ਸਮੇਂ ਐਡਮਿਨ, ਸੰਪਾਦਕ ਅਤੇ ਪੱਤਰਕਾਰ ਤਿੰਨੋਂ ਬਣਾ ਸਕਦੇ ਹੋ (You can assign any combination of roles).</span>
+            </div>
           </div>
 
-          <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', color: '#334155', marginBottom: '4px' }}>
-              ਪਾਸਵਰਡ (Password)
-            </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="ਘੱਟੋ-ਘੱਟ 6 ਅੱਖਰ (Min 6 characters)"
-              required
-              style={{ width: '100%', padding: '8px 10px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '13px' }}
-            />
-          </div>
-
-          <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', color: '#334155', marginBottom: '4px' }}>
-              ਭੂਮਿਕਾ (Role)
-            </label>
-            <select
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              style={{ width: '100%', padding: '8px 10px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '13px' }}
+          {/* Row 3: Direct Publish Option (when Reporter is selected) */}
+          {selectedRoles.includes('reporter') && (
+            <div
+              style={{
+                marginBottom: '16px',
+                backgroundColor: canDirectPublish ? '#f0fdf4' : '#ffffff',
+                border: `1.5px solid ${canDirectPublish ? '#86efac' : '#cbd5e1'}`,
+                borderRadius: '8px',
+                padding: '12px 16px',
+                transition: 'all 0.2s ease',
+                boxShadow: canDirectPublish ? '0 2px 6px rgba(22, 163, 74, 0.08)' : 'none'
+              }}
             >
-              <option value="reporter">ਪੱਤਰਕਾਰ (Reporter)</option>
-              <option value="editor">ਸੰਪਾਦਕ (Editor)</option>
-              <option value="admin">ਮੁੱਖ ਐਡਮਿਨ (Admin)</option>
-            </select>
-          </div>
-
-          {role === 'reporter' && (
-            <div style={{ gridColumn: '1 / -1', marginTop: '4px', backgroundColor: '#f1f5f9', padding: '10px 14px', borderRadius: '6px', border: '1px dashed #cbd5e1' }}>
-              <label style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '700', color: '#1e293b' }}>
+              <label
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  cursor: 'pointer',
+                  margin: 0,
+                  userSelect: 'none'
+                }}
+              >
                 <input
                   type="checkbox"
                   checked={canDirectPublish}
                   onChange={(e) => setCanDirectPublish(e.target.checked)}
-                  style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+                  style={{
+                    width: '18px',
+                    height: '18px',
+                    cursor: 'pointer',
+                    accentColor: '#16a34a',
+                    margin: 0,
+                    flexShrink: 0
+                  }}
                 />
-                <span>⚡ ਸਿੱਧਾ ਲਾਈਵ ਪ੍ਰਕਾਸ਼ਿਤ ਕਰਨ ਦੀ ਇਜਾਜ਼ਤ ਦਿਓ (Allow Direct Live Publishing without approval)</span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                    <span style={{ fontSize: '13px', fontWeight: '800', color: '#0f172a' }}>
+                      ⚡ ਸਿੱਧਾ ਲਾਈਵ ਪ੍ਰਕਾਸ਼ਿਤ ਕਰਨ ਦੀ ਇਜਾਜ਼ਤ ਦਿਓ (Allow Direct Live Publishing without approval)
+                    </span>
+                    <span
+                      style={{
+                        backgroundColor: canDirectPublish ? '#dcfce7' : '#f1f5f9',
+                        color: canDirectPublish ? '#15803d' : '#64748b',
+                        fontSize: '10.5px',
+                        fontWeight: '800',
+                        padding: '1px 8px',
+                        borderRadius: '10px'
+                      }}
+                    >
+                      {canDirectPublish ? '✓ ਚਾਲੂ (Enabled)' : '✕ ਬੰਦ (Disabled)'}
+                    </span>
+                  </div>
+                  <p style={{ margin: '3px 0 0', fontSize: '11.5px', color: '#64748b', lineHeight: '1.4' }}>
+                    ਜੇਕਰ ਇਹ ਚਾਲੂ ਹੋਵੇਗਾ, ਤਾਂ ਇਸ ਰਿਪੋਰਟਰ ਦੀਆਂ ਖ਼ਬਰਾਂ ਬਿਨਾਂ ਸੰਪਾਦਕ ਜਾਂ ਐਡਮਿਨ ਦੀ ਪ੍ਰਵਾਨਗੀ ਦੇ ਸਿੱਧੀਆਂ ਵੈੱਬਸਾਈਟ ’ਤੇ ਲਾਈਵ ਹੋ ਜਾਣਗੀਆਂ।
+                  </p>
+                </div>
               </label>
-              <p style={{ margin: '4px 0 0 24px', fontSize: '11.5px', color: '#64748b' }}>
-                ਜੇਕਰ ਇਹ ਚਾਲੂ ਹੋਵੇਗਾ, ਤਾਂ ਇਸ ਰਿਪੋਰਟਰ ਦੀਆਂ ਖ਼ਬਰਾਂ ਬਿਨਾਂ ਸੰਪਾਦਕ ਜਾਂ ਐਡਮਿਨ ਦੀ ਪ੍ਰਵਾਨਗੀ ਦੇ ਸਿੱਧੀਆਂ ਵੈੱਬਸਾਈਟ ’ਤੇ ਲਾਈਵ ਹੋ ਜਾਣਗੀਆਂ।
-              </p>
             </div>
           )}
 
-          <div>
+          {/* Row 4: Submit Button */}
+          <div style={{ display: 'flex', justifyContent: 'flex-start', paddingTop: '2px' }}>
             <button
               type="submit"
               disabled={creating}
@@ -284,15 +626,21 @@ export default function UserManagementView({ currentUser }) {
                 backgroundColor: '#b71c1c',
                 color: '#ffffff',
                 border: 'none',
-                padding: '9px 18px',
-                borderRadius: '4px',
+                height: '40px',
+                padding: '0 22px',
+                borderRadius: '6px',
                 fontSize: '13px',
                 fontWeight: '800',
                 cursor: creating ? 'not-allowed' : 'pointer',
-                whiteSpace: 'nowrap'
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                boxShadow: '0 2px 6px rgba(183, 28, 28, 0.25)',
+                transition: 'all 0.15s ease'
               }}
             >
-              {creating ? '...' : '+ ਸ਼ਾਮਲ ਕਰੋ (Add)'}
+              <i className={creating ? 'fa fa-spinner fa-spin' : 'fa fa-user-plus'}></i>
+              <span>{creating ? 'ਜੋੜਿਆ ਜਾ ਰਿਹਾ ਹੈ...' : '+ ਨਵਾਂ ਸਟਾਫ਼ ਮੈਂਬਰ ਸ਼ਾਮਲ ਕਰੋ (Add Staff Member)'}</span>
             </button>
           </div>
         </form>
@@ -312,12 +660,12 @@ export default function UserManagementView({ currentUser }) {
           <>
             {/* Desktop Table View */}
             <div className="desktop-table-view" style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
-              <table style={{ width: '100%', minWidth: '620px', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <table style={{ width: '100%', minWidth: '680px', borderCollapse: 'collapse', fontSize: '13px' }}>
                 <thead>
                   <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0', textAlign: 'left', color: '#475569', fontWeight: '700' }}>
                     <th style={{ padding: '10px 12px' }}>ਨਾਮ (Name)</th>
                     <th style={{ padding: '10px 12px' }}>ਈਮੇਲ (Email)</th>
-                    <th style={{ padding: '10px 12px' }}>ਮੌਜੂਦਾ ਭੂਮਿਕਾ (Role)</th>
+                    <th style={{ padding: '10px 12px' }}>ਮੌਜੂਦਾ ਭੂਮਿਕਾਵਾਂ (Roles)</th>
                     <th style={{ padding: '10px 12px' }}>ਸਿੱਧਾ ਲਾਈਵ (Direct Publish)</th>
                     <th style={{ padding: '10px 12px' }}>ਸਟੇਟਸ (Status)</th>
                     <th style={{ padding: '10px 12px', textAlign: 'right' }}>ਕਾਰਵਾਈ (Actions)</th>
@@ -326,6 +674,9 @@ export default function UserManagementView({ currentUser }) {
                 <tbody>
                   {users.map((u) => {
                     const isSelf = currentUser && currentUser.id === u._id;
+                    const uRoles = getUserRoles(u);
+                    const isReporter = uRoles.includes('reporter');
+
                     return (
                       <tr key={u._id} style={{ borderBottom: '1px solid #f1f5f9' }}>
                         <td style={{ padding: '10px 12px', fontWeight: '700', color: '#0f172a' }}>
@@ -334,21 +685,55 @@ export default function UserManagementView({ currentUser }) {
                         <td style={{ padding: '10px 12px', color: '#475569' }}>{u.email}</td>
                         <td style={{ padding: '10px 12px' }}>
                           {isSelf ? (
-                            getRoleBadge(u.role)
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 86px)', gap: '6px' }}>
+                              {uRoles.map((r) => getRoleBadge(r))}
+                            </div>
                           ) : (
-                            <select
-                              value={u.role}
-                              onChange={(e) => handleRoleChange(u._id, e.target.value)}
-                              style={{ padding: '4px 8px', fontSize: '12px', borderRadius: '4px', border: '1px solid #cbd5e1' }}
-                            >
-                              <option value="reporter">ਪੱਤਰਕਾਰ (Reporter)</option>
-                              <option value="editor">ਸੰਪਾਦਕ (Editor)</option>
-                              <option value="admin">ਐਡਮਿਨ (Admin)</option>
-                            </select>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 86px)', gap: '6px', alignItems: 'center' }}>
+                              {[
+                                { key: 'admin', label: 'ਐਡਮਿਨ', bg: '#1e293b' },
+                                { key: 'editor', label: 'ਸੰਪਾਦਕ', bg: '#b71c1c' },
+                                { key: 'reporter', label: 'ਰਿਪੋਰਟਰ', bg: '#047857' }
+                              ].map(({ key, label, bg }) => {
+                                const active = uRoles.includes(key);
+                                return (
+                                  <label
+                                    key={key}
+                                    style={{
+                                      display: 'inline-flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      gap: '5px',
+                                      padding: '3px 4px',
+                                      height: '26px',
+                                      borderRadius: '4px',
+                                      fontSize: '11px',
+                                      fontWeight: '700',
+                                      cursor: 'pointer',
+                                      border: active ? `1px solid ${bg}` : '1px solid #cbd5e1',
+                                      backgroundColor: active ? bg : '#ffffff',
+                                      color: active ? '#ffffff' : '#64748b',
+                                      transition: 'all 0.15s ease',
+                                      boxSizing: 'border-box',
+                                      userSelect: 'none'
+                                    }}
+                                    title={`Toggle ${label} role for ${u.name}`}
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      checked={active}
+                                      onChange={() => handleToggleExistingUserRole(u._id, key)}
+                                      style={{ width: '12px', height: '12px', cursor: 'pointer', margin: 0 }}
+                                    />
+                                    <span>{label}</span>
+                                  </label>
+                                );
+                              })}
+                            </div>
                           )}
                         </td>
                         <td style={{ padding: '10px 12px' }}>
-                          {u.role === 'reporter' ? (
+                          {isReporter ? (
                             <button
                               type="button"
                               onClick={() => handleToggleDirectPublish(u._id, u.canDirectPublish, u.name)}
@@ -422,6 +807,9 @@ export default function UserManagementView({ currentUser }) {
             <div className="mobile-user-card-list">
               {users.map((u) => {
                 const isSelf = currentUser && currentUser.id === u._id;
+                const uRoles = getUserRoles(u);
+                const isReporter = uRoles.includes('reporter');
+
                 return (
                   <div
                     key={u._id}
@@ -445,17 +833,48 @@ export default function UserManagementView({ currentUser }) {
                       </div>
                       <div>
                         {isSelf ? (
-                          getRoleBadge(u.role)
+                          <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+                            {uRoles.map((r) => getRoleBadge(r))}
+                          </div>
                         ) : (
-                          <select
-                            value={u.role}
-                            onChange={(e) => handleRoleChange(u._id, e.target.value)}
-                            style={{ padding: '4px 8px', fontSize: '12px', borderRadius: '4px', border: '1px solid #cbd5e1', fontWeight: '700' }}
-                          >
-                            <option value="reporter">ਪੱਤਰਕਾਰ (Reporter)</option>
-                            <option value="editor">ਸੰਪਾਦਕ (Editor)</option>
-                            <option value="admin">ਐਡਮਿਨ (Admin)</option>
-                          </select>
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px', alignItems: 'center' }}>
+                            {[
+                              { key: 'admin', label: 'ਐਡਮਿਨ', bg: '#1e293b' },
+                              { key: 'editor', label: 'ਸੰਪਾਦਕ', bg: '#b71c1c' },
+                              { key: 'reporter', label: 'ਰਿਪੋਰਟਰ', bg: '#047857' }
+                            ].map(({ key, label, bg }) => {
+                              const active = uRoles.includes(key);
+                              return (
+                                <label
+                                  key={key}
+                                  style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '3px',
+                                    padding: '4px 6px',
+                                    borderRadius: '4px',
+                                    fontSize: '11px',
+                                    fontWeight: '700',
+                                    cursor: 'pointer',
+                                    border: active ? `1px solid ${bg}` : '1px solid #cbd5e1',
+                                    backgroundColor: active ? bg : '#ffffff',
+                                    color: active ? '#ffffff' : '#64748b',
+                                    userSelect: 'none',
+                                    boxSizing: 'border-box'
+                                  }}
+                                >
+                                  <input
+                                    type="checkbox"
+                                    checked={active}
+                                    onChange={() => handleToggleExistingUserRole(u._id, key)}
+                                    style={{ width: '12px', height: '12px', cursor: 'pointer', margin: 0 }}
+                                  />
+                                  <span>{label}</span>
+                                </label>
+                              );
+                            })}
+                          </div>
                         )}
                       </div>
                     </div>
@@ -480,7 +899,7 @@ export default function UserManagementView({ currentUser }) {
                           {u.isActive ? '● ਸਰਗਰਮ (Active)' : '● ਬੰਦ (Inactive)'}
                         </button>
 
-                        {u.role === 'reporter' && (
+                        {isReporter && (
                           <button
                             type="button"
                             onClick={() => handleToggleDirectPublish(u._id, u.canDirectPublish, u.name)}

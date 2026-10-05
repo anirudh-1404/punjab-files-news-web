@@ -13,6 +13,11 @@ const sendTokenResponse = (user, statusCode, res) => {
     sameSite: "lax"
   };
 
+  const effectiveRoles =
+    Array.isArray(user.roles) && user.roles.length > 0
+      ? user.roles
+      : [user.role || "reporter"];
+
   res
     .status(statusCode)
     .cookie("token", token, options)
@@ -24,6 +29,7 @@ const sendTokenResponse = (user, statusCode, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        roles: effectiveRoles,
         avatar: user.avatar,
         isActive: user.isActive,
         canDirectPublish: Boolean(user.canDirectPublish)
@@ -87,9 +93,16 @@ export const login = async (req, res) => {
 export const getMe = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    const userObj = user.toObject();
+    if (!Array.isArray(userObj.roles) || userObj.roles.length === 0) {
+      userObj.roles = [userObj.role || "reporter"];
+    }
     res.status(200).json({
       success: true,
-      user
+      user: userObj
     });
   } catch (error) {
     res.status(500).json({
@@ -120,7 +133,7 @@ export const logout = async (req, res) => {
 // @access  Private (Admin only)
 export const registerStaff = async (req, res) => {
   try {
-    const { name, email, password, role, canDirectPublish } = req.body;
+    let { name, email, password, role, roles, canDirectPublish } = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).json({
@@ -137,22 +150,42 @@ export const registerStaff = async (req, res) => {
       });
     }
 
+    // Determine roles array and primary role
+    const validRoles = ["admin", "editor", "reporter"];
+    let finalRoles = [];
+    if (Array.isArray(roles) && roles.length > 0) {
+      finalRoles = roles.filter((r) => validRoles.includes(r));
+    }
+    if (finalRoles.length === 0 && role && validRoles.includes(role)) {
+      finalRoles = [role];
+    }
+    if (finalRoles.length === 0) {
+      finalRoles = ["reporter"];
+    }
+
+    let primaryRole = "reporter";
+    if (finalRoles.includes("admin")) primaryRole = "admin";
+    else if (finalRoles.includes("editor")) primaryRole = "editor";
+    else primaryRole = "reporter";
+
     const user = await User.create({
       name: name.trim(),
       email: email.toLowerCase().trim(),
       password,
-      role: role || "reporter",
-      canDirectPublish: role === "reporter" ? Boolean(canDirectPublish) : false
+      role: primaryRole,
+      roles: finalRoles,
+      canDirectPublish: finalRoles.includes("reporter") ? Boolean(canDirectPublish) : true
     });
 
     res.status(201).json({
       success: true,
-      message: `Staff member ${user.name} created successfully with role: ${user.role}`,
+      message: `Staff member ${user.name} created successfully with roles: ${finalRoles.join(", ")}`,
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
         role: user.role,
+        roles: user.roles,
         isActive: user.isActive,
         canDirectPublish: Boolean(user.canDirectPublish)
       }
