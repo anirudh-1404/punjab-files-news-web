@@ -41,8 +41,9 @@ export default function DashboardLayout({ user, onLogout }) {
     if (role === 'editor') {
       return [
         { id: 'review', label: 'ਸੰਪਾਦਕੀ ਸਮੀਖਿਆ (Review Desk)', icon: 'fa-check-square-o', sub: 'Review Desk' },
-        { id: 'podcasts', label: 'ਪੋਡਕਾਸਟ ਸਮੀਖਿਆ (Podcasts Desk)', icon: 'fa-podcast', sub: 'Review Podcasts' },
+        { id: 'all_news', label: 'ਸਾਰੀਆਂ ਖ਼ਬਰਾਂ (All News)', icon: 'fa-newspaper-o', sub: 'All News & Categories' },
         { id: 'create', label: 'ਨਵੀਂ ਖ਼ਬਰ ਲਿਖੋ (Write News)', icon: 'fa-pencil-square-o', sub: 'Write News' },
+        { id: 'podcasts', label: 'ਪੋਡਕਾਸਟ ਸਮੀਖਿਆ (Podcasts Desk)', icon: 'fa-podcast', sub: 'Review Podcasts' },
         { id: 'breaking', label: 'ਬਰੇਕਿੰਗ ਨਿਊਜ਼ (Breaking News)', icon: 'fa-bolt', sub: 'Breaking Ticker' },
         { id: 'contact_queries', label: 'ਸੰਪਰਕ ਸੁਨੇਹੇ (Contact Messages)', icon: 'fa-envelope-o', sub: 'Inquiries' },
         { id: 'mukhwak', label: 'ਮੁੱਖ ਵਾਕ (Daily Mukhwak)', icon: 'fa-book', sub: 'Daily Mukhwak' }
@@ -302,7 +303,7 @@ export default function DashboardLayout({ user, onLogout }) {
             <OverviewStatsView user={user} onNavigate={setActiveTab} />
           )}
 
-          {activeTab === 'all_news' && user?.role === 'admin' && (
+          {activeTab === 'all_news' && ['admin', 'editor'].includes(user?.role) && (
             <AllNewsCategoryView currentUser={user} onNavigate={setActiveTab} />
           )}
 

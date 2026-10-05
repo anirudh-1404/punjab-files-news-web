@@ -93,13 +93,14 @@ export default function ParallaxHero() {
           }}
         >
           {/* ========================================================
-              COLUMN 1 (approx 38%): HUKAMNAMA (PORTRAIT FORM) WITH LIVE CLOCK
+              COLUMN 1: HUKAMNAMA (PORTRAIT FORM) WITH LIVE CLOCK
           ======================================================== */}
           <div
             className="hero-col-hukamnama"
             style={{
-              flex: '1 1 360px',
-              minWidth: '320px',
+              flex: '1 1 330px',
+              minWidth: '290px',
+              maxWidth: '360px',
               display: 'flex',
               flexDirection: 'column'
             }}
@@ -122,13 +123,13 @@ export default function ParallaxHero() {
           </div>
 
           {/* ========================================================
-              COLUMN 2 (approx 38%): CURRENT / MAIN HEADLINE (ਮੁੱਖ ਸੁਰਖ਼ੀ / LEAD STORY)
+              COLUMN 2: CURRENT / MAIN HEADLINE (ਮੁੱਖ ਸੁਰਖ਼ੀ / LEAD STORY)
           ======================================================== */}
           <div
             className="hero-col-lead-headline"
             style={{
-              flex: '1 1 360px',
-              minWidth: '320px',
+              flex: '1.2 1 360px',
+              minWidth: '310px',
               display: 'flex',
               flexDirection: 'column'
             }}
@@ -273,15 +274,15 @@ export default function ParallaxHero() {
           </div>
 
           {/* ========================================================
-              COLUMN 3 (approx 24% compact): WEB TV & PODCASTS
+              COLUMN 3: WEB TV & PODCASTS (WIDER & LARGER)
           ======================================================== */}
           <div
             className="hero-col-webtv"
             id="web-tv"
             style={{
-              flex: '1 1 240px',
-              maxWidth: '300px',
-              minWidth: '220px',
+              flex: '1.15 1 350px',
+              minWidth: '310px',
+              maxWidth: '410px',
               display: 'flex',
               flexDirection: 'column'
             }}

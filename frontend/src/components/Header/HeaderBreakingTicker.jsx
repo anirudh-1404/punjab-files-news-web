@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { breakingAPI } from '../../services/api';
-import { getStoredBreaking } from '../../services/articleStore';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { breakingAPI } from "../../services/api";
+import { getStoredBreaking } from "../../services/articleStore";
 
 export default function HeaderBreakingTicker() {
   const [news, setNews] = useState(() => getStoredBreaking());
@@ -15,14 +16,16 @@ export default function HeaderBreakingTicker() {
         if (isMounted && res.items && res.items.length > 0) {
           const mapped = res.items.map((item) => ({
             id: item._id,
-            tag: item.tag || 'ਪੰਜਾਬ',
-            text: item.text
+            tag: item.tag || "ਪੰਜਾਬ",
+            text: item.text,
+            slug: item.slug,
+            articleId: item.articleId
           }));
           setNews(mapped);
           return;
         }
       } catch (err) {
-        console.warn('Backend breaking fetch fallback:', err.message);
+        console.warn("Backend breaking fetch fallback:", err.message);
       }
 
       // Fallback: stored breaking news from admin
@@ -39,19 +42,19 @@ export default function HeaderBreakingTicker() {
       loadBackendBreaking();
     };
 
-    window.addEventListener('storage', handleUpdate);
-    window.addEventListener('punjab_breaking_updated', handleUpdate);
+    window.addEventListener("storage", handleUpdate);
+    window.addEventListener("punjab_breaking_updated", handleUpdate);
 
     return () => {
       isMounted = false;
-      window.removeEventListener('storage', handleUpdate);
-      window.removeEventListener('punjab_breaking_updated', handleUpdate);
+      window.removeEventListener("storage", handleUpdate);
+      window.removeEventListener("punjab_breaking_updated", handleUpdate);
     };
   }, []);
 
   return (
     <div className="header-top-breaking-wrapper">
-      <div className="container" style={{ display: 'flex', alignItems: 'center', height: '42px', overflow: 'hidden' }}>
+      <div className="container" style={{ display: "flex", alignItems: "center", height: "42px", overflow: "hidden" }}>
         {/* Left Badge */}
         <div className="breaking-ticker-badge">
           <span className="live-dot-pulse"></span>
@@ -62,13 +65,30 @@ export default function HeaderBreakingTicker() {
         <div className="breaking-marquee-container">
           <div className="breaking-marquee-track">
             {/* Render items twice for infinite seamless loop */}
-            {[...news, ...news].map((item, index) => (
-              <span key={`${item.id}-${index}`} className="marquee-item">
-                <span className="marquee-tag">{item.tag || 'ਪੰਜਾਬ'}</span>
-                <span className="marquee-text">{item.text}</span>
-                <span className="marquee-divider">✦</span>
-              </span>
-            ))}
+            {[...news, ...news].map((item, index) => {
+              const targetUrl = item.slug
+                ? `/news/${item.slug}`
+                : item.articleId
+                ? `/news/${item.articleId}`
+                : item.id && !String(item.id).startsWith("brk-")
+                ? `/news/${item.id}`
+                : `/search?q=${encodeURIComponent(item.text)}`;
+
+              return (
+                <span key={`${item.id || index}-${index}`} className="marquee-item">
+                  <span className="marquee-tag">{item.tag || "ਪੰਜਾਬ"}</span>
+                  <Link
+                    to={targetUrl}
+                    className="marquee-text"
+                    style={{ textDecoration: "none", cursor: "pointer" }}
+                    title={`ਵੇਖੋ: ${item.text}`}
+                  >
+                    {item.text}
+                  </Link>
+                  <span className="marquee-divider">✦</span>
+                </span>
+              );
+            })}
           </div>
         </div>
       </div>

@@ -2,12 +2,14 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { articleAPI } from '../../../services/api';
 import { formatArticleDate } from '../../../services/dateUtils';
 import ActionModal from '../../../components/Common/ActionModal';
+import EditArticleModal from '../../../components/Common/EditArticleModal';
 
-export default function MyArticlesView() {
+export default function MyArticlesView({ user }) {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all'); // 'all', 'published', 'pending_review', 'rejected'
   const [actionMsg, setActionMsg] = useState('');
+  const [editingArticle, setEditingArticle] = useState(null);
   const [popup, setPopup] = useState(null);
 
   const fetchMyArticles = useCallback(async () => {
@@ -245,22 +247,69 @@ export default function MyArticlesView() {
                     <td style={{ padding: '10px 12px', color: '#64748b', fontSize: '12px' }}>
                       {art.createdAt ? formatArticleDate(art.createdAt, art.language) : '—'}
                     </td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right' }}>
-                      <button
-                        type="button"
-                        onClick={() => handleDelete(art._id, art.title)}
-                        style={{
-                          backgroundColor: 'transparent',
-                          border: 'none',
-                          color: '#b71c1c',
-                          cursor: 'pointer',
-                          padding: '4px 8px',
-                          fontSize: '13px'
-                        }}
-                        title="Delete"
-                      >
-                        <i className="fa fa-trash"></i>
-                      </button>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                      <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                        {art.status === 'published' && (
+                          <a
+                            href={`/news/${art.slug || art._id}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            style={{
+                              backgroundColor: '#eff6ff',
+                              color: '#1d4ed8',
+                              border: '1px solid #bfdbfe',
+                              padding: '5px 8px',
+                              borderRadius: '4px',
+                              fontSize: '12px',
+                              textDecoration: 'none',
+                              display: 'inline-flex',
+                              alignItems: 'center'
+                            }}
+                            title="ਲਾਈਵ ਵੇਖੋ (View Live)"
+                          >
+                            <i className="fa fa-external-link"></i>
+                          </a>
+                        )}
+
+                        <button
+                          type="button"
+                          onClick={() => setEditingArticle(art)}
+                          style={{
+                            backgroundColor: '#1c2d5a',
+                            color: '#ffffff',
+                            border: 'none',
+                            padding: '5px 10px',
+                            borderRadius: '4px',
+                            fontSize: '12px',
+                            fontWeight: '700',
+                            cursor: 'pointer',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px'
+                          }}
+                          title="ਖ਼ਬਰ ਸੋਧੋ (Edit News)"
+                        >
+                          <i className="fa fa-pencil"></i>
+                          <span>ਸੋਧੋ</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(art._id, art.title)}
+                          style={{
+                            backgroundColor: '#fee2e2',
+                            border: '1px solid #fca5a5',
+                            color: '#b71c1c',
+                            cursor: 'pointer',
+                            padding: '5px 8px',
+                            borderRadius: '4px',
+                            fontSize: '12px'
+                          }}
+                          title="Delete"
+                        >
+                          <i className="fa fa-trash"></i>
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -373,6 +422,26 @@ export default function MyArticlesView() {
 
                   <button
                     type="button"
+                    onClick={() => setEditingArticle(art)}
+                    style={{
+                      backgroundColor: '#1c2d5a',
+                      color: '#ffffff',
+                      border: 'none',
+                      padding: '4px 10px',
+                      borderRadius: '4px',
+                      fontSize: '11.5px',
+                      fontWeight: '700',
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px'
+                    }}
+                  >
+                    <i className="fa fa-pencil"></i> ਸੋਧੋ (Edit)
+                  </button>
+
+                  <button
+                    type="button"
                     onClick={() => handleDelete(art._id, art.title)}
                     style={{
                       backgroundColor: '#fee2e2',
@@ -396,6 +465,19 @@ export default function MyArticlesView() {
           </div>
         </>
       )}
+
+      {/* Edit Article Modal */}
+      <EditArticleModal
+        isOpen={Boolean(editingArticle)}
+        article={editingArticle}
+        currentUser={user}
+        onClose={() => setEditingArticle(null)}
+        onSaved={() => {
+          setActionMsg('ਤੁਹਾਡੀ ਖ਼ਬਰ ਸਫ਼ਲਤਾਪੂਰਵਕ ਸੋਧੀ ਗਈ ਹੈ (Your article has been updated)!');
+          fetchMyArticles();
+          setTimeout(() => setActionMsg(''), 4500);
+        }}
+      />
 
       {/* Custom Action Modal */}
       <ActionModal

@@ -9,7 +9,7 @@ const DEFAULT_FALLBACK = {
   ang: '੬੫੪',
   gurbani: `ਗੁਰੁ ਪੂਰਾ ਭੇਟਿਆ ਵਡਭਾਗੀ ਮਨਹਿ ਭਇਆ ਪਰਗਾਸਾ ॥\nਕੋਇ ਨ ਪਹੁਚਨਹਾਰਾ ਦੂਜਾ ਅਪਨੇ ਠਾਕੁਰ ਕਾ ਭਰਵਾਸਾ ॥੧॥\nਅਪਨੇ ਸੇਵਕ ਕੀ ਆਪੇ ਰਾਖੈ ਨਿਮਖ ਨ ਬਿਸਰੈ ਸਾਸਾ ॥\nਹਰਿ ਕਾ ਨਾਮੁ ਜਪਹੁ ਮੇਰੇ ਮੀਤਾ ਨਾਨਕ ਕੀ ਅਰਦਾਸਾ ॥੨॥`,
   viakhya: 'ਹੇ ਭਾਈ! ਜਿਸ ਮਨੁੱਖ ਨੂੰ ਵੱਡੇ ਭਾਗਾਂ ਨਾਲ ਪੂਰਾ ਗੁਰੂ ਮਿਲ ਪੈਂਦਾ ਹੈ, ਉਸ ਦੇ ਮਨ ਵਿੱਚ ਆਤਮਕ ਜੀਵਨ ਦਾ ਚਾਨਣ ਹੋ ਜਾਂਦਾ ਹੈ। ਉਸ ਨੂੰ ਆਪਣੇ ਮਾਲਕ-ਪ੍ਰਭੂ ਦਾ ਪੱਕਾ ਆਸਰਾ ਬਣ ਜਾਂਦਾ ਹੈ। ਪਰਮਾਤਮਾ ਆਪਣੇ ਭਗਤਾਂ ਤੇ ਸੇਵਕਾਂ ਦੀ ਹਰ ਪਲ ਰਾਖੀ ਕਰਦਾ ਹੈ।',
-  image: '/img/darbar-sahib-mukhwak.jpg',
+  image: '/img/darbar-sahib-portrait.jpg',
   sgpcLink: 'https://sgpc.net/hukamnama/'
 };
 
@@ -114,12 +114,13 @@ export default function DarbarSahibMukhWak() {
       </div>
 
       {/* Visual Portrait Image of Sri Darbar Sahib */}
-      <div className="mukhwak-image-container" style={{ position: 'relative', height: '170px', overflow: 'hidden' }}>
+      <div className="mukhwak-image-container" style={{ position: 'relative', height: '260px', overflow: 'hidden' }}>
         <img
-          src={data.image || '/img/darbar-sahib-mukhwak.jpg'}
+          src={data.image || '/img/darbar-sahib-portrait.jpg'}
           alt={data.location || 'ਸੱਚਖੰਡ ਸ੍ਰੀ ਹਰਿਮੰਦਰ ਸਾਹਿਬ, ਸ੍ਰੀ ਅੰਮ੍ਰਿਤਸਰ'}
           className="mukhwak-golden-temple-img"
-          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
+          onError={(e) => { e.target.src = '/img/darbar-sahib-mukhwak.jpg'; }}
         />
         <div className="mukhwak-image-overlay">
           <span className="sacred-location-tag">

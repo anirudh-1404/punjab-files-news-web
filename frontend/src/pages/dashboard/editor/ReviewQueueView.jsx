@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { articleAPI } from '../../../services/api';
 import ActionModal from '../../../components/Common/ActionModal';
+import EditArticleModal from '../../../components/Common/EditArticleModal';
 
 export default function ReviewQueueView({ currentUser, onStatusChanged }) {
   const isAdmin = currentUser?.role === 'admin';
@@ -20,6 +21,7 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [activePreview, setActivePreview] = useState(null);
   const [actionLoading, setActionLoading] = useState(null);
+  const [editingArticle, setEditingArticle] = useState(null);
   const [notification, setNotification] = useState('');
   const [popup, setPopup] = useState(null);
 
@@ -598,15 +600,15 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
                   {/* EDITOR PERSPECTIVE */}
                   {!isAdmin && (
                     <>
-                      {/* If Editor Pending: Forward to Admin or Reject */}
+                      {/* If Editor Pending: Approve Live, Edit, Forward or Reject */}
                       {isPendingEditor && (
                         <>
                           <button
                             type="button"
                             disabled={actionLoading === art._id}
-                            onClick={() => handleUpdateStatus(art._id, 'pending_admin', art.title)}
+                            onClick={() => handleUpdateStatus(art._id, 'published', art.title)}
                             style={{
-                              backgroundColor: '#1e40af',
+                              backgroundColor: '#16a34a',
                               color: '#ffffff',
                               border: 'none',
                               padding: '8px 14px',
@@ -618,7 +620,50 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
                               alignItems: 'center',
                               justifyContent: 'center',
                               gap: '6px',
-                              boxShadow: '0 2px 5px rgba(30, 64, 175, 0.25)'
+                              boxShadow: '0 2px 5px rgba(22, 163, 74, 0.25)'
+                            }}
+                          >
+                            <i className="fa fa-check"></i> ਮਨਜ਼ੂਰ ਕਰੋ ਤੇ ਲਾਈਵ ਕਰੋ (Approve Live)
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => setEditingArticle(art)}
+                            style={{
+                              backgroundColor: '#1c2d5a',
+                              color: '#ffffff',
+                              border: 'none',
+                              padding: '7px 12px',
+                              borderRadius: '5px',
+                              fontSize: '12px',
+                              fontWeight: '700',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: '6px'
+                            }}
+                          >
+                            <i className="fa fa-pencil"></i> ਸੋਧੋ (Edit)
+                          </button>
+
+                          <button
+                            type="button"
+                            disabled={actionLoading === art._id}
+                            onClick={() => handleUpdateStatus(art._id, 'pending_admin', art.title)}
+                            style={{
+                              backgroundColor: '#1e40af',
+                              color: '#ffffff',
+                              border: 'none',
+                              padding: '7px 12px',
+                              borderRadius: '5px',
+                              fontSize: '12px',
+                              fontWeight: '700',
+                              cursor: actionLoading === art._id ? 'not-allowed' : 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: '6px'
                             }}
                           >
                             <i className="fa fa-paper-plane"></i> ਐਡਮਿਨ ਨੂੰ ਭੇਜੋ (Forward)
@@ -648,11 +693,74 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
                         </>
                       )}
 
-                      {/* If Forwarded to Admin */}
+                      {/* If Forwarded to Admin: Editor can still Approve Live or Edit */}
                       {isPendingAdmin && (
-                        <div style={{ textAlign: 'center', padding: '6px 8px', backgroundColor: '#eff6ff', borderRadius: '4px', border: '1px solid #bfdbfe', fontSize: '11.5px', color: '#1e40af', fontWeight: '700' }}>
-                          <i className="fa fa-hourglass-half"></i> ਐਡਮਿਨ ਪ੍ਰਵਾਨਗੀ ਦੀ ਉਡੀਕ (Awaiting Admin)
-                        </div>
+                        <>
+                          <button
+                            type="button"
+                            disabled={actionLoading === art._id}
+                            onClick={() => handleUpdateStatus(art._id, 'published', art.title)}
+                            style={{
+                              backgroundColor: '#16a34a',
+                              color: '#ffffff',
+                              border: 'none',
+                              padding: '7px 12px',
+                              borderRadius: '5px',
+                              fontSize: '12px',
+                              fontWeight: '800',
+                              cursor: actionLoading === art._id ? 'not-allowed' : 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: '5px'
+                            }}
+                          >
+                            <i className="fa fa-check"></i> ਸਿੱਧਾ ਲਾਈਵ ਕਰੋ (Approve Live)
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => setEditingArticle(art)}
+                            style={{
+                              backgroundColor: '#1c2d5a',
+                              color: '#ffffff',
+                              border: 'none',
+                              padding: '6px 12px',
+                              borderRadius: '5px',
+                              fontSize: '12px',
+                              fontWeight: '700',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: '5px'
+                            }}
+                          >
+                            <i className="fa fa-pencil"></i> ਸੋਧੋ (Edit)
+                          </button>
+
+                          <button
+                            type="button"
+                            disabled={actionLoading === art._id}
+                            onClick={() => openRejectDialog(art)}
+                            style={{
+                              backgroundColor: '#ffffff',
+                              color: '#b91c1c',
+                              border: '1px solid #fca5a5',
+                              padding: '5px 10px',
+                              borderRadius: '5px',
+                              fontSize: '11.5px',
+                              fontWeight: '700',
+                              cursor: actionLoading === art._id ? 'not-allowed' : 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: '4px'
+                            }}
+                          >
+                            <i className="fa fa-times"></i> ਰੱਦ ਕਰੋ (Reject)
+                          </button>
+                        </>
                       )}
                     </>
                   )}
@@ -684,6 +792,27 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
                             }}
                           >
                             <i className="fa fa-check"></i> ਅੰਤਿਮ ਪ੍ਰਵਾਨਗੀ (Publish Live)
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => setEditingArticle(art)}
+                            style={{
+                              backgroundColor: '#1c2d5a',
+                              color: '#ffffff',
+                              border: 'none',
+                              padding: '7px 12px',
+                              borderRadius: '5px',
+                              fontSize: '12px',
+                              fontWeight: '700',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: '5px'
+                            }}
+                          >
+                            <i className="fa fa-pencil"></i> ਸੋਧੋ (Edit)
                           </button>
 
                           <button
@@ -733,6 +862,27 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
                             }}
                           >
                             <i className="fa fa-bolt"></i> ਸਿੱਧਾ ਲਾਈਵ ਕਰੋ (Publish Live)
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => setEditingArticle(art)}
+                            style={{
+                              backgroundColor: '#1c2d5a',
+                              color: '#ffffff',
+                              border: 'none',
+                              padding: '7px 12px',
+                              borderRadius: '5px',
+                              fontSize: '12px',
+                              fontWeight: '700',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: '5px'
+                            }}
+                          >
+                            <i className="fa fa-pencil"></i> ਸੋਧੋ (Edit)
                           </button>
 
                           <button
@@ -789,6 +939,27 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
 
                       <button
                         type="button"
+                        onClick={() => setEditingArticle(art)}
+                        style={{
+                          backgroundColor: '#1c2d5a',
+                          color: '#ffffff',
+                          border: 'none',
+                          padding: '6px 12px',
+                          borderRadius: '5px',
+                          fontSize: '12px',
+                          fontWeight: '700',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '5px'
+                        }}
+                      >
+                        <i className="fa fa-pencil"></i> ਸੋਧੋ (Edit)
+                      </button>
+
+                      <button
+                        type="button"
                         disabled={actionLoading === art._id}
                         onClick={() => openRejectDialog(art)}
                         style={{
@@ -813,9 +984,10 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
 
                   {/* Common: If Rejected, Allow Re-approving */}
                   {isRejected && (
-                    <button
-                      type="button"
-                      disabled={actionLoading === art._id}
+                    <>
+                      <button
+                        type="button"
+                        disabled={actionLoading === art._id}
                       onClick={() =>
                         handleUpdateStatus(
                           art._id,
@@ -842,6 +1014,28 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
                       <i className="fa fa-undo"></i>{' '}
                       {isAdmin ? 'ਮੁੜ ਲਾਈਵ ਕਰੋ (Re-approve Live)' : 'ਐਡਮਿਨ ਨੂੰ ਭੇਜੋ (Forward to Admin)'}
                     </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setEditingArticle(art)}
+                      style={{
+                        backgroundColor: '#1c2d5a',
+                        color: '#ffffff',
+                        border: 'none',
+                        padding: '7px 12px',
+                        borderRadius: '5px',
+                        fontSize: '12px',
+                        fontWeight: '700',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '5px'
+                      }}
+                    >
+                        <i className="fa fa-pencil"></i> ਸੋਧੋ (Edit)
+                      </button>
+                    </>
                   )}
 
                   {/* Toggle Preview Drawer */}
@@ -992,6 +1186,19 @@ export default function ReviewQueueView({ currentUser, onStatusChanged }) {
           </div>
         </div>
       )}
+
+      {/* Edit Article Modal */}
+      <EditArticleModal
+        isOpen={Boolean(editingArticle)}
+        article={editingArticle}
+        currentUser={currentUser}
+        onClose={() => setEditingArticle(null)}
+        onSaved={() => {
+          setNotification('ਖ਼ਬਰ ਸਫ਼ਲਤਾਪੂਰਵਕ ਸੋਧੀ ਗਈ ਹੈ (Article updated successfully)!');
+          fetchArticles();
+          setTimeout(() => setNotification(''), 4500);
+        }}
+      />
 
       {/* Custom Action Modal */}
       <ActionModal

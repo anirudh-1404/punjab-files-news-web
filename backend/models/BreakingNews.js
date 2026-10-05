@@ -13,6 +13,16 @@ const breakingNewsSchema = new mongoose.Schema(
       required: [true, "Breaking news text is required"],
       trim: true
     },
+    slug: {
+      type: String,
+      default: null,
+      trim: true
+    },
+    articleId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Article",
+      default: null
+    },
     isActive: {
       type: Boolean,
       default: true

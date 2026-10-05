@@ -225,13 +225,13 @@ export const getReadersChoiceTop10 = async (req, res) => {
 
 // @desc    Create new article (Only field reporters can create articles)
 // @route   POST /api/articles
-// @access  Private (Reporter only)
+// @access  Private (Reporter, Editor, Admin)
 export const createArticle = async (req, res) => {
   try {
-    if (req.user.role !== "reporter") {
+    if (!["reporter", "editor", "admin"].includes(req.user.role)) {
       return res.status(403).json({
         success: false,
-        message: "Only reporters are allowed to create news articles. Editors and Admins review and approve."
+        message: "You are not authorized to create news articles."
       });
     }
 
