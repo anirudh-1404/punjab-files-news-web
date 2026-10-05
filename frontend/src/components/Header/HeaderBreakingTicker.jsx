@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { breakingAPI } from "../../services/api";
 import { getStoredBreaking } from "../../services/articleStore";
 
@@ -66,25 +65,15 @@ export default function HeaderBreakingTicker() {
           <div className="breaking-marquee-track">
             {/* Render items twice for infinite seamless loop */}
             {[...news, ...news].map((item, index) => {
-              const targetUrl = item.slug
-                ? `/news/${item.slug}`
-                : item.articleId
-                ? `/news/${item.articleId}`
-                : item.id && !String(item.id).startsWith("brk-")
-                ? `/news/${item.id}`
-                : `/search?q=${encodeURIComponent(item.text)}`;
-
               return (
                 <span key={`${item.id || index}-${index}`} className="marquee-item">
                   <span className="marquee-tag">{item.tag || "ਪੰਜਾਬ"}</span>
-                  <Link
-                    to={targetUrl}
+                  <span
                     className="marquee-text"
-                    style={{ textDecoration: "none", cursor: "pointer" }}
-                    title={`ਵੇਖੋ: ${item.text}`}
+                    style={{ cursor: "default", userSelect: "text" }}
                   >
                     {item.text}
-                  </Link>
+                  </span>
                   <span className="marquee-divider">✦</span>
                 </span>
               );

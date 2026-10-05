@@ -1188,12 +1188,8 @@ header,
   color: #111317;
   font-weight: 700;
   letter-spacing: 0.2px;
-  transition: color 0.2s ease;
-}
-
-.marquee-text:hover {
-  color: #b71c1c;
-  text-decoration: underline;
+  cursor: default;
+  user-select: text;
 }
 
 .marquee-divider {

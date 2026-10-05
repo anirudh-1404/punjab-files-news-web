@@ -58,9 +58,9 @@ export default function BreakingNews() {
           <li key={currentIndex} style={{ transition: 'all 0.4s ease-in-out' }}>
             <h4>
               <span className="category">{current.category}</span>
-              <a href={current.link} target="_blank" rel="noreferrer">
+              <span className="text" style={{ cursor: 'default' }}>
                 {' '}{current.text}
-              </a>
+              </span>
             </h4>
           </li>
         </ul>
