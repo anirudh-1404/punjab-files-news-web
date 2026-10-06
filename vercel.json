@@ -1,9 +1,28 @@
 {
-  "installCommand": "npm --prefix frontend install",
+  "installCommand": "npm install && npm --prefix frontend install",
   "buildCommand": "npm --prefix frontend run build",
   "outputDirectory": "frontend/dist",
   "framework": "vite",
   "rewrites": [
+    {
+      "source": "/news/:slug",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": "(?i).*(facebookexternalhit|whatsapp|twitterbot|telegrambot|linkedinbot|slackbot|discordbot|applebot|pinterest|skypeuripreview|googlebot).*"
+        }
+      ],
+      "destination": "/api/og?slug=:slug"
+    },
+    {
+      "source": "/share/:slug",
+      "destination": "/api/og?slug=:slug"
+    },
+    {
+      "source": "/api/articles/share/:slug",
+      "destination": "/api/og?slug=:slug"
+    },
     {
       "source": "/(.*)",
       "destination": "/index.html"

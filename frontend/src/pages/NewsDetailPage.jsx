@@ -182,7 +182,13 @@ export default function NewsDetailPage() {
     const currentUrl = window.location.href;
     const desc = article.excerpt || (article.content ? article.content.slice(0, 160) : '') || article.title;
     let imgUrl = article.featuredImage || '/img/index_800x400-image01.jpg';
-    if (imgUrl.startsWith('/')) {
+    if (imgUrl.includes('res.cloudinary.com') && imgUrl.includes('/image/upload/')) {
+      const uploadIdx = imgUrl.indexOf('/image/upload/');
+      const prefix = imgUrl.substring(0, uploadIdx + '/image/upload/'.length);
+      let suffix = imgUrl.substring(uploadIdx + '/image/upload/'.length);
+      suffix = suffix.replace(/^(?:w_\d+,?|h_\d+,?|c_[a-z]+,?|q_[a-z0-9:]+,?|f_[a-z0-9]+,?|dpr_[a-z0-9.]+,?)+\//i, '');
+      imgUrl = `${prefix}c_fill,w_1200,h_630,g_auto,f_jpg,q_auto:best/${suffix}`;
+    } else if (imgUrl.startsWith('/')) {
       imgUrl = `${window.location.origin}${imgUrl}`;
     }
 
@@ -196,6 +202,10 @@ export default function NewsDetailPage() {
     setOrUpdateMeta('property', 'og:description', desc);
     setOrUpdateMeta('property', 'og:url', currentUrl);
     setOrUpdateMeta('property', 'og:image', imgUrl);
+    setOrUpdateMeta('property', 'og:image:secure_url', imgUrl);
+    setOrUpdateMeta('property', 'og:image:width', '1200');
+    setOrUpdateMeta('property', 'og:image:height', '630');
+    setOrUpdateMeta('property', 'og:image:type', 'image/jpeg');
     setOrUpdateMeta('property', 'og:image:alt', article.title);
 
     // Twitter / X Card
@@ -247,7 +257,8 @@ export default function NewsDetailPage() {
     );
   }
 
-  const shareUrl = window.location.href;
+  const articleKey = article.slug || article._id || id;
+  const shareUrl = `${window.location.origin}/news/${articleKey}`;
   const shareTitle = article.title;
 
   const handleCopyLink = () => {

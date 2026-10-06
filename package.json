@@ -2,8 +2,12 @@
   "name": "punjab-files-news-web",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "npm --prefix frontend run dev",
     "build": "npm --prefix frontend run build"
+  },
+  "dependencies": {
+    "mongoose": "^9.11.0"
   }
 }

@@ -9,7 +9,8 @@ import {
   getReviewDeskArticles,
   updateArticleStatus,
   updateArticle,
-  deleteArticle
+  deleteArticle,
+  renderArticleShareHtml
 } from "../controllers/articleController.js";
 import { protect, authorize } from "../middleware/auth.js";
 
@@ -18,6 +19,7 @@ const router = express.Router();
 // Public routes
 router.get("/", getPublishedArticles);
 router.get("/readers-choice", getReadersChoiceTop10);
+router.get("/share/:slug", renderArticleShareHtml);
 router.get("/detail/:slug", getArticleBySlug);
 router.get("/:slug", getArticleBySlug);
 
