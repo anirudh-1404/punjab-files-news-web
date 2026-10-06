@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { triggerGoogleTranslate, setGoogleTranslateCookie } from '../services/translator';
 
 const LanguageContext = createContext(null);
 
@@ -28,6 +29,9 @@ export function LanguageProvider({ children }) {
       localStorage.setItem(STORAGE_KEY, newLang);
     } catch (e) {}
     window.dispatchEvent(new CustomEvent('punjab_language_changed', { detail: newLang }));
+
+    // Seamlessly trigger full website translation
+    triggerGoogleTranslate(newLang);
   };
 
   useEffect(() => {

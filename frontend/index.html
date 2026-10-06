@@ -53,6 +53,43 @@
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- Hidden Google Translate Mount Point -->
+    <div id="google_translate_element" style="display: none;" class="notranslate"></div>
+
+    <script type="text/javascript">
+      // Sync Google Translate cookie from localStorage before script evaluation
+      try {
+        var userLang = localStorage.getItem('punjab_files_user_language');
+        if (userLang && (userLang === 'hi' || userLang === 'en')) {
+          var cookieVal = '/pa/' + userLang;
+          document.cookie = 'googtrans=' + cookieVal + '; path=/;';
+          document.cookie = 'googtrans=' + cookieVal + '; path=/; domain=' + window.location.hostname + ';';
+          document.cookie = 'googtrans=' + cookieVal + '; path=/; domain=.' + window.location.hostname + ';';
+        } else if (userLang === 'pa') {
+          document.cookie = 'googtrans=/pa/pa; path=/;';
+        }
+      } catch (e) {}
+
+      function googleTranslateElementInit() {
+        if (window.google && window.google.translate) {
+          new window.google.translate.TranslateElement(
+            {
+              pageLanguage: 'pa',
+              includedLanguages: 'pa,hi,en',
+              autoDisplay: false
+            },
+            'google_translate_element'
+          );
+        }
+      }
+    </script>
+    <script
+      type="text/javascript"
+      src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+      async
+    ></script>
+
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

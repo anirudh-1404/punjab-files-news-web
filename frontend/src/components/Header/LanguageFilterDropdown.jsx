@@ -39,7 +39,7 @@ export default function LanguageFilterDropdown({ isCompact = false }) {
   return (
     <div
       ref={dropdownRef}
-      className="header-language-filter-dropdown"
+      className="header-language-filter-dropdown notranslate"
       style={{
         position: 'relative',
         display: 'inline-flex',
