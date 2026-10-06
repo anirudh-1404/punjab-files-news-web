@@ -14,6 +14,7 @@ import mukhwakRoutes from "./routes/mukhwakRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import podcastRoutes from "./routes/podcastRoutes.js";
+import webTVRoutes from "./routes/webTVRoutes.js";
 import { renderArticleShareHtml } from "./controllers/articleController.js";
 
 dotenv.config();
@@ -64,6 +65,7 @@ app.use("/api/mukhwak", mukhwakRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/podcasts", podcastRoutes);
+app.use("/api/webtv", webTVRoutes);
 
 // Social Media Open Graph Share & Crawler Preview Endpoints
 // WhatsApp, Facebook, Twitter, Telegram crawlers receive server-rendered HTML with article's actual image

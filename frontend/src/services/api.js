@@ -622,4 +622,59 @@ export const podcastAPI = {
   }
 };
 
+// -------------------------------------------------------------
+// 12. WEB TV LIVE STREAM API
+// -------------------------------------------------------------
+export const webTVAPI = {
+  // Public - get active stream config for homepage (scheduled check + fallback)
+  getLive: async () => {
+    return apiFetch('/webtv');
+  },
+
+  // Protected - update default 24x7 stream config (Admin / Editor)
+  update: async (data) => {
+    return apiFetch('/webtv', {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  },
+
+  // Protected - get all scheduled broadcasts
+  getSchedules: async () => {
+    return apiFetch('/webtv/schedules');
+  },
+
+  // Protected - create or update a schedule for a specific date
+  createSchedule: async (data) => {
+    return apiFetch('/webtv/schedules', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  },
+
+  // Protected - update an existing schedule by ID
+  updateSchedule: async (id, data) => {
+    return apiFetch(`/webtv/schedules/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  },
+
+  // Protected - delete a scheduled broadcast by ID
+  deleteSchedule: async (id) => {
+    return apiFetch(`/webtv/schedules/${id}`, {
+      method: 'DELETE'
+    });
+  },
+
+  // Protected - toggle schedule active state by ID
+  toggleSchedule: async (id) => {
+    return apiFetch(`/webtv/schedules/${id}/toggle`, {
+      method: 'PUT'
+    });
+  }
+};
+
+
+
 

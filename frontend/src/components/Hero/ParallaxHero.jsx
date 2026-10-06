@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import DarbarSahibMukhWak from './DarbarSahibMukhWak';
-import { articleAPI, podcastAPI } from '../../services/api';
+import { articleAPI, podcastAPI, webTVAPI } from '../../services/api';
 import { getAllArticles } from '../../services/articleStore';
 import { getCardImageUrl } from '../../services/imageUtils';
 import PodcastAudioCard from '../Common/PodcastAudioCard';
@@ -36,6 +36,19 @@ export default function ParallaxHero() {
   const { language } = useLanguage();
   const [leadStory, setLeadStory] = useState(DEFAULT_LEAD);
   const [latestPodcast, setLatestPodcast] = useState(null);
+  const [webTVConfig, setWebTVConfig] = useState(() => {
+    try {
+      const cached = localStorage.getItem('punjab_webtv_cache');
+      if (cached) return JSON.parse(cached);
+    } catch (e) {}
+    return {
+      embedUrl: 'https://www.youtube-nocookie.com/embed/6OW56yMNB1g?autoplay=1&mute=1&playsinline=1&enablejsapi=1&rel=0',
+      title: '24x7 HD ਪ੍ਰਸਾਰਣ',
+      badge: 'ON AIR • WEB TV',
+      quality: '1080p HD',
+      isActive: true
+    };
+  });
 
   useEffect(() => {
     let isMounted = true;
@@ -65,16 +78,33 @@ export default function ParallaxHero() {
       } catch (e) {}
     };
 
+    const fetchWebTV = async () => {
+      try {
+        const res = await webTVAPI.getLive();
+        if (isMounted && res && res.data) {
+          setWebTVConfig(res.data);
+          try {
+            localStorage.setItem('punjab_webtv_cache', JSON.stringify(res.data));
+          } catch (e) {}
+        }
+      } catch (e) {}
+    };
+
     fetchLead();
     fetchPodcast();
+    fetchWebTV();
+
     window.addEventListener('storage', fetchLead);
     window.addEventListener('punjab_articles_updated', fetchLead);
     window.addEventListener('punjab_language_changed', fetchLead);
+    window.addEventListener('punjab_webtv_updated', fetchWebTV);
+
     return () => {
       isMounted = false;
       window.removeEventListener('storage', fetchLead);
       window.removeEventListener('punjab_articles_updated', fetchLead);
       window.removeEventListener('punjab_language_changed', fetchLead);
+      window.removeEventListener('punjab_webtv_updated', fetchWebTV);
     };
   }, [language]);
 
@@ -300,7 +330,7 @@ export default function ParallaxHero() {
               </span>
               <span className="hero-col-divider">/</span>
               <h3 className="hero-col-title" style={{ fontSize: '13.5px', fontWeight: '800', color: '#1c2d5a' }}>
-                24x7 HD ਪ੍ਰਸਾਰਣ
+                {webTVConfig?.title || '24x7 HD ਪ੍ਰਸਾਰਣ'}
               </h3>
             </div>
 
@@ -327,13 +357,22 @@ export default function ParallaxHero() {
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span style={{ width: '7px', height: '7px', backgroundColor: '#ef4444', borderRadius: '50%', display: 'inline-block', animation: 'livePulse 1.2s infinite' }}></span>
+                  <span
+                    style={{
+                      width: '7px',
+                      height: '7px',
+                      backgroundColor: webTVConfig?.isActive !== false ? '#ef4444' : '#94a3b8',
+                      borderRadius: '50%',
+                      display: 'inline-block',
+                      animation: webTVConfig?.isActive !== false ? 'livePulse 1.2s infinite' : 'none'
+                    }}
+                  ></span>
                   <span style={{ fontSize: '10.5px', fontWeight: '800', color: '#ffffff', letterSpacing: '0.5px' }}>
-                    ON AIR • WEB TV
+                    {webTVConfig?.badge || 'ON AIR • WEB TV'}
                   </span>
                 </div>
                 <span style={{ fontSize: '10px', fontWeight: '700', color: '#ebb10d' }}>
-                  1080p HD
+                  {webTVConfig?.quality || '1080p HD'}
                 </span>
               </div>
 
@@ -349,22 +388,45 @@ export default function ParallaxHero() {
                   backgroundColor: '#000000'
                 }}
               >
-                <iframe
-                  src="https://www.youtube-nocookie.com/embed/6OW56yMNB1g?autoplay=1&mute=1&playsinline=1&enablejsapi=1&rel=0"
-                  title="Punjab Files WEB TV"
-                  loading="lazy"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    border: 'none',
-                    display: 'block'
-                  }}
-                ></iframe>
+                {webTVConfig?.isActive !== false ? (
+                  <iframe
+                    key={webTVConfig?.embedUrl || 'webtv-default'}
+                    src={webTVConfig?.embedUrl || 'https://www.youtube-nocookie.com/embed/6OW56yMNB1g?autoplay=1&mute=1&playsinline=1&enablejsapi=1&rel=0'}
+                    title="Punjab Files WEB TV"
+                    loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      height: '100%',
+                      border: 'none',
+                      display: 'block'
+                    }}
+                  ></iframe>
+                ) : (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      height: '100%',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#94a3b8',
+                      fontSize: '12px',
+                      backgroundColor: '#0a0c10'
+                    }}
+                  >
+                    <i className="fa fa-television" style={{ fontSize: '26px', marginBottom: '6px', color: '#64748b' }}></i>
+                    <span>ਵੈੱਬ ਟੀਵੀ ਸਟ੍ਰੀਮ ਬੰਦ ਹੈ (Broadcast Offline)</span>
+                  </div>
+                )}
               </div>
             </div>
 

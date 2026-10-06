@@ -12,6 +12,7 @@ import ContactMessagesView from './admin/ContactMessagesView';
 import UserManagementView from './admin/UserManagementView';
 import MukhwakManagerView from './admin/MukhwakManagerView';
 import PodcastManagerView from './PodcastManagerView';
+import WebTVManagerView from './WebTVManagerView';
 import { contactAPI } from '../../services/api';
 
 export default function DashboardLayout({ user, activeRoleParam, onRoleChange, onLogout }) {
@@ -70,6 +71,7 @@ export default function DashboardLayout({ user, activeRoleParam, onRoleChange, o
         { id: 'contact_queries', label: 'ਸੰਪਰਕ ਸੁਨੇਹੇ (Contact Messages)', icon: 'fa-envelope-o', sub: 'Inquiries' },
         { id: 'users', label: 'ਸਟਾਫ਼ ਪ੍ਰਬੰਧਨ (Staff Management)', icon: 'fa-users', sub: 'Staff Management' },
         { id: 'breaking', label: 'ਬਰੇਕਿੰਗ ਨਿਊਜ਼ (Breaking News)', icon: 'fa-bolt', sub: 'Breaking News' },
+        { id: 'webtv', label: 'ਵੈੱਬ ਟੀਵੀ (Web TV Stream)', icon: 'fa-television', sub: 'Web TV Live Stream' },
         { id: 'mukhwak', label: 'ਮੁੱਖ ਵਾਕ (Daily Mukhwak)', icon: 'fa-book', sub: 'Daily Mukhwak' }
       ];
     }
@@ -81,6 +83,7 @@ export default function DashboardLayout({ user, activeRoleParam, onRoleChange, o
         { id: 'create', label: 'ਨਵੀਂ ਖ਼ਬਰ ਲਿਖੋ (Write News)', icon: 'fa-pencil-square-o', sub: 'Write News' },
         { id: 'podcasts', label: 'ਪੋਡਕਾਸਟ ਸਮੀਖਿਆ (Podcasts Desk)', icon: 'fa-podcast', sub: 'Review Podcasts' },
         { id: 'breaking', label: 'ਬਰੇਕਿੰਗ ਨਿਊਜ਼ (Breaking News)', icon: 'fa-bolt', sub: 'Breaking Ticker' },
+        { id: 'webtv', label: 'ਵੈੱਬ ਟੀਵੀ (Web TV Stream)', icon: 'fa-television', sub: 'Web TV Live Stream' },
         { id: 'contact_queries', label: 'ਸੰਪਰਕ ਸੁਨੇਹੇ (Contact Messages)', icon: 'fa-envelope-o', sub: 'Inquiries' },
         { id: 'mukhwak', label: 'ਮੁੱਖ ਵਾਕ (Daily Mukhwak)', icon: 'fa-book', sub: 'Daily Mukhwak' }
       ];
@@ -489,6 +492,10 @@ export default function DashboardLayout({ user, activeRoleParam, onRoleChange, o
 
           {activeTab === 'mukhwak' && ['admin', 'editor'].includes(activeRole) && (
             <MukhwakManagerView currentUser={user} />
+          )}
+
+          {activeTab === 'webtv' && ['admin', 'editor'].includes(activeRole) && (
+            <WebTVManagerView currentUser={user} />
           )}
 
           {activeTab === 'podcasts' && (
