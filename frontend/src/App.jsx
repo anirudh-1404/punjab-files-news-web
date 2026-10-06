@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 
-import Lenis from 'lenis';
-
 // Global Header & Footer
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
@@ -93,33 +91,10 @@ export default function App() {
   const isAdmin = location.pathname.startsWith('/admin');
 
   useEffect(() => {
-    // Disable Lenis on Admin routes and mobile devices (<= 768px)
-    // On mobile screens, native momentum scrolling is smoother and avoids height desync that clips footers
-    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
-    if (isAdmin || isMobile) {
-      document.documentElement.classList.remove('lenis', 'lenis-smooth');
-      return;
-    }
-
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
-      smoothWheel: true,
-      wheelMultiplier: 1.0,
-      touchMultiplier: 1.5,
-      infinite: false,
-      prevent: (node) => {
-        return (
-          node.classList?.contains('punjabi-chat-dialog') ||
-          node.classList?.contains('punjabi-chat-messages') ||
-          Boolean(node.closest?.('.punjabi-chat-dialog')) ||
-          Boolean(node.closest?.('.punjabi-chat-messages')) ||
-          Boolean(node.closest?.('[data-lenis-prevent]'))
-        );
-      },
-    });
+    // Ensure document and body are never scroll-locked
+    document.documentElement.classList.remove('lenis', 'lenis-smooth', 'lenis-stopped');
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
 
     // Seamless in-page smooth anchor scrolling
     const handleAnchorClick = (e) => {
@@ -130,33 +105,17 @@ export default function App() {
         const targetElement = document.querySelector(href);
         if (targetElement) {
           e.preventDefault();
-          lenis.scrollTo(targetElement, { offset: -90, duration: 1.3 });
+          const y = targetElement.getBoundingClientRect().top + window.pageYOffset - 90;
+          window.scrollTo({ top: y, behavior: 'smooth' });
         }
       }
     };
 
     document.addEventListener('click', handleAnchorClick);
-
-    const handleResize = () => lenis.resize();
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('load', handleResize);
-
-    let rafId;
-    function raf(time) {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    }
-    rafId = requestAnimationFrame(raf);
-
     return () => {
-      cancelAnimationFrame(rafId);
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('load', handleResize);
       document.removeEventListener('click', handleAnchorClick);
-      lenis.destroy();
-      document.documentElement.classList.remove('lenis', 'lenis-smooth');
     };
-  }, [isAdmin]);
+  }, []);
 
   return (
     <div id="wrapper" data-color="red">

@@ -1660,24 +1660,12 @@ html {
   scroll-padding-top: 90px;
 }
 
-html.lenis, html.lenis body {
-  height: auto;
+html {
+  scroll-behavior: smooth;
 }
 
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-
-.lenis.lenis-scrolling iframe {
-  pointer-events: none;
+html, body {
+  overflow-y: auto !important;
 }
 
 /* Sleek Modern Light Scrollbar */
@@ -2944,7 +2932,7 @@ img {
 ==================================================== */
 body {
   top: 0px !important;
-  position: static !important;
+  position: relative !important;
 }
 
 .goog-te-banner-frame,
