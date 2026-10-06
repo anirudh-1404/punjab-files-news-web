@@ -38,6 +38,8 @@ export default function Footer() {
   const tags = [
     { name: 'ਮੁੱਖ ਪੰਨਾ', href: '/' },
     { name: 'ਪੰਜਾਬ', href: '#punjab' },
+    { name: 'ਫ਼ੋਟੋ ਗੈਲਰੀ', href: '/gallery' },
+    { name: 'ਪੋਡਕਾਸਟ', href: '/podcasts' },
     { name: 'ਦੇਸ਼-ਵਿਦੇਸ਼', href: '#world' },
     { name: 'ਖੇਡਾਂ', href: '#sport' },
     { name: 'ਸਿਹਤ', href: '#health' },

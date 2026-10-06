@@ -2002,8 +2002,8 @@ html.lenis, html.lenis body {
 
   .brand-logo-img,
   .header-brand-block img {
-    height: 64px !important;
-    max-height: 70px !important;
+    height: auto !important;
+    max-height: 85px !important;
     max-width: 250px !important;
     width: auto !important;
     object-fit: contain !important;
@@ -2908,6 +2908,34 @@ img {
   overscroll-behavior: contain !important;
   -webkit-overflow-scrolling: touch !important;
   touch-action: pan-y !important;
+}
+
+/* ====================================================
+   LIGHTBOX FULL-SCREEN MODAL STYLING (FORCE WHITE TEXT)
+==================================================== */
+.lightbox-modal-content {
+  color: #ffffff !important;
+}
+
+.lightbox-photo-title {
+  color: #ffffff !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  margin: 0 !important;
+  line-height: 1.3 !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8) !important;
+}
+
+.lightbox-photo-caption {
+  color: #f8fafc !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  margin: 8px 0 0 !important;
+}
+
+.lightbox-meta-item {
+  color: #cbd5e1 !important;
+  font-size: 13px !important;
 }
 
 

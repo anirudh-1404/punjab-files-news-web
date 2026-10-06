@@ -78,13 +78,14 @@ export default function ParallaxHero() {
       } catch (e) {}
     };
 
-    const fetchWebTV = async () => {
+    const fetchWebTV = async (targetLang) => {
       try {
-        const res = await webTVAPI.getLive();
+        const langToFetch = targetLang || language || 'pa';
+        const res = await webTVAPI.getLive(langToFetch);
         if (isMounted && res && res.data) {
           setWebTVConfig(res.data);
           try {
-            localStorage.setItem('punjab_webtv_cache', JSON.stringify(res.data));
+            localStorage.setItem(`punjab_webtv_cache_${langToFetch}`, JSON.stringify(res.data));
           } catch (e) {}
         }
       } catch (e) {}
@@ -92,19 +93,25 @@ export default function ParallaxHero() {
 
     fetchLead();
     fetchPodcast();
-    fetchWebTV();
+    fetchWebTV(language);
+
+    const handleLangChange = (e) => {
+      fetchLead();
+      const newLang = e?.detail || language || 'pa';
+      fetchWebTV(newLang);
+    };
 
     window.addEventListener('storage', fetchLead);
     window.addEventListener('punjab_articles_updated', fetchLead);
-    window.addEventListener('punjab_language_changed', fetchLead);
-    window.addEventListener('punjab_webtv_updated', fetchWebTV);
+    window.addEventListener('punjab_language_changed', handleLangChange);
+    window.addEventListener('punjab_webtv_updated', () => fetchWebTV(language));
 
     return () => {
       isMounted = false;
       window.removeEventListener('storage', fetchLead);
       window.removeEventListener('punjab_articles_updated', fetchLead);
-      window.removeEventListener('punjab_language_changed', fetchLead);
-      window.removeEventListener('punjab_webtv_updated', fetchWebTV);
+      window.removeEventListener('punjab_language_changed', handleLangChange);
+      window.removeEventListener('punjab_webtv_updated', () => fetchWebTV(language));
     };
   }, [language]);
 
@@ -370,6 +377,19 @@ export default function ParallaxHero() {
                   <span style={{ fontSize: '10.5px', fontWeight: '800', color: '#ffffff', letterSpacing: '0.5px' }}>
                     {webTVConfig?.badge || 'ON AIR • WEB TV'}
                   </span>
+                  <span
+                    style={{
+                      fontSize: '9.5px',
+                      fontWeight: '800',
+                      padding: '1px 6px',
+                      borderRadius: '3px',
+                      backgroundColor: language === 'hi' ? '#d97706' : language === 'en' ? '#2563eb' : '#b71c1c',
+                      color: '#ffffff',
+                      textTransform: 'uppercase'
+                    }}
+                  >
+                    {language === 'hi' ? 'हिंदी' : language === 'en' ? 'EN' : 'ਪੰਜਾਬੀ'}
+                  </span>
                 </div>
                 <span style={{ fontSize: '10px', fontWeight: '700', color: '#ebb10d' }}>
                   {webTVConfig?.quality || '1080p HD'}
@@ -390,7 +410,7 @@ export default function ParallaxHero() {
               >
                 {webTVConfig?.isActive !== false ? (
                   <iframe
-                    key={webTVConfig?.embedUrl || 'webtv-default'}
+                    key={`${language}-${webTVConfig?.embedUrl || 'webtv-default'}`}
                     src={webTVConfig?.embedUrl || 'https://www.youtube-nocookie.com/embed/6OW56yMNB1g?autoplay=1&mute=1&playsinline=1&enablejsapi=1&rel=0'}
                     title="Punjab Files WEB TV"
                     loading="lazy"
@@ -431,15 +451,49 @@ export default function ParallaxHero() {
             </div>
 
             {/* 2. PODCASTS HEADER */}
-            <div className="hero-col-header" style={{ marginBottom: '8px' }}>
-              <span className="hero-col-badge badge-podcast" style={{ backgroundColor: '#b71c1c', color: '#fff', fontWeight: '800' }}>
-                <i className="fa fa-podcast" style={{ marginRight: '6px' }}></i> ਪੋਡਕਾਸਟ
-              </span>
-              <span className="hero-col-divider">/</span>
-              <h3 className="hero-col-title" style={{ fontSize: '13.5px', fontWeight: '800', color: '#1c2d5a' }}>
-                ਨਵੇਂ ਐਪੀਸੋਡ
-              </h3>
+            <div
+              className="hero-col-header"
+              style={{
+                marginBottom: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span className="hero-col-badge badge-podcast" style={{ backgroundColor: '#b71c1c', color: '#fff', fontWeight: '800' }}>
+                  <i className="fa fa-podcast" style={{ marginRight: '6px' }}></i> ਪੋਡਕਾਸਟ
+                </span>
+                <span className="hero-col-divider">/</span>
+                <h3 className="hero-col-title" style={{ fontSize: '13.5px', fontWeight: '800', color: '#1c2d5a' }}>
+                  ਵੀਡੀਓ ਪੋਡਕਾਸਟ
+                </h3>
+              </div>
+
+              {/* View All Podcasts Link */}
+              <Link
+                to="/podcasts"
+                style={{
+                  fontSize: '11px',
+                  fontWeight: '800',
+                  color: '#b71c1c',
+                  backgroundColor: '#fef2f2',
+                  border: '1px solid #fecaca',
+                  padding: '2px 8px',
+                  borderRadius: '4px',
+                  textDecoration: 'none',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  transition: 'all 0.15s ease'
+                }}
+                title="ਸਾਰੇ ਪੋਡਕਾਸਟ ਦੇਖੋ (View All Podcasts)"
+              >
+                <span>ਸਾਰੇ ਦੇਖੋ</span>
+                <i className="fa fa-angle-right" style={{ fontSize: '11px' }}></i>
+              </Link>
             </div>
+
 
             {/* Podcasts Box (Pure Audio Player or Empty State) */}
             {latestPodcast ? (

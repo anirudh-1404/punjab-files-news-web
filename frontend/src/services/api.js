@@ -604,6 +604,15 @@ export const podcastAPI = {
     return res;
   },
 
+  // Protected - Edit podcast details
+  update: async (id, podcastData) => {
+    const res = await apiFetch(`/podcasts/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(podcastData)
+    });
+    return res;
+  },
+
   // Protected - Editor / Admin update status
   updateStatus: async (id, status) => {
     const res = await apiFetch(`/podcasts/${id}/status`, {
@@ -626,12 +635,18 @@ export const podcastAPI = {
 // 12. WEB TV LIVE STREAM API
 // -------------------------------------------------------------
 export const webTVAPI = {
-  // Public - get active stream config for homepage (scheduled check + fallback)
-  getLive: async () => {
-    return apiFetch('/webtv');
+  // Public - get active stream config for homepage (scheduled check + fallback by language)
+  getLive: async (language = 'pa') => {
+    const query = language ? `?language=${encodeURIComponent(language)}` : '';
+    return apiFetch(`/webtv${query}`);
   },
 
-  // Protected - update default 24x7 stream config (Admin / Editor)
+  // Protected - get all default 24x7 streams by language (Admin / Editor)
+  getDefaults: async () => {
+    return apiFetch('/webtv/defaults');
+  },
+
+  // Protected - update default 24x7 stream config for a specific language (Admin / Editor)
   update: async (data) => {
     return apiFetch('/webtv', {
       method: 'PUT',
@@ -639,9 +654,10 @@ export const webTVAPI = {
     });
   },
 
-  // Protected - get all scheduled broadcasts
-  getSchedules: async () => {
-    return apiFetch('/webtv/schedules');
+  // Protected - get all scheduled broadcasts (supports ?language= filter)
+  getSchedules: async (params = {}) => {
+    const qs = params?.language ? `?language=${encodeURIComponent(params.language)}` : '';
+    return apiFetch(`/webtv/schedules${qs}`);
   },
 
   // Protected - create or update a schedule for a specific date
@@ -674,6 +690,121 @@ export const webTVAPI = {
     });
   }
 };
+
+// -------------------------------------------------------------
+// 13. ADVERTISEMENT BANNER API
+// -------------------------------------------------------------
+export const adAPI = {
+  // Public - get active ads (optional ?slot=...)
+  getActive: async (params = {}) => {
+    const qs = params?.slot ? `?slot=${encodeURIComponent(params.slot)}` : '';
+    return apiFetch(`/ads/active${qs}`);
+  },
+
+  // Public - record ad click
+  trackClick: async (id) => {
+    try {
+      return await apiFetch(`/ads/${id}/click`, { method: 'POST' });
+    } catch (e) {
+      return { success: false };
+    }
+  },
+
+  // Protected - get all ads (Admin / Editor)
+  getAll: async (params = {}) => {
+    const query = new URLSearchParams();
+    if (params.slot) query.append('slot', params.slot);
+    if (params.status) query.append('status', params.status);
+    const qs = query.toString();
+    return apiFetch(`/ads${qs ? `?${qs}` : ''}`);
+  },
+
+  // Protected - create a new ad
+  create: async (data) => {
+    return apiFetch('/ads', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  },
+
+  // Protected - update ad by ID
+  update: async (id, data) => {
+    return apiFetch(`/ads/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  },
+
+  // Protected - delete ad by ID
+  delete: async (id) => {
+    return apiFetch(`/ads/${id}`, {
+      method: 'DELETE'
+    });
+  },
+
+  // Protected - toggle ad active status
+  toggle: async (id) => {
+    return apiFetch(`/ads/${id}/toggle`, {
+      method: 'PUT'
+    });
+  }
+};
+
+// -------------------------------------------------------------
+// 12. PHOTO GALLERY APIS
+// -------------------------------------------------------------
+export const galleryAPI = {
+  // Public - get published photos
+  getPublic: async (params = {}) => {
+    const query = new URLSearchParams();
+    if (params.category) query.append('category', params.category);
+    if (params.limit) query.append('limit', params.limit);
+    if (params.page) query.append('page', params.page);
+    const qs = query.toString();
+    return apiFetch(`/gallery${qs ? `?${qs}` : ''}`);
+  },
+
+  // Protected - get all photos (Admin / Editor)
+  getAdmin: async (params = {}) => {
+    const query = new URLSearchParams();
+    if (params.category) query.append('category', params.category);
+    if (params.status) query.append('status', params.status);
+    if (params.search) query.append('search', params.search);
+    const qs = query.toString();
+    return apiFetch(`/gallery/admin${qs ? `?${qs}` : ''}`);
+  },
+
+  // Protected - create a new photo
+  create: async (data) => {
+    return apiFetch('/gallery', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  },
+
+  // Protected - update photo by ID
+  update: async (id, data) => {
+    return apiFetch(`/gallery/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  },
+
+  // Protected - delete photo by ID
+  delete: async (id) => {
+    return apiFetch(`/gallery/${id}`, {
+      method: 'DELETE'
+    });
+  },
+
+  // Protected - toggle publish status
+  toggle: async (id) => {
+    return apiFetch(`/gallery/${id}/toggle`, {
+      method: 'PUT'
+    });
+  }
+};
+
 
 
 

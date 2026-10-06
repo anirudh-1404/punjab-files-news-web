@@ -15,6 +15,8 @@ import contactRoutes from "./routes/contactRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import podcastRoutes from "./routes/podcastRoutes.js";
 import webTVRoutes from "./routes/webTVRoutes.js";
+import adRoutes from "./routes/adRoutes.js";
+import galleryRoutes from "./routes/galleryRoutes.js";
 import { renderArticleShareHtml } from "./controllers/articleController.js";
 
 dotenv.config();
@@ -66,6 +68,8 @@ app.use("/api/contact", contactRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/podcasts", podcastRoutes);
 app.use("/api/webtv", webTVRoutes);
+app.use("/api/ads", adRoutes);
+app.use("/api/gallery", galleryRoutes);
 
 // Social Media Open Graph Share & Crawler Preview Endpoints
 // WhatsApp, Facebook, Twitter, Telegram crawlers receive server-rendered HTML with article's actual image

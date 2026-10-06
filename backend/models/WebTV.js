@@ -2,6 +2,12 @@ import mongoose from "mongoose";
 
 const webTVSchema = new mongoose.Schema(
   {
+    language: {
+      type: String,
+      enum: ["pa", "hi", "en"],
+      default: "pa",
+      index: true
+    },
     videoUrl: {
       type: String,
       required: [true, "Video URL is required"],
@@ -47,5 +53,7 @@ const webTVSchema = new mongoose.Schema(
     timestamps: true
   }
 );
+
+webTVSchema.index({ language: 1 });
 
 export default mongoose.model("WebTV", webTVSchema);

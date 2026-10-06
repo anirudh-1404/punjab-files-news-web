@@ -4,6 +4,7 @@ import { articleAPI } from '../services/api';
 import { getArticleById, incrementArticleViews, getRelatedArticles } from '../services/articleStore';
 import { formatArticleDate, formatArticleTime } from '../services/dateUtils';
 import { getHighResImageUrl } from '../services/imageUtils';
+import AdBanner from '../components/Common/AdBanner';
 
 export default function NewsDetailPage() {
   const { id } = useParams();
@@ -283,6 +284,9 @@ export default function NewsDetailPage() {
           <span style={{ margin: '0 8px' }}>/</span>
           <span style={{ color: '#111111', fontWeight: '600' }}>{article.title.substring(0, 35)}...</span>
         </div>
+
+        {/* Top Article Ad Banner */}
+        <AdBanner slot="article_top_banner" containerStyle={{ marginBottom: '20px' }} />
 
         <div className="row">
           {/* Main Article Column (col-md-8) */}
@@ -613,6 +617,12 @@ export default function NewsDetailPage() {
               </div>
             </article>
 
+            {/* Bottom Article Ad Banner */}
+            <AdBanner
+              slot="article_bottom_banner"
+              containerStyle={{ marginTop: '25px', marginBottom: '10px' }}
+            />
+
             {/* ========================================================
                 ALSO READ / RELATED NEWS (ਸੰਬੰਧਿਤ ਖ਼ਬਰਾਂ)
             ======================================================== */}
@@ -733,6 +743,12 @@ export default function NewsDetailPage() {
                 ></iframe>
               </div>
             </div>
+
+            {/* Sidebar Ad Banner (300x250 Rectangle) */}
+            <AdBanner
+              slot="sidebar_rectangle"
+              containerStyle={{ marginBottom: '25px' }}
+            />
 
             {/* Editor's Desk Contact */}
             <div

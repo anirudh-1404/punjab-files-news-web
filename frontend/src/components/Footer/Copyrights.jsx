@@ -11,10 +11,10 @@ export default function Copyrights() {
   ];
 
   return (
-    <div id="copyrights" style={{ backgroundColor: '#0a0d14', borderTop: '1px solid rgba(255, 255, 255, 0.1)', padding: '16px 0 20px' }}>
+    <div id="copyrights" style={{ backgroundColor: '#0a0d14', borderTop: '1px solid rgba(255, 255, 255, 0.1)', padding: '20px 0 65px' }}>
       <div className="container">
         {/* Social Media Handles Row */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: '14px', marginBottom: '14px', paddingBottom: '12px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: '10px', marginBottom: '14px', paddingBottom: '14px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
           <span style={{ fontSize: '12px', fontWeight: '800', color: '#ebb10d', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
             ਸਾਡੇ ਸੋਸ਼ਲ ਮੀਡੀਆ ਹੈਂਡਲਜ਼ (Follow Us):
           </span>
@@ -28,9 +28,9 @@ export default function Copyrights() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '6px',
-                backgroundColor: 'rgba(255, 255, 255, 0.07)',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
-                padding: '4px 10px',
+                backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                border: '1px solid rgba(255, 255, 255, 0.14)',
+                padding: '5px 12px',
                 borderRadius: '20px',
                 color: '#e2e8f0',
                 fontSize: '12px',
@@ -40,13 +40,13 @@ export default function Copyrights() {
             >
               <i className={`fa ${item.icon}`} style={{ color: item.color, fontSize: '13px' }}></i>
               <span style={{ fontWeight: '600' }}>{item.name}:</span>
-              <span style={{ color: '#94a3b8' }}>{item.handle}</span>
+              <span style={{ color: '#cbd5e1' }}>{item.handle}</span>
             </a>
           ))}
         </div>
 
         {/* Copyright text */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', fontSize: '12px', color: '#94a3b8' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', fontSize: '12px', color: '#94a3b8', textAlign: 'center' }}>
           <div>
             © {currentYear}, ਕਾਪੀਰਾਈਟ ਪੰਜਾਬ ਫਾਈਲਜ਼ (Punjab Files) | ਸਾਰੇ ਹੱਕ ਰਾਖਵੇਂ ਹਨ।
           </div>

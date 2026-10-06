@@ -198,6 +198,57 @@ export const updatePodcastStatus = async (req, res) => {
   }
 };
 
+// @desc    Update podcast details (title, description, mediaUrl, thumbnail, host)
+// @route   PUT /api/podcasts/:id
+// @access  Private (Staff)
+export const updatePodcast = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, description, mediaUrl, thumbnail, host } = req.body;
+
+    const podcast = await Podcast.findById(id);
+    if (!podcast) {
+      return res.status(404).json({
+        success: false,
+        message: "Podcast not found"
+      });
+    }
+
+    const userRole = req.user?.role;
+    const userId = req.user?._id.toString();
+
+    if (userRole !== "admin" && userRole !== "editor" && podcast.author?.toString() !== userId) {
+      return res.status(403).json({
+        success: false,
+        message: "Not authorized to edit this podcast"
+      });
+    }
+
+    if (title && title.trim()) podcast.title = title.trim();
+    if (description && description.trim()) podcast.description = description.trim();
+    if (mediaUrl && mediaUrl.trim()) {
+      podcast.mediaUrl = mediaUrl.trim();
+      podcast.mediaType = "youtube";
+    }
+    if (thumbnail) podcast.thumbnail = thumbnail;
+    if (host && host.trim()) podcast.host = host.trim();
+
+    await podcast.save();
+
+    res.status(200).json({
+      success: true,
+      data: podcast,
+      message: "ਪੋਡਕਾਸਟ ਸਫਲਤਾਪੂਰਵਕ ਅੱਪਡੇਟ ਹੋ ਗਿਆ ਹੈ।"
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error updating podcast",
+      error: error.message
+    });
+  }
+};
+
 // @desc    Delete podcast
 // @route   DELETE /api/podcasts/:id
 // @access  Private (Staff)

@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { podcastAPI, uploadAPI } from '../../services/api';
+import { podcastAPI } from '../../services/api';
+
+// Helper to extract YouTube Video ID
+function extractYouTubeId(url) {
+  if (!url) return null;
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/|live\/))([\w-]{11})/);
+  return match ? match[1] : null;
+}
 
 export default function PodcastManagerView({ currentUser }) {
   const role = currentUser?.role || 'reporter';
@@ -7,20 +14,16 @@ export default function PodcastManagerView({ currentUser }) {
   const [podcasts, setPodcasts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all'); // 'all', 'pending', 'published'
-  const [showAddModal, setShowAddModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [editingId, setEditingId] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [msg, setMsg] = useState({ text: '', type: '' });
-  const [uploadingImg, setUploadingImg] = useState(false);
 
-  // Form State
+  // Streamlined Form State: ONLY YouTube Link, Title, Description
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    host: currentUser?.name || 'ਪੰਜਾਬ ਫਾਈਲਜ਼ ਟੀਮ',
-    mediaType: 'youtube', // 'youtube' or 'audio'
     mediaUrl: '',
-    thumbnail: '/img/index_800x400-image01.jpg',
-    duration: '20:00'
+    title: '',
+    description: ''
   });
 
   const loadPodcasts = async () => {
@@ -46,52 +49,70 @@ export default function PodcastManagerView({ currentUser }) {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleImageUpload = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const handleOpenAddModal = () => {
+    setEditingId(null);
+    setFormData({
+      mediaUrl: '',
+      title: '',
+      description: ''
+    });
+    setMsg({ text: '', type: '' });
+    setShowModal(true);
+  };
 
-    setUploadingImg(true);
-    try {
-      const res = await uploadAPI.uploadImage(file);
-      if (res && res.url) {
-        setFormData((prev) => ({ ...prev, thumbnail: res.url }));
-        setMsg({ text: 'ਕਵਰ ਫੋਟੋ ਸਫ਼ਲਤਾਪੂਰਵਕ ਅੱਪਲੋਡ ਹੋਈ!', type: 'success' });
-      }
-    } catch (err) {
-      setMsg({ text: 'ਫੋਟੋ ਅੱਪਲੋਡ ਕਰਨ ਵਿੱਚ ਸਮੱਸਿਆ ਆਈ: ' + err.message, type: 'error' });
-    } finally {
-      setUploadingImg(false);
-    }
+  const handleOpenEditModal = (podcast) => {
+    setEditingId(podcast._id);
+    setFormData({
+      mediaUrl: podcast.mediaUrl || '',
+      title: podcast.title || '',
+      description: podcast.description || ''
+    });
+    setMsg({ text: '', type: '' });
+    setShowModal(true);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.title.trim() || !formData.mediaUrl.trim() || !formData.description.trim()) {
-      setMsg({ text: 'ਕਿਰਪਾ ਕਰਕੇ ਸਿਰਲੇਖ, ਵੇਰਵਾ ਅਤੇ ਮੀਡੀਆ ਲਿੰਕ ਭਰੋ।', type: 'error' });
+    if (!formData.mediaUrl.trim() || !formData.title.trim() || !formData.description.trim()) {
+      setMsg({ text: 'ਕਿਰਪਾ ਕਰਕੇ ਯੂਟਿਊਬ ਲਿੰਕ, ਸਿਰਲੇਖ ਅਤੇ ਵੇਰਵਾ ਦਰਜ ਕਰੋ।', type: 'error' });
       return;
     }
+
+    const ytId = extractYouTubeId(formData.mediaUrl);
+    const autoThumbnail = ytId
+      ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`
+      : '/img/index_800x400-image01.jpg';
+
+    const payload = {
+      mediaUrl: formData.mediaUrl.trim(),
+      title: formData.title.trim(),
+      description: formData.description.trim(),
+      mediaType: 'youtube',
+      thumbnail: autoThumbnail,
+      host: currentUser?.name || 'ਪੰਜਾਬ ਫਾਈਲਜ਼ ਟੀਮ',
+      duration: '20:00'
+    };
 
     setSubmitting(true);
     setMsg({ text: '', type: '' });
 
     try {
-      const res = await podcastAPI.create(formData);
+      let res;
+      if (editingId) {
+        res = await podcastAPI.update(editingId, payload);
+      } else {
+        res = await podcastAPI.create(payload);
+      }
+
       if (res && res.success) {
-        setMsg({ text: res.message || 'ਪੋਡਕਾਸਟ ਸਫਲਤਾਪੂਰਵਕ ਜੋੜਿਆ ਗਿਆ!', type: 'success' });
-        setShowAddModal(false);
-        setFormData({
-          title: '',
-          description: '',
-          host: currentUser?.name || 'ਪੰਜਾਬ ਫਾਈਲਜ਼ ਟੀਮ',
-          mediaType: 'youtube',
-          mediaUrl: '',
-          thumbnail: '/img/index_800x400-image01.jpg',
-          duration: '20:00'
-        });
+        setMsg({ text: res.message || 'ਪੋਡਕਾਸਟ ਸਫਲਤਾਪੂਰਵਕ ਸੇਵ ਹੋ ਗਿਆ ਹੈ!', type: 'success' });
+        setShowModal(false);
+        setFormData({ mediaUrl: '', title: '', description: '' });
+        setEditingId(null);
         loadPodcasts();
       }
     } catch (err) {
-      setMsg({ text: err.message || 'ਪੋਡਕਾਸਟ ਜੋੜਨ ਵਿੱਚ ਸਮੱਸਿਆ ਆਈ।', type: 'error' });
+      setMsg({ text: err.message || 'ਪੋਡਕਾਸਟ ਸੇਵ ਕਰਨ ਵਿੱਚ ਸਮੱਸਿਆ ਆਈ।', type: 'error' });
     } finally {
       setSubmitting(false);
     }
@@ -147,6 +168,8 @@ export default function PodcastManagerView({ currentUser }) {
     }
   };
 
+  const modalYouTubeId = extractYouTubeId(formData.mediaUrl);
+
   return (
     <div style={{ backgroundColor: '#ffffff', borderRadius: '8px', padding: '24px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
       {/* Top Header Row */}
@@ -158,15 +181,15 @@ export default function PodcastManagerView({ currentUser }) {
           </h2>
           <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#64748b' }}>
             {role === 'reporter'
-              ? 'ਆਪਣੇ ਪੋਡਕਾਸਟ ਐਪੀਸੋਡ ਜੋੜੋ ਅਤੇ ਸੰਪਾਦਕੀ ਸਮੀਖਿਆ ਦੀ ਸਥਿਤੀ ਦੇਖੋ।'
+              ? 'ਆਪਣੇ ਵੀਡੀਓ ਪੋਡਕਾਸਟ ਦਾ ਯੂਟਿਊਬ ਲਿੰਕ, ਸਿਰਲੇਖ ਅਤੇ ਵੇਰਵਾ ਦਰਜ ਕਰੋ।'
               : role === 'editor'
-              ? 'ਰਿਪੋਰਟਰਾਂ ਦੇ ਪੋਡਕਾਸਟ ਰਿਵਿਊ ਕਰੋ, ਪ੍ਰਵਾਨਗੀ ਲਈ ਐਡਮਿਨ ਨੂੰ ਭੇਜੋ, ਜਾਂ ਨਵਾਂ ਪੋਡਕਾਸਟ ਸ਼ਾਮਲ ਕਰੋ।'
-              : 'ਸਾਰੇ ਪੋਡਕਾਸਟ ਐਪੀਸੋਡ ਪ੍ਰਵਾਨ ਕਰੋ, ਪ੍ਰਕਾਸ਼ਿਤ ਕਰੋ ਜਾਂ ਪ੍ਰਬੰਧਿਤ ਕਰੋ।'}
+              ? 'ਪੋਡਕਾਸਟ ਰਿਵਿਊ ਕਰੋ, ਪ੍ਰਵਾਨਗੀ ਲਈ ਐਡਮਿਨ ਨੂੰ ਭੇਜੋ, ਜਾਂ ਨਵਾਂ ਪੋਡਕਾਸਟ ਸ਼ਾਮਲ ਕਰੋ।'
+              : 'ਸਾਰੇ ਪੋਡਕਾਸਟ ਐਪੀਸੋਡ ਪ੍ਰਵਾਨ ਕਰੋ, ਸਿੱਧੇ ਪ੍ਰਕਾਸ਼ਿਤ ਕਰੋ ਜਾਂ ਪ੍ਰਬੰਧਿਤ ਕਰੋ।'}
           </p>
         </div>
 
         <button
-          onClick={() => setShowAddModal(true)}
+          onClick={handleOpenAddModal}
           style={{
             backgroundColor: '#b71c1c',
             color: '#ffffff',
@@ -179,7 +202,7 @@ export default function PodcastManagerView({ currentUser }) {
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            boxShadow: '0 2px 6px rgba(183,28,28,0.3)'
+            boxShadow: '0 2px 6px rgba(183, 28, 28, 0.25)'
           }}
         >
           <i className="fa fa-plus-circle"></i>
@@ -187,18 +210,18 @@ export default function PodcastManagerView({ currentUser }) {
         </button>
       </div>
 
-      {/* Alert Messages */}
+      {/* Notifications */}
       {msg.text && (
         <div
           style={{
-            padding: '10px 14px',
+            padding: '12px 16px',
             borderRadius: '6px',
-            marginBottom: '16px',
+            marginBottom: '18px',
             fontSize: '13px',
             fontWeight: '600',
-            backgroundColor: msg.type === 'error' ? '#fef2f2' : '#f0fdf4',
-            color: msg.type === 'error' ? '#b91c1c' : '#15803d',
-            border: `1px solid ${msg.type === 'error' ? '#fecaca' : '#bbf7d0'}`
+            backgroundColor: msg.type === 'error' ? '#fee2e2' : '#dcfce7',
+            color: msg.type === 'error' ? '#991b1b' : '#166534',
+            border: `1px solid ${msg.type === 'error' ? '#fca5a5' : '#86efac'}`
           }}
         >
           {msg.text}
@@ -206,18 +229,18 @@ export default function PodcastManagerView({ currentUser }) {
       )}
 
       {/* Filter Tabs */}
-      <div style={{ display: 'flex', gap: '8px', marginBottom: '20px', borderBottom: '1px solid #e2e8f0', paddingBottom: '10px' }}>
+      <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid #e2e8f0', paddingBottom: '12px', marginBottom: '16px' }}>
         <button
           onClick={() => setFilter('all')}
           style={{
-            background: filter === 'all' ? '#1c2d5a' : '#f1f5f9',
-            color: filter === 'all' ? '#ffffff' : '#475569',
-            border: 'none',
-            borderRadius: '4px',
             padding: '6px 14px',
-            fontSize: '12.5px',
+            borderRadius: '4px',
+            border: 'none',
+            cursor: 'pointer',
             fontWeight: '700',
-            cursor: 'pointer'
+            fontSize: '12.5px',
+            backgroundColor: filter === 'all' ? '#1c2d5a' : '#f1f5f9',
+            color: filter === 'all' ? '#fff' : '#475569'
           }}
         >
           ਸਾਰੇ ({podcasts.length})
@@ -225,14 +248,14 @@ export default function PodcastManagerView({ currentUser }) {
         <button
           onClick={() => setFilter('pending')}
           style={{
-            background: filter === 'pending' ? '#1c2d5a' : '#f1f5f9',
-            color: filter === 'pending' ? '#ffffff' : '#475569',
-            border: 'none',
-            borderRadius: '4px',
             padding: '6px 14px',
-            fontSize: '12.5px',
+            borderRadius: '4px',
+            border: 'none',
+            cursor: 'pointer',
             fontWeight: '700',
-            cursor: 'pointer'
+            fontSize: '12.5px',
+            backgroundColor: filter === 'pending' ? '#1c2d5a' : '#f1f5f9',
+            color: filter === 'pending' ? '#fff' : '#475569'
           }}
         >
           ਸਮੀਖਿਆ ਅਧੀਨ ({podcasts.filter((p) => ['pending_editor', 'pending_admin'].includes(p.status)).length})
@@ -240,173 +263,148 @@ export default function PodcastManagerView({ currentUser }) {
         <button
           onClick={() => setFilter('published')}
           style={{
-            background: filter === 'published' ? '#1c2d5a' : '#f1f5f9',
-            color: filter === 'published' ? '#ffffff' : '#475569',
-            border: 'none',
-            borderRadius: '4px',
             padding: '6px 14px',
-            fontSize: '12.5px',
+            borderRadius: '4px',
+            border: 'none',
+            cursor: 'pointer',
             fontWeight: '700',
-            cursor: 'pointer'
+            fontSize: '12.5px',
+            backgroundColor: filter === 'published' ? '#1c2d5a' : '#f1f5f9',
+            color: filter === 'published' ? '#fff' : '#475569'
           }}
         >
           ਲਾਈਵ ਪ੍ਰਕਾਸ਼ਿਤ ({podcasts.filter((p) => p.status === 'published').length})
         </button>
       </div>
 
-      {/* Podcasts Table / List */}
+      {/* Podcasts Table */}
       {loading ? (
         <div style={{ textAlign: 'center', padding: '40px', color: '#64748b' }}>
-          <i className="fa fa-spinner fa-spin" style={{ fontSize: '24px', marginBottom: '10px' }}></i>
-          <p>ਪੋਡਕਾਸਟ ਲੋਡ ਹੋ ਰਹੇ ਹਨ...</p>
+          <i className="fa fa-spinner fa-spin" style={{ fontSize: '24px' }}></i>
         </div>
       ) : filteredPodcasts.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '40px 20px', border: '1px dashed #cbd5e1', borderRadius: '6px', backgroundColor: '#f8fafc' }}>
+        <div style={{ textAlign: 'center', padding: '40px', color: '#94a3b8' }}>
           <i className="fa fa-podcast" style={{ fontSize: '32px', color: '#94a3b8', marginBottom: '10px' }}></i>
-          <h4 style={{ margin: '0 0 6px', color: '#334155' }}>ਕੋਈ ਪੋਡਕਾਸਟ ਨਹੀਂ ਮਿਲਿਆ</h4>
-          <p style={{ margin: 0, fontSize: '13px', color: '#64748b' }}>
-            ਉੱਪਰ ਦਿੱਤੇ ਬਟਨ 'ਤੇ ਕਲਿੱਕ ਕਰਕੇ ਨਵਾਂ ਪੋਡਕਾਸਟ ਸ਼ਾਮਲ ਕਰੋ।
-          </p>
+          <p style={{ margin: 0, fontSize: '14px', fontWeight: '600' }}>ਕੋਈ ਪੋਡਕਾਸਟ ਨਹੀਂ ਮਿਲਿਆ।</p>
         </div>
       ) : (
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+        <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '700px' }}>
             <thead>
-              <tr style={{ backgroundColor: '#f8fafc', borderBottom: '2px solid #e2e8f0', textAlign: 'left', color: '#475569' }}>
-                <th style={{ padding: '10px 12px' }}>ਕਵਰ</th>
-                <th style={{ padding: '10px 12px' }}>ਸਿਰਲੇਖ ਅਤੇ ਵੇਰਵਾ</th>
-                <th style={{ padding: '10px 12px' }}>ਮੇਜ਼ਬਾਨ</th>
-                <th style={{ padding: '10px 12px' }}>ਮੀਡੀਆ</th>
-                <th style={{ padding: '10px 12px' }}>ਸਥਿਤੀ</th>
-                <th style={{ padding: '10px 12px', textAlign: 'right' }}>ਕਾਰਵਾਈਆਂ (Actions)</th>
+              <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0', color: '#475569', fontSize: '12px', fontWeight: '800' }}>
+                <th style={{ padding: '10px 14px', width: '100px' }}>ਥੰਬਨੇਲ</th>
+                <th style={{ padding: '10px 14px' }}>ਸਿਰਲੇਖ & ਵੇਰਵਾ</th>
+                <th style={{ padding: '10px 14px', width: '150px' }}>ਲੇਖਕ / ਹੋਸਟ</th>
+                <th style={{ padding: '10px 14px', width: '130px' }}>ਸਥਿਤੀ</th>
+                <th style={{ padding: '10px 14px', width: '180px', textAlign: 'right' }}>ਕਾਰਵਾਈ</th>
               </tr>
             </thead>
             <tbody>
-              {filteredPodcasts.map((podcast) => (
-                <tr key={podcast._id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                  <td style={{ padding: '10px 12px', verticalAlign: 'top', width: '70px' }}>
-                    <img
-                      src={podcast.thumbnail || '/img/index_800x400-image01.jpg'}
-                      alt=""
-                      style={{ width: '60px', height: '45px', objectFit: 'cover', borderRadius: '4px' }}
-                      onError={(e) => { e.target.src = '/img/index_800x400-image01.jpg'; }}
-                    />
-                  </td>
-                  <td style={{ padding: '10px 12px', verticalAlign: 'top' }}>
-                    <div style={{ fontWeight: '700', color: '#1e293b', marginBottom: '4px' }}>
-                      {podcast.title}
-                    </div>
-                    <div style={{ fontSize: '12px', color: '#64748b', lineClamp: 2, display: '-webkit-box', WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                      {podcast.description}
-                    </div>
-                  </td>
-                  <td style={{ padding: '10px 12px', verticalAlign: 'top', whiteSpace: 'nowrap', color: '#475569' }}>
-                    {podcast.host}
-                  </td>
-                  <td style={{ padding: '10px 12px', verticalAlign: 'top', whiteSpace: 'nowrap' }}>
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11.5px', color: podcast.mediaType === 'youtube' ? '#ef4444' : '#0284c7' }}>
-                      <i className={podcast.mediaType === 'youtube' ? 'fa fa-youtube-play' : 'fa fa-volume-up'}></i>
-                      {podcast.mediaType === 'youtube' ? 'YouTube' : 'Audio MP3'}
-                    </span>
-                    <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>
-                      {podcast.duration}
-                    </div>
-                  </td>
-                  <td style={{ padding: '10px 12px', verticalAlign: 'top', whiteSpace: 'nowrap' }}>
-                    {getStatusBadge(podcast.status)}
-                  </td>
-                  <td style={{ padding: '10px 12px', verticalAlign: 'top', textAlign: 'right', whiteSpace: 'nowrap' }}>
-                    {/* Editor Action: Review & Forward */}
-                    {role === 'editor' && podcast.status === 'pending_editor' && (
-                      <button
-                        onClick={() => handleStatusUpdate(podcast._id, 'pending_admin')}
-                        style={{
-                          backgroundColor: '#0284c7',
-                          color: '#fff',
-                          border: 'none',
-                          padding: '5px 10px',
-                          borderRadius: '4px',
-                          fontSize: '11.5px',
-                          fontWeight: '700',
-                          cursor: 'pointer',
-                          marginRight: '6px'
-                        }}
-                        title="ਐਡਮਿਨ ਪ੍ਰਵਾਨਗੀ ਲਈ ਭੇਜੋ"
-                      >
-                        <i className="fa fa-share"></i> ਐਡਮਿਨ ਨੂੰ ਭੇਜੋ
-                      </button>
-                    )}
+              {filteredPodcasts.map((podcast) => {
+                const ytId = extractYouTubeId(podcast.mediaUrl);
+                const thumb = ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : (podcast.thumbnail || '/img/index_800x400-image01.jpg');
 
-                    {/* Admin Action: Approve & Publish */}
-                    {role === 'admin' && podcast.status !== 'published' && (
-                      <button
-                        onClick={() => handleStatusUpdate(podcast._id, 'published')}
-                        style={{
-                          backgroundColor: '#10b981',
-                          color: '#fff',
-                          border: 'none',
-                          padding: '5px 10px',
-                          borderRadius: '4px',
-                          fontSize: '11.5px',
-                          fontWeight: '700',
-                          cursor: 'pointer',
-                          marginRight: '6px'
-                        }}
-                        title="ਪ੍ਰਵਾਨ ਕਰੋ ਤੇ ਲਾਈਵ ਕਰੋ"
-                      >
-                        <i className="fa fa-check"></i> ਲਾਈਵ ਕਰੋ
-                      </button>
-                    )}
+                return (
+                  <tr key={podcast._id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                    {/* Thumbnail */}
+                    <td style={{ padding: '12px 14px', verticalAlign: 'middle' }}>
+                      <a href={podcast.mediaUrl} target="_blank" rel="noopener noreferrer" style={{ position: 'relative', display: 'block', width: '70px', height: '42px', borderRadius: '4px', overflow: 'hidden' }}>
+                        <img
+                          src={thumb}
+                          alt=""
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                          onError={(e) => { e.target.src = '/img/index_800x400-image01.jpg'; }}
+                        />
+                        <span style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: '#fff', fontSize: '14px', textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>
+                          <i className="fa fa-play-circle"></i>
+                        </span>
+                      </a>
+                    </td>
 
-                    {/* Reject (Editor / Admin) */}
-                    {['editor', 'admin'].includes(role) && ['pending_editor', 'pending_admin'].includes(podcast.status) && (
-                      <button
-                        onClick={() => handleStatusUpdate(podcast._id, 'rejected')}
-                        style={{
-                          backgroundColor: '#fef2f2',
-                          color: '#ef4444',
-                          border: '1px solid #fecaca',
-                          padding: '5px 8px',
-                          borderRadius: '4px',
-                          fontSize: '11.5px',
-                          fontWeight: '700',
-                          cursor: 'pointer',
-                          marginRight: '6px'
-                        }}
-                        title="ਰੱਦ ਕਰੋ"
+                    {/* Title & Description */}
+                    <td style={{ padding: '12px 14px', verticalAlign: 'top' }}>
+                      <div style={{ fontWeight: '800', color: '#0f172a', fontSize: '13.5px', marginBottom: '3px' }}>
+                        {podcast.title}
+                      </div>
+                      <div style={{ fontSize: '12px', color: '#64748b', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                        {podcast.description}
+                      </div>
+                      <a
+                        href={podcast.mediaUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ fontSize: '11px', color: '#0284c7', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '4px' }}
                       >
-                        <i className="fa fa-times"></i>
-                      </button>
-                    )}
+                        <i className="fa fa-youtube-play" style={{ color: '#ef4444' }}></i>
+                        <span>{podcast.mediaUrl}</span>
+                      </a>
+                    </td>
 
-                    {/* Delete */}
-                    {['editor', 'admin'].includes(role) && (
-                      <button
-                        onClick={() => handleDelete(podcast._id)}
-                        style={{
-                          backgroundColor: '#f8fafc',
-                          color: '#64748b',
-                          border: '1px solid #e2e8f0',
-                          padding: '5px 8px',
-                          borderRadius: '4px',
-                          fontSize: '11.5px',
-                          cursor: 'pointer'
-                        }}
-                        title="ਡਿਲੀਟ ਕਰੋ"
-                      >
-                        <i className="fa fa-trash"></i>
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
+                    {/* Author / Host */}
+                    <td style={{ padding: '12px 14px', verticalAlign: 'top', fontSize: '12.5px' }}>
+                      <div style={{ fontWeight: '700', color: '#334155' }}>{podcast.authorName || 'ਸਟਾਫ਼'}</div>
+                      <div style={{ fontSize: '11px', color: '#64748b' }}>ਹੋਸਟ: {podcast.host || 'ਟੀਮ'}</div>
+                    </td>
+
+                    {/* Status */}
+                    <td style={{ padding: '12px 14px', verticalAlign: 'middle' }}>
+                      {getStatusBadge(podcast.status)}
+                    </td>
+
+                    {/* Actions */}
+                    <td style={{ padding: '12px 14px', verticalAlign: 'middle', textAlign: 'right' }}>
+                      <div style={{ display: 'flex', gap: '6px', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
+                        {/* Editor action */}
+                        {role === 'editor' && podcast.status === 'pending_editor' && (
+                          <button
+                            onClick={() => handleStatusUpdate(podcast._id, 'pending_admin')}
+                            style={{ backgroundColor: '#2563eb', color: '#fff', border: 'none', borderRadius: '4px', padding: '4px 8px', fontSize: '11px', cursor: 'pointer', fontWeight: '700' }}
+                            title="ਐਡਮਿਨ ਪ੍ਰਵਾਨਗੀ ਲਈ ਭੇਜੋ"
+                          >
+                            ਐਡਮਿਨ ਨੂੰ ਭੇਜੋ
+                          </button>
+                        )}
+
+                        {/* Admin action */}
+                        {role === 'admin' && podcast.status !== 'published' && (
+                          <button
+                            onClick={() => handleStatusUpdate(podcast._id, 'published')}
+                            style={{ backgroundColor: '#10b981', color: '#fff', border: 'none', borderRadius: '4px', padding: '4px 8px', fontSize: '11px', cursor: 'pointer', fontWeight: '700' }}
+                            title="ਸਿੱਧਾ ਪ੍ਰਕਾਸ਼ਿਤ ਕਰੋ"
+                          >
+                            ਪ੍ਰਕਾਸ਼ਿਤ ਕਰੋ
+                          </button>
+                        )}
+
+                        {/* Edit Button */}
+                        <button
+                          onClick={() => handleOpenEditModal(podcast)}
+                          style={{ backgroundColor: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '4px 8px', fontSize: '11.5px', color: '#334155', cursor: 'pointer' }}
+                          title="ਸੋਧੋ (Edit)"
+                        >
+                          <i className="fa fa-pencil"></i>
+                        </button>
+
+                        {/* Delete Button */}
+                        <button
+                          onClick={() => handleDelete(podcast._id)}
+                          style={{ backgroundColor: '#fee2e2', border: '1px solid #fecaca', borderRadius: '4px', padding: '4px 8px', fontSize: '11.5px', color: '#b91c1c', cursor: 'pointer' }}
+                          title="ਡਿਲੀਟ ਕਰੋ"
+                        >
+                          <i className="fa fa-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
       )}
 
-      {/* Add Podcast Modal */}
-      {showAddModal && (
+      {/* STREAMLINED UPLOAD / EDIT MODAL (YouTube URL + Title + Description ONLY) */}
+      {showModal && (
         <div
           style={{
             position: 'fixed',
@@ -415,158 +413,127 @@ export default function PodcastManagerView({ currentUser }) {
             right: 0,
             bottom: 0,
             backgroundColor: 'rgba(0,0,0,0.5)',
+            zIndex: 10000,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            zIndex: 10000,
             padding: '20px'
           }}
         >
           <div
             style={{
               backgroundColor: '#ffffff',
-              borderRadius: '8px',
+              borderRadius: '10px',
               maxWidth: '560px',
               width: '100%',
-              maxHeight: '90vh',
-              overflowY: 'auto',
               padding: '24px',
-              boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)'
+              boxShadow: '0 8px 30px rgba(0,0,0,0.25)',
+              maxHeight: '90vh',
+              overflowY: 'auto'
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', borderBottom: '1px solid #f1f5f9', paddingBottom: '10px' }}>
-              <h3 style={{ margin: 0, fontSize: '17px', fontWeight: '800', color: '#1c2d5a' }}>
-                ਨਵਾਂ ਪੋਡਕਾਸਟ ਐਪੀਸੋਡ ਸ਼ਾਮਲ ਕਰੋ
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', borderBottom: '1px solid #f1f5f9', paddingBottom: '12px' }}>
+              <h3 style={{ margin: 0, fontSize: '16.5px', fontWeight: '800', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <i className="fa fa-youtube-play" style={{ color: '#ef4444' }}></i>
+                <span>{editingId ? 'ਪੋਡਕਾਸਟ ਸੋਧੋ (Edit Video Podcast)' : 'ਨਵਾਂ ਵੀਡੀਓ ਪੋਡਕਾਸਟ ਸ਼ਾਮਲ ਕਰੋ (Upload Video Podcast)'}</span>
               </h3>
               <button
-                onClick={() => setShowAddModal(false)}
-                style={{ background: 'none', border: 'none', fontSize: '18px', color: '#64748b', cursor: 'pointer' }}
+                type="button"
+                onClick={() => setShowModal(false)}
+                style={{ background: 'none', border: 'none', fontSize: '18px', color: '#64748b', cursor: 'pointer', padding: 0 }}
               >
-                ✕
+                &times;
               </button>
             </div>
 
             <form onSubmit={handleSubmit}>
-              {/* Title */}
-              <div style={{ marginBottom: '14px' }}>
-                <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#334155', marginBottom: '5px' }}>
-                  ਪੋਡਕਾਸਟ ਸਿਰਲੇਖ (Podcast Title) *
+              {/* 1. YouTube URL */}
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#1e293b', marginBottom: '6px' }}>
+                  ਯੂਟਿਊਬ ਵੀਡੀਓ ਲਿੰਕ (YouTube Video URL) <span style={{ color: '#b71c1c' }}>*</span>
+                </label>
+                <input
+                  type="text"
+                  name="mediaUrl"
+                  value={formData.mediaUrl}
+                  onChange={handleInputChange}
+                  placeholder="https://www.youtube.com/watch?v=... ਜਾਂ https://youtu.be/..."
+                  required
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    border: '1.5px solid #cbd5e1',
+                    borderRadius: '6px',
+                    fontSize: '13px',
+                    fontWeight: '600',
+                    outline: 'none',
+                    boxSizing: 'border-box'
+                  }}
+                />
+                <span style={{ fontSize: '11px', color: '#64748b', marginTop: '3px', display: 'block' }}>
+                  ਕਿਸੇ ਵੀ ਯੂਟਿਊਬ ਵੀਡੀਓ ਜਾਂ ਪੋਡਕਾਸਟ ਦਾ ਲਿੰਕ ਇੱਥੇ ਪੇਸਟ ਕਰੋ। ਥੰਬਨੇਲ ਆਟੋਮੈਟਿਕ ਬਣ ਜਾਵੇਗਾ।
+                </span>
+
+                {/* Instant Live Video Preview if valid YouTube ID */}
+                {modalYouTubeId && (
+                  <div style={{ marginTop: '10px', borderRadius: '6px', overflow: 'hidden', border: '1px solid #1c2d5a', backgroundColor: '#000' }}>
+                    <div style={{ position: 'relative', width: '100%', paddingBottom: '56.25%', height: 0 }}>
+                      <iframe
+                        src={`https://www.youtube-nocookie.com/embed/${modalYouTubeId}?rel=0`}
+                        title="Preview"
+                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* 2. Title */}
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#1e293b', marginBottom: '6px' }}>
+                  ਸਿਰਲੇਖ (Podcast Title) <span style={{ color: '#b71c1c' }}>*</span>
                 </label>
                 <input
                   type="text"
                   name="title"
                   value={formData.title}
                   onChange={handleInputChange}
-                  placeholder="ਉਦਾਹਰਣ: ਪੰਜਾਬ ਦੀ ਰਾਜਨੀਤੀ 'ਤੇ ਖ਼ਾਸ ਚਰਚਾ"
-                  style={{ width: '100%', padding: '9px 12px', border: '1px solid #cbd5e1', borderRadius: '5px', fontSize: '13.5px', boxSizing: 'border-box' }}
+                  placeholder="ਜਿਵੇਂ: ਪੰਜਾਬ ਦੇ ਤਾਜ਼ਾ ਮੁੱਦਿਆਂ 'ਤੇ ਵਿਸ਼ੇਸ਼ ਚਰਚਾ"
                   required
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    border: '1px solid #cbd5e1',
+                    borderRadius: '6px',
+                    fontSize: '13.5px',
+                    color: '#0f172a',
+                    boxSizing: 'border-box'
+                  }}
                 />
               </div>
 
-              {/* Host & Duration Row */}
-              <div style={{ display: 'flex', gap: '12px', marginBottom: '14px' }}>
-                <div style={{ flex: 1 }}>
-                  <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#334155', marginBottom: '5px' }}>
-                    ਮੇਜ਼ਬਾਨ / ਹੋਸਟ (Host / Speaker)
-                  </label>
-                  <input
-                    type="text"
-                    name="host"
-                    value={formData.host}
-                    onChange={handleInputChange}
-                    style={{ width: '100%', padding: '9px 12px', border: '1px solid #cbd5e1', borderRadius: '5px', fontSize: '13px', boxSizing: 'border-box' }}
-                  />
-                </div>
-                <div style={{ width: '130px' }}>
-                  <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#334155', marginBottom: '5px' }}>
-                    ਸਮਾਂ (Duration)
-                  </label>
-                  <input
-                    type="text"
-                    name="duration"
-                    value={formData.duration}
-                    onChange={handleInputChange}
-                    placeholder="25:40"
-                    style={{ width: '100%', padding: '9px 12px', border: '1px solid #cbd5e1', borderRadius: '5px', fontSize: '13px', boxSizing: 'border-box' }}
-                  />
-                </div>
-              </div>
-
-              {/* Media Type Selection */}
-              <div style={{ marginBottom: '14px' }}>
-                <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#334155', marginBottom: '6px' }}>
-                  ਮੀਡੀਆ ਕਿਸਮ (Media Type)
-                </label>
-                <div style={{ display: 'flex', gap: '16px' }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', cursor: 'pointer' }}>
-                    <input
-                      type="radio"
-                      name="mediaType"
-                      value="youtube"
-                      checked={formData.mediaType === 'youtube'}
-                      onChange={handleInputChange}
-                    />
-                    <span>YouTube ਵੀਡੀਓ ਲਿੰਕ</span>
-                  </label>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', cursor: 'pointer' }}>
-                    <input
-                      type="radio"
-                      name="mediaType"
-                      value="audio"
-                      checked={formData.mediaType === 'audio'}
-                      onChange={handleInputChange}
-                    />
-                    <span>ਆਡੀਓ ਲਿੰਕ (MP3 / Audio URL)</span>
-                  </label>
-                </div>
-              </div>
-
-              {/* Media URL */}
-              <div style={{ marginBottom: '14px' }}>
-                <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#334155', marginBottom: '5px' }}>
-                  {formData.mediaType === 'youtube' ? 'YouTube ਲਿੰਕ (URL) *' : 'ਆਡੀਓ MP3 ਲਿੰਕ (Audio URL) *'}
-                </label>
-                <input
-                  type="url"
-                  name="mediaUrl"
-                  value={formData.mediaUrl}
-                  onChange={handleInputChange}
-                  placeholder={formData.mediaType === 'youtube' ? 'https://www.youtube.com/watch?v=...' : 'https://example.com/audio.mp3'}
-                  style={{ width: '100%', padding: '9px 12px', border: '1px solid #cbd5e1', borderRadius: '5px', fontSize: '13px', boxSizing: 'border-box' }}
-                  required
-                />
-              </div>
-
-              {/* Thumbnail Image */}
-              <div style={{ marginBottom: '14px' }}>
-                <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#334155', marginBottom: '5px' }}>
-                  ਕਵਰ ਫੋਟੋ (Thumbnail Poster)
-                </label>
-                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    disabled={uploadingImg}
-                    style={{ fontSize: '12px' }}
-                  />
-                  {uploadingImg && <span style={{ fontSize: '12px', color: '#0284c7' }}><i className="fa fa-spinner fa-spin"></i> ਅੱਪਲੋਡ ਹੋ ਰਹੀ ਹੈ...</span>}
-                </div>
-              </div>
-
-              {/* Description */}
-              <div style={{ marginBottom: '18px' }}>
-                <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#334155', marginBottom: '5px' }}>
-                  ਵੇਰਵਾ (Description / Summary) *
+              {/* 3. Description */}
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#1e293b', marginBottom: '6px' }}>
+                  ਵੇਰਵਾ (Podcast Description) <span style={{ color: '#b71c1c' }}>*</span>
                 </label>
                 <textarea
                   name="description"
-                  rows="3"
+                  rows="4"
                   value={formData.description}
                   onChange={handleInputChange}
-                  placeholder="ਇਸ ਪੋਡਕਾਸਟ ਐਪੀਸੋਡ ਬਾਰੇ ਸੰਖੇਪ ਜਾਣਕਾਰੀ..."
-                  style={{ width: '100%', padding: '9px 12px', border: '1px solid #cbd5e1', borderRadius: '5px', fontSize: '13px', boxSizing: 'border-box' }}
+                  placeholder="ਇਸ ਪੋਡਕਾਸਟ ਬਾਰੇ ਸੰਖੇਪ ਵੇਰਵਾ ਜਾਂ ਜਾਣਕਾਰੀ ਦਰਜ ਕਰੋ..."
                   required
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    border: '1px solid #cbd5e1',
+                    borderRadius: '6px',
+                    fontSize: '13px',
+                    color: '#0f172a',
+                    boxSizing: 'border-box',
+                    resize: 'vertical'
+                  }}
                 ></textarea>
               </div>
 
@@ -574,8 +541,8 @@ export default function PodcastManagerView({ currentUser }) {
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', borderTop: '1px solid #f1f5f9', paddingTop: '14px' }}>
                 <button
                   type="button"
-                  onClick={() => setShowAddModal(false)}
-                  style={{ padding: '8px 16px', border: '1px solid #cbd5e1', background: '#fff', borderRadius: '5px', fontSize: '13px', cursor: 'pointer' }}
+                  onClick={() => setShowModal(false)}
+                  style={{ padding: '9px 16px', border: '1px solid #cbd5e1', background: '#fff', borderRadius: '6px', fontSize: '13px', cursor: 'pointer', fontWeight: '700', color: '#475569' }}
                 >
                   ਰੱਦ ਕਰੋ (Cancel)
                 </button>
@@ -586,19 +553,22 @@ export default function PodcastManagerView({ currentUser }) {
                     backgroundColor: role === 'admin' ? '#10b981' : '#b71c1c',
                     color: '#fff',
                     border: 'none',
-                    borderRadius: '5px',
-                    padding: '8px 20px',
-                    fontWeight: '700',
-                    fontSize: '13px',
-                    cursor: 'pointer'
+                    borderRadius: '6px',
+                    padding: '9px 22px',
+                    fontWeight: '800',
+                    fontSize: '13.5px',
+                    cursor: submitting ? 'not-allowed' : 'pointer',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
                   }}
                 >
                   {submitting ? (
-                    <span><i className="fa fa-spinner fa-spin"></i> ਸੇਵ ਹੋ ਰਿਹਾ ਹੈ...</span>
+                    <span><i className="fa fa-spinner fa-spin"></i> ਸੇਵ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ...</span>
+                  ) : editingId ? (
+                    'ਅੱਪਡੇਟ ਕਰੋ (Update Podcast)'
                   ) : role === 'admin' ? (
                     'ਸਿੱਧਾ ਪ੍ਰਕਾਸ਼ਿਤ ਕਰੋ (Publish Directly)'
                   ) : role === 'editor' ? (
-                    'ਐਡਮਿਨ ਪ੍ਰਵਾਨਗੀ ਲਈ ਭੇਜੋ (Submit for Admin)'
+                    'ਪ੍ਰਵਾਨਗੀ ਲਈ ਭੇਜੋ (Submit for Admin)'
                   ) : (
                     'ਸਮੀਖਿਆ ਲਈ ਭੇਜੋ (Submit for Editor)'
                   )}

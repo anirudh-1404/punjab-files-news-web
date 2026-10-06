@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 
-export default function LanguageFilterDropdown() {
+export default function LanguageFilterDropdown({ isCompact = false }) {
   const { language, setLanguage, languages, activeLangObj } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -58,13 +58,13 @@ export default function LanguageFilterDropdown() {
         style={{
           display: 'inline-flex',
           alignItems: 'center',
-          gap: '8px',
+          gap: isCompact ? '6px' : '8px',
           backgroundColor: '#ffffff',
           color: '#1c2d5a',
           border: isOpen ? '1.5px solid #b71c1c' : '1.5px solid #cbd5e1',
-          borderRadius: '8px',
-          padding: '8px 14px',
-          fontSize: '13px',
+          borderRadius: isCompact ? '6px' : '8px',
+          padding: isCompact ? '4px 8px' : '8px 14px',
+          fontSize: isCompact ? '11.5px' : '13px',
           fontWeight: '700',
           cursor: 'pointer',
           boxShadow: isOpen
@@ -87,15 +87,15 @@ export default function LanguageFilterDropdown() {
       >
         <div
           style={{
-            width: '24px',
-            height: '24px',
+            width: isCompact ? '18px' : '24px',
+            height: isCompact ? '18px' : '24px',
             borderRadius: '50%',
             backgroundColor: '#fef2f2',
             color: '#b71c1c',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontSize: '13px',
+            fontSize: isCompact ? '10px' : '13px',
             flexShrink: 0
           }}
         >
@@ -103,22 +103,24 @@ export default function LanguageFilterDropdown() {
         </div>
 
         <div style={{ textAlign: 'left', lineHeight: 1.15 }}>
+          {!isCompact && (
+            <span
+              style={{
+                display: 'block',
+                fontSize: '10px',
+                fontWeight: '800',
+                color: '#64748b',
+                textTransform: 'uppercase',
+                letterSpacing: '0.4px'
+              }}
+            >
+              ਖ਼ਬਰਾਂ ਦੀ ਭਾਸ਼ਾ
+            </span>
+          )}
           <span
             style={{
               display: 'block',
-              fontSize: '10px',
-              fontWeight: '800',
-              color: '#64748b',
-              textTransform: 'uppercase',
-              letterSpacing: '0.4px'
-            }}
-          >
-            ਖ਼ਬਰਾਂ ਦੀ ਭਾਸ਼ਾ
-          </span>
-          <span
-            style={{
-              display: 'block',
-              fontSize: '13px',
+              fontSize: isCompact ? '12px' : '13px',
               fontWeight: '800',
               color: '#1c2d5a'
             }}
@@ -130,9 +132,9 @@ export default function LanguageFilterDropdown() {
         <i
           className="fa fa-chevron-down"
           style={{
-            fontSize: '11px',
+            fontSize: isCompact ? '9px' : '11px',
             color: '#94a3b8',
-            marginLeft: '4px',
+            marginLeft: '2px',
             transition: 'transform 0.2s ease',
             transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)'
           }}
@@ -146,8 +148,9 @@ export default function LanguageFilterDropdown() {
           style={{
             position: 'absolute',
             top: 'calc(100% + 6px)',
-            left: 0,
-            minWidth: '200px',
+            left: isCompact ? 'auto' : 0,
+            right: isCompact ? 0 : 'auto',
+            minWidth: '185px',
             backgroundColor: '#ffffff',
             borderRadius: '10px',
             border: '1px solid #e2e8f0',

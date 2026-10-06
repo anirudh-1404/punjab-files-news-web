@@ -93,35 +93,6 @@ export default function MobileNav() {
 
   return (
     <>
-      {/* Hamburger Trigger Button in Masthead */}
-      <div className="mobile-nav-trigger-wrap visible-xs visible-sm" style={{ display: 'flex', alignItems: 'center' }}>
-        <button
-          type="button"
-          className="mobile-hamburger-btn"
-          onClick={() => setIsOpen(true)}
-          aria-expanded={isOpen}
-          aria-label="ਮੀਨੂ ਖੋਲ੍ਹੋ"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            backgroundColor: '#b71c1c',
-            color: '#ffffff',
-            border: '1px solid #ebb10d',
-            borderRadius: '6px',
-            padding: '7px 14px',
-            fontSize: '13.5px',
-            fontWeight: '800',
-            cursor: 'pointer',
-            boxShadow: '0 2px 8px rgba(183, 28, 28, 0.35)',
-            fontFamily: "'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif"
-          }}
-        >
-          <i className="fa fa-bars" style={{ fontSize: '15px' }}></i>
-          <span>ਮੀਨੂ (Menu)</span>
-        </button>
-      </div>
-
       {/* Portal-Mounted Slide-in Drawer */}
       {createPortal(
         <div
@@ -388,6 +359,22 @@ export default function MobileNav() {
                     <i className="fa fa-television" style={{ color: '#ef4444', width: '18px' }}></i>
                     <span>ਵੈੱਬ ਟੀਵੀ (WEB TV 24x7)</span>
                   </a>
+                </li>
+
+                {/* Podcasts */}
+                <li style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                  <Link to="/podcasts" onClick={() => setIsOpen(false)} style={drawerLinkStyle}>
+                    <i className="fa fa-podcast" style={{ color: '#ebb10d', width: '18px' }}></i>
+                    <span>ਪੋਡਕਾਸਟ (Podcasts)</span>
+                  </Link>
+                </li>
+
+                {/* Photo Gallery */}
+                <li style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                  <Link to="/gallery" onClick={() => setIsOpen(false)} style={drawerLinkStyle}>
+                    <i className="fa fa-camera-retro" style={{ color: '#f59e0b', width: '18px' }}></i>
+                    <span>ਫ਼ੋਟੋ ਗੈਲਰੀ (Photo Gallery)</span>
+                  </Link>
                 </li>
 
                 {/* Contact */}

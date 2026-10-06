@@ -58,6 +58,11 @@ export default function FixedNavbar() {
       return;
     }
 
+    if (location.pathname === '/podcasts') {
+      setActiveSection('podcasts');
+      return;
+    }
+
     if (location.pathname.startsWith('/category/')) {
       const slug = location.pathname.split('/')[2];
       setActiveSection(slug || '');
@@ -370,6 +375,30 @@ export default function FixedNavbar() {
                 <a href="#web-tv" onClick={(e) => handleNavClick(e, 'web-tv')}>
                   ਵੈੱਬ ਟੀਵੀ
                 </a>
+              </li>
+
+              {/* Podcasts */}
+              <li className={activeSection === 'podcasts' ? 'active' : ''}>
+                <Link
+                  to="/podcasts"
+                  onClick={() => setActiveSection('podcasts')}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                >
+                  <i className="fa fa-podcast" style={{ fontSize: '11px', color: '#b71c1c' }}></i>
+                  <span>ਪੋਡਕਾਸਟ</span>
+                </Link>
+              </li>
+
+              {/* Photo Gallery */}
+              <li className={activeSection === 'gallery' ? 'active' : ''}>
+                <Link
+                  to="/gallery"
+                  onClick={() => setActiveSection('gallery')}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                >
+                  <i className="fa fa-camera-retro" style={{ fontSize: '11px', color: '#b71c1c' }}></i>
+                  <span>ਗੈਲਰੀ</span>
+                </Link>
               </li>
 
               {/* Contact */}

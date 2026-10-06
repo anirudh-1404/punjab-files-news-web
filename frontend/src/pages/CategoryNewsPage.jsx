@@ -5,6 +5,7 @@ import { getAllArticles } from '../services/articleStore';
 import { formatArticleDate } from '../services/dateUtils';
 import { getHighResImageUrl, getCardImageUrl } from '../services/imageUtils';
 import { useLanguage } from '../context/LanguageContext';
+import AdBanner from '../components/Common/AdBanner';
 
 const REGION_INFO = {
   majha: {
@@ -686,6 +687,9 @@ export default function CategoryNewsPage() {
                 ))}
               </div>
             </div>
+
+            {/* Sidebar Ad Banner (300x250) - Hidden if no ad */}
+            <AdBanner slot="sidebar_rectangle" containerStyle={{ marginBottom: '24px' }} />
 
             {/* 3. Live TV Promotional Box */}
             <div

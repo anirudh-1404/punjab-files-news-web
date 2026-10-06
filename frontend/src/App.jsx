@@ -24,6 +24,7 @@ import TravelModule from './components/Modules/TravelModule';
 import EntertainmentModule from './components/Modules/EntertainmentModule';
 import ReadersChoiceModule from './components/Modules/ReadersChoiceModule';
 import YouTubeChannelModule from './components/Modules/YouTubeChannelModule';
+import AdBanner from './components/Common/AdBanner';
 
 // Inner Pages
 import NewsDetailPage from './pages/NewsDetailPage';
@@ -31,6 +32,8 @@ import AdminCMS from './pages/AdminCMS';
 import ContactPage from './pages/ContactPage';
 import CategoryNewsPage from './pages/CategoryNewsPage';
 import SearchPage from './pages/SearchPage';
+import PodcastsPage from './pages/PodcastsPage';
+import GalleryPage from './pages/GalleryPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 function ScrollToTopOnNavigate() {
@@ -53,7 +56,14 @@ function HomePage() {
       {/* 3. ਦੇਸ਼-ਵਿਦੇਸ਼: World & National News Module (#world) */}
       <WorldNewsModule />
 
-      {/* 4. ਖੇਡਾਂ: Dedicated Sports Module (#sport) */}
+      {/* 4. Homepage Horizontal Sponsor Ad Banner (970x90 / 820x100) */}
+      <AdBanner
+        slot="home_middle_banner"
+        containerClassName="container"
+        containerStyle={{ margin: '24px auto' }}
+      />
+
+      {/* 5. ਖੇਡਾਂ: Dedicated Sports Module (#sport) */}
       <SportsModule />
 
       {/* 5. ਸਿਹਤ: Dedicated Health & Wellness Module (#health) */}
@@ -83,8 +93,10 @@ export default function App() {
   const isAdmin = location.pathname.startsWith('/admin');
 
   useEffect(() => {
-    // Disable Lenis on Admin routes to ensure 100% natural, unhindered trackpad/mousepad scrolling in modals & tables
-    if (isAdmin) {
+    // Disable Lenis on Admin routes and mobile devices (<= 768px)
+    // On mobile screens, native momentum scrolling is smoother and avoids height desync that clips footers
+    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
+    if (isAdmin || isMobile) {
       document.documentElement.classList.remove('lenis', 'lenis-smooth');
       return;
     }
@@ -125,6 +137,10 @@ export default function App() {
 
     document.addEventListener('click', handleAnchorClick);
 
+    const handleResize = () => lenis.resize();
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('load', handleResize);
+
     let rafId;
     function raf(time) {
       lenis.raf(time);
@@ -134,6 +150,8 @@ export default function App() {
 
     return () => {
       cancelAnimationFrame(rafId);
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('load', handleResize);
       document.removeEventListener('click', handleAnchorClick);
       lenis.destroy();
       document.documentElement.classList.remove('lenis', 'lenis-smooth');
@@ -154,6 +172,8 @@ export default function App() {
         <Route path="/news/:id" element={<NewsDetailPage />} />
         <Route path="/article/:id" element={<NewsDetailPage />} />
         <Route path="/admin" element={<AdminCMS />} />
+        <Route path="/podcasts" element={<PodcastsPage />} />
+        <Route path="/gallery" element={<GalleryPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/category/:category" element={<CategoryNewsPage />} />

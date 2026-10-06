@@ -13,6 +13,8 @@ import UserManagementView from './admin/UserManagementView';
 import MukhwakManagerView from './admin/MukhwakManagerView';
 import PodcastManagerView from './PodcastManagerView';
 import WebTVManagerView from './WebTVManagerView';
+import AdManagerView from './AdManagerView';
+import GalleryManagerView from './GalleryManagerView';
 import { contactAPI } from '../../services/api';
 
 export default function DashboardLayout({ user, activeRoleParam, onRoleChange, onLogout }) {
@@ -65,7 +67,9 @@ export default function DashboardLayout({ user, activeRoleParam, onRoleChange, o
         { id: 'overview', label: 'ਓਵਰਵਿਊ (Overview)', icon: 'fa-dashboard', sub: 'Overview' },
         { id: 'create', label: 'ਨਵੀਂ ਖ਼ਬਰ ਲਿਖੋ (Write News)', icon: 'fa-pencil-square-o', sub: 'Write & Publish News' },
         { id: 'all_news', label: 'ਸਾਰੀਆਂ ਖ਼ਬਰਾਂ (All News)', icon: 'fa-newspaper-o', sub: 'All News & Categories' },
+        { id: 'gallery', label: 'ਫ਼ੋਟੋ ਗੈਲਰੀ (Gallery Manager)', icon: 'fa-camera-retro', sub: 'Photo Gallery' },
         { id: 'podcasts', label: 'ਪੋਡਕਾਸਟ ਪ੍ਰਬੰਧਨ (Podcasts)', icon: 'fa-podcast', sub: 'Podcast Management' },
+        { id: 'ads', label: 'ਇਸ਼ਤਿਹਾਰ ਪ੍ਰਬੰਧਨ (Ad Manager)', icon: 'fa-bullhorn', sub: 'Banners & Sponsors' },
         { id: 'categories', label: 'ਕੈਟੇਗਰੀ ਮੈਨੇਜਰ (Category Manager)', icon: 'fa-tags', sub: 'Categories' },
         { id: 'review', label: 'ਅੰਤਿਮ ਪ੍ਰਵਾਨਗੀ ਡੈਸਕ (Final Approval Desk)', icon: 'fa-check-square-o', sub: 'Final Approval Desk' },
         { id: 'contact_queries', label: 'ਸੰਪਰਕ ਸੁਨੇਹੇ (Contact Messages)', icon: 'fa-envelope-o', sub: 'Inquiries' },
@@ -80,8 +84,10 @@ export default function DashboardLayout({ user, activeRoleParam, onRoleChange, o
       return [
         { id: 'review', label: 'ਸੰਪਾਦਕੀ ਸਮੀਖਿਆ (Review Desk)', icon: 'fa-check-square-o', sub: 'Review Desk' },
         { id: 'all_news', label: 'ਸਾਰੀਆਂ ਖ਼ਬਰਾਂ (All News)', icon: 'fa-newspaper-o', sub: 'All News & Categories' },
+        { id: 'gallery', label: 'ਫ਼ੋਟੋ ਗੈਲਰੀ (Gallery Desk)', icon: 'fa-camera-retro', sub: 'Photo Gallery' },
         { id: 'create', label: 'ਨਵੀਂ ਖ਼ਬਰ ਲਿਖੋ (Write News)', icon: 'fa-pencil-square-o', sub: 'Write News' },
         { id: 'podcasts', label: 'ਪੋਡਕਾਸਟ ਸਮੀਖਿਆ (Podcasts Desk)', icon: 'fa-podcast', sub: 'Review Podcasts' },
+        { id: 'ads', label: 'ਇਸ਼ਤਿਹਾਰ (Ad Manager)', icon: 'fa-bullhorn', sub: 'Banners & Sponsors' },
         { id: 'breaking', label: 'ਬਰੇਕਿੰਗ ਨਿਊਜ਼ (Breaking News)', icon: 'fa-bolt', sub: 'Breaking Ticker' },
         { id: 'webtv', label: 'ਵੈੱਬ ਟੀਵੀ (Web TV Stream)', icon: 'fa-television', sub: 'Web TV Live Stream' },
         { id: 'contact_queries', label: 'ਸੰਪਰਕ ਸੁਨੇਹੇ (Contact Messages)', icon: 'fa-envelope-o', sub: 'Inquiries' },
@@ -93,6 +99,7 @@ export default function DashboardLayout({ user, activeRoleParam, onRoleChange, o
     return [
       { id: 'create', label: 'ਨਵੀਂ ਖ਼ਬਰ ਲਿਖੋ (Write News)', icon: 'fa-pencil-square-o', sub: 'Write News' },
       { id: 'my_articles', label: 'ਮੇਰੀਆਂ ਖ਼ਬਰਾਂ (My Articles)', icon: 'fa-list-alt', sub: 'My Articles' },
+      { id: 'gallery', label: 'ਫ਼ੋਟੋ ਗੈਲਰੀ (Photo Gallery)', icon: 'fa-camera-retro', sub: 'Add Photos' },
       { id: 'podcasts', label: 'ਪੋਡਕਾਸਟ (Podcasts)', icon: 'fa-podcast', sub: 'Add Podcasts' }
     ];
   };
@@ -500,6 +507,14 @@ export default function DashboardLayout({ user, activeRoleParam, onRoleChange, o
 
           {activeTab === 'podcasts' && (
             <PodcastManagerView currentUser={user} />
+          )}
+
+          {activeTab === 'gallery' && (
+            <GalleryManagerView currentUser={user} />
+          )}
+
+          {activeTab === 'ads' && ['admin', 'editor'].includes(activeRole) && (
+            <AdManagerView currentUser={user} />
           )}
         </div>
       </main>

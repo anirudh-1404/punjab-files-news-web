@@ -66,22 +66,21 @@ export default function LogoBanner() {
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '10px 0',
-        gap: '20px',
-        flexWrap: 'wrap',
-        flex: 1
+        gap: '16px',
+        width: '100%'
       }}
     >
-      {/* Left: Prominent & Enlarged Brand Logo + Theme Matched Language Dropdown */}
-      <div className="header-brand-block" style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap', flexShrink: 0 }}>
+      {/* Left: Brand Logo + Desktop Language Dropdown */}
+      <div className="header-brand-block" style={{ display: 'flex', alignItems: 'center', gap: '16px', flexShrink: 0 }}>
         <a href="/" style={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}>
           <img
             src={brandLogo}
             alt="Punjab Files"
             className="brand-logo-img"
             style={{
-              height: '135px',
-              maxHeight: '145px',
-              maxWidth: '480px',
+              height: 'auto',
+              maxHeight: '118px',
+              maxWidth: '450px',
               width: 'auto',
               objectFit: 'contain',
               display: 'block'
@@ -89,11 +88,18 @@ export default function LogoBanner() {
           />
         </a>
 
-        {/* Theme Matched Language Filter Dropdown (No country flags, default Punjabi) */}
-        <LanguageFilterDropdown />
+        {/* Desktop Language Filter Dropdown (Next to Logo) */}
+        <div className="hidden-xs hidden-sm">
+          <LanguageFilterDropdown isCompact={false} />
+        </div>
       </div>
 
-      {/* Right / Center: Advertisement Provision Next to Logo (728x90 Leaderboard Slot) */}
+      {/* Mobile-Only Language Filter Dropdown (Shifted to Top-Right where Menu button was) */}
+      <div className="visible-xs visible-sm" style={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
+        <LanguageFilterDropdown isCompact={true} />
+      </div>
+
+      {/* Right: Permanent Static Advertisement Inquiries & Booking Provision (Desktop) */}
       <div className="header-ad-provision-wrapper hidden-xs hidden-sm" style={{ flex: 1, maxWidth: '640px', marginLeft: 'auto' }}>
         <div
           className="header-top-ad-slot"

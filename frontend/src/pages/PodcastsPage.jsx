@@ -1,0 +1,481 @@
+import React, { useState, useEffect, useMemo } from 'react';
+import { Link } from 'react-router-dom';
+import { podcastAPI } from '../services/api';
+import AdBanner from '../components/Common/AdBanner';
+
+// Helper to extract YouTube ID
+function extractYouTubeId(url) {
+  if (!url) return null;
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/|live\/))([\w-]{11})/);
+  return match ? match[1] : null;
+}
+
+// Format date nicely
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  try {
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('pa-IN', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  } catch (e) {
+    return dateStr;
+  }
+}
+
+export default function PodcastsPage() {
+  const [podcasts, setPodcasts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activePlayingId, setActivePlayingId] = useState(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchPodcasts = async () => {
+      try {
+        setLoading(true);
+        const res = await podcastAPI.getPublished({ limit: 50 });
+        if (isMounted && res && res.data) {
+          setPodcasts(res.data);
+          if (res.data.length > 0) {
+            setActivePlayingId(res.data[0]._id);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load podcasts:', err);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+
+    fetchPodcasts();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // Filtered podcasts
+  const filteredPodcasts = useMemo(() => {
+    return podcasts.filter((p) => {
+      const matchesSearch =
+        !searchQuery.trim() ||
+        p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (p.description && p.description.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (p.host && p.host.toLowerCase().includes(searchQuery.toLowerCase()));
+
+      return matchesSearch;
+    });
+  }, [podcasts, searchQuery]);
+
+  // Featured Podcast (first one or active playing)
+  const featuredPodcast = useMemo(() => {
+    if (activePlayingId) {
+      const found = podcasts.find((p) => p._id === activePlayingId);
+      if (found) return found;
+    }
+    return podcasts[0] || null;
+  }, [podcasts, activePlayingId]);
+
+  const featuredYouTubeId = featuredPodcast ? extractYouTubeId(featuredPodcast.mediaUrl) : null;
+  const isFeaturedVideo = featuredPodcast ? (featuredPodcast.mediaType === 'youtube' || Boolean(featuredYouTubeId)) : false;
+
+  return (
+    <main style={{ backgroundColor: '#f8fafc', minHeight: '80vh', padding: '16px 0 60px' }}>
+      <div className="container">
+        {/* Breadcrumb & Clean Page Title (No Dark Banner) */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', marginBottom: '18px', borderBottom: '2px solid #e2e8f0', paddingBottom: '12px' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: '#64748b', marginBottom: '4px' }}>
+              <Link to="/" style={{ color: '#b71c1c', textDecoration: 'none', fontWeight: '700' }}>
+                ਮੁੱਖ ਪੰਨਾ (Home)
+              </Link>
+              <span>/</span>
+              <span style={{ color: '#0f172a', fontWeight: '800' }}>ਪੋਡਕਾਸਟ</span>
+            </div>
+            <h1 style={{ margin: 0, fontSize: '22px', fontWeight: '900', color: '#1c2d5a', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <i className="fa fa-podcast" style={{ color: '#b71c1c' }}></i>
+              <span>ਪੰਜਾਬ ਫਾਈਲਜ਼ ਪੋਡਕਾਸਟ (Podcasts)</span>
+            </h1>
+          </div>
+        </div>
+        {/* 2. Spotlight: Featured Latest Episode */}
+        {featuredPodcast && (
+          <div
+            style={{
+              backgroundColor: '#ffffff',
+              borderRadius: '12px',
+              border: '1px solid #e2e8f0',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
+              overflow: 'hidden',
+              marginBottom: '36px'
+            }}
+          >
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '0' }}>
+              {/* Left: Video Player */}
+              <div style={{ backgroundColor: '#000000', position: 'relative' }}>
+                {isFeaturedVideo && featuredYouTubeId ? (
+                  <div style={{ position: 'relative', width: '100%', paddingBottom: '56.25%', height: 0 }}>
+                    <iframe
+                      key={featuredYouTubeId}
+                      src={`https://www.youtube-nocookie.com/embed/${featuredYouTubeId}?autoplay=0&rel=0`}
+                      title={featuredPodcast.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        border: 'none',
+                        display: 'block'
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <div style={{ position: 'relative', width: '100%', minHeight: '280px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <img
+                      src={featuredPodcast.thumbnail || '/img/index_800x400-image01.jpg'}
+                      alt=""
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 }}
+                    />
+                    <div style={{ position: 'absolute', bottom: '16px', left: '16px', right: '16px' }}>
+                      <audio controls src={featuredPodcast.mediaUrl} style={{ width: '100%' }} />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Right: Featured Info */}
+              <div style={{ padding: '28px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
+                    <span style={{ backgroundColor: '#fee2e2', color: '#b71c1c', fontSize: '11px', fontWeight: '900', padding: '3px 8px', borderRadius: '4px' }}>
+                      🔴 ਤਾਜ਼ਾ ਪੋਡਕਾਸਟ
+                    </span>
+                    {featuredPodcast.duration && (
+                      <span style={{ fontSize: '11.5px', fontWeight: '700', color: '#64748b' }}>
+                        <i className="fa fa-clock-o" style={{ marginRight: '4px' }}></i>
+                        {featuredPodcast.duration}
+                      </span>
+                    )}
+                    {featuredPodcast.publishedAt && (
+                      <span style={{ fontSize: '11.5px', color: '#94a3b8' }}>
+                        • {formatDate(featuredPodcast.publishedAt)}
+                      </span>
+                    )}
+                  </div>
+
+                  <h2 style={{ margin: '0 0 12px', fontSize: '20px', fontWeight: '900', color: '#0f172a', lineHeight: '1.35' }}>
+                    {featuredPodcast.title}
+                  </h2>
+
+                  <p style={{ margin: '0 0 16px', fontSize: '13.5px', color: '#475569', lineHeight: '1.6' }}>
+                    {featuredPodcast.description}
+                  </p>
+                </div>
+
+                <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontSize: '12px', color: '#64748b' }}>ਮੇਜ਼ਬਾਨ (Host):</span>
+                    <strong style={{ fontSize: '13px', color: '#1c2d5a' }}>{featuredPodcast.host || 'ਪੰਜਾਬ ਫਾਈਲਜ਼'}</strong>
+                  </div>
+
+                  {featuredPodcast.mediaUrl && (
+                    <a
+                      href={featuredPodcast.mediaUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        backgroundColor: '#ef4444',
+                        color: '#ffffff',
+                        padding: '6px 14px',
+                        borderRadius: '6px',
+                        fontSize: '12px',
+                        fontWeight: '800',
+                        textDecoration: 'none',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px'
+                      }}
+                    >
+                      <i className="fa fa-youtube-play"></i>
+                      <span>ਯੂਟਿਊਬ 'ਤੇ ਦੇਖੋ</span>
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* 3. Filter Bar & Search */}
+        <div
+          style={{
+            backgroundColor: '#ffffff',
+            borderRadius: '10px',
+            padding: '16px 20px',
+            border: '1px solid #e2e8f0',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.03)',
+            marginBottom: '26px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '14px'
+          }}
+        >
+          {/* Section Header: All Podcasts */}
+          <div>
+            <span
+              style={{
+                padding: '7px 16px',
+                borderRadius: '6px',
+                backgroundColor: '#1c2d5a',
+                color: '#ffffff',
+                fontSize: '13px',
+                fontWeight: '800',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '7px'
+              }}
+            >
+              <i className="fa fa-podcast"></i>
+              <span>ਸਾਰੇ ਪੋਡਕਾਸਟ</span>
+            </span>
+          </div>
+
+          {/* Search Input */}
+          <div style={{ position: 'relative', minWidth: '260px', flex: '0 1 320px' }}>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="ਪੋਡਕਾਸਟ ਖੋਜੋ... (Search podcasts)"
+              style={{
+                width: '100%',
+                padding: '8px 36px 8px 14px',
+                borderRadius: '6px',
+                border: '1px solid #cbd5e1',
+                fontSize: '13px',
+                outline: 'none',
+                boxSizing: 'border-box'
+              }}
+            />
+            <i className="fa fa-search" style={{ position: 'absolute', right: '12px', top: '11px', color: '#94a3b8' }}></i>
+          </div>
+        </div>
+
+        {/* Advertisement Banner */}
+        <AdBanner slot="podcasts_banner" containerStyle={{ marginBottom: '22px' }} />
+
+        {/* 4. All Podcasts Grid */}
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '60px 20px', color: '#64748b' }}>
+            <i className="fa fa-spinner fa-spin" style={{ fontSize: '32px', color: '#b71c1c', marginBottom: '12px', display: 'block' }}></i>
+            <span>ਪੋਡਕਾਸਟ ਲੋਡ ਕੀਤੇ ਜਾ ਰਹੇ ਹਨ...</span>
+          </div>
+        ) : filteredPodcasts.length === 0 ? (
+          <div
+            style={{
+              backgroundColor: '#ffffff',
+              borderRadius: '10px',
+              padding: '48px 20px',
+              textAlign: 'center',
+              border: '1px dashed #cbd5e1'
+            }}
+          >
+            <i className="fa fa-podcast" style={{ fontSize: '42px', color: '#94a3b8', marginBottom: '14px', display: 'block' }}></i>
+            <h3 style={{ margin: '0 0 6px', fontSize: '18px', fontWeight: '800', color: '#1e293b' }}>
+              ਕੋਈ ਪੋਡਕਾਸਟ ਨਹੀਂ ਮਿਲਿਆ
+            </h3>
+            <p style={{ margin: 0, fontSize: '13px', color: '#64748b' }}>
+              {searchQuery ? 'ਤੁਹਾਡੀ ਖੋਜ ਨਾਲ ਮੇਲ ਖਾਂਦਾ ਕੋਈ ਨਤੀਜਾ ਨਹੀਂ ਹੈ।' : 'ਜਲਦ ਹੀ ਨਵੇਂ ਪੋਡਕਾਸਟ ਪ੍ਰਕਾਸ਼ਿਤ ਕੀਤੇ ਜਾਣਗੇ।'}
+            </p>
+          </div>
+        ) : (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '22px' }}>
+            {filteredPodcasts.map((podcast) => {
+              const ytId = extractYouTubeId(podcast.mediaUrl);
+              const isVideo = podcast.mediaType === 'youtube' || Boolean(ytId);
+              const isSpotlight = activePlayingId === podcast._id;
+
+              return (
+                <div
+                  key={podcast._id}
+                  style={{
+                    backgroundColor: '#ffffff',
+                    borderRadius: '10px',
+                    border: isSpotlight ? '2px solid #b71c1c' : '1px solid #e2e8f0',
+                    boxShadow: '0 3px 12px rgba(0,0,0,0.04)',
+                    overflow: 'hidden',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  {/* Media Frame (Video or Thumbnail) */}
+                  <div style={{ position: 'relative', width: '100%', paddingBottom: '56.25%', height: 0, backgroundColor: '#000000', overflow: 'hidden' }}>
+                    {isVideo && ytId ? (
+                      <iframe
+                        src={`https://www.youtube-nocookie.com/embed/${ytId}?rel=0`}
+                        title={podcast.title}
+                        loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '100%',
+                          border: 'none',
+                          display: 'block'
+                        }}
+                      />
+                    ) : (
+                      <>
+                        <img
+                          src={podcast.thumbnail || '/img/index_800x400-image01.jpg'}
+                          alt=""
+                          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+                          onError={(e) => { e.target.src = '/img/index_800x400-image01.jpg'; }}
+                        />
+                        <div
+                          style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            backgroundColor: 'rgba(0,0,0,0.3)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                          }}
+                        >
+                          <span
+                            style={{
+                              width: '46px',
+                              height: '46px',
+                              borderRadius: '50%',
+                              backgroundColor: '#b71c1c',
+                              color: '#ffffff',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontSize: '18px'
+                            }}
+                          >
+                            <i className="fa fa-play" style={{ marginLeft: '3px' }}></i>
+                          </span>
+                        </div>
+                      </>
+                    )}
+
+
+                    {podcast.duration && (
+                      <span
+                        style={{
+                          position: 'absolute',
+                          bottom: '10px',
+                          right: '10px',
+                          backgroundColor: 'rgba(0,0,0,0.8)',
+                          color: '#ffffff',
+                          padding: '2px 7px',
+                          borderRadius: '4px',
+                          fontSize: '10.5px',
+                          fontWeight: '700'
+                        }}
+                      >
+                        ⏱ {podcast.duration}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Body Content */}
+                  <div style={{ padding: '16px 18px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
+                        <span style={{ fontSize: '10.5px', fontWeight: '800', color: '#b71c1c', backgroundColor: '#fee2e2', padding: '1px 6px', borderRadius: '3px' }}>
+                          ਪੋਡਕਾਸਟ
+                        </span>
+                        {podcast.publishedAt && (
+                          <span style={{ fontSize: '11px', color: '#94a3b8' }}>
+                            {formatDate(podcast.publishedAt)}
+                          </span>
+                        )}
+                      </div>
+
+                      <h3
+                        style={{
+                          margin: '0 0 8px',
+                          fontSize: '15px',
+                          fontWeight: '800',
+                          color: '#0f172a',
+                          lineHeight: '1.4',
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: 'vertical',
+                          overflow: 'hidden'
+                        }}
+                      >
+                        {podcast.title}
+                      </h3>
+
+                      <p
+                        style={{
+                          margin: '0 0 12px',
+                          fontSize: '12.5px',
+                          color: '#64748b',
+                          lineHeight: '1.5',
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: 'vertical',
+                          overflow: 'hidden'
+                        }}
+                      >
+                        {podcast.description}
+                      </p>
+                    </div>
+
+                    {/* Footer */}
+                    <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '11.5px' }}>
+                      <span style={{ color: '#64748b' }}>
+                        ਮੇਜ਼ਬਾਨ: <strong style={{ color: '#334155' }}>{podcast.host || 'ਪੰਜਾਬ ਫਾਈਲਜ਼'}</strong>
+                      </span>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActivePlayingId(podcast._id);
+                          window.scrollTo({ top: 180, behavior: 'smooth' });
+                        }}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          color: '#b71c1c',
+                          fontWeight: '800',
+                          cursor: 'pointer',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          padding: 0
+                        }}
+                      >
+                        <span>ਮੁੱਖ ਪਲੇਅਰ 'ਚ ਚਲਾਓ</span>
+                        <i className="fa fa-play-circle"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </main>
+  );
+}

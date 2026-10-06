@@ -8,6 +8,12 @@ const webTVScheduleSchema = new mongoose.Schema(
       trim: true,
       index: true
     },
+    language: {
+      type: String,
+      enum: ["pa", "hi", "en"],
+      default: "pa",
+      index: true
+    },
     videoUrl: {
       type: String,
       required: [true, "Video URL is required"],
@@ -57,6 +63,6 @@ const webTVScheduleSchema = new mongoose.Schema(
   }
 );
 
-webTVScheduleSchema.index({ scheduledDate: 1, isActive: 1 });
+webTVScheduleSchema.index({ scheduledDate: 1, language: 1, isActive: 1 });
 
 export default mongoose.model("WebTVSchedule", webTVScheduleSchema);
