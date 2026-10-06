@@ -31,11 +31,59 @@ export default async function handler(req, res) {
     const host = req.headers["x-forwarded-host"] || req.headers.host || "punjab-files-news-web-1b3.vercel.app";
     const proto = req.headers["x-forwarded-proto"] || "https";
     const siteBaseUrl = `${proto}://${host}`;
+    const defaultLogoUrl = `${siteBaseUrl}/logo-updated.png`;
 
-    if (!slug) {
-      return res.redirect(siteBaseUrl);
+    // 1. If homepage / website URL is shared
+    if (!slug || slug === "home" || slug === "default") {
+      const homeTitle = "Punjab Files | Your 24h News Source";
+      const homeDesc = "ਪੰਜਾਬ ਫਾਈਲਜ਼ - 24 ਘੰਟੇ ਨਿਰਪੱਖ, ਸੱਚੀਆਂ ਅਤੇ ਭਰੋਸੇਯੋਗ ਜ਼ਮੀਨੀ ਖ਼ਬਰਾਂ, ਮੁੱਖ ਵਾਕ ਅਤੇ ਲਾਈਵ ਟੀਵੀ।";
+
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      res.setHeader("Cache-Control", "public, max-age=300, s-maxage=600");
+
+      const homeHtml = `<!DOCTYPE html>
+<html lang="pa" prefix="og: https://ogp.me/ns#">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtml(homeTitle)}</title>
+  <meta name="description" content="${escapeHtml(homeDesc)}">
+
+  <!-- Open Graph Meta Tags (WhatsApp, Facebook, LinkedIn, Telegram) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Punjab Files">
+  <meta property="og:title" content="${escapeHtml(homeTitle)}">
+  <meta property="og:description" content="${escapeHtml(homeDesc)}">
+  <meta property="og:image" content="${escapeHtml(defaultLogoUrl)}">
+  <meta property="og:image:secure_url" content="${escapeHtml(defaultLogoUrl)}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:alt" content="Punjab Files News Logo">
+  <meta property="og:url" content="${escapeHtml(siteBaseUrl)}">
+
+  <!-- Twitter / X Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@punjabfiles">
+  <meta name="twitter:title" content="${escapeHtml(homeTitle)}">
+  <meta name="twitter:description" content="${escapeHtml(homeDesc)}">
+  <meta name="twitter:image" content="${escapeHtml(defaultLogoUrl)}">
+
+  <!-- Instant Redirection for Human Visitors -->
+  <meta http-equiv="refresh" content="0;url=${escapeHtml(siteBaseUrl)}">
+  <script>
+    window.location.replace(${JSON.stringify(siteBaseUrl)});
+  </script>
+</head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; text-align: center; padding: 40px 20px;">
+  <p>Loading Punjab Files...</p>
+</body>
+</html>`;
+
+      return res.status(200).send(homeHtml);
     }
 
+    // 2. Fetch specific news article
     await getMongoConnection();
     const db = mongoose.connection.db;
     const articlesCollection = db.collection("articles");
@@ -72,7 +120,7 @@ export default async function handler(req, res) {
     const articleSlugOrId = article.slug || String(article._id);
     const targetUrl = `${siteBaseUrl}/news/${articleSlugOrId}`;
 
-    let imageUrl = article.featuredImage || "https://punjabfiles.com/img/index_800x400-image01.jpg";
+    let imageUrl = article.featuredImage || defaultLogoUrl;
     if (imageUrl.includes("res.cloudinary.com") && imageUrl.includes("/image/upload/")) {
       const uploadIdx = imageUrl.indexOf("/image/upload/");
       const prefix = imageUrl.substring(0, uploadIdx + "/image/upload/".length);

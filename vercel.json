@@ -5,6 +5,17 @@
   "framework": "vite",
   "rewrites": [
     {
+      "source": "/",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": "(?i).*(facebookexternalhit|whatsapp|twitterbot|telegrambot|linkedinbot|slackbot|discordbot|applebot|pinterest|skypeuripreview|googlebot).*"
+        }
+      ],
+      "destination": "/api/og?slug=home"
+    },
+    {
       "source": "/news/:slug",
       "has": [
         {

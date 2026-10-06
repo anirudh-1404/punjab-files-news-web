@@ -714,7 +714,7 @@ export const renderArticleShareHtml = async (req, res) => {
     const targetUrl = `${frontendUrl}/news/${articleSlugOrId}`;
 
     // Process article image into high-resolution, absolute URL for social crawlers (1200x630)
-    let imageUrl = article.featuredImage || "/img/index_800x400-image01.jpg";
+    let imageUrl = article.featuredImage || `${frontendUrl}/logo-updated.png`;
     if (imageUrl.includes("res.cloudinary.com") && imageUrl.includes("/image/upload/")) {
       const uploadIdx = imageUrl.indexOf("/image/upload/");
       const prefix = imageUrl.substring(0, uploadIdx + "/image/upload/".length);
