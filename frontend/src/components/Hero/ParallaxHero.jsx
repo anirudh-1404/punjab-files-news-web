@@ -5,6 +5,7 @@ import { articleAPI, podcastAPI } from '../../services/api';
 import { getAllArticles } from '../../services/articleStore';
 import { getCardImageUrl } from '../../services/imageUtils';
 import PodcastAudioCard from '../Common/PodcastAudioCard';
+import { useLanguage } from '../../context/LanguageContext';
 
 const DEFAULT_LEAD = {
   title: 'ਪੰਜਾਬ ਵਿਧਾਨ ਸਭਾ ਸੈਸ਼ਨ: ਲੋਕ ਹਿੱਤ ਦੇ ਅਹਿਮ ਬਿੱਲ ਪਾਸ, ਨਵੇਂ ਪ੍ਰੋਜੈਕਟਾਂ ਨੂੰ ਵੱਡੀ ਮਨਜ਼ੂਰੀ',
@@ -32,6 +33,7 @@ const stripHtmlTags = (str) => {
 };
 
 export default function ParallaxHero() {
+  const { language } = useLanguage();
   const [leadStory, setLeadStory] = useState(DEFAULT_LEAD);
   const [latestPodcast, setLatestPodcast] = useState(null);
 
@@ -39,16 +41,18 @@ export default function ParallaxHero() {
     let isMounted = true;
     const fetchLead = async () => {
       try {
-        const res = await articleAPI.getPublished({ limit: 1 });
+        const res = await articleAPI.getPublished({ limit: 1, language });
         if (isMounted && res && res.data && res.data.length > 0) {
           setLeadStory(res.data[0]);
           return;
         }
       } catch (e) {}
 
-      const local = getAllArticles();
+      const local = getAllArticles({ language });
       if (isMounted && local && local.length > 0) {
         setLeadStory(local[0]);
+      } else if (isMounted && language === 'pa') {
+        setLeadStory(DEFAULT_LEAD);
       }
     };
 
@@ -65,12 +69,14 @@ export default function ParallaxHero() {
     fetchPodcast();
     window.addEventListener('storage', fetchLead);
     window.addEventListener('punjab_articles_updated', fetchLead);
+    window.addEventListener('punjab_language_changed', fetchLead);
     return () => {
       isMounted = false;
       window.removeEventListener('storage', fetchLead);
       window.removeEventListener('punjab_articles_updated', fetchLead);
+      window.removeEventListener('punjab_language_changed', fetchLead);
     };
-  }, []);
+  }, [language]);
 
   return (
     <section

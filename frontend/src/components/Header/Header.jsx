@@ -34,12 +34,12 @@ export default function Header() {
 
   return (
     <>
-      <header id="header">
+      <header id="header" style={{ position: 'relative', zIndex: isScrolled ? 100 : 10005 }}>
         {/* Top Dark Bar */}
         <TopMenu />
 
         {/* Header Middle: Logo & Live Clock */}
-        <div className={`header-masthead-wrapper ${isScrolled ? 'masthead-disabled' : ''}`}>
+        <div className={`header-masthead-wrapper ${isScrolled ? 'masthead-disabled' : ''}`} style={{ position: 'relative', zIndex: isScrolled ? 100 : 10006 }}>
           <div className="container">
             <LogoBanner />
             <MobileNav />

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { articleAPI } from '../../services/api';
 import { getAllArticles } from '../../services/articleStore';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function TravelModule() {
+  const { language } = useLanguage();
   const [articles, setArticles] = useState([]);
 
   useEffect(() => {
@@ -10,7 +12,7 @@ export default function TravelModule() {
 
     const loadTravelArticles = async () => {
       try {
-        const res = await articleAPI.getPublished({ category: 'travel' });
+        const res = await articleAPI.getPublished({ category: 'travel', language });
         if (isMounted && res && res.data && res.data.length > 0) {
           const fromApi = res.data.map((item) => ({
             id: item.slug || item._id,
@@ -26,7 +28,7 @@ export default function TravelModule() {
         }
       } catch (err) {}
 
-      const all = getAllArticles({ category: 'travel' });
+      const all = getAllArticles({ category: 'travel', language });
       if (isMounted) {
         if (all && all.length > 0) {
           const mapped = all.slice(0, 4).map((item) => ({
@@ -48,12 +50,14 @@ export default function TravelModule() {
     loadTravelArticles();
     window.addEventListener('storage', loadTravelArticles);
     window.addEventListener('punjab_articles_updated', loadTravelArticles);
+    window.addEventListener('punjab_language_changed', loadTravelArticles);
     return () => {
       isMounted = false;
       window.removeEventListener('storage', loadTravelArticles);
       window.removeEventListener('punjab_articles_updated', loadTravelArticles);
+      window.removeEventListener('punjab_language_changed', loadTravelArticles);
     };
-  }, []);
+  }, [language]);
 
   if (articles.length === 0) {
     return null;

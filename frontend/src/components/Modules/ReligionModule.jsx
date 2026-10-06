@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { articleAPI } from '../../services/api';
 import { getAllArticles } from '../../services/articleStore';
 import { formatArticleDate } from '../../services/dateUtils';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function ReligionModule() {
+  const { language } = useLanguage();
   const [religionItems, setReligionItems] = useState([]);
 
   useEffect(() => {
@@ -11,7 +13,7 @@ export default function ReligionModule() {
 
     const loadData = async () => {
       try {
-        const res = await articleAPI.getPublished({ category: 'religion' });
+        const res = await articleAPI.getPublished({ category: 'religion', language });
         if (isMounted && res && res.data && res.data.length > 0) {
           const mapped = res.data.map((item) => ({
             id: item.slug || item._id,
@@ -28,22 +30,23 @@ export default function ReligionModule() {
         // Fallback
       }
 
-      const all = getAllArticles();
-      const filtered = all.filter((a) => a.category === 'religion');
+      const all = getAllArticles({ category: 'religion', language });
       if (isMounted) {
-        setReligionItems(filtered && filtered.length > 0 ? filtered : []);
+        setReligionItems(all && all.length > 0 ? all : []);
       }
     };
 
     loadData();
     window.addEventListener('storage', loadData);
     window.addEventListener('punjab_articles_updated', loadData);
+    window.addEventListener('punjab_language_changed', loadData);
     return () => {
       isMounted = false;
       window.removeEventListener('storage', loadData);
       window.removeEventListener('punjab_articles_updated', loadData);
+      window.removeEventListener('punjab_language_changed', loadData);
     };
-  }, []);
+  }, [language]);
 
   if (religionItems.length === 0) {
     return null;

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { articleAPI } from '../../services/api';
 import { getAllArticles } from '../../services/articleStore';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function SportsModule() {
+  const { language } = useLanguage();
   const [articles, setArticles] = useState([]);
 
   useEffect(() => {
@@ -10,7 +12,7 @@ export default function SportsModule() {
 
     const loadSportsArticles = async () => {
       try {
-        const res = await articleAPI.getPublished({ category: 'sport' });
+        const res = await articleAPI.getPublished({ category: 'sport', language });
         if (isMounted && res && res.data && res.data.length > 0) {
           const fromApi = res.data.map((item) => ({
             id: item.slug || item._id,
@@ -26,7 +28,7 @@ export default function SportsModule() {
         }
       } catch (err) {}
 
-      const all = getAllArticles({ category: 'sport' });
+      const all = getAllArticles({ category: 'sport', language });
       if (isMounted) {
         if (all && all.length > 0) {
           const mapped = all.slice(0, 4).map((item) => ({
@@ -48,12 +50,14 @@ export default function SportsModule() {
     loadSportsArticles();
     window.addEventListener('storage', loadSportsArticles);
     window.addEventListener('punjab_articles_updated', loadSportsArticles);
+    window.addEventListener('punjab_language_changed', loadSportsArticles);
     return () => {
       isMounted = false;
       window.removeEventListener('storage', loadSportsArticles);
       window.removeEventListener('punjab_articles_updated', loadSportsArticles);
+      window.removeEventListener('punjab_language_changed', loadSportsArticles);
     };
-  }, []);
+  }, [language]);
 
   if (articles.length === 0) {
     return null;

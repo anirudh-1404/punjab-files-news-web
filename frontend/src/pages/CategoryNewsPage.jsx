@@ -4,6 +4,7 @@ import { articleAPI, categoryAPI } from '../services/api';
 import { getAllArticles } from '../services/articleStore';
 import { formatArticleDate } from '../services/dateUtils';
 import { getHighResImageUrl, getCardImageUrl } from '../services/imageUtils';
+import { useLanguage } from '../context/LanguageContext';
 
 const REGION_INFO = {
   majha: {
@@ -54,6 +55,7 @@ const CATEGORY_NAMES = {
 
 export default function CategoryNewsPage() {
   const { category = 'punjab', subRegion } = useParams();
+  const { language } = useLanguage();
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [categoryMeta, setCategoryMeta] = useState(null);
@@ -83,7 +85,7 @@ export default function CategoryNewsPage() {
         } catch (e) {}
 
         // 1. Fetch published articles from backend
-        const queryParams = { category, limit: 30 };
+        const queryParams = { category, limit: 30, language };
         if (subRegion && subRegion !== 'all') {
           queryParams.punjabRegion = subRegion.toLowerCase();
         }
@@ -94,19 +96,19 @@ export default function CategoryNewsPage() {
         if (isMounted) {
           setArticles(liveArticles);
           // Trending articles from general store or api
-          const allStoreArticles = getAllArticles();
+          const allStoreArticles = getAllArticles({ language });
           setTrendingArticles(allStoreArticles.slice(0, 5));
         }
       } catch (err) {
         console.warn('Backend load error, checking local store:', err);
         if (isMounted) {
-          const filter = { category };
+          const filter = { category, language };
           if (subRegion && subRegion !== 'all') {
             filter.punjabRegion = subRegion.toLowerCase();
           }
           const localList = getAllArticles(filter);
           setArticles(localList);
-          setTrendingArticles(getAllArticles().slice(0, 5));
+          setTrendingArticles(getAllArticles({ language }).slice(0, 5));
         }
       } finally {
         if (isMounted) setLoading(false);
@@ -114,11 +116,17 @@ export default function CategoryNewsPage() {
     }
 
     loadCategoryData();
+    window.addEventListener('storage', loadCategoryData);
+    window.addEventListener('punjab_articles_updated', loadCategoryData);
+    window.addEventListener('punjab_language_changed', loadCategoryData);
 
     return () => {
       isMounted = false;
+      window.removeEventListener('storage', loadCategoryData);
+      window.removeEventListener('punjab_articles_updated', loadCategoryData);
+      window.removeEventListener('punjab_language_changed', loadCategoryData);
     };
-  }, [category, subRegion]);
+  }, [category, subRegion, language]);
 
   const leadArticle = articles[0] || null;
   const otherArticles = articles.slice(1);

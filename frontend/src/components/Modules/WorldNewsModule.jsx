@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { articleAPI } from '../../services/api';
 import { getAllArticles } from '../../services/articleStore';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function WorldNewsModule() {
+  const { language } = useLanguage();
   const [items, setItems] = useState([]);
 
   useEffect(() => {
@@ -11,7 +13,7 @@ export default function WorldNewsModule() {
 
     const loadWorldArticles = async () => {
       try {
-        const res = await articleAPI.getPublished({ category: 'world' });
+        const res = await articleAPI.getPublished({ category: 'world', language });
         if (isMounted && res && res.data && res.data.length > 0) {
           const fromApi = res.data.map((item, idx) => ({
             title: item.title,
@@ -29,7 +31,7 @@ export default function WorldNewsModule() {
         // Fallback
       }
 
-      const all = getAllArticles({ category: 'world' });
+      const all = getAllArticles({ category: 'world', language });
       if (isMounted) {
         if (all && all.length > 0) {
           const mapped = all.slice(0, 4).map((item, idx) => ({
@@ -50,12 +52,14 @@ export default function WorldNewsModule() {
     loadWorldArticles();
     window.addEventListener('storage', loadWorldArticles);
     window.addEventListener('punjab_articles_updated', loadWorldArticles);
+    window.addEventListener('punjab_language_changed', loadWorldArticles);
     return () => {
       isMounted = false;
       window.removeEventListener('storage', loadWorldArticles);
       window.removeEventListener('punjab_articles_updated', loadWorldArticles);
+      window.removeEventListener('punjab_language_changed', loadWorldArticles);
     };
-  }, []);
+  }, [language]);
 
   if (items.length === 0) {
     return null;

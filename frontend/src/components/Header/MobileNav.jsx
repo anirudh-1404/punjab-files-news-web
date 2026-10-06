@@ -3,11 +3,13 @@ import { createPortal } from 'react-dom';
 import { useNavigate, Link } from 'react-router-dom';
 import brandLogo from '../../assets/logo-updated.png';
 import { categoryAPI } from '../../services/api';
+import { useLanguage } from '../../context/LanguageContext';
 
 const PUNJAB_SLUG = 'punjab';
 
 export default function MobileNav() {
   const navigate = useNavigate();
+  const { language, setLanguage, languages } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [categories, setCategories] = useState([]);
   const [mobileDrawerSearch, setMobileDrawerSearch] = useState('');
@@ -245,6 +247,45 @@ export default function MobileNav() {
                   <i className="fa fa-search" style={{ fontSize: '12px' }}></i>
                 </button>
               </form>
+            </div>
+
+            {/* Drawer Language Switcher (No country flags) */}
+            <div
+              style={{
+                padding: '10px 16px',
+                borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                backgroundColor: '#1a1d24'
+              }}
+            >
+              <div style={{ fontSize: '10.5px', color: '#94a3b8', fontWeight: '800', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.4px' }}>
+                ਖ਼ਬਰਾਂ ਦੀ ਭਾਸ਼ਾ (Select Language)
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px' }}>
+                {languages.map((l) => {
+                  const isActive = language === l.code;
+                  return (
+                    <button
+                      key={l.code}
+                      type="button"
+                      onClick={() => setLanguage(l.code)}
+                      style={{
+                        padding: '6px 4px',
+                        borderRadius: '5px',
+                        fontSize: '11.5px',
+                        fontWeight: isActive ? '800' : '600',
+                        backgroundColor: isActive ? '#b71c1c' : 'rgba(255, 255, 255, 0.08)',
+                        color: '#ffffff',
+                        border: isActive ? '1px solid #ebb10d' : '1px solid rgba(255, 255, 255, 0.15)',
+                        cursor: 'pointer',
+                        textAlign: 'center',
+                        transition: 'all 0.15s ease'
+                      }}
+                    >
+                      {l.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             {/* Navigation List */}

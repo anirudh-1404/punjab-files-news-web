@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { articleAPI } from '../services/api';
 import { getAllArticles } from '../services/articleStore';
 import { getCardImageUrl } from '../services/imageUtils';
+import { useLanguage } from '../context/LanguageContext';
 
 const emptyRegionalNews = {
   majha: [],
@@ -11,6 +12,7 @@ const emptyRegionalNews = {
 };
 
 export default function DarbarSahibAndPunjabModule() {
+  const { language } = useLanguage();
   const [activeRegion, setActiveRegion] = useState('all');
   const [regionalNews, setRegionalNews] = useState(emptyRegionalNews);
 
@@ -19,7 +21,7 @@ export default function DarbarSahibAndPunjabModule() {
 
     const loadDynamicPunjabNews = async () => {
       try {
-        const res = await articleAPI.getPublished({ category: 'punjab' });
+        const res = await articleAPI.getPublished({ category: 'punjab', language });
         if (isMounted && res && res.data && res.data.length > 0) {
           const all = res.data;
           const majhaFromApi = all.filter((a) => a.punjabRegion === 'majha').map((a) => ({
@@ -64,7 +66,7 @@ export default function DarbarSahibAndPunjabModule() {
       }
 
       // Fallback if API was unavailable
-      const allLocal = getAllArticles({ category: 'punjab' });
+      const allLocal = getAllArticles({ category: 'punjab', language });
       if (isMounted) {
         if (allLocal && allLocal.length > 0) {
           const majha = allLocal.filter((a) => a.punjabRegion === 'majha').map((a) => ({
@@ -111,6 +113,7 @@ export default function DarbarSahibAndPunjabModule() {
     loadDynamicPunjabNews();
     window.addEventListener('storage', loadDynamicPunjabNews);
     window.addEventListener('punjab_articles_updated', loadDynamicPunjabNews);
+    window.addEventListener('punjab_language_changed', loadDynamicPunjabNews);
 
     const handleRegionSelect = (e) => {
       if (e.detail && ['all', 'majha', 'malwa', 'doaba'].includes(e.detail)) {
@@ -123,9 +126,10 @@ export default function DarbarSahibAndPunjabModule() {
       isMounted = false;
       window.removeEventListener('storage', loadDynamicPunjabNews);
       window.removeEventListener('punjab_articles_updated', loadDynamicPunjabNews);
+      window.removeEventListener('punjab_language_changed', loadDynamicPunjabNews);
       window.removeEventListener('punjab_region_select', handleRegionSelect);
     };
-  }, []);
+  }, [language]);
 
   const getFilteredNews = () => {
     if (activeRegion === 'majha') return regionalNews.majha;

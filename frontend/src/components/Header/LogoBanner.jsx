@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import brandLogo from '../../assets/logo-updated.png';
+import LanguageFilterDropdown from './LanguageFilterDropdown';
 
 export default function LogoBanner() {
   const [timeStr, setTimeStr] = useState('');
@@ -70,8 +71,8 @@ export default function LogoBanner() {
         flex: 1
       }}
     >
-      {/* Left: Prominent & Enlarged Brand Logo */}
-      <div className="header-brand-block" style={{ flexShrink: 0 }}>
+      {/* Left: Prominent & Enlarged Brand Logo + Theme Matched Language Dropdown */}
+      <div className="header-brand-block" style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap', flexShrink: 0 }}>
         <a href="/" style={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}>
           <img
             src={brandLogo}
@@ -87,6 +88,9 @@ export default function LogoBanner() {
             }}
           />
         </a>
+
+        {/* Theme Matched Language Filter Dropdown (No country flags, default Punjabi) */}
+        <LanguageFilterDropdown />
       </div>
 
       {/* Right / Center: Advertisement Provision Next to Logo (728x90 Leaderboard Slot) */}
