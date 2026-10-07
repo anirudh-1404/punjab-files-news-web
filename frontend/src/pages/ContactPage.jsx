@@ -322,7 +322,7 @@ export default function ContactPage() {
               </div>
 
               {/* Advertisement Queries Call Box */}
-              <div style={{ backgroundColor: '#fffbeb', border: '1.5px dashed #f59e0b', borderRadius: '6px', padding: '12px 14px', marginBottom: '18px' }}>
+              <div style={{ backgroundColor: '#fffbeb', border: '1.5px dashed #f59e0b', borderRadius: '6px', padding: '12px 14px', marginBottom: 0 }}>
                 <strong style={{ fontSize: '13px', color: '#92400e', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
                   <i className="fa fa-bullhorn"></i> ਇਸ਼ਤਿਹਾਰਾਂ ਲਈ ਸੰਪਰਕ (Advertisement Queries)
                 </strong>
@@ -339,15 +339,6 @@ export default function ContactPage() {
                   |
                   <a href="mailto:info@punjabfiles.com" style={{ color: '#1c2d5a', fontWeight: '700', textDecoration: 'none', marginLeft: '6px' }}>info@punjabfiles.com</a>
                 </div>
-              </div>
-
-              <div style={{ backgroundColor: '#f1f5f9', padding: '14px', borderRadius: '4px' }}>
-                <strong style={{ fontSize: '12.5px', color: '#1c2d5a', display: 'block', marginBottom: '4px' }}>
-                  <i className="fa fa-shield" style={{ marginRight: '4px' }}></i> ਨਿਰਪੱਖ ਪੱਤਰਕਾਰੀ
-                </strong>
-                <p style={{ fontSize: '12px', color: '#111111', margin: 0, lineHeight: '1.45', fontWeight: '500' }}>
-                  ਤੁਹਾਡੀ ਪਛਾਣ ਅਤੇ ਜਾਣਕਾਰੀ ਪੂਰੀ ਤਰ੍ਹਾਂ ਗੁਪਤ ਰੱਖੀ ਜਾਵੇਗੀ। ਅਸੀਂ ਜ਼ਮੀਨੀ ਸੱਚਾਈ ਸਾਹਮਣੇ ਲਿਆਉਣ ਲਈ ਵਚਨਬੱਧ ਹਾਂ।
-                </p>
               </div>
             </div>
           </div>
