@@ -288,7 +288,7 @@ export default function ContactPage() {
                 <div>
                   <strong style={{ fontSize: '13.5px', color: '#000000', display: 'block' }}>Head Office Address (ਮੁੱਖ ਦਫ਼ਤਰ)</strong>
                   <span style={{ fontSize: '13px', color: '#111111', lineHeight: '1.5', fontWeight: '600' }}>
-                    SCO 106, 3rd Floor, District Shopping Center,<br />
+                    SCO 106, 4th Floor, District Shopping Center,<br />
                     Ranjit Avenue, Amritsar - 143001, Punjab, India
                   </span>
                 </div>
