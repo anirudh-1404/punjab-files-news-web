@@ -327,7 +327,7 @@ export default function ContactPage() {
                   <i className="fa fa-bullhorn"></i> ਇਸ਼ਤਿਹਾਰਾਂ ਲਈ ਸੰਪਰਕ (Advertisement Queries)
                 </strong>
                 <p style={{ fontSize: '12px', color: '#451a03', margin: '0 0 6px', lineHeight: '1.45' }}>
-                  ਵੈੱਬਸਾਈਟ ਅਤੇ ਵੀਡੀਓ ਸਟੂਡੀਓ ਵਿੱਚ ਇਸ਼ਤਿਹਾਰ ਦੇਣ ਲਈ ਸਾਡੀ ਮਾਰਕੀਟਿੰਗ ਟੀਮ ਨਾਲ ਸੰਪਰਕ ਕਰੋ:
+                  ਵੈੱਬਸਾਈਟ ਅਤੇ ਵੈੱਬ ਚੈਨਲ 'ਤੇ ਇਸ਼ਤਿਹਾਰ ਦੇਣ ਲਈ ਸਾਡੀ ਮਾਰਕੀਟਿੰਗ ਟੀਮ ਨਾਲ ਸੰਪਰਕ ਕਰੋ:
                 </p>
                 <div style={{ fontSize: '12.5px', color: '#111827', fontWeight: '700' }}>
                   <span>ਮੋਬਾਈਲ: </span>
