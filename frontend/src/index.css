@@ -1871,19 +1871,246 @@ html, body {
   box-shadow: inset 0 -3px 0 0 #ebb10d !important;
 }
 
-/* Desktop Punjab Dropdown Rules (Never cut off by overflow) */
-@media (min-width: 769px) {
+/* ====================================================
+   FIXED NAVBAR: MOBILE & TABLET (<= 1199px)
+   Matches mobile horizontal swipeable pill strip exactly
+==================================================== */
+@media (max-width: 1199px) {
+  .mobile-tablet-chip {
+    display: inline-flex !important;
+  }
+
+  .desktop-only-search {
+    display: none !important;
+  }
+
+  .desktop-only-dropdown {
+    display: none !important;
+  }
+
+  .mobile-tablet-only {
+    display: block !important;
+  }
+
+  #fixed-navbar {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    min-height: auto !important;
+    margin: 0 !important;
+    border: none !important;
+    border-top: 1px solid var(--brand-crimson) !important;
+    border-bottom: 2px solid var(--brand-crimson) !important;
+    background: linear-gradient(180deg, var(--brand-gold) 0%, var(--brand-gold-dark) 100%) !important;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.18) !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  #fixed-navbar .main-menu {
+    display: block !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    width: 100% !important;
+  }
+
+  #fixed-navbar .container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    box-sizing: border-box !important;
+  }
+
+  #fixed-navbar .nav-scroll-container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    box-sizing: border-box !important;
+  }
+
+  #fixed-navbar .nav-scroll-container::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  #fixed-navbar .navbar-nav,
+  #fixed-navbar .horizontal-category-nav {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    margin: 0 !important;
+    padding: 6px 0 !important;
+    gap: 6px !important;
+    width: max-content !important;
+    min-width: 100% !important;
+    float: none !important;
+    align-items: center !important;
+  }
+
+  #fixed-navbar .navbar-nav::-webkit-scrollbar,
+  #fixed-navbar .horizontal-category-nav::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  #fixed-navbar .navbar-nav > li,
+  #fixed-navbar .horizontal-category-nav > li {
+    float: none !important;
+    flex-shrink: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+  }
+
+  #fixed-navbar .navbar-nav > li > a,
+  #fixed-navbar .horizontal-category-nav > li > a {
+    padding: 6px 13px !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    white-space: nowrap !important;
+    border-radius: 6px !important;
+    border: 1px solid rgba(0, 0, 0, 0.12) !important;
+    background: rgba(0, 0, 0, 0.08) !important;
+    color: #111317 !important;
+    line-height: 1.25 !important;
+    display: flex !important;
+    align-items: center !important;
+    transition: all 0.2s ease !important;
+  }
+
+  #fixed-navbar .navbar-nav > li.active > a,
+  #fixed-navbar .navbar-nav > li.active > a:focus,
+  #fixed-navbar .navbar-nav > li.active > a:hover,
+  #fixed-navbar .horizontal-category-nav > li.active > a {
+    background-color: #8c0008 !important;
+    color: #ffffff !important;
+    border-color: #8c0008 !important;
+    box-shadow: 0 2px 6px rgba(140, 0, 8, 0.4) !important;
+  }
+
+  /* Suppress duplicate template arrow indicators */
+  #fixed-navbar .horizontal-category-nav .dropdown-toggle::after,
+  #fixed-navbar .horizontal-category-nav li.dropdown > a::after,
+  #fixed-navbar .horizontal-category-nav a::after {
+    display: none !important;
+    content: none !important;
+  }
+
+  #fixed-navbar .dropdown-menu {
+    display: none;
+    position: absolute !important;
+    top: calc(100% + 4px) !important;
+    left: 0 !important;
+    min-width: 210px !important;
+    background-color: #1c2d5a !important;
+    border: 2px solid #ebb10d !important;
+    border-radius: 8px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+    padding: 6px 0 !important;
+    z-index: 999999 !important;
+    list-style: none !important;
+  }
+
+  #fixed-navbar .dropdown-menu.punjab-dropdown-show,
+  #fixed-navbar .punjab-nav-item.open .dropdown-menu,
+  #fixed-navbar .more-nav-item.open .dropdown-menu {
+    display: block !important;
+  }
+
+  #fixed-navbar .dropdown-menu li {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  #fixed-navbar .dropdown-menu li a {
+    display: block !important;
+    padding: 9px 16px !important;
+    color: #ffffff !important;
+    font-size: 13.5px !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    text-align: left !important;
+    transition: all 0.15s ease !important;
+  }
+
+  #fixed-navbar .dropdown-menu li:last-child a {
+    border-bottom: none !important;
+  }
+
+  #fixed-navbar .dropdown-menu li a:hover,
+  #fixed-navbar .dropdown-menu li a:active {
+    background-color: #b71c1c !important;
+    color: #ffffff !important;
+    padding-left: 20px !important;
+  }
+}
+
+/* ====================================================
+   FIXED NAVBAR: DESKTOP SCREENS (>= 1200px)
+==================================================== */
+@media (min-width: 1200px) {
+  .mobile-tablet-chip {
+    display: none !important;
+  }
+
+  .desktop-only-search {
+    display: flex !important;
+  }
+
+  .mobile-tablet-only {
+    display: none !important;
+  }
+
   #fixed-navbar .nav-scroll-container {
     overflow: visible !important;
+    flex: 1 1 auto !important;
   }
-  #fixed-navbar .navbar-nav {
+
+  #fixed-navbar .navbar-nav,
+  #fixed-navbar .horizontal-category-nav {
     overflow: visible !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 0 !important;
+    width: auto !important;
   }
+
+  #fixed-navbar .navbar-nav > li,
+  #fixed-navbar .horizontal-category-nav > li {
+    float: none !important;
+    flex-shrink: 0 !important;
+  }
+
   #fixed-navbar .punjab-nav-item {
     position: relative !important;
   }
+
   #fixed-navbar .punjab-nav-item.open > .dropdown-menu,
   #fixed-navbar .punjab-nav-item:hover > .dropdown-menu {
+    display: block !important;
+  }
+
+  #fixed-navbar .more-nav-item.open > .dropdown-menu,
+  #fixed-navbar .more-nav-item:hover > .dropdown-menu {
     display: block !important;
   }
 }
@@ -2042,159 +2269,7 @@ html, body {
     float: right !important;
   }
 
-  /* 3. Horizontal Swipeable Category Pill Strip (#fixed-navbar) */
-  #fixed-navbar {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    height: auto !important;
-    min-height: auto !important;
-    margin: 0 !important;
-    border: none !important;
-    border-top: 1px solid var(--brand-crimson) !important;
-    border-bottom: 2px solid var(--brand-crimson) !important;
-    background: linear-gradient(180deg, var(--brand-gold) 0%, var(--brand-gold-dark) 100%) !important;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.18) !important;
-    padding: 0 !important;
-    width: 100% !important;
-  }
 
-  #fixed-navbar .main-menu {
-    display: block !important;
-    padding: 0 !important;
-    border: none !important;
-    box-shadow: none !important;
-    background: transparent !important;
-    width: 100% !important;
-  }
-
-  #fixed-navbar .nav-scroll-container {
-    padding-left: 12px !important;
-    padding-right: 12px !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-    scrollbar-width: none !important;
-    box-sizing: border-box !important;
-  }
-
-  #fixed-navbar .nav-scroll-container::-webkit-scrollbar {
-    display: none !important;
-  }
-
-  #fixed-navbar .navbar-nav,
-  #fixed-navbar .horizontal-category-nav {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-    scrollbar-width: none !important;
-    margin: 0 !important;
-    padding: 6px 0 !important;
-    gap: 6px !important;
-    width: max-content !important;
-    min-width: 100% !important;
-    float: none !important;
-  }
-
-  #fixed-navbar .navbar-nav::-webkit-scrollbar,
-  #fixed-navbar .horizontal-category-nav::-webkit-scrollbar {
-    display: none !important;
-  }
-
-  #fixed-navbar .navbar-nav > li,
-  #fixed-navbar .horizontal-category-nav > li {
-    float: none !important;
-    flex-shrink: 0 !important;
-    display: inline-flex !important;
-  }
-
-  #fixed-navbar .navbar-nav > li > a,
-  #fixed-navbar .horizontal-category-nav > li > a {
-    padding: 6px 13px !important;
-    font-size: 13px !important;
-    font-weight: 800 !important;
-    white-space: nowrap !important;
-    border-radius: 6px !important;
-    border: 1px solid rgba(0, 0, 0, 0.12) !important;
-    background: rgba(0, 0, 0, 0.08) !important;
-    color: #111317 !important;
-    line-height: 1.25 !important;
-    display: flex !important;
-    align-items: center !important;
-    transition: all 0.2s ease !important;
-  }
-
-  #fixed-navbar .navbar-nav > li.active > a,
-  #fixed-navbar .navbar-nav > li.active > a:focus,
-  #fixed-navbar .navbar-nav > li.active > a:hover,
-  #fixed-navbar .horizontal-category-nav > li.active > a {
-    background-color: #8c0008 !important;
-    color: #ffffff !important;
-    border-color: #8c0008 !important;
-    box-shadow: 0 2px 6px rgba(140, 0, 8, 0.4) !important;
-  }
-
-  /* Completely suppress any template pseudo-element arrows (removes duplicate arrows) */
-  #fixed-navbar .horizontal-category-nav .dropdown-toggle::after,
-  #fixed-navbar .horizontal-category-nav li.dropdown > a::after,
-  #fixed-navbar .horizontal-category-nav a::after {
-    display: none !important;
-    content: none !important;
-  }
-
-  #fixed-navbar .dropdown-menu {
-    display: none;
-    position: absolute !important;
-    top: calc(100% + 4px) !important;
-    left: 0 !important;
-    min-width: 210px !important;
-    background-color: #1c2d5a !important;
-    border: 2px solid #ebb10d !important;
-    border-radius: 8px !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
-    padding: 6px 0 !important;
-    z-index: 999999 !important;
-    list-style: none !important;
-  }
-
-  #fixed-navbar .dropdown-menu.punjab-dropdown-show,
-  #fixed-navbar .punjab-nav-item.open .dropdown-menu {
-    display: block !important;
-  }
-
-  #fixed-navbar .dropdown-menu li {
-    display: block !important;
-    width: 100% !important;
-  }
-
-  #fixed-navbar .dropdown-menu li a {
-    display: block !important;
-    padding: 9px 16px !important;
-    color: #ffffff !important;
-    font-size: 13.5px !important;
-    font-weight: 700 !important;
-    text-decoration: none !important;
-    border-radius: 0 !important;
-    background: transparent !important;
-    border: none !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-    text-align: left !important;
-    transition: all 0.15s ease !important;
-  }
-
-  #fixed-navbar .dropdown-menu li:last-child a {
-    border-bottom: none !important;
-  }
-
-  #fixed-navbar .dropdown-menu li a:hover,
-  #fixed-navbar .dropdown-menu li a:active {
-    background-color: #b71c1c !important;
-    color: #ffffff !important;
-    padding-left: 20px !important;
-  }
 
   /* 4. Top Breaking News Ticker */
   .header-top-breaking-wrapper {

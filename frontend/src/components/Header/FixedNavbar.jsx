@@ -203,8 +203,8 @@ export default function FixedNavbar() {
           <div className="nav-scroll-container" style={{ flex: '1 1 auto' }}>
             <ul className="nav navbar-nav horizontal-category-nav">
 
-              {/* Mobile: Menu Button Chip */}
-              <li className="category-indicator-chip visible-xs visible-sm" style={{ display: 'inline-flex', alignItems: 'center' }}>
+              {/* Mobile & Tablet: Menu Button Chip */}
+              <li className="category-indicator-chip mobile-tablet-chip" style={{ alignItems: 'center' }}>
                 <button
                   type="button"
                   onClick={() => window.dispatchEvent(new CustomEvent('open_mobile_menu'))}
@@ -231,8 +231,8 @@ export default function FixedNavbar() {
                 </button>
               </li>
 
-              {/* Mobile: Search Button Chip */}
-              <li className="category-indicator-chip visible-xs visible-sm" style={{ display: 'inline-flex', alignItems: 'center' }}>
+              {/* Mobile & Tablet: Search Button Chip */}
+              <li className="category-indicator-chip mobile-tablet-chip" style={{ alignItems: 'center' }}>
                 <button
                   type="button"
                   onClick={() => setMobileSearchOpen((prev) => !prev)}
@@ -287,7 +287,7 @@ export default function FixedNavbar() {
                   </a>
 
                   {/* Desktop Punjab Dropdown */}
-                  <ul className="dropdown-menu punjab-dropdown-list hidden-xs hidden-sm" style={dropdownMenuStyle(punjabDropdownOpen)}>
+                  <ul className="dropdown-menu punjab-dropdown-list hidden-xs hidden-sm desktop-only-dropdown" style={dropdownMenuStyle(punjabDropdownOpen)}>
                     <li>
                       <Link
                         to={`/category/${PUNJAB_SLUG}`}
@@ -351,7 +351,7 @@ export default function FixedNavbar() {
                     <i className={`fa fa-chevron-${moreDropdownOpen ? 'up' : 'down'}`} style={{ fontSize: '11px', marginLeft: '3px' }}></i>
                   </a>
 
-                  <ul className="dropdown-menu more-dropdown-list hidden-xs hidden-sm" style={dropdownMenuStyle(moreDropdownOpen)}>
+                  <ul className="dropdown-menu more-dropdown-list" style={dropdownMenuStyle(moreDropdownOpen)}>
                     {moreCats.map((cat) => (
                       <li key={cat.slug}>
                         <Link
@@ -410,9 +410,9 @@ export default function FixedNavbar() {
             </ul>
           </div>
 
-          {/* Desktop Search Bar */}
+          {/* Desktop Search Bar (Hidden on Tablets & Mobile) */}
           <div
-            className="navbar-search-desktop-wrapper hidden-xs hidden-sm"
+            className="navbar-search-desktop-wrapper desktop-only-search"
             style={{ flexShrink: 0, marginLeft: '20px', display: 'flex', alignItems: 'center' }}
           >
             <form
@@ -491,7 +491,7 @@ export default function FixedNavbar() {
       {/* Mobile Expandable Search Panel */}
       {mobileSearchOpen && (
         <div
-          className="visible-xs visible-sm"
+          className="mobile-tablet-only"
           style={{
             padding: '10px 14px',
             backgroundColor: '#12141a',
@@ -555,9 +555,9 @@ export default function FixedNavbar() {
         </div>
       )}
 
-      {/* Mobile: Punjab Floating Region Card (shown outside scroll container to avoid clipping) */}
+      {/* Mobile & Tablet: Punjab Floating Region Card */}
       {punjabDropdownOpen && punjabCat && (
-        <div className="visible-xs visible-sm">
+        <div className="mobile-tablet-only">
           <div
             onClick={() => setPunjabDropdownOpen(false)}
             style={{
