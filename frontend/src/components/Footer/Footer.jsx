@@ -67,31 +67,18 @@ export default function Footer() {
                 </p>
                 <div className="site-logo" style={{ marginTop: '16px' }}>
                   <Link to="/" style={{ textDecoration: 'none', display: 'inline-block' }}>
-                    <div
+                    <img
+                      src={brandLogo}
+                      alt="Punjab Files Logo"
                       style={{
-                        backgroundColor: '#ffffff',
-                        borderRadius: '8px',
-                        padding: '10px 16px',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.3)',
-                        border: '1px solid rgba(255, 255, 255, 0.2)'
+                        height: '92px',
+                        maxHeight: '100px',
+                        maxWidth: '240px',
+                        width: 'auto',
+                        objectFit: 'contain',
+                        display: 'block'
                       }}
-                    >
-                      <img
-                        src={brandLogo}
-                        alt="Punjab Files Logo"
-                        style={{
-                          height: '92px',
-                          maxHeight: '100px',
-                          maxWidth: '240px',
-                          width: 'auto',
-                          objectFit: 'contain',
-                          display: 'block'
-                        }}
-                      />
-                    </div>
+                    />
                   </Link>
                 </div>
 
