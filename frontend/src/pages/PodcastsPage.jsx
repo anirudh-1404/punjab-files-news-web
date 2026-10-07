@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { podcastAPI } from '../services/api';
 import AdBanner from '../components/Common/AdBanner';
+import { formatArticleDate } from '../services/dateUtils';
 
 // Helper to extract YouTube ID
 function extractYouTubeId(url) {
@@ -10,19 +11,10 @@ function extractYouTubeId(url) {
   return match ? match[1] : null;
 }
 
-// Format date nicely
+// Format date nicely in Punjabi (e.g., 7 ਅਕਤੂਬਰ, 2026)
 function formatDate(dateStr) {
   if (!dateStr) return '';
-  try {
-    const d = new Date(dateStr);
-    return d.toLocaleDateString('pa-IN', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    });
-  } catch (e) {
-    return dateStr;
-  }
+  return formatArticleDate(dateStr, 'pa');
 }
 
 export default function PodcastsPage() {
@@ -30,6 +22,24 @@ export default function PodcastsPage() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [activePlayingId, setActivePlayingId] = useState(null);
+  const [modalPodcast, setModalPodcast] = useState(null);
+
+  // Lock body scroll when modal is open + handle Escape key
+  useEffect(() => {
+    if (modalPodcast) {
+      document.body.style.overflow = 'hidden';
+      const handleKeyDown = (e) => {
+        if (e.key === 'Escape') setModalPodcast(null);
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.body.style.overflow = '';
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    } else {
+      document.body.style.overflow = '';
+    }
+  }, [modalPodcast]);
 
   useEffect(() => {
     let isMounted = true;
@@ -114,7 +124,7 @@ export default function PodcastsPage() {
           >
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '0' }}>
               {/* Left: Video Player */}
-              <div style={{ backgroundColor: '#000000', position: 'relative' }}>
+              <div style={{ backgroundColor: '#000000', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {isFeaturedVideo && featuredYouTubeId ? (
                   <div style={{ position: 'relative', width: '100%', paddingBottom: '56.25%', height: 0 }}>
                     <iframe
@@ -172,9 +182,47 @@ export default function PodcastsPage() {
                     {featuredPodcast.title}
                   </h2>
 
-                  <p style={{ margin: '0 0 16px', fontSize: '13.5px', color: '#475569', lineHeight: '1.6' }}>
+                  <p
+                    style={{
+                      margin: '0 0 8px',
+                      fontSize: '13.5px',
+                      color: '#475569',
+                      lineHeight: '1.6',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 4,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis'
+                    }}
+                  >
                     {featuredPodcast.description}
                   </p>
+
+                  {featuredPodcast.description && featuredPodcast.description.length > 120 && (
+                    <button
+                      type="button"
+                      onClick={() => setModalPodcast(featuredPodcast)}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: '#b71c1c',
+                        fontWeight: '800',
+                        fontSize: '13px',
+                        cursor: 'pointer',
+                        padding: 0,
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '5px',
+                        marginBottom: '14px',
+                        fontFamily: "'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif"
+                      }}
+                      onMouseEnter={(e) => (e.currentTarget.style.textDecoration = 'underline')}
+                      onMouseLeave={(e) => (e.currentTarget.style.textDecoration = 'none')}
+                    >
+                      <span>ਹੋਰ ਪੜ੍ਹੋ... (Read More)</span>
+                      <i className="fa fa-angle-right" style={{ fontSize: '13px', fontWeight: '900' }}></i>
+                    </button>
+                  )}
                 </div>
 
                 <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
@@ -427,18 +475,45 @@ export default function PodcastsPage() {
 
                       <p
                         style={{
-                          margin: '0 0 12px',
+                          margin: '0 0 6px',
                           fontSize: '12.5px',
                           color: '#64748b',
                           lineHeight: '1.5',
                           display: '-webkit-box',
                           WebkitLineClamp: 2,
                           WebkitBoxOrient: 'vertical',
-                          overflow: 'hidden'
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis'
                         }}
                       >
                         {podcast.description}
                       </p>
+
+                      {podcast.description && podcast.description.length > 80 && (
+                        <button
+                          type="button"
+                          onClick={() => setModalPodcast(podcast)}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: '#b71c1c',
+                            fontWeight: '800',
+                            fontSize: '11.5px',
+                            cursor: 'pointer',
+                            padding: 0,
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            marginBottom: '10px',
+                            fontFamily: "'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif"
+                          }}
+                          onMouseEnter={(e) => (e.currentTarget.style.textDecoration = 'underline')}
+                          onMouseLeave={(e) => (e.currentTarget.style.textDecoration = 'none')}
+                        >
+                          <span>ਹੋਰ ਪੜ੍ਹੋ (Read More)</span>
+                          <i className="fa fa-angle-right"></i>
+                        </button>
+                      )}
                     </div>
 
                     {/* Footer */}
@@ -476,6 +551,254 @@ export default function PodcastsPage() {
           </div>
         )}
       </div>
+
+      {/* Podcast Full Details Modal Popup */}
+      {modalPodcast && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: 'rgba(15, 23, 42, 0.75)',
+            backdropFilter: 'blur(4px)',
+            WebkitBackdropFilter: 'blur(4px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 999999,
+            padding: '16px',
+            boxSizing: 'border-box'
+          }}
+          onClick={() => setModalPodcast(null)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              backgroundColor: '#ffffff',
+              borderRadius: '14px',
+              maxWidth: '680px',
+              width: '100%',
+              maxHeight: '90vh',
+              display: 'flex',
+              flexDirection: 'column',
+              boxShadow: '0 24px 60px rgba(0, 0, 0, 0.35)',
+              border: '1.5px solid rgba(235, 177, 13, 0.4)',
+              overflow: 'hidden',
+              fontFamily: "'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif"
+            }}
+          >
+            {/* Modal Header */}
+            <div
+              style={{
+                padding: '16px 22px',
+                borderBottom: '1px solid #e2e8f0',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                background: 'linear-gradient(135deg, #1c2d5a 0%, #152244 100%)',
+                color: '#ffffff'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                <span
+                  style={{
+                    backgroundColor: '#ebb10d',
+                    color: '#1c2d5a',
+                    fontSize: '11px',
+                    fontWeight: '900',
+                    padding: '3px 9px',
+                    borderRadius: '4px',
+                    textTransform: 'uppercase'
+                  }}
+                >
+                  <i className="fa fa-podcast" style={{ marginRight: '5px' }}></i> ਪੋਡਕਾਸਟ ਵੇਰਵੇ
+                </span>
+                {modalPodcast.duration && (
+                  <span style={{ fontSize: '12px', color: '#cbd5e1' }}>
+                    <i className="fa fa-clock-o" style={{ marginRight: '4px', color: '#ebb10d' }}></i>
+                    {modalPodcast.duration}
+                  </span>
+                )}
+                {modalPodcast.publishedAt && (
+                  <span style={{ fontSize: '12px', color: '#94a3b8' }}>
+                    • {formatDate(modalPodcast.publishedAt)}
+                  </span>
+                )}
+              </div>
+
+              {/* Close Button */}
+              <button
+                type="button"
+                onClick={() => setModalPodcast(null)}
+                aria-label="ਬੰਦ ਕਰੋ (Close)"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  borderRadius: '50%',
+                  width: '32px',
+                  height: '32px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#ffffff',
+                  fontSize: '15px',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#b71c1c';
+                  e.currentTarget.style.color = '#ffffff';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                  e.currentTarget.style.color = '#ffffff';
+                }}
+              >
+                <i className="fa fa-times"></i>
+              </button>
+            </div>
+
+            {/* Modal Body (Scrollable) */}
+            <div
+              style={{
+                padding: '24px',
+                overflowY: 'auto',
+                flex: 1,
+                maxHeight: 'calc(90vh - 145px)'
+              }}
+            >
+              <h2
+                style={{
+                  margin: '0 0 14px',
+                  fontSize: '20px',
+                  fontWeight: '900',
+                  color: '#0f172a',
+                  lineHeight: '1.35'
+                }}
+              >
+                {modalPodcast.title}
+              </h2>
+
+              <div
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  backgroundColor: '#f8fafc',
+                  padding: '6px 12px',
+                  borderRadius: '6px',
+                  border: '1px solid #e2e8f0',
+                  marginBottom: '18px'
+                }}
+              >
+                <i className="fa fa-microphone" style={{ color: '#b71c1c', fontSize: '13px' }}></i>
+                <span style={{ fontSize: '12.5px', color: '#64748b' }}>ਮੇਜ਼ਬਾਨ (Host):</span>
+                <strong style={{ fontSize: '13px', color: '#1c2d5a' }}>{modalPodcast.host || 'ਪੰਜਾਬ ਫਾਈਲਜ਼'}</strong>
+              </div>
+
+              {/* Full Description with paragraph preservation */}
+              <div
+                style={{
+                  fontSize: '14.5px',
+                  color: '#334155',
+                  lineHeight: '1.75',
+                  whiteSpace: 'pre-line',
+                  fontWeight: '500'
+                }}
+              >
+                {modalPodcast.description}
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div
+              style={{
+                padding: '14px 22px',
+                borderTop: '1px solid #f1f5f9',
+                backgroundColor: '#f8fafc',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '10px'
+              }}
+            >
+              <button
+                type="button"
+                onClick={() => setModalPodcast(null)}
+                style={{
+                  backgroundColor: '#e2e8f0',
+                  color: '#334155',
+                  border: 'none',
+                  padding: '8px 16px',
+                  borderRadius: '6px',
+                  fontSize: '13px',
+                  fontWeight: '700',
+                  cursor: 'pointer'
+                }}
+              >
+                ਬੰਦ ਕਰੋ (Close)
+              </button>
+
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                {modalPodcast._id !== activePlayingId && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActivePlayingId(modalPodcast._id);
+                      setModalPodcast(null);
+                      window.scrollTo({ top: 180, behavior: 'smooth' });
+                    }}
+                    style={{
+                      backgroundColor: '#1c2d5a',
+                      color: '#ffffff',
+                      border: 'none',
+                      padding: '8px 16px',
+                      borderRadius: '6px',
+                      fontSize: '13px',
+                      fontWeight: '800',
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px'
+                    }}
+                  >
+                    <i className="fa fa-play-circle"></i>
+                    <span>ਮੁੱਖ ਪਲੇਅਰ 'ਚ ਚਲਾਓ</span>
+                  </button>
+                )}
+
+                {modalPodcast.mediaUrl && (
+                  <a
+                    href={modalPodcast.mediaUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      backgroundColor: '#ef4444',
+                      color: '#ffffff',
+                      padding: '8px 18px',
+                      borderRadius: '6px',
+                      fontSize: '13px',
+                      fontWeight: '800',
+                      textDecoration: 'none',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px'
+                    }}
+                  >
+                    <i className="fa fa-youtube-play"></i>
+                    <span>ਯੂਟਿਊਬ 'ਤੇ ਦੇਖੋ</span>
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

@@ -2078,9 +2078,17 @@ html, body {
     display: none !important;
   }
 
+  #fixed-navbar .container {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    position: relative !important;
+  }
+
   #fixed-navbar .nav-scroll-container {
     overflow: visible !important;
     flex: 1 1 auto !important;
+    min-width: 0 !important;
   }
 
   #fixed-navbar .navbar-nav,
@@ -2100,6 +2108,13 @@ html, body {
     flex-shrink: 0 !important;
   }
 
+  #fixed-navbar .navbar-nav > li > a,
+  #fixed-navbar .horizontal-category-nav > li > a {
+    padding: 10px 9px !important;
+    font-size: 12.5px !important;
+    white-space: nowrap !important;
+  }
+
   #fixed-navbar .punjab-nav-item {
     position: relative !important;
   }
@@ -2112,6 +2127,15 @@ html, body {
   #fixed-navbar .more-nav-item.open > .dropdown-menu,
   #fixed-navbar .more-nav-item:hover > .dropdown-menu {
     display: block !important;
+  }
+}
+
+/* On medium/compact desktop screens (1200px - 1380px), automatically scale padding & text */
+@media (min-width: 1200px) and (max-width: 1380px) {
+  #fixed-navbar .navbar-nav > li > a,
+  #fixed-navbar .horizontal-category-nav > li > a {
+    padding: 9px 8px !important;
+    font-size: 12px !important;
   }
 }
 

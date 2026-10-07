@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { categoryAPI } from '../../services/api';
 
 // Max categories to show directly in the main navbar (before "More" dropdown)
-const MAX_MAIN_NAV = 7;
+const MAX_MAIN_NAV = 5;
 
 // Punjab slug is special — it gets Majha/Malwa/Doaba sub-regions dropdown
 const PUNJAB_SLUG = 'punjab';
@@ -200,7 +200,7 @@ export default function FixedNavbar() {
             position: 'relative'
           }}
         >
-          <div className="nav-scroll-container" style={{ flex: '1 1 auto' }}>
+          <div className="nav-scroll-container" style={{ flex: '1 1 auto', minWidth: 0 }}>
             <ul className="nav navbar-nav horizontal-category-nav">
 
               {/* Mobile & Tablet: Menu Button Chip */}
@@ -410,10 +410,10 @@ export default function FixedNavbar() {
             </ul>
           </div>
 
-          {/* Desktop Search Bar (Hidden on Tablets & Mobile) */}
+          {/* Subtle Compact Desktop Search Bar on Right */}
           <div
             className="navbar-search-desktop-wrapper desktop-only-search"
-            style={{ flexShrink: 0, marginLeft: '20px', display: 'flex', alignItems: 'center' }}
+            style={{ flexShrink: 0, marginLeft: '12px', display: 'flex', alignItems: 'center' }}
           >
             <form
               onSubmit={(e) => {
@@ -426,39 +426,42 @@ export default function FixedNavbar() {
             >
               <input
                 type="text"
-                placeholder="ਖ਼ਬਰਾਂ ਖੋਜੋ... (Search news)"
+                placeholder="ਖ਼ਬਰਾਂ ਖੋਜੋ..."
                 value={navSearchQuery}
                 onChange={(e) => setNavSearchQuery(e.target.value)}
                 style={{
-                  backgroundColor: '#ffffff',
+                  backgroundColor: 'rgba(255, 255, 255, 0.95)',
                   color: '#0f172a',
                   border: '1.5px solid rgba(28, 45, 90, 0.45)',
-                  borderRadius: '24px',
-                  padding: '7px 40px 7px 16px',
-                  fontSize: '13px',
+                  borderRadius: '20px',
+                  padding: '5px 30px 5px 12px',
+                  fontSize: '12px',
                   fontWeight: '600',
-                  width: '210px',
-                  height: '35px',
+                  width: '135px',
+                  height: '31px',
                   boxSizing: 'border-box',
                   outline: 'none',
-                  boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+                  boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
                   transition: 'all 0.25s ease',
                   fontFamily: "'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif"
                 }}
                 onFocus={(e) => {
-                  e.target.style.width = '270px';
+                  e.target.style.width = '175px';
                   e.target.style.borderColor = '#1c2d5a';
-                  e.target.style.boxShadow = '0 0 0 3px rgba(28, 45, 90, 0.2)';
+                  e.target.style.backgroundColor = '#ffffff';
+                  e.target.style.boxShadow = '0 0 0 2.5px rgba(28, 45, 90, 0.2)';
                 }}
                 onBlur={(e) => {
-                  if (!navSearchQuery) e.target.style.width = '210px';
+                  if (!navSearchQuery) e.target.style.width = '135px';
                   e.target.style.borderColor = 'rgba(28, 45, 90, 0.45)';
-                  e.target.style.boxShadow = '0 2px 6px rgba(0,0,0,0.1)';
+                  e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
+                  e.target.style.boxShadow = '0 1px 4px rgba(0,0,0,0.08)';
                 }}
               />
               <button
                 type="submit"
-                aria-label="Search"
+                aria-label="ਖ਼ਬਰਾਂ ਖੋਜੋ"
+                title="ਖ਼ਬਰਾਂ ਖੋਜੋ"
                 style={{
                   position: 'absolute',
                   right: '3px',
@@ -468,15 +471,15 @@ export default function FixedNavbar() {
                   color: '#ffffff',
                   border: 'none',
                   borderRadius: '50%',
-                  width: '29px',
-                  height: '29px',
+                  width: '25px',
+                  height: '25px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   cursor: 'pointer',
-                  fontSize: '12px',
-                  boxShadow: '0 1px 4px rgba(0,0,0,0.2)',
-                  transition: 'background-color 0.15s ease'
+                  fontSize: '11px',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+                  transition: 'all 0.15s ease'
                 }}
                 onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#b71c1c')}
                 onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#1c2d5a')}

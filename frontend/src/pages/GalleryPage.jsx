@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { galleryAPI, categoryAPI } from '../services/api';
+import { formatArticleDate } from '../services/dateUtils';
 
 // Core fallback categories matching Category Manager
 export const DEFAULT_GALLERY_CATEGORIES = [
@@ -392,7 +393,7 @@ export default function GalleryPage() {
                         {photo.photographer || 'ਪੰਜਾਬ ਫਾਈਲਜ਼'}
                       </span>
                       <span>
-                        {photo.eventDate || new Date(photo.createdAt).toLocaleDateString('pa-IN')}
+                        {photo.eventDate || (photo.createdAt ? formatArticleDate(photo.createdAt, 'pa') : '')}
                       </span>
                     </div>
                   </div>
