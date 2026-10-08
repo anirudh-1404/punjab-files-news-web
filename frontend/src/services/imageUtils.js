@@ -62,9 +62,9 @@ export function getCardImageUrl(url, targetWidth = 600) {
     // Strip previous transformation
     suffix = suffix.replace(/^(?:w_\d+,?|h_\d+,?|c_[a-z]+,?|q_[a-z0-9:]+,?|f_[a-z0-9]+,?|dpr_[a-z0-9.]+,?)+\//i, '');
 
-    // Request high-quality 2x width (e.g. targetWidth * 2) so pixels remain razor sharp
+    // Request high-quality 2x width with c_limit so the photo is never cropped or cut off
     const retinaWidth = Math.min(targetWidth * 2, 1200);
-    return `${prefix}c_fill,w_${retinaWidth},f_auto,q_auto:best,dpr_auto/${suffix}`;
+    return `${prefix}c_limit,w_${retinaWidth},f_auto,q_auto:best,dpr_auto/${suffix}`;
   }
 
   return trimmed;

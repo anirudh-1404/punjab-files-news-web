@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { articleAPI } from '../../services/api';
 import { getAllArticles } from '../../services/articleStore';
 import { useLanguage } from '../../context/LanguageContext';
+import NewsCardImage from '../Common/NewsCardImage';
 
 export default function EntertainmentModule() {
   const { language } = useLanguage();
@@ -99,16 +100,13 @@ export default function EntertainmentModule() {
                 }}
               >
                 {/* Image */}
-                <div style={{ position: 'relative', width: '100%', height: '160px', overflow: 'hidden', backgroundColor: '#edf2f7' }}>
-                  <a href={`/news/${item.id}`} style={{ display: 'block', width: '100%', height: '100%' }}>
-                    <img
+                <div style={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
+                  <a href={`/news/${item.id}`} style={{ display: 'block', width: '100%', textDecoration: 'none' }}>
+                    <NewsCardImage
                       src={item.img}
                       alt={item.title}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.3s ease' }}
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = '/img/art-entertainment_370x185-image04.jpg';
-                      }}
+                      height="170px"
+                      fallbackSrc="/img/art-entertainment_370x185-image04.jpg"
                     />
                   </a>
                   <span

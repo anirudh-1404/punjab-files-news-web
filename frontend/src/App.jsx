@@ -22,6 +22,7 @@ import TravelModule from './components/Modules/TravelModule';
 import EntertainmentModule from './components/Modules/EntertainmentModule';
 import ReadersChoiceModule from './components/Modules/ReadersChoiceModule';
 import YouTubeChannelModule from './components/Modules/YouTubeChannelModule';
+import DynamicCategoryModule from './components/Modules/DynamicCategoryModule';
 import AdBanner from './components/Common/AdBanner';
 
 // Inner Pages
@@ -76,10 +77,13 @@ function HomePage() {
       {/* 8. ਧਰਮ ਤੇ ਵਿਰਾਸਤ: Dedicated Religion & Heritage Module (#religion) - Moved after ਮਨੋਰੰਜਨ */}
       <ReligionModule />
 
-      {/* 9. ਪਾਠਕਾਂ ਦੀ ਪਸੰਦ: Dedicated Readers' Choice Top 10 News */}
+      {/* 9. ਗਤੀਸ਼ੀਲ ਕੈਟੇਗਰੀਆਂ (Dynamic Categories created from Admin e.g. Exclusive, Crime, etc.) */}
+      <DynamicCategoryModule />
+
+      {/* 10. ਪਾਠਕਾਂ ਦੀ ਪਸੰਦ: Dedicated Readers' Choice Top 10 News */}
       <ReadersChoiceModule />
 
-      {/* 10. ਯੂਟਿਊਬ ਚੈਨਲ: Dedicated YouTube Video Grid */}
+      {/* 11. ਯੂਟਿਊਬ ਚੈਨਲ: Dedicated YouTube Video Grid */}
       <YouTubeChannelModule />
 
     </section>

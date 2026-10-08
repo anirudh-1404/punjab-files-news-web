@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { articleAPI } from '../services/api';
 import { getAllArticles } from '../services/articleStore';
 import { getCardImageUrl } from '../services/imageUtils';
+import NewsCardImage from './Common/NewsCardImage';
 import { useLanguage } from '../context/LanguageContext';
 
 const emptyRegionalNews = {
@@ -249,24 +250,13 @@ export default function DarbarSahibAndPunjabModule() {
                     }}
                   >
                     {/* Image with Region Badge */}
-                    <div style={{ position: 'relative', width: '100%', height: '165px', overflow: 'hidden', backgroundColor: '#edf2f7' }}>
-                      <Link to={`/news/${item.id}`} style={{ display: 'block', width: '100%', height: '100%' }}>
-                        <img
-                          src={getCardImageUrl(item.img, 380)}
+                    <div style={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
+                      <Link to={`/news/${item.id}`} style={{ display: 'block', width: '100%', textDecoration: 'none' }}>
+                        <NewsCardImage
+                          src={item.img}
                           alt={item.title}
-                          loading="lazy"
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
-                            display: 'block',
-                            transition: 'transform 0.3s',
-                            imageRendering: '-webkit-optimize-contrast'
-                          }}
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = '/img/index_370x185-image01.jpg';
-                          }}
+                          height="175px"
+                          fallbackSrc="/img/index_370x185-image01.jpg"
                         />
                       </Link>
                       <span

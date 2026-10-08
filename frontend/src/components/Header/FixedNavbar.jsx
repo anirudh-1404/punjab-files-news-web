@@ -140,13 +140,20 @@ export default function FixedNavbar() {
       return;
     }
 
-    if (location.pathname !== '/') {
-      navigate(`/#${targetId}`);
-      setTimeout(() => {
+    if (location.pathname === '/') {
+      const el = document.getElementById(targetId);
+      if (el) {
         scrollToSection(targetId);
-      }, 150);
+      } else {
+        navigate(`/category/${targetId}`);
+      }
     } else {
-      scrollToSection(targetId);
+      const el = document.getElementById(targetId);
+      if (el) {
+        scrollToSection(targetId);
+      } else {
+        navigate(`/category/${targetId}`);
+      }
     }
   };
 

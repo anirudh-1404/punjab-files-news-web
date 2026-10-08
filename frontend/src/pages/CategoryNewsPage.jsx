@@ -6,6 +6,7 @@ import { formatArticleDate } from '../services/dateUtils';
 import { getHighResImageUrl, getCardImageUrl } from '../services/imageUtils';
 import { useLanguage } from '../context/LanguageContext';
 import AdBanner from '../components/Common/AdBanner';
+import NewsCardImage from '../components/Common/NewsCardImage';
 
 const REGION_INFO = {
   majha: {
@@ -361,18 +362,12 @@ export default function CategoryNewsPage() {
                       to={`/news/${leadArticle.slug || leadArticle._id || leadArticle.id}`}
                       style={{ textDecoration: 'none', display: 'block', position: 'relative' }}
                     >
-                      <div style={{ height: '340px', overflow: 'hidden', position: 'relative', backgroundColor: '#0f172a' }}>
-                        <img
-                          src={getHighResImageUrl(leadArticle.featuredImage || '/img/index_800x400-image01.jpg')}
+                      <div style={{ height: '340px', overflow: 'hidden', position: 'relative' }}>
+                        <NewsCardImage
+                          src={leadArticle.featuredImage}
                           alt={leadArticle.title}
-                          loading="eager"
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
-                            transition: 'transform 0.3s ease',
-                            imageRendering: '-webkit-optimize-contrast'
-                          }}
+                          height="340px"
+                          fallbackSrc="/img/index_800x400-image01.jpg"
                         />
                         <div
                           style={{
@@ -462,19 +457,13 @@ export default function CategoryNewsPage() {
                       >
                         <Link
                           to={`/news/${art.slug || art._id || art.id}`}
-                          style={{ textDecoration: 'none', display: 'block', height: '180px', overflow: 'hidden' }}
+                          style={{ textDecoration: 'none', display: 'block', overflow: 'hidden' }}
                         >
-                          <img
-                            src={getCardImageUrl(art.featuredImage || '/img/index_800x400-image02.jpg', 420)}
+                          <NewsCardImage
+                            src={art.featuredImage}
                             alt={art.title}
-                            loading="lazy"
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                              objectFit: 'cover',
-                              transition: 'transform 0.3s ease',
-                              imageRendering: '-webkit-optimize-contrast'
-                            }}
+                            height="180px"
+                            fallbackSrc="/img/index_800x400-image02.jpg"
                           />
                         </Link>
 
