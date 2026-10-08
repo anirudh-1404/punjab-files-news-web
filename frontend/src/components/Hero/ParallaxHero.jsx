@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import DarbarSahibMukhWak from './DarbarSahibMukhWak';
 import { articleAPI, podcastAPI, webTVAPI } from '../../services/api';
 import { getAllArticles } from '../../services/articleStore';
 import { getCardImageUrl } from '../../services/imageUtils';
 import PodcastAudioCard from '../Common/PodcastAudioCard';
+import NewsCardImage from '../Common/NewsCardImage';
 import { useLanguage } from '../../context/LanguageContext';
 
 const DEFAULT_LEAD = {
@@ -36,6 +37,8 @@ export default function ParallaxHero() {
   const { language } = useLanguage();
   const [leadStory, setLeadStory] = useState(DEFAULT_LEAD);
   const [latestPodcast, setLatestPodcast] = useState(null);
+  const webtvColRef = useRef(null);
+  const [targetColHeight, setTargetColHeight] = useState(null);
   const [webTVConfig, setWebTVConfig] = useState(() => {
     try {
       const cached = localStorage.getItem('punjab_webtv_cache');
@@ -49,6 +52,35 @@ export default function ParallaxHero() {
       isActive: true
     };
   });
+
+  // Synchronize height of Column 1 and Column 2 to match Column 3 (Web TV + Podcast) on desktop
+  useEffect(() => {
+    const syncHeights = () => {
+      if (webtvColRef.current && window.innerWidth >= 992) {
+        const h = webtvColRef.current.offsetHeight;
+        if (h > 450) {
+          setTargetColHeight(h);
+        }
+      } else {
+        setTargetColHeight(null);
+      }
+    };
+
+    const timer = setTimeout(syncHeights, 120);
+    window.addEventListener('resize', syncHeights);
+
+    let ro;
+    if (typeof ResizeObserver !== 'undefined' && webtvColRef.current) {
+      ro = new ResizeObserver(() => syncHeights());
+      ro.observe(webtvColRef.current);
+    }
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', syncHeights);
+      if (ro) ro.disconnect();
+    };
+  }, [latestPodcast, webTVConfig]);
 
   useEffect(() => {
     let isMounted = true;
@@ -145,7 +177,10 @@ export default function ParallaxHero() {
               minWidth: '290px',
               maxWidth: '360px',
               display: 'flex',
-              flexDirection: 'column'
+              flexDirection: 'column',
+              height: targetColHeight ? `${targetColHeight}px` : 'auto',
+              maxHeight: targetColHeight ? `${targetColHeight}px` : 'none',
+              boxSizing: 'border-box'
             }}
           >
             {/* Section Header */}
@@ -160,7 +195,7 @@ export default function ParallaxHero() {
             </div>
 
             {/* Sacred Portrait Hukamnama Card */}
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
               <DarbarSahibMukhWak />
             </div>
           </div>
@@ -174,7 +209,10 @@ export default function ParallaxHero() {
               flex: '1.2 1 360px',
               minWidth: '310px',
               display: 'flex',
-              flexDirection: 'column'
+              flexDirection: 'column',
+              height: targetColHeight ? `${targetColHeight}px` : 'auto',
+              maxHeight: targetColHeight ? `${targetColHeight}px` : 'none',
+              boxSizing: 'border-box'
             }}
           >
             {/* Section Header */}
@@ -199,28 +237,18 @@ export default function ParallaxHero() {
                 display: 'flex',
                 flexDirection: 'column',
                 boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
-                transition: 'box-shadow 0.2s ease'
+                transition: 'box-shadow 0.2s ease',
+                height: '100%'
               }}
             >
               {/* Featured Image */}
-              <div style={{ position: 'relative', width: '100%', height: '220px', overflow: 'hidden', backgroundColor: '#0f172a' }}>
-                <Link to={`/news/${leadStory.slug || leadStory.id || leadStory._id}`} style={{ display: 'block', width: '100%', height: '100%' }}>
-                  <img
-                    src={getCardImageUrl(leadStory.featuredImage || '/img/index_800x400-image01.jpg', 600)}
+              <div style={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
+                <Link to={`/news/${leadStory.slug || leadStory.id || leadStory._id}`} style={{ display: 'block', width: '100%', textDecoration: 'none' }}>
+                  <NewsCardImage
+                    src={leadStory.featuredImage}
                     alt={leadStory.title}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      display: 'block',
-                      transition: 'transform 0.3s ease'
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.03)')}
-                    onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = '/img/index_800x400-image01.jpg';
-                    }}
+                    height="210px"
+                    fallbackSrc="/img/index_800x400-image01.jpg"
                   />
                 </Link>
 
@@ -236,47 +264,50 @@ export default function ParallaxHero() {
               </div>
 
               {/* Headline Body */}
-              <div style={{ padding: '16px 18px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <h2
-                  style={{
-                    margin: '0 0 10px',
-                    fontSize: '18px',
-                    fontWeight: '800',
-                    lineHeight: '1.4',
-                    color: '#0f172a'
-                  }}
-                >
-                  <Link
-                    to={`/news/${leadStory.slug || leadStory.id || leadStory._id}`}
-                    style={{ color: '#0f172a', textDecoration: 'none', transition: 'color 0.2s ease' }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = '#b71c1c')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = '#0f172a')}
-                  >
-                    {leadStory.title}
-                  </Link>
-                </h2>
-
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                  <p
+              <div style={{ padding: '14px 16px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', overflow: 'hidden', minHeight: 0 }}>
+                <div style={{ overflow: 'hidden', minHeight: 0 }}>
+                  <h2
                     style={{
-                      margin: '0 0 12px',
-                      fontSize: '13.5px',
-                      lineHeight: '1.65',
-                      color: '#475569',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 6,
-                      WebkitBoxOrient: 'vertical'
+                      margin: '0 0 8px',
+                      fontSize: '17px',
+                      fontWeight: '800',
+                      lineHeight: '1.35',
+                      color: '#0f172a'
                     }}
                   >
-                    {(() => {
-                      const raw = leadStory.content && stripHtmlTags(leadStory.content).length > 50
-                        ? leadStory.content
-                        : (leadStory.excerpt || leadStory.content || '');
-                      return stripHtmlTags(raw).slice(0, 450);
-                    })()}
-                  </p>
+                    <Link
+                      to={`/news/${leadStory.slug || leadStory.id || leadStory._id}`}
+                      style={{ color: '#0f172a', textDecoration: 'none', transition: 'color 0.2s ease' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = '#b71c1c')}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = '#0f172a')}
+                    >
+                      {leadStory.title}
+                    </Link>
+                  </h2>
+
+                  <div style={{ overflow: 'hidden', minHeight: 0 }}>
+                    <p
+                      style={{
+                        margin: '0 0 4px',
+                        fontSize: '13px',
+                        lineHeight: '1.55',
+                        color: '#475569',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 10,
+                        WebkitBoxOrient: 'vertical',
+                        maxHeight: '205px'
+                      }}
+                    >
+                      {(() => {
+                        const raw = leadStory.content && stripHtmlTags(leadStory.content).length > 50
+                          ? leadStory.content
+                          : (leadStory.excerpt || leadStory.content || '');
+                        return stripHtmlTags(raw);
+                      })()}
+                    </p>
+                  </div>
                 </div>
 
                 {/* Footer metadata & Read More CTA */}
@@ -285,7 +316,7 @@ export default function ParallaxHero() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    paddingTop: '12px',
+                    paddingTop: '10px',
                     borderTop: '1px solid #f1f5f9',
                     fontSize: '12px',
                     color: '#64748b',
@@ -308,7 +339,7 @@ export default function ParallaxHero() {
                       fontSize: '13px'
                     }}
                   >
-                    <span>ਹੋਰ ਪੜ੍ਹੋ</span>
+                    <span>ਹੋਰ ਪੜ੍ਹੋ (Read More)</span>
                     <i className="fa fa-arrow-right"></i>
                   </Link>
                 </div>
@@ -320,6 +351,7 @@ export default function ParallaxHero() {
               COLUMN 3: WEB TV & PODCASTS (WIDER & LARGER)
           ======================================================== */}
           <div
+            ref={webtvColRef}
             className="hero-col-webtv"
             id="web-tv"
             style={{

@@ -1430,13 +1430,19 @@ body {
   color: #000000;
 }
 
-/* Major Headings: 100% Solid Bold Black (Excluding dark boxes, contact widgets & admin modals) */
-h1:not(#footer *):not(.editors-desk-contact *):not(.dark-box *):not(.admin-modal-header *):not(.admin-modal-title),
-h2:not(#footer *):not(.editors-desk-contact *):not(.dark-box *):not(.admin-modal-header *):not(.admin-modal-title),
-h3:not(#footer *):not(.editors-desk-contact *):not(.dark-box *):not(.admin-modal-header *):not(.admin-modal-title),
-h4:not(#footer *):not(.editors-desk-contact *):not(.dark-box *):not(.admin-modal-header *):not(.admin-modal-title),
-h5:not(#footer *):not(.editors-desk-contact *):not(.dark-box *):not(.admin-modal-header *):not(.admin-modal-title),
-h6:not(#footer *):not(.editors-desk-contact *):not(.dark-box *):not(.admin-modal-header *):not(.admin-modal-title),
+/* Major Headings: 100% Solid Bold Black (Excluding dark boxes, contact widgets, admin modals & mukhwak modal header) */
+h1:not(#footer *):not(.editors-desk-contact *):not(.dark-box *):not(.admin-modal-header *):not(.admin-modal-title):not(.mukhwak-modal-header *),
+h2:not(#footer *):not(.editors-desk-contact *):not(.dark-box *):not(.admin-modal-header *):not(.admin-modal-title):not(.mukhwak-modal-header *),
+h3:not(#footer *):not(.editors-desk-contact *):not(.dark-box *):not(.admin-modal-header *):not(.admin-modal-title):not(.mukhwak-modal-header *),
+h4:not(#footer *):not(.editors-desk-contact *):not(.dark-box *):not(.admin-modal-header *):not(.admin-modal-title):not(.mukhwak-modal-header *),
+h5:not(#footer *):not(.editors-desk-contact *):not(.dark-box *):not(.admin-modal-header *):not(.admin-modal-title):not(.mukhwak-modal-header *),
+h6:not(#footer *):not(.editors-desk-contact *):not(.dark-box *):not(.admin-modal-header *):not(.admin-modal-title):not(.mukhwak-modal-header *) {
+  color: #000000 !important;
+}
+
+.mukhwak-modal-title {
+  color: #ffffff !important;
+}
 #main-section h1,
 #main-section h2,
 #main-section h3,
