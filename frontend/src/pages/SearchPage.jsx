@@ -36,16 +36,57 @@ export default function SearchPage() {
     setLoading(true);
     try {
       let backendResults = [];
+      const searchTerms = expandSearchTerms(query);
+
       try {
         const res = await articleAPI.getPublished({ search: query, limit: 100 });
         backendResults = res.data || res.articles || [];
       } catch (e) {
-        console.warn('Backend search error, falling back to local store:', e.message);
+        console.warn('Backend search error, falling back to all articles:', e.message);
+      }
+
+      // If backend search returned empty (e.g. production backend running older search version),
+      // fetch recent published articles and let frontend's universal multilingual engine filter them!
+      if (backendResults.length === 0 && query && query.trim()) {
+        try {
+          const allRes = await articleAPI.getPublished({ limit: 100 });
+          const allArticles = allRes.data || allRes.articles || [];
+          if (allArticles.length > 0) {
+            backendResults = allArticles.filter((art) => {
+              const title = (art.title || '').toLowerCase();
+              const excerpt = (art.excerpt || '').toLowerCase();
+              const content = (art.content || '').toLowerCase();
+              const author = (art.author || art.authorName || '').toLowerCase();
+              const cat = (art.category || '').toLowerCase();
+              const region = (art.punjabRegion || '').toLowerCase();
+              const slug = (art.slug || '').toLowerCase();
+
+              const cleanTitle = title.replace(/[*'’"“”_]/g, '');
+              const cleanContent = content.replace(/[*'’"“”_]/g, '');
+
+              return searchTerms.some((term) => {
+                const t = term.toLowerCase();
+                return (
+                  title.includes(t) ||
+                  cleanTitle.includes(t) ||
+                  excerpt.includes(t) ||
+                  content.includes(t) ||
+                  cleanContent.includes(t) ||
+                  author.includes(t) ||
+                  cat.includes(t) ||
+                  region.includes(t) ||
+                  slug.includes(t)
+                );
+              });
+            });
+          }
+        } catch (fallbackErr) {
+          console.warn('Failed fallback fetch for client-side search:', fallbackErr.message);
+        }
       }
 
       // Also search local store for complete coverage
       const localAll = getAllArticles();
-      const searchTerms = expandSearchTerms(query);
       const localMatches = searchTerms.length > 0
         ? localAll.filter((art) => {
             const title = (art.title || '').toLowerCase();
