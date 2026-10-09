@@ -3,6 +3,7 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { articleAPI } from '../services/api';
 import { getAllArticles } from '../services/articleStore';
 import { formatArticleDate } from '../services/dateUtils';
+import { expandSearchTerms, scoreArticleRelevance } from '../services/searchUtils';
 
 const CATEGORY_MAP = {
   punjab: 'ਪੰਜਾਬ',
@@ -15,70 +16,6 @@ const CATEGORY_MAP = {
 };
 
 const POPULAR_TAGS = ['ਪੰਜਾਬ', 'ਸ੍ਰੀ ਦਰਬਾਰ ਸਾਹਿਬ', 'ਅੰਮ੍ਰਿਤਸਰ', 'ਲੁਧਿਆਣਾ', 'ਖੇਡਾਂ', 'ਸਿਹਤ', 'ਮਨੋਰੰਜਨ', 'ਵਿਰਾਸਤ'];
-
-// Expand bilingual search terms (English <-> Punjabi / Transliterations)
-const BILINGUAL_KEYWORDS = {
-  punjab: ["ਪੰਜਾਬ", "punjab", "panjab"],
-  panjab: ["ਪੰਜਾਬ", "punjab", "panjab"],
-  amritsar: ["ਅੰਮ੍ਰਿਤਸਰ", "amritsar"],
-  ludhiana: ["ਲੁਧਿਆਣਾ", "ludhiana"],
-  jalandhar: ["ਜਲੰਧਰ", "jalandhar"],
-  bathinda: ["ਬਠਿੰਡਾ", "bathinda", "bhatinda"],
-  bhatinda: ["ਬਠਿੰਡਾ", "bathinda", "bhatinda"],
-  patiala: ["ਪਟਿਆਲਾ", "patiala"],
-  gurdaspur: ["ਗੁਰਦਾਸਪੁਰ", "gurdaspur"],
-  tarn: ["ਤਰਨਤਾਰਨ", "ਤਰਨ", "tarn"],
-  tarntaran: ["ਤਰਨਤਾਰਨ", "tarntaran"],
-  sangrur: ["ਸੰਗਰੂਰ", "sangrur"],
-  moga: ["ਮੋਗਾ", "moga"],
-  firozpur: ["ਫ਼ਿਰੋਜ਼ਪੁਰ", "firozpur", "ferozepur"],
-  ferozepur: ["ਫ਼ਿਰੋਜ਼ਪੁਰ", "firozpur", "ferozepur"],
-  hushiarpur: ["ਹੁਸ਼ਿਆਰਪੁਰ", "hushiarpur", "hoshiarpur"],
-  hoshiarpur: ["ਹੁਸ਼ਿਆਰਪੁਰ", "hushiarpur", "hoshiarpur"],
-  kapurthala: ["ਕਪੂਰਥਲਾ", "kapurthala"],
-  pathankot: ["ਪਠਾਨਕੋਟ", "pathankot"],
-  majha: ["ਮਾਝਾ", "majha"],
-  malwa: ["ਮਾਲਵਾ", "malwa"],
-  doaba: ["ਦੋਆਬਾ", "doaba"],
-  sports: ["ਖੇਡ", "ਖੇਡਾਂ", "sport", "sports"],
-  sport: ["ਖੇਡ", "ਖੇਡਾਂ", "sport", "sports"],
-  health: ["ਸਿਹਤ", "health"],
-  religion: ["ਧਰਮ", "religion"],
-  religious: ["ਧਰਮ", "religious"],
-  entertainment: ["ਮਨੋਰੰਜਨ", "entertainment", "cinema"],
-  cinema: ["ਮਨੋਰੰਜਨ", "cinema"],
-  travel: ["ਸੈਰ-ਸਪਾਟਾ", "ਵਿਰਸਾ", "travel"],
-  heritage: ["ਵਿਰਸਾ", "heritage"],
-  world: ["ਦੇਸ਼-ਵਿਦੇਸ਼", "ਵਿਦੇਸ਼", "world"],
-  national: ["ਦੇਸ਼-ਵਿਦੇਸ਼", "ਰਾਸ਼ਟਰੀ", "national"],
-  farmer: ["ਕਿਸਾਨ", "ਖੇਤੀ", "farmer"],
-  farmers: ["ਕਿਸਾਨ", "ਖੇਤੀ", "farmers"],
-  kisan: ["ਕਿਸਾਨ", "kisan"],
-  police: ["ਪੁਲਿਸ", "police"],
-  crime: ["ਜੁਰਮ", "ਅਪਰਾਧ", "crime"],
-  darbar: ["ਦਰਬਾਰ", "darbar"],
-  mukhwak: ["ਮੁੱਖਵਾਕ", "ਹੁਕਮਨਾਮਾ", "mukhwak"],
-  hukamnama: ["ਹੁਕਮਨਾਮਾ", "ਮੁੱਖਵਾਕ", "hukamnama"],
-  live: ["ਲਾਈਵ", "live"],
-  modi: ["ਮੋਦੀ", "modi"],
-  mann: ["ਮਾਨ", "ਭਗਵੰਤ", "mann"],
-  bhagwant: ["ਭਗਵੰਤ", "ਮਾਨ", "bhagwant"]
-};
-
-const getSearchTerms = (str) => {
-  if (!str) return [];
-  const clean = str.trim();
-  const lower = clean.toLowerCase();
-  const terms = new Set([clean, lower]);
-
-  Object.keys(BILINGUAL_KEYWORDS).forEach((key) => {
-    if (lower.includes(key)) {
-      BILINGUAL_KEYWORDS[key].forEach((t) => terms.add(t));
-    }
-  });
-
-  return Array.from(terms);
-};
 
 export default function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -100,7 +37,7 @@ export default function SearchPage() {
     try {
       let backendResults = [];
       try {
-        const res = await articleAPI.getPublished({ search: query, limit: 50 });
+        const res = await articleAPI.getPublished({ search: query, limit: 100 });
         backendResults = res.data || res.articles || [];
       } catch (e) {
         console.warn('Backend search error, falling back to local store:', e.message);
@@ -108,7 +45,7 @@ export default function SearchPage() {
 
       // Also search local store for complete coverage
       const localAll = getAllArticles();
-      const searchTerms = getSearchTerms(query);
+      const searchTerms = expandSearchTerms(query);
       const localMatches = searchTerms.length > 0
         ? localAll.filter((art) => {
             const title = (art.title || '').toLowerCase();
@@ -119,15 +56,24 @@ export default function SearchPage() {
             const region = (art.punjabRegion || '').toLowerCase();
             const slug = (art.slug || '').toLowerCase();
 
-            return searchTerms.some((term) =>
-              title.includes(term) ||
-              excerpt.includes(term) ||
-              content.includes(term) ||
-              author.includes(term) ||
-              cat.includes(term) ||
-              region.includes(term) ||
-              slug.includes(term)
-            );
+            // Strip asterisks/quotes for matching words like ਕ*ਤ*ਲ and ਮੌ*ਤ
+            const cleanTitle = title.replace(/[*'’"“”_]/g, '');
+            const cleanContent = content.replace(/[*'’"“”_]/g, '');
+
+            return searchTerms.some((term) => {
+              const t = term.toLowerCase();
+              return (
+                title.includes(t) ||
+                cleanTitle.includes(t) ||
+                excerpt.includes(t) ||
+                content.includes(t) ||
+                cleanContent.includes(t) ||
+                author.includes(t) ||
+                cat.includes(t) ||
+                region.includes(t) ||
+                slug.includes(t)
+              );
+            });
           })
         : localAll;
 
@@ -150,6 +96,16 @@ export default function SearchPage() {
           combined.push(art);
         }
       });
+
+      // Score and sort articles by relevance
+      if (query && query.trim()) {
+        combined.sort((a, b) => {
+          const scoreB = scoreArticleRelevance(b, query, searchTerms);
+          const scoreA = scoreArticleRelevance(a, query, searchTerms);
+          if (scoreB !== scoreA) return scoreB - scoreA;
+          return new Date(b.publishedAt || b.createdAt || 0) - new Date(a.publishedAt || a.createdAt || 0);
+        });
+      }
 
       setArticles(combined);
     } catch (err) {
@@ -230,7 +186,7 @@ export default function SearchPage() {
             <span>ਪੰਜਾਬ ਫਾਈਲਜ਼ ਖੋਜ ਕੇਂਦਰ (News Search)</span>
           </h1>
           <p style={{ margin: '0 0 20px 0', color: '#64748b', fontSize: '14px' }}>
-            ਕਿਸੇ ਵੀ ਵਿਸ਼ੇ, ਸ਼ਹਿਰ, ਲੇਖਕ ਜਾਂ ਖ਼ਬਰ ਦਾ ਨਾਂ ਲਿਖ ਕੇ ਤੁਰੰਤ ਭਾਲੋ।
+            ਕਿਸੇ ਵੀ ਭਾਸ਼ਾ (English, ਪੰਜਾਬੀ, हिन्दी) ਵਿੱਚ ਖ਼ਬਰ, ਵਿਸ਼ਾ ਜਾਂ ਸ਼ਹਿਰ ਲਿਖ ਕੇ ਖੋਜੋ।
           </p>
 
           {/* Search Form */}
@@ -240,7 +196,7 @@ export default function SearchPage() {
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                placeholder="ਖ਼ਬਰ ਦਾ ਨਾਮ, ਲੇਖਕ ਜਾਂ ਵਿਸ਼ਾ ਲਿਖੋ... (e.g. ਅੰਮ੍ਰਿਤਸਰ, ਖੇਡਾਂ)"
+                placeholder="ਖ਼ਬਰਾਂ ਖੋਜੋ / Search news in English, Punjabi or Hindi... (e.g. Amritsar, Diljit, ਕਿਸਾਨ)"
                 style={{
                   width: '100%',
                   padding: '12px 42px 12px 16px',

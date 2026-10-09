@@ -433,7 +433,7 @@ export default function FixedNavbar() {
             >
               <input
                 type="text"
-                placeholder="ਖ਼ਬਰਾਂ ਖੋਜੋ..."
+                placeholder="ਖ਼ਬਰਾਂ ਖੋਜੋ... (Search)"
                 value={navSearchQuery}
                 onChange={(e) => setNavSearchQuery(e.target.value)}
                 style={{
@@ -523,7 +523,7 @@ export default function FixedNavbar() {
           >
             <input
               type="text"
-              placeholder="ਕੋਈ ਵੀ ਖ਼ਬਰ ਖੋਜੋ... (e.g. ਅੰਮ੍ਰਿਤਸਰ, ਖੇਡਾਂ)"
+              placeholder="ਖ਼ਬਰਾਂ ਖੋਜੋ... (Search news in EN, PA, HI)"
               value={navSearchQuery}
               onChange={(e) => setNavSearchQuery(e.target.value)}
               autoFocus

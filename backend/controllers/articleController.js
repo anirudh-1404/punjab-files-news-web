@@ -1,71 +1,8 @@
 import Article from "../models/Article.js";
 import { generateEnglishSlug } from "../utils/slugUtils.js";
+import { expandSearchTerms, scoreArticleRelevance } from "../utils/searchUtils.js";
 
-// Expand bilingual search terms (English <-> Punjabi / Transliterations)
-const BILINGUAL_KEYWORDS = {
-  punjab: ["ਪੰਜਾਬ", "punjab", "panjab"],
-  panjab: ["ਪੰਜਾਬ", "punjab", "panjab"],
-  amritsar: ["ਅੰਮ੍ਰਿਤਸਰ", "amritsar"],
-  ludhiana: ["ਲੁਧਿਆਣਾ", "ludhiana"],
-  jalandhar: ["ਜਲੰਧਰ", "jalandhar"],
-  bathinda: ["ਬਠਿੰਡਾ", "bathinda", "bhatinda"],
-  bhatinda: ["ਬਠਿੰਡਾ", "bathinda", "bhatinda"],
-  patiala: ["ਪਟਿਆਲਾ", "patiala"],
-  gurdaspur: ["ਗੁਰਦਾਸਪੁਰ", "gurdaspur"],
-  tarn: ["ਤਰਨਤਾਰਨ", "ਤਰਨ", "tarn"],
-  tarntaran: ["ਤਰਨਤਾਰਨ", "tarntaran"],
-  sangrur: ["ਸੰਗਰੂਰ", "sangrur"],
-  moga: ["ਮੋਗਾ", "moga"],
-  firozpur: ["ਫ਼ਿਰੋਜ਼ਪੁਰ", "firozpur", "ferozepur"],
-  ferozepur: ["ਫ਼ਿਰੋਜ਼ਪੁਰ", "firozpur", "ferozepur"],
-  hushiarpur: ["ਹੁਸ਼ਿਆਰਪੁਰ", "hushiarpur", "hoshiarpur"],
-  hoshiarpur: ["ਹੁਸ਼ਿਆਰਪੁਰ", "hushiarpur", "hoshiarpur"],
-  kapurthala: ["ਕਪੂਰਥਲਾ", "kapurthala"],
-  pathankot: ["ਪਠਾਨਕੋਟ", "pathankot"],
-  majha: ["ਮਾਝਾ", "majha"],
-  malwa: ["ਮਾਲਵਾ", "malwa"],
-  doaba: ["ਦੋਆਬਾ", "doaba"],
-  sports: ["ਖੇਡ", "ਖੇਡਾਂ", "sport", "sports"],
-  sport: ["ਖੇਡ", "ਖੇਡਾਂ", "sport", "sports"],
-  health: ["ਸਿਹਤ", "health"],
-  religion: ["ਧਰਮ", "religion"],
-  religious: ["ਧਰਮ", "religious"],
-  entertainment: ["ਮਨੋਰੰਜਨ", "entertainment", "cinema"],
-  cinema: ["ਮਨੋਰੰਜਨ", "cinema"],
-  travel: ["ਸੈਰ-ਸਪਾਟਾ", "ਵਿਰਸਾ", "travel"],
-  heritage: ["ਵਿਰਸਾ", "heritage"],
-  world: ["ਦੇਸ਼-ਵਿਦੇਸ਼", "ਵਿਦੇਸ਼", "world"],
-  national: ["ਦੇਸ਼-ਵਿਦੇਸ਼", "ਰਾਸ਼ਟਰੀ", "national"],
-  farmer: ["ਕਿਸਾਨ", "ਖੇਤੀ", "farmer"],
-  farmers: ["ਕਿਸਾਨ", "ਖੇਤੀ", "farmers"],
-  kisan: ["ਕਿਸਾਨ", "kisan"],
-  police: ["ਪੁਲਿਸ", "police"],
-  crime: ["ਜੁਰਮ", "ਅਪਰਾਧ", "crime"],
-  darbar: ["ਦਰਬਾਰ", "darbar"],
-  mukhwak: ["ਮੁੱਖਵਾਕ", "ਹੁਕਮਨਾਮਾ", "mukhwak"],
-  hukamnama: ["ਹੁਕਮਨਾਮਾ", "ਮੁੱਖਵਾਕ", "hukamnama"],
-  live: ["ਲਾਈਵ", "live"],
-  modi: ["ਮੋਦੀ", "modi"],
-  mann: ["ਮਾਨ", "ਭਗਵੰਤ", "mann"],
-  bhagwant: ["ਭਗਵੰਤ", "ਮਾਨ", "bhagwant"]
-};
-
-const getSearchTerms = (str) => {
-  if (!str) return [];
-  const clean = str.trim();
-  const lower = clean.toLowerCase();
-  const terms = new Set([clean, lower]);
-
-  Object.keys(BILINGUAL_KEYWORDS).forEach((key) => {
-    if (lower.includes(key)) {
-      BILINGUAL_KEYWORDS[key].forEach((t) => terms.add(t));
-    }
-  });
-
-  return Array.from(terms);
-};
-
-// @desc    Get all published articles (Public with filters)
+// @desc    Get all published articles (Public with filters & Universal Multilingual Search)
 // @route   GET /api/articles
 // @access  Public
 export const getPublishedArticles = async (req, res) => {
@@ -86,27 +23,71 @@ export const getPublishedArticles = async (req, res) => {
       query.language = language;
     }
 
-    if (search && search.trim()) {
-      const searchTerms = getSearchTerms(search);
+    const isSearchQuery = Boolean(search && search.trim());
+    let searchTerms = [];
+
+    if (isSearchQuery) {
+      searchTerms = expandSearchTerms(search);
       const orClauses = [];
       searchTerms.forEach((term) => {
+        const cleanTerm = term.trim();
+        if (!cleanTerm) return;
+        let regexPattern;
+        if (cleanTerm === "ਕਤਲ") regexPattern = "ਕ\\*?ਤ\\*?ਲ|ਕਾਤਲ";
+        else if (cleanTerm === "ਮੌਤ") regexPattern = "ਮੌ\\*?ਤ";
+        else if (cleanTerm === "ਖ਼ੁਦਕੁਸ਼ੀ" || cleanTerm === "ਖੁਦਕੁਸ਼ੀ") regexPattern = "ਖ਼ੁ\\*?ਦਕੁ\\*?ਸ਼ੀ|ਖ਼ੁ\\*?ਦਕੁ\\*?ਸ਼ੀ";
+        else regexPattern = cleanTerm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+        const reg = { $regex: regexPattern, $options: "i" };
         orClauses.push(
-          { title: { $regex: term, $options: "i" } },
-          { excerpt: { $regex: term, $options: "i" } },
-          { content: { $regex: term, $options: "i" } },
-          { authorName: { $regex: term, $options: "i" } },
-          { category: { $regex: term, $options: "i" } },
-          { punjabRegion: { $regex: term, $options: "i" } },
-          { slug: { $regex: term, $options: "i" } }
+          { title: reg },
+          { excerpt: reg },
+          { content: reg },
+          { authorName: reg },
+          { category: reg },
+          { punjabRegion: reg },
+          { slug: reg }
         );
       });
-      query.$or = orClauses;
+
+      if (orClauses.length > 0) {
+        query.$or = orClauses;
+      }
     }
 
     const pageNum = parseInt(page, 10) || 1;
     const limitNum = parseInt(limit, 10) || 20;
-    const skip = (pageNum - 1) * limitNum;
 
+    if (isSearchQuery) {
+      // For search queries, fetch candidates and sort by Multilingual Relevance Score
+      const matchedArticles = await Article.find(query).lean();
+      const scored = matchedArticles.map((art) => ({
+        article: art,
+        score: scoreArticleRelevance(art, search, searchTerms)
+      }));
+
+      // Sort by score descending, then by published date
+      scored.sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        return new Date(b.article.publishedAt || b.article.createdAt || 0) - new Date(a.article.publishedAt || a.article.createdAt || 0);
+      });
+
+      const total = scored.length;
+      const skip = (pageNum - 1) * limitNum;
+      const paginatedArticles = scored.slice(skip, skip + limitNum).map((s) => s.article);
+
+      return res.status(200).json({
+        success: true,
+        count: paginatedArticles.length,
+        total,
+        page: pageNum,
+        pages: Math.ceil(total / limitNum) || 1,
+        data: paginatedArticles,
+        articles: paginatedArticles
+      });
+    }
+
+    const skip = (pageNum - 1) * limitNum;
     const total = await Article.countDocuments(query);
     const articles = await Article.find(query)
       .sort({ publishedAt: -1, createdAt: -1 })
@@ -118,7 +99,7 @@ export const getPublishedArticles = async (req, res) => {
       count: articles.length,
       total,
       page: pageNum,
-      pages: Math.ceil(total / limitNum),
+      pages: Math.ceil(total / limitNum) || 1,
       data: articles,
       articles
     });
@@ -390,19 +371,30 @@ export const getReviewDeskArticles = async (req, res) => {
     }
 
     if (search && search.trim()) {
-      const searchTerms = getSearchTerms(search);
+      const searchTerms = expandSearchTerms(search);
       const orClauses = [];
       searchTerms.forEach((term) => {
+        const cleanTerm = term.trim();
+        if (!cleanTerm) return;
+        let regexPattern;
+        if (cleanTerm === "ਕਤਲ") regexPattern = "ਕ\\*?ਤ\\*?ਲ|ਕਾਤਲ";
+        else if (cleanTerm === "ਮੌਤ") regexPattern = "ਮੌ\\*?ਤ";
+        else if (cleanTerm === "ਖ਼ੁਦਕੁਸ਼ੀ" || cleanTerm === "ਖੁਦਕੁਸ਼ੀ") regexPattern = "ਖ਼ੁ\\*?ਦਕੁ\\*?ਸ਼ੀ|ਖ਼ੁ\\*?ਦਕੁ\\*?ਸ਼ੀ";
+        else regexPattern = cleanTerm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+        const reg = { $regex: regexPattern, $options: "i" };
         orClauses.push(
-          { title: { $regex: term, $options: "i" } },
-          { authorName: { $regex: term, $options: "i" } },
-          { excerpt: { $regex: term, $options: "i" } },
-          { content: { $regex: term, $options: "i" } },
-          { category: { $regex: term, $options: "i" } },
-          { slug: { $regex: term, $options: "i" } }
+          { title: reg },
+          { authorName: reg },
+          { excerpt: reg },
+          { content: reg },
+          { category: reg },
+          { slug: reg }
         );
       });
-      queryFilter.$or = orClauses;
+      if (orClauses.length > 0) {
+        queryFilter.$or = orClauses;
+      }
     }
 
     let sortOption = { updatedAt: -1, createdAt: -1 };
