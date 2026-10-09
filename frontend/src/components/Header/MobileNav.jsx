@@ -344,14 +344,14 @@ export default function MobileNav() {
                 {/* All other categories — dynamically rendered */}
                 {otherCats.map((cat) => (
                   <li key={cat.slug} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                    <a
-                      href={`#${cat.slug}`}
-                      onClick={() => handleLinkClick(`#${cat.slug}`)}
+                    <Link
+                      to={`/category/${cat.slug}`}
+                      onClick={() => setIsOpen(false)}
                       style={drawerLinkStyle}
                     >
                       <i className={`fa ${cat.icon || 'fa-tag'}`} style={{ color: '#ebb10d', width: '18px' }}></i>
                       <span>{cat.namePa} ({cat.nameEn})</span>
-                    </a>
+                    </Link>
                   </li>
                 ))}
 

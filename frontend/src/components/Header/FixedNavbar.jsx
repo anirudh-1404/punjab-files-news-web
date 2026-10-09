@@ -140,21 +140,16 @@ export default function FixedNavbar() {
       return;
     }
 
-    if (location.pathname === '/') {
-      const el = document.getElementById(targetId);
-      if (el) {
+    if (targetId === 'web-tv' || targetId === 'live-tv') {
+      if (location.pathname === '/') {
         scrollToSection(targetId);
       } else {
-        navigate(`/category/${targetId}`);
+        navigate(`/#${targetId}`);
       }
-    } else {
-      const el = document.getElementById(targetId);
-      if (el) {
-        scrollToSection(targetId);
-      } else {
-        navigate(`/category/${targetId}`);
-      }
+      return;
     }
+
+    navigate(`/category/${targetId}`);
   };
 
   // Split categories: Punjab (special), first MAX_MAIN_NAV in main bar, rest in More
@@ -281,17 +276,24 @@ export default function FixedNavbar() {
                   onMouseLeave={() => setPunjabDropdownOpen(false)}
                   style={{ position: 'relative' }}
                 >
-                  <a
-                    href={`/category/${PUNJAB_SLUG}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setPunjabDropdownOpen((prev) => !prev);
+                  <Link
+                    to={`/category/${PUNJAB_SLUG}`}
+                    onClick={() => {
+                      setActiveSection(PUNJAB_SLUG);
                     }}
                     style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}
                   >
                     <span>{punjabCat.namePa}</span>
-                    <i className={`fa fa-chevron-${punjabDropdownOpen ? 'up' : 'down'}`} style={{ fontSize: '11px', marginLeft: '3px' }}></i>
-                  </a>
+                    <i
+                      className={`fa fa-chevron-${punjabDropdownOpen ? 'up' : 'down'}`}
+                      style={{ fontSize: '11px', marginLeft: '3px' }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setPunjabDropdownOpen((prev) => !prev);
+                      }}
+                    ></i>
+                  </Link>
 
                   {/* Desktop Punjab Dropdown */}
                   <ul className="dropdown-menu punjab-dropdown-list hidden-xs hidden-sm desktop-only-dropdown" style={dropdownMenuStyle(punjabDropdownOpen)}>
@@ -332,12 +334,12 @@ export default function FixedNavbar() {
               {/* Main Nav Categories (non-Punjab, up to MAX_MAIN_NAV) */}
               {mainNavCats.map((cat) => (
                 <li key={cat.slug} className={activeSection === cat.slug ? 'active' : ''}>
-                  <a
-                    href={`#${cat.slug}`}
-                    onClick={(e) => handleNavClick(e, cat.slug)}
+                  <Link
+                    to={`/category/${cat.slug}`}
+                    onClick={() => setActiveSection(cat.slug)}
                   >
                     {cat.namePa}
-                  </a>
+                  </Link>
                 </li>
               ))}
 

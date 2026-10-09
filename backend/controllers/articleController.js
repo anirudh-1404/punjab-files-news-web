@@ -12,7 +12,7 @@ export const getPublishedArticles = async (req, res) => {
     const query = { status: "published" };
 
     if (category && category !== "all") {
-      query.category = category;
+      query.category = { $regex: new RegExp(`^${category.trim()}$`, "i") };
     }
 
     if (punjabRegion && punjabRegion !== "all") {
@@ -359,7 +359,7 @@ export const getReviewDeskArticles = async (req, res) => {
     }
 
     if (category && category !== "all") {
-      queryFilter.category = category;
+      queryFilter.category = { $regex: new RegExp(`^${category.trim()}$`, "i") };
     }
 
     if (punjabRegion && punjabRegion !== "all") {

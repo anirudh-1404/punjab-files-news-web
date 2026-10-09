@@ -3,7 +3,6 @@ import { useParams, Link } from 'react-router-dom';
 import { articleAPI, categoryAPI } from '../services/api';
 import { getAllArticles } from '../services/articleStore';
 import { formatArticleDate } from '../services/dateUtils';
-import { getHighResImageUrl, getCardImageUrl } from '../services/imageUtils';
 import { useLanguage } from '../context/LanguageContext';
 import AdBanner from '../components/Common/AdBanner';
 import NewsCardImage from '../components/Common/NewsCardImage';
@@ -43,16 +42,16 @@ const REGION_INFO = {
   }
 };
 
-const CATEGORY_NAMES = {
-  punjab: 'ਪੰਜਾਬ ਵਿਸ਼ੇਸ਼ (Punjab News)',
-  religion: 'ਧਰਮ ਤੇ ਅਧਿਆਤਮ (Religion)',
-  world: 'ਦੇਸ਼-ਵਿਦੇਸ਼ (National & International)',
-  sport: 'ਖੇਡ ਜਗਤ (Sports)',
-  health: 'ਸਿਹਤ ਸੰਭਾਲ (Health & Wellness)',
-  travel: 'ਸੈਰ-ਸਪਾਟਾ ਤੇ ਵਿਰਸਾ (Travel & Heritage)',
-  'art-entertainment': 'ਮਨੋਰੰਜਨ ਤੇ ਸਿਨੇਮਾ (Entertainment)',
-  politics: 'ਰਾਜਨੀਤੀ (Politics)',
-  business: 'ਵਪਾਰ ਤੇ ਕਾਰੋਬਾਰ (Business)'
+const CATEGORY_DEFAULT_CONFIG = {
+  punjab: { namePa: 'ਪੰਜਾਬ', nameEn: 'Punjab', tagline: 'ਪੰਜਾਬ ਭਰ ਦੇ ਸਾਰੇ 23 ਜ਼ਿਲ੍ਹਿਆਂ ਦੀਆਂ ਤਾਜ਼ਾ, ਭਰੋਸੇਯੋਗ ਅਤੇ ਨਿਰਪੱਖ ਖ਼ਬਰਾਂ', icon: 'fa-map-marker', color: '#b71c1c' },
+  religion: { namePa: 'ਧਰਮ ਤੇ ਵਿਰਾਸਤ', nameEn: 'Religion', tagline: 'ਸਿੱਖ ਇਤਿਹਾਸ, ਗੁਰਮਤਿ ਵਿਚਾਰ, ਧਾਰਮਿਕ ਸਮਾਗਮ ਅਤੇ ਅਧਿਆਤਮਕ ਖ਼ਬਰਾਂ', icon: 'fa-sun-o', color: '#d97706' },
+  world: { namePa: 'ਦੇਸ਼-ਵਿਦੇਸ਼', nameEn: 'National & World', tagline: 'ਦੇਸ਼ ਅਤੇ ਦੁਨੀਆ ਭਰ ਦੀਆਂ ਤਾਜ਼ਾ ਅਤੇ ਅਹਿਮ ਅੰਤਰਰਾਸ਼ਟਰੀ ਖ਼ਬਰਾਂ', icon: 'fa-globe', color: '#1c2d5a' },
+  sport: { namePa: 'ਖੇਡਾਂ', nameEn: 'Sports', tagline: 'ਕ੍ਰਿਕਟ, ਕਬੱਡੀ, ਫੁੱਟਬਾਲ ਅਤੇ ਖੇਡ ਦੁਨੀਆ ਦੀਆਂ ਤਾਜ਼ਾ ਸਰਗਰਮੀਆਂ', icon: 'fa-trophy', color: '#047857' },
+  health: { namePa: 'ਸਿਹਤ', nameEn: 'Health', tagline: 'ਤੰਦਰੁਸਤ ਜੀਵਨ ਸ਼ੈਲੀ, ਡਾਕਟਰੀ ਸਲਾਹ ਅਤੇ ਸਿਹਤ ਸੰਭਾਲ ਨਾਲ ਜੁੜੀਆਂ ਖ਼ਾਸ ਖ਼ਬਰਾਂ', icon: 'fa-heartbeat', color: '#be123c' },
+  travel: { namePa: 'ਸੈਰ-ਸਪਾਟਾ', nameEn: 'Travel', tagline: 'ਪੰਜਾਬ ਅਤੇ ਵਿਸ਼ਵ ਦੇ ਇਤਿਹਾਸਕ ਤੇ ਦਿਲਚਸਪ ਸੈਰ-ਸਪਾਟਾ ਸਥਾਨ', icon: 'fa-plane', color: '#0284c7' },
+  'art-entertainment': { namePa: 'ਮਨੋਰੰਜਨ', nameEn: 'Entertainment', tagline: 'ਪਾਲੀਵੁੱਡ, ਬਾਲੀਵੁੱਡ, ਸੰਗੀਤ ਅਤੇ ਮਨੋਰੰਜਨ ਜਗਤ ਦੀਆਂ ਚਰਚਿਤ ਖ਼ਬਰਾਂ', icon: 'fa-film', color: '#7c3aed' },
+  politics: { namePa: 'ਰਾਜਨੀਤੀ', nameEn: 'Politics', tagline: 'ਪੰਜਾਬ ਅਤੇ ਦੇਸ਼ ਦੀ ਸਿਆਸਤ ਨਾਲ ਜੁੜੇ ਵੱਡੇ ਫ਼ੈਸਲੇ ਅਤੇ ਵਿਸ਼ਲੇਸ਼ਣ', icon: 'fa-university', color: '#b45309' },
+  business: { namePa: 'ਵਪਾਰ', nameEn: 'Business', tagline: 'ਮਾਰਕੀਟ, ਅਰਥਵਿਵਸਥਾ ਅਤੇ ਕਾਰੋਬਾਰ ਨਾਲ ਜੁੜੀਆਂ ਖ਼ਬਰਾਂ', icon: 'fa-line-chart', color: '#0f766e' }
 };
 
 export default function CategoryNewsPage() {
@@ -61,13 +60,18 @@ export default function CategoryNewsPage() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [categoryMeta, setCategoryMeta] = useState(null);
-  const [trendingArticles, setTrendingArticles] = useState([]);
+  const [allCategories, setAllCategories] = useState([]);
 
+  const isPunjab = (category || '').toLowerCase() === 'punjab';
   const currentRegionKey = subRegion ? subRegion.toLowerCase() : 'all';
   const regionInfo = REGION_INFO[currentRegionKey] || REGION_INFO.all;
-  const categoryTitle = categoryMeta
-    ? `${categoryMeta.namePa} (${categoryMeta.nameEn})`
-    : (CATEGORY_NAMES[category] || category.toUpperCase());
+
+  const defaultConfig = CATEGORY_DEFAULT_CONFIG[(category || '').toLowerCase()] || {};
+  const activeNamePa = categoryMeta?.namePa || defaultConfig.namePa || (category.charAt(0).toUpperCase() + category.slice(1));
+  const activeNameEn = categoryMeta?.nameEn || defaultConfig.nameEn || category.toUpperCase();
+  const activeTagline = defaultConfig.tagline || `${activeNamePa} (${activeNameEn}) ਨਾਲ ਸੰਬੰਧਿਤ ਤਾਜ਼ਾ, ਭਰੋਸੇਯੋਗ ਅਤੇ ਨਿਰਪੱਖ ਖ਼ਬਰਾਂ`;
+  const activeIcon = categoryMeta?.icon || defaultConfig.icon || 'fa-newspaper-o';
+  const activeColor = defaultConfig.color || '#b71c1c';
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -77,40 +81,55 @@ export default function CategoryNewsPage() {
       try {
         setLoading(true);
 
-        // 0. Fetch category metadata if custom
+        // 0. Fetch category metadata & list of all active categories
         try {
           const catRes = await categoryAPI.getAll();
           if (isMounted && catRes && catRes.data) {
-            const found = catRes.data.find((c) => c.slug === category);
+            setAllCategories(catRes.data);
+            const found = catRes.data.find(
+              (c) => c.slug?.toLowerCase() === (category || '').toLowerCase()
+            );
             if (found) setCategoryMeta(found);
+            else setCategoryMeta(null);
           }
-        } catch (e) {}
+        } catch (e) {
+          console.warn('Could not load categories list:', e);
+        }
 
         // 1. Fetch published articles from backend
-        const queryParams = { category, limit: 30, language };
-        if (subRegion && subRegion !== 'all') {
+        const queryParams = { category, limit: 50, language };
+        if (isPunjab && subRegion && subRegion !== 'all') {
           queryParams.punjabRegion = subRegion.toLowerCase();
         }
 
         const res = await articleAPI.getPublished(queryParams);
         let liveArticles = Array.isArray(res?.data) ? res.data : [];
 
+        // Fallback: If language-specific filter returns 0, try fetching without language filter
+        if (liveArticles.length === 0 && language && language !== 'all') {
+          try {
+            const fallbackRes = await articleAPI.getPublished({ ...queryParams, language: undefined });
+            if (Array.isArray(fallbackRes?.data) && fallbackRes.data.length > 0) {
+              liveArticles = fallbackRes.data;
+            }
+          } catch (e) {}
+        }
+
         if (isMounted) {
           setArticles(liveArticles);
-          // Trending articles from general store or api
-          const allStoreArticles = getAllArticles({ language });
-          setTrendingArticles(allStoreArticles.slice(0, 5));
         }
       } catch (err) {
         console.warn('Backend load error, checking local store:', err);
         if (isMounted) {
           const filter = { category, language };
-          if (subRegion && subRegion !== 'all') {
+          if (isPunjab && subRegion && subRegion !== 'all') {
             filter.punjabRegion = subRegion.toLowerCase();
           }
-          const localList = getAllArticles(filter);
+          let localList = getAllArticles(filter);
+          if (localList.length === 0 && language) {
+            localList = getAllArticles({ ...filter, language: undefined });
+          }
           setArticles(localList);
-          setTrendingArticles(getAllArticles({ language }).slice(0, 5));
         }
       } finally {
         if (isMounted) setLoading(false);
@@ -132,6 +151,11 @@ export default function CategoryNewsPage() {
 
   const leadArticle = articles[0] || null;
   const otherArticles = articles.slice(1);
+
+  // Other categories for sidebar jump (excluding current category)
+  const otherCategoriesList = (allCategories.length > 0 ? allCategories : Object.entries(CATEGORY_DEFAULT_CONFIG).map(([slug, c]) => ({ slug, ...c })))
+    .filter((c) => c.slug?.toLowerCase() !== (category || '').toLowerCase() && c.isActive !== false)
+    .slice(0, 8);
 
   return (
     <div style={{ backgroundColor: '#f8fafc', minHeight: '100vh', paddingBottom: '60px' }}>
@@ -157,18 +181,26 @@ export default function CategoryNewsPage() {
               </Link>
             </li>
             <li>/</li>
-            <li>
-              <Link to="/category/punjab" style={{ color: '#b71c1c', fontWeight: '700', textDecoration: 'none' }}>
-                ਪੰਜਾਬ (Punjab)
-              </Link>
-            </li>
-            {subRegion && (
+            {isPunjab ? (
               <>
-                <li>/</li>
-                <li style={{ color: regionInfo.color, fontWeight: '800' }}>
-                  {regionInfo.namePa} ({regionInfo.nameEn})
+                <li>
+                  <Link to="/category/punjab" style={{ color: '#b71c1c', fontWeight: '700', textDecoration: 'none' }}>
+                    ਪੰਜਾਬ (Punjab)
+                  </Link>
                 </li>
+                {subRegion && (
+                  <>
+                    <li>/</li>
+                    <li style={{ color: regionInfo.color, fontWeight: '800' }}>
+                      {regionInfo.namePa} ({regionInfo.nameEn})
+                    </li>
+                  </>
+                )}
               </>
+            ) : (
+              <li style={{ color: '#b71c1c', fontWeight: '800' }}>
+                {activeNamePa} {activeNameEn ? `(${activeNameEn})` : ''}
+              </li>
             )}
           </ul>
         </div>
@@ -190,18 +222,22 @@ export default function CategoryNewsPage() {
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
                 <span
                   style={{
-                    backgroundColor: regionInfo.color,
+                    backgroundColor: isPunjab ? regionInfo.color : activeColor,
                     color: '#ffffff',
                     fontSize: '11px',
                     fontWeight: '800',
                     padding: '3px 10px',
                     borderRadius: '3px',
-                    letterSpacing: '0.5px'
+                    letterSpacing: '0.5px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '5px'
                   }}
                 >
-                  ਖੇਤਰੀ ਨਿਊਜ਼ ਡੈਸਕ (REGIONAL DESK)
+                  <i className={`fa ${isPunjab ? 'fa-map-marker' : activeIcon}`}></i>
+                  {isPunjab ? 'ਖੇਤਰੀ ਨਿਊਜ਼ ਡੈਸਕ (REGIONAL DESK)' : `${activeNamePa.toUpperCase()} ਡੈਸਕ (NEWS DESK)`}
                 </span>
-                <span style={{ fontSize: '13px', color: '#64748b' }}>
+                <span style={{ fontSize: '13px', color: '#64748b', fontWeight: '600' }}>
                   • {articles.length} ਖ਼ਬਰਾਂ ਉਪਲਬਧ
                 </span>
               </div>
@@ -214,22 +250,36 @@ export default function CategoryNewsPage() {
                   color: '#0f172a',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '8px'
+                  gap: '8px',
+                  flexWrap: 'wrap'
                 }}
               >
-                <span>ਪੰਜਾਬ ਵਿਸ਼ੇਸ਼: {regionInfo.namePa}</span>
-                <span style={{ fontSize: '16px', color: '#64748b', fontWeight: '600' }}>
-                  ({regionInfo.nameEn})
-                </span>
+                {isPunjab ? (
+                  <>
+                    <span>ਪੰਜਾਬ ਵਿਸ਼ੇਸ਼: {regionInfo.namePa}</span>
+                    <span style={{ fontSize: '16px', color: '#64748b', fontWeight: '600' }}>
+                      ({regionInfo.nameEn})
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span>{activeNamePa}</span>
+                    {activeNameEn && (
+                      <span style={{ fontSize: '16px', color: '#64748b', fontWeight: '600' }}>
+                        ({activeNameEn})
+                      </span>
+                    )}
+                  </>
+                )}
               </h1>
 
               <p style={{ margin: '6px 0 0', fontSize: '13.5px', color: '#475569' }}>
-                {regionInfo.tagline}
+                {isPunjab ? regionInfo.tagline : activeTagline}
               </p>
             </div>
 
-            {/* Region Switcher Buttons */}
-            {category === 'punjab' && (
+            {/* Region Switcher Buttons ONLY for Punjab */}
+            {isPunjab && (
               <div
                 style={{
                   display: 'flex',
@@ -324,7 +374,7 @@ export default function CategoryNewsPage() {
             ) : articles.length === 0 ? (
               <div style={{ backgroundColor: '#ffffff', borderRadius: '8px', padding: '60px', textAlign: 'center', border: '1px solid #e2e8f0' }}>
                 <i className="fa fa-newspaper-o" style={{ fontSize: '42px', color: '#cbd5e1', marginBottom: '16px' }}></i>
-                <h3 style={{ margin: '0 0 8px', color: '#0f172a' }}>ਇਸ ਖੇਤਰ ਵਿੱਚ ਫ਼ਿਲਹਾਲ ਕੋਈ ਖ਼ਬਰ ਨਹੀਂ ਹੈ</h3>
+                <h3 style={{ margin: '0 0 8px', color: '#0f172a' }}>ਇਸ ਕੈਟੇਗਰੀ ਵਿੱਚ ਫ਼ਿਲਹਾਲ ਕੋਈ ਖ਼ਬਰ ਨਹੀਂ ਹੈ</h3>
                 <p style={{ margin: '0 0 20px', color: '#64748b', fontSize: '14px' }}>
                   ਜਲਦ ਹੀ ਸਾਡੀ ਫੀਲਡ ਰਿਪੋਰਟਿੰਗ ਟੀਮ ਵੱਲੋਂ ਨਵੀਆਂ ਖ਼ਬਰਾਂ ਅੱਪਡੇਟ ਕੀਤੀਆਂ ਜਾਣਗੀਆਂ।
                 </p>
@@ -390,8 +440,9 @@ export default function CategoryNewsPage() {
 
                     <div style={{ padding: '22px 24px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px', fontSize: '12px', color: '#64748b' }}>
-                        <span style={{ fontWeight: '700', color: regionInfo.color }}>
-                          <i className="fa fa-map-marker"></i> {leadArticle.district || regionInfo.namePa}
+                        <span style={{ fontWeight: '700', color: isPunjab ? regionInfo.color : activeColor }}>
+                          <i className={`fa ${isPunjab ? 'fa-map-marker' : activeIcon}`}></i>{' '}
+                          {leadArticle.district || activeNamePa}
                         </span>
                         <span>•</span>
                         <span>
@@ -438,7 +489,7 @@ export default function CategoryNewsPage() {
                   </div>
                 )}
 
-                {/* Sub-grid of Other Articles */}
+                {/* Sub-grid of Other Category Articles in Responsive Cards */}
                 {otherArticles.length > 0 && (
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))', gap: '20px' }}>
                     {otherArticles.map((art) => (
@@ -478,7 +529,7 @@ export default function CategoryNewsPage() {
                                 borderRadius: '3px'
                               }}
                             >
-                              {art.district || regionInfo.namePa}
+                              {art.district || activeNamePa}
                             </span>
                             <span>•</span>
                             <span>
@@ -521,166 +572,164 @@ export default function CategoryNewsPage() {
 
           {/* Sidebar Column */}
           <div className="col-md-4 col-sm-12">
-            {/* 1. Regional Quick Jump Widget */}
-            <div
-              style={{
-                backgroundColor: '#ffffff',
-                borderRadius: '8px',
-                border: '1px solid #e2e8f0',
-                padding: '20px',
-                marginBottom: '24px',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.03)'
-              }}
-            >
-              <h4
+            {/* 1. Regional Quick Jump Widget (ONLY for Punjab page) */}
+            {isPunjab ? (
+              <div
                 style={{
-                  margin: '0 0 14px',
-                  fontSize: '15px',
-                  fontWeight: '800',
-                  color: '#0f172a',
-                  borderBottom: '2px solid #b71c1c',
-                  paddingBottom: '8px'
+                  backgroundColor: '#ffffff',
+                  borderRadius: '8px',
+                  border: '1px solid #e2e8f0',
+                  padding: '20px',
+                  marginBottom: '24px',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.03)'
                 }}
               >
-                ਪੰਜਾਬ ਦੇ ਹੋਰ ਖਿੱਤੇ (Other Regions)
-              </h4>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <Link
-                  to="/category/punjab/majha"
+                <h4
                   style={{
-                    padding: '10px 14px',
-                    borderRadius: '6px',
-                    backgroundColor: currentRegionKey === 'majha' ? '#fef2f2' : '#f8fafc',
-                    border: currentRegionKey === 'majha' ? '2px solid #b71c1c' : '1px solid #e2e8f0',
-                    color: currentRegionKey === 'majha' ? '#b71c1c' : '#1e293b',
-                    fontWeight: '700',
-                    textDecoration: 'none',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
+                    margin: '0 0 14px',
+                    fontSize: '15px',
+                    fontWeight: '800',
+                    color: '#0f172a',
+                    borderBottom: '2px solid #b71c1c',
+                    paddingBottom: '8px'
                   }}
                 >
-                  <span>ਮਾਝਾ (Majha)</span>
-                  <span style={{ fontSize: '11px', color: '#64748b' }}>ਅੰਮ੍ਰਿਤਸਰ, ਗੁਰਦਾਸਪੁਰ...</span>
-                </Link>
+                  ਪੰਜਾਬ ਦੇ ਹੋਰ ਖਿੱਤੇ (Other Regions)
+                </h4>
 
-                <Link
-                  to="/category/punjab/malwa"
-                  style={{
-                    padding: '10px 14px',
-                    borderRadius: '6px',
-                    backgroundColor: currentRegionKey === 'malwa' ? '#f0f9ff' : '#f8fafc',
-                    border: currentRegionKey === 'malwa' ? '2px solid #1c2d5a' : '1px solid #e2e8f0',
-                    color: currentRegionKey === 'malwa' ? '#1c2d5a' : '#1e293b',
-                    fontWeight: '700',
-                    textDecoration: 'none',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
-                  }}
-                >
-                  <span>ਮਾਲਵਾ (Malwa)</span>
-                  <span style={{ fontSize: '11px', color: '#64748b' }}>ਲੁਧਿਆਣਾ, ਬਠਿੰਡਾ, ਪਟਿਆਲਾ...</span>
-                </Link>
-
-                <Link
-                  to="/category/punjab/doaba"
-                  style={{
-                    padding: '10px 14px',
-                    borderRadius: '6px',
-                    backgroundColor: currentRegionKey === 'doaba' ? '#f0fdf4' : '#f8fafc',
-                    border: currentRegionKey === 'doaba' ? '2px solid #047857' : '1px solid #e2e8f0',
-                    color: currentRegionKey === 'doaba' ? '#047857' : '#1e293b',
-                    fontWeight: '700',
-                    textDecoration: 'none',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
-                  }}
-                >
-                  <span>ਦੋਆਬਾ (Doaba)</span>
-                  <span style={{ fontSize: '11px', color: '#64748b' }}>ਜਲੰਧਰ, ਹੁਸ਼ਿਆਰਪੁਰ...</span>
-                </Link>
-              </div>
-            </div>
-
-            {/* 2. Trending / Readers' Choice Widget */}
-            <div
-              style={{
-                backgroundColor: '#ffffff',
-                borderRadius: '8px',
-                border: '1px solid #e2e8f0',
-                padding: '20px',
-                marginBottom: '24px',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.03)'
-              }}
-            >
-              <h4
-                style={{
-                  margin: '0 0 14px',
-                  fontSize: '15px',
-                  fontWeight: '800',
-                  color: '#0f172a',
-                  borderBottom: '2px solid #ebb10d',
-                  paddingBottom: '8px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px'
-                }}
-              >
-                <i className="fa fa-fire" style={{ color: '#d97706' }}></i> ਪਾਠਕਾਂ ਦੀ ਪਸੰਦ (Trending)
-              </h4>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                {trendingArticles.map((art, idx) => (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   <Link
-                    key={art.id || idx}
-                    to={`/news/${art.id}`}
-                    style={{ textDecoration: 'none', display: 'flex', gap: '12px', alignItems: 'center' }}
+                    to="/category/punjab/majha"
+                    style={{
+                      padding: '10px 14px',
+                      borderRadius: '6px',
+                      backgroundColor: currentRegionKey === 'majha' ? '#fef2f2' : '#f8fafc',
+                      border: currentRegionKey === 'majha' ? '2px solid #b71c1c' : '1px solid #e2e8f0',
+                      color: currentRegionKey === 'majha' ? '#b71c1c' : '#1e293b',
+                      fontWeight: '700',
+                      textDecoration: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between'
+                    }}
                   >
-                    <span
+                    <span>ਮਾਝਾ (Majha)</span>
+                    <span style={{ fontSize: '11px', color: '#64748b' }}>ਅੰਮ੍ਰਿਤਸਰ, ਗੁਰਦਾਸਪੁਰ...</span>
+                  </Link>
+
+                  <Link
+                    to="/category/punjab/malwa"
+                    style={{
+                      padding: '10px 14px',
+                      borderRadius: '6px',
+                      backgroundColor: currentRegionKey === 'malwa' ? '#f0f9ff' : '#f8fafc',
+                      border: currentRegionKey === 'malwa' ? '2px solid #1c2d5a' : '1px solid #e2e8f0',
+                      color: currentRegionKey === 'malwa' ? '#1c2d5a' : '#1e293b',
+                      fontWeight: '700',
+                      textDecoration: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between'
+                    }}
+                  >
+                    <span>ਮਾਲਵਾ (Malwa)</span>
+                    <span style={{ fontSize: '11px', color: '#64748b' }}>ਲੁਧਿਆਣਾ, ਬਠਿੰਡਾ, ਪਟਿਆਲਾ...</span>
+                  </Link>
+
+                  <Link
+                    to="/category/punjab/doaba"
+                    style={{
+                      padding: '10px 14px',
+                      borderRadius: '6px',
+                      backgroundColor: currentRegionKey === 'doaba' ? '#f0fdf4' : '#f8fafc',
+                      border: currentRegionKey === 'doaba' ? '2px solid #047857' : '1px solid #e2e8f0',
+                      color: currentRegionKey === 'doaba' ? '#047857' : '#1e293b',
+                      fontWeight: '700',
+                      textDecoration: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between'
+                    }}
+                  >
+                    <span>ਦੋਆਬਾ (Doaba)</span>
+                    <span style={{ fontSize: '11px', color: '#64748b' }}>ਜਲੰਧਰ, ਹੁਸ਼ਿਆਰਪੁਰ...</span>
+                  </Link>
+                </div>
+              </div>
+            ) : (
+              /* For non-Punjab pages: Other categories quick jump widget */
+              <div
+                style={{
+                  backgroundColor: '#ffffff',
+                  borderRadius: '8px',
+                  border: '1px solid #e2e8f0',
+                  padding: '20px',
+                  marginBottom: '24px',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.03)'
+                }}
+              >
+                <h4
+                  style={{
+                    margin: '0 0 14px',
+                    fontSize: '15px',
+                    fontWeight: '800',
+                    color: '#0f172a',
+                    borderBottom: '2px solid #b71c1c',
+                    paddingBottom: '8px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  <i className="fa fa-th-large" style={{ color: '#b71c1c' }}></i> ਹੋਰ ਪ੍ਰਮੁੱਖ ਕੈਟੇਗਰੀਆਂ (Explore Categories)
+                </h4>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {otherCategoriesList.map((cat) => (
+                    <Link
+                      key={cat.slug}
+                      to={`/category/${cat.slug}`}
                       style={{
-                        width: '28px',
-                        height: '28px',
-                        borderRadius: '50%',
-                        backgroundColor: idx === 0 ? '#b71c1c' : idx === 1 ? '#ebb10d' : '#f1f5f9',
-                        color: idx < 2 ? '#ffffff' : '#334155',
+                        padding: '10px 14px',
+                        borderRadius: '6px',
+                        backgroundColor: '#f8fafc',
+                        border: '1px solid #e2e8f0',
+                        color: '#1e293b',
+                        fontWeight: '700',
+                        textDecoration: 'none',
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '12px',
-                        fontWeight: '800',
-                        flexShrink: 0
+                        justifyContent: 'space-between',
+                        transition: 'all 0.2s ease'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#fef2f2';
+                        e.currentTarget.style.borderColor = '#b71c1c';
+                        e.currentTarget.style.color = '#b71c1c';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = '#f8fafc';
+                        e.currentTarget.style.borderColor = '#e2e8f0';
+                        e.currentTarget.style.color = '#1e293b';
                       }}
                     >
-                      {idx + 1}
-                    </span>
-                    <div style={{ flex: 1 }}>
-                      <h5
-                        style={{
-                          margin: '0 0 3px',
-                          fontSize: '13px',
-                          fontWeight: '700',
-                          color: '#0f172a',
-                          lineHeight: '1.4'
-                        }}
-                      >
-                        {art.title?.substring(0, 70)}...
-                      </h5>
-                      <span style={{ fontSize: '11px', color: '#94a3b8' }}>
-                        {art.views || 100 + idx * 30} ਪਾਠਕਾਂ ਨੇ ਪੜ੍ਹਿਆ
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                        <i className={`fa ${cat.icon || 'fa-newspaper-o'}`} style={{ color: '#b71c1c', width: '16px' }}></i>
+                        <span>{cat.namePa} {cat.nameEn ? `(${cat.nameEn})` : ''}</span>
                       </span>
-                    </div>
-                  </Link>
-                ))}
+                      <i className="fa fa-angle-right" style={{ color: '#94a3b8' }}></i>
+                    </Link>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
-            {/* Sidebar Ad Banner (300x250) - Hidden if no ad */}
+            {/* (NOTE: Trending widget removed completely as requested!) */}
+
+            {/* Sidebar Ad Banner (300x250) */}
             <AdBanner slot="sidebar_rectangle" containerStyle={{ marginBottom: '24px' }} />
 
-            {/* 3. Live TV Promotional Box */}
+            {/* Live TV Promotional Box */}
             <div
               className="dark-box"
               style={{
