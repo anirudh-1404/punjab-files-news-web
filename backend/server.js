@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
@@ -18,6 +19,7 @@ import webTVRoutes from "./routes/webTVRoutes.js";
 import adRoutes from "./routes/adRoutes.js";
 import galleryRoutes from "./routes/galleryRoutes.js";
 import { renderArticleShareHtml } from "./controllers/articleController.js";
+import mcp from "./punjabFilesMcp.cjs";
 
 dotenv.config();
 
@@ -70,6 +72,9 @@ app.use("/api/podcasts", podcastRoutes);
 app.use("/api/webtv", webTVRoutes);
 app.use("/api/ads", adRoutes);
 app.use("/api/gallery", galleryRoutes);
+
+// Model Context Protocol (MCP) Server for Claude
+app.use(mcp);
 
 // Social Media Open Graph Share & Crawler Preview Endpoints
 // WhatsApp, Facebook, Twitter, Telegram crawlers receive server-rendered HTML with article's actual image
