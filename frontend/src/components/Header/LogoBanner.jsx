@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import brandLogo from '../../assets/logo-updated.png';
-import LanguageFilterDropdown from './LanguageFilterDropdown';
 
 export default function LogoBanner() {
   const [timeStr, setTimeStr] = useState('');
@@ -70,7 +69,7 @@ export default function LogoBanner() {
         width: '100%'
       }}
     >
-      {/* Left: Brand Logo + Desktop Language Dropdown */}
+      {/* Left: Brand Logo */}
       <div className="header-brand-block" style={{ display: 'flex', alignItems: 'center', gap: '16px', flexShrink: 0 }}>
         <a href="/" style={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}>
           <img
@@ -87,16 +86,6 @@ export default function LogoBanner() {
             }}
           />
         </a>
-
-        {/* Desktop Language Filter Dropdown (Next to Logo) */}
-        <div className="hidden-xs hidden-sm">
-          <LanguageFilterDropdown isCompact={false} />
-        </div>
-      </div>
-
-      {/* Mobile-Only Language Filter Dropdown (Shifted to Top-Right where Menu button was) */}
-      <div className="visible-xs visible-sm" style={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
-        <LanguageFilterDropdown isCompact={true} />
       </div>
 
       {/* Right: Permanent Static Advertisement Inquiries & Booking Provision (Desktop) */}
